@@ -8,7 +8,7 @@ npm i -S git+ssh://git@gitlab.com:ObsessVR/npm-modules/threejs-scene.git
 ## Usage
 
 ```javascript
-import Scene, { Hotspot } from '../../../three-js';
+import Scene, { Hotspot } from 'threejs-scene';
 ```
 Available components:  
 - Scene
