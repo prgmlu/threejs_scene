@@ -60,7 +60,7 @@ Currently supported public callbacks:
 ### Filter
 Sometimes we may want to allow access and events only to specific scene object types.
 
-```javascript
+```jsx
 //With this configuration only scene objects with type 'hotspot_marker' would react on onClick/onMouseMove and other events
 <Scene
     ...
@@ -72,23 +72,42 @@ Sometimes we may want to allow access and events only to specific scene object t
 <hr/>
 
 # Scene Objects
-To place a scene object on the scene, use `<Hotspot/>` component provided by the library.
 
-```javascript
-import Scene, { Hotspot } from '../../../three-js';
+To place scene object on the scene, use `<Hotspot/>` component provided by the library.
 
+##### Types:
+- hotspot
+- image_hotspot
+
+
+### Hotspot Marker
+![image](https://user-images.githubusercontent.com/8204364/139121711-2f4e815d-9351-40c4-a90f-861225eadaa7.png)
+
+```jsx
 <Scene >
    <Hotspot
        key={item._id}
-       hotspot_type='hotspot'
+       type='hotspot'
        collider_transform={item.collider_transform}
        transform={item.transform}
    />
 </Scene>
 ```
 
-##### Scene Object types:
-- hotspot
-- image_hotspot
+### Image Hotspot Marker
 
+![image](https://user-images.githubusercontent.com/8204364/139122331-74d0b7a1-841b-4ab2-b898-c98d67de58c1.png)
 
+```jsx
+<Scene >
+   <Hotspot
+       key={item._id}
+       type='image_hotspot'
+       collider_transform={item.collider_transform}
+       transform={item.transform}
+       scale={item.scale}
+       renderOrder={item.renderOrder}
+       imageURL='http://abc.com/bgImage.jpg'
+   />
+</Scene>
+```
