@@ -17,8 +17,7 @@ module.exports = (env, args)=>{
             path: path.resolve('lib'),
             filename: 'index.js',
             // filename: mode === 'production' ? libraryName + '.min.js' : libraryName + '.js',
-            // libraryTarget: 'commonjs2', //or commonjs2, umd
-            libraryTarget: 'umd', //or commonjs2, umd
+            libraryTarget: 'commonjs2', //or commonjs2, umd
             clean: true,
         },
         plugins: [new MiniCssExtractPlugin()],
@@ -29,7 +28,12 @@ module.exports = (env, args)=>{
                 {
                     test: /\.(js|jsx)$/,
                     exclude: /node_modules/,
-                    use: { loader:'babel-loader'},
+                    use: {
+                        loader:'babel-loader',
+                        options: {
+                            presets: ['@babel/preset-env']
+                        }
+                    },
                     // options: {
                     // 	presets: ['react']
                     // }
