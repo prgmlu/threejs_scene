@@ -7,6 +7,10 @@
     "build:dev": "webpack --config webpack.config.js --mode=development --env=build",
     "build:prod": "webpack --config webpack.config.js --mode=production --env=build"
   },
+  "files": [
+    "README.md",
+    "lib"
+  ],
   "dependencies": {
     "canvg": "^3.0.9",
     "three": "^0.114.0",
