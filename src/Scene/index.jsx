@@ -5,7 +5,7 @@ import { setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { Background, ColliderSphere } from '../three-background';
 import {renderHotspotRecord, renderImageHotspotRecord} from '../utils';
-import styles from './ThreeEditor.module.scss';
+import  './scene.scss';
 
 
 
@@ -192,7 +192,7 @@ const ThreeEditor = (props) => {
     return (
         <div
             id="canvas-wrapper"
-            className={styles['canvas-wrapper']}
+            className='canvas-wrapper'
             ref={canvasRef}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => props.onDrop(e, cameraRef, maxRenderOrder, scene, setMaxRenderOrder)}
@@ -205,7 +205,7 @@ const ThreeEditor = (props) => {
                 </>
             )}
 
-            <div id="canvasUI" className={`${styles['canvasUI']} ${UI ? styles['active'] : ''}`} style={UI?.style}>
+            <div id="canvasUI" className={`canvasUI ${UI ? 'active' : ''}`} style={UI?.style}>
                 {UI && <UI.Component {...UI?.props} sceneRef={sceneRef} />}
             </div>
         </div>
