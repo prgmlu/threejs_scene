@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import InteractionObject from '../InteractionObject';
+import InteractionObject from '../../three-base-components/InteractionObject';
 
 
 

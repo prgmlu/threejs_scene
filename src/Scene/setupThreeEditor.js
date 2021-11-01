@@ -1,4 +1,4 @@
-// import * as THREE from 'three';
+
 
 export const setupRenderer = ( renderer, canvasContainer) => {
     renderer.setPixelRatio(window.devicePixelRatio);

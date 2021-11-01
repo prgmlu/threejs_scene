@@ -1,4 +1,4 @@
-import InteractionObject from '../InteractionObject';
+import InteractionObject from '../../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
 
 

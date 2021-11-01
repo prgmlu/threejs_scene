@@ -1,50 +1,68 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+// let libraryName = 'index';
 
-module.exports = (env, args)=>{
-    const { mode } = args;
 
-    console.log('>>webpack', {mode, env, args});
-    // const plugins=[];
-    // if(mode === 'production') plugins.push(new MiniCssExtractPlugin());
 
-    return {
-        mode: mode, //production,development
-        entry: './src',
-        // devtool: 'source-map',
-        // styles: './src/styles.ts'
+
+module.exports = (env, argv) => {
+    const { mode } = argv;
+    const devMode = mode === 'development';
+    const buildMode = argv.env.build == true;
+    const APP_ENV = buildMode ? 'production' : mode;
+
+
+    const pluginsArr=[new MiniCssExtractPlugin()];
+    if(devMode && !buildMode) pluginsArr.push( new HtmlWebPackPlugin({
+        template: path.resolve(__dirname, 'example/index.html'),
+        // filename: 'index.html',
+        inject: true,
+    }));
+
+
+    const config = {
+        mode: argv.mode,
+        entry: devMode ? './example/App/index.js': './src/index.js',
+        devtool: 'source-map',
         output: {
-            path: path.resolve('lib'),
-            filename: 'index.js',
-            // filename: mode === 'production' ? libraryName + '.min.js' : libraryName + '.js',
-            libraryTarget: 'commonjs2', //or commonjs2, umd
-            clean: true,
+            path: path.resolve(__dirname, 'dist'),
+            publicPath: '/',
+            filename: mode === 'production' ? 'index.min.js' :  'index.js',
+            // libraryTarget: 'umd',
+            libraryTarget: 'commonjs2',
+            umdNamedDefine: true,
+            clean: true,//erase old build
         },
-        plugins: [new MiniCssExtractPlugin()],
-        // plugins: [],
+
+
+        devServer: {
+            host: 'localhost',
+            port: 5555,
+            publicPath: '/', //webpack output is served from /
+            headers: {"Access-Control-Allow-Origin": "*"},
+            // build & public files available as HOST/
+            // contentBase: [
+                // path.join(__dirname, 'build'), //serve build files
+            // ],
+
+            historyApiFallback: true,
+            disableHostCheck: true,
+            // open: true, //Opens the browser after launching the dev server.
+            hot: true,
+        },
+
 
         module: {
             rules: [
                 {
                     test: /\.(js|jsx)$/,
                     exclude: /node_modules/,
-                    use: {
-                        loader:'babel-loader',
-                        options: {
-                            presets: ['@babel/preset-env']
-                        }
-                    },
-                    // options: {
-                    // 	presets: ['react']
-                    // }
+                    use: ['babel-loader'],
                 },
-                // {
-                //     // test: /\.css$/i,
-                //     test: /\.(sa|sc|c)ss$/,
-                //     use: [MiniCssExtractPlugin.loader, 'css-loader']
-                // },
+
                 {
-                    // test: /\.css$/i,
+
                     test: /\.(sa|sc|c)ss$/,
                     use: [
                         MiniCssExtractPlugin.loader,
@@ -53,17 +71,21 @@ module.exports = (env, args)=>{
                         "sass-loader",
                     ]
                 },
-            ]
+                // {
+                //     test: /\.(sa|sc|c)ss$/,
+                //     use: ['style-loader', 'css-loader', 'sass-loader'],
+                // },
+            ],
         },
 
         resolve: {
-            extensions: ['.ts', '.tsx', '.js', '.jsx'],
-            alias: {
-                'react': path.resolve(path.join(__dirname, './node_modules/react')),
-                'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-            }
+            extensions: ['*', '.js', '.jsx'],
+            modules: [
+                path.resolve('./node_modules'),
+                path.resolve('./src'),
+                // path.resolve('./example'),
+            ],
         },
-
 
         // Don't bundle react or react-dom
         externals: {
@@ -82,5 +104,9 @@ module.exports = (env, args)=>{
                 root: "ReactDOM"
             }
         },
+
+        plugins:pluginsArr
     };
-}
+
+    return config;
+};

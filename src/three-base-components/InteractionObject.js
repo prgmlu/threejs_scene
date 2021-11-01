@@ -52,7 +52,6 @@ export default class InteractionObject extends ThreeSceneObject {
      * Call when the collider attached to this InteractableObject is clicked.
      */
     onClick = (e) => {
-        const {userData, scene} = this;
 
         //Display UI
         this.openUI(e);
@@ -78,6 +77,7 @@ export default class InteractionObject extends ThreeSceneObject {
                     renderOrder:this.sceneObject.renderOrder,
                     setUserData:this.setUserData,
                     getTransforms:this.getTransforms,
+                    transforms:this.getTransforms(),
                     removeFromScene:this.dispose,
                     setScale:this.setScale,
                     setRenderOrder:this.setRenderOrder,
@@ -187,6 +187,7 @@ export default class InteractionObject extends ThreeSceneObject {
 
         const colliderTransform = this.sceneObject.matrix;
         const visualTransform = this.visualObject.matrix;
+
         return { colliderTransform, visualTransform };
     }
 
