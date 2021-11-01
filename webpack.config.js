@@ -29,8 +29,8 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, 'dist'),
             publicPath: '/',
             filename: mode === 'production' ? 'index.min.js' :  'index.js',
-            libraryTarget: 'umd',
-            // libraryTarget: 'commonjs2', //document undefined
+            // libraryTarget: 'umd', //self undefined
+            libraryTarget: 'commonjs2', //document undefined
             umdNamedDefine: true,
             clean: true,//erase old build
         },
