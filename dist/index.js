@@ -1,28 +1,6 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./example/App/App.js":
-/*!****************************!*\
-  !*** ./example/App/App.js ***!
-  \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ App)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _src_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../src/index */ "./src/index.js");
-
-
-function App() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "ThreeJS Scene"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_src_index__WEBPACK_IMPORTED_MODULE_1__["default"], null));
-}
-
-/***/ }),
-
 /***/ "./src/Hotspot/_constructors/HotspotMarker.js":
 /*!****************************************************!*\
   !*** ./src/Hotspot/_constructors/HotspotMarker.js ***!
@@ -1028,26 +1006,6 @@ var threeEditorMouseEvents = function threeEditorMouseEvents(sceneRef, renderer,
     removeThreeEditorMouseEventListeners: removeThreeEditorMouseEventListeners
   };
 };
-
-/***/ }),
-
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Hotspot": () => (/* reexport safe */ _Hotspot__WEBPACK_IMPORTED_MODULE_1__["default"]),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _Scene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Scene */ "./src/Scene/index.jsx");
-/* harmony import */ var _Hotspot__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Hotspot */ "./src/Hotspot/index.js");
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_Scene__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -61432,17 +61390,6 @@ module.exports = require("react");
 
 /***/ }),
 
-/***/ "react-dom":
-/*!****************************************************************************************************!*\
-  !*** external {"commonjs":"react-dom","commonjs2":"react-dom","amd":"ReactDOM","root":"ReactDOM"} ***!
-  \****************************************************************************************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("react-dom");
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js ***!
@@ -68253,19 +68200,19 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!******************************!*\
-  !*** ./example/App/index.js ***!
-  \******************************/
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "react-dom");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App */ "./example/App/App.js");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Hotspot": () => (/* reexport safe */ _Hotspot__WEBPACK_IMPORTED_MODULE_1__["default"]),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Scene__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Scene */ "./src/Scene/index.jsx");
+/* harmony import */ var _Hotspot__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Hotspot */ "./src/Hotspot/index.js");
 
 
-
-react_dom__WEBPACK_IMPORTED_MODULE_1___default().render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_App__WEBPACK_IMPORTED_MODULE_2__["default"], null), document.getElementById('sceneRoot'));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_Scene__WEBPACK_IMPORTED_MODULE_0__["default"]);
 })();
 
 module.exports = __webpack_exports__;

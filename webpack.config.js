@@ -1,3 +1,4 @@
+const { IgnorePlugin } = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
@@ -14,22 +15,37 @@ module.exports = (env, argv) => {
 
 
     const pluginsArr=[new MiniCssExtractPlugin()];
-    if(devMode && !buildMode) pluginsArr.push( new HtmlWebPackPlugin({
-        template: path.resolve(__dirname, 'example/index.html'),
-        // filename: 'index.html',
-        inject: true,
-    }));
+
+
+
+
+
+   if(devMode ) {
+       if(buildMode){
+           pluginsArr.push(new IgnorePlugin({
+               resourceRegExp: /example/,
+           }));
+       }
+        else{
+           pluginsArr.push( new HtmlWebPackPlugin({
+               template: path.resolve(__dirname, 'example/index.html'),
+               // filename: 'index.html',
+               inject: true,
+           }));
+        }
+
+
+   }
 
 
     const config = {
         mode: argv.mode,
-        entry: devMode ? './example/App/index.js': './src/index.js',
+        entry: buildMode ?  './src/index.js' : './example/App/index.js',
         devtool: 'source-map',
         output: {
             path: path.resolve(__dirname, 'dist'),
             publicPath: '/',
             filename: mode === 'production' ? 'index.min.js' :  'index.js',
-            // libraryTarget: 'umd', //self undefined
             libraryTarget: 'commonjs2', //document undefined
             umdNamedDefine: true,
             clean: true,//erase old build
