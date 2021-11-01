@@ -1,14 +1,4 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("react-dom"));
-	else if(typeof define === 'function' && define.amd)
-		define(["React", "ReactDOM"], factory);
-	else {
-		var a = typeof exports === 'object' ? factory(require("react"), require("react-dom")) : factory(root["React"], root["ReactDOM"]);
-		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
-	}
-})(self, function(__WEBPACK_EXTERNAL_MODULE_react__, __WEBPACK_EXTERNAL_MODULE_react_dom__) {
-return /******/ (() => { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./example/App/App.js":
@@ -61438,7 +61428,7 @@ function validate(uuid) {
 /***/ ((module) => {
 
 "use strict";
-module.exports = __WEBPACK_EXTERNAL_MODULE_react__;
+module.exports = require("react");
 
 /***/ }),
 
@@ -61449,7 +61439,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_react__;
 /***/ ((module) => {
 
 "use strict";
-module.exports = __WEBPACK_EXTERNAL_MODULE_react_dom__;
+module.exports = require("react-dom");
 
 /***/ }),
 
@@ -68278,8 +68268,7 @@ __webpack_require__.r(__webpack_exports__);
 react_dom__WEBPACK_IMPORTED_MODULE_1___default().render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_App__WEBPACK_IMPORTED_MODULE_2__["default"], null), document.getElementById('sceneRoot'));
 })();
 
-/******/ 	return __webpack_exports__;
+module.exports = __webpack_exports__;
 /******/ })()
 ;
-});
 //# sourceMappingURL=index.js.map
