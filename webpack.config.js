@@ -1,8 +1,7 @@
-const { IgnorePlugin } = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-// let libraryName = 'index';
+
 
 
 
@@ -11,22 +10,14 @@ module.exports = (env, argv) => {
     const { mode } = argv;
     const devMode = mode === 'development';
     const buildMode = argv.env.build == true;
-    const APP_ENV = buildMode ? 'production' : mode;
 
 
+
+    //Plugins
     const pluginsArr=[new MiniCssExtractPlugin()];
-
-
-
-
-    if(buildMode){
-        // pluginsArr.push(new IgnorePlugin({
-        //     resourceRegExp: /example/,
-        // }));
-    }else{
+    if(!buildMode){
         pluginsArr.push( new HtmlWebPackPlugin({
             template: path.resolve(__dirname, 'example/index.html'),
-            // filename: 'index.html',
             inject: true,
         }));
     }
@@ -41,7 +32,15 @@ module.exports = (env, argv) => {
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: 'index.js',
-            libraryTarget: 'commonjs2', //document undefined
+
+            //CommonJS
+            // libraryTarget: 'commonjs2',
+
+            //UMD
+            libraryTarget: 'umd', //document undefined
+            globalObject: 'this',
+            // umdNamedDefine: true,
+
             clean: true,//erase old build
         },
 
@@ -62,15 +61,10 @@ module.exports = (env, argv) => {
             rules: [
                 {
                     test: /\.(js|jsx)$/,
-                    exclude: /node_modules/,
-
-                    //harmony export
+                    exclude: /(node_modules|example)/,
                     use: {
-                        loader:'babel-loader',
-                    },
-
-                    // use: ['babel-loader'],
-
+                        loader:'babel-loader'
+                    }
                 },
 
                 {
@@ -94,18 +88,26 @@ module.exports = (env, argv) => {
         },
 
         // Don't bundle react or react-dom
+        // use the React dependency of our lib instead of using our own React.
         externals: {
+            // 'react': 'commonjs react'
             react: {
+                root: "React",
                 commonjs: "react",
                 commonjs2: "react",
-                amd: "React",
-                root: "React"
+                amd: "react"
             },
             "react-dom": {
+                root: "ReactDOM",
                 commonjs: "react-dom",
                 commonjs2: "react-dom",
-                amd: "ReactDOM",
-                root: "ReactDOM"
+                amd: "react-dom",
+            },
+            'prop-types': {
+                root: 'PropTypes',
+                commonjs2: 'prop-types',
+                commonjs: 'prop-types',
+                amd: 'prop-types'
             }
         },
 
