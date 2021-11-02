@@ -19,35 +19,29 @@ module.exports = (env, argv) => {
 
 
 
-
-   if(devMode ) {
-       if(buildMode){
-           pluginsArr.push(new IgnorePlugin({
-               resourceRegExp: /example/,
-           }));
-       }
-        else{
-           pluginsArr.push( new HtmlWebPackPlugin({
-               template: path.resolve(__dirname, 'example/index.html'),
-               // filename: 'index.html',
-               inject: true,
-           }));
-        }
+    if(buildMode){
+        // pluginsArr.push(new IgnorePlugin({
+        //     resourceRegExp: /example/,
+        // }));
+    }else{
+        pluginsArr.push( new HtmlWebPackPlugin({
+            template: path.resolve(__dirname, 'example/index.html'),
+            // filename: 'index.html',
+            inject: true,
+        }));
+    }
 
 
-   }
 
 
     const config = {
         mode: argv.mode,
         entry: buildMode ?  './src/index.js' : './example/App/index.js',
-        devtool: 'source-map',
+        // devtool: 'source-map',
         output: {
             path: path.resolve(__dirname, 'dist'),
-            publicPath: '/',
-            filename: mode === 'production' ? 'index.min.js' :  'index.js',
+            filename: 'index.js',
             libraryTarget: 'commonjs2', //document undefined
-            umdNamedDefine: true,
             clean: true,//erase old build
         },
 
@@ -57,11 +51,6 @@ module.exports = (env, argv) => {
             port: 5555,
             publicPath: '/', //webpack output is served from /
             headers: {"Access-Control-Allow-Origin": "*"},
-            // build & public files available as HOST/
-            // contentBase: [
-                // path.join(__dirname, 'build'), //serve build files
-            // ],
-
             historyApiFallback: true,
             disableHostCheck: true,
             // open: true, //Opens the browser after launching the dev server.
@@ -74,11 +63,17 @@ module.exports = (env, argv) => {
                 {
                     test: /\.(js|jsx)$/,
                     exclude: /node_modules/,
-                    use: ['babel-loader'],
+
+                    //harmony export
+                    use: {
+                        loader:'babel-loader',
+                    },
+
+                    // use: ['babel-loader'],
+
                 },
 
                 {
-
                     test: /\.(sa|sc|c)ss$/,
                     use: [
                         MiniCssExtractPlugin.loader,
@@ -87,26 +82,19 @@ module.exports = (env, argv) => {
                         "sass-loader",
                     ]
                 },
-                // {
-                //     test: /\.(sa|sc|c)ss$/,
-                //     use: ['style-loader', 'css-loader', 'sass-loader'],
-                // },
             ],
         },
 
         resolve: {
-            extensions: ['*', '.js', '.jsx'],
-            modules: [
-                path.resolve('./node_modules'),
-                path.resolve('./src'),
-                // path.resolve('./example'),
-            ],
+            extensions: ['.ts', '.tsx', '.js', '.jsx'],
+            alias: {
+                'react': path.resolve(path.join(__dirname, './node_modules/react')),
+                'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
+            }
         },
 
         // Don't bundle react or react-dom
         externals: {
-            // react: 'react',
-            // 'react-dom': 'react-dom',
             react: {
                 commonjs: "react",
                 commonjs2: "react",
