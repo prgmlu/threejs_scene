@@ -89,7 +89,7 @@ To place scene object on the scene, use `<Hotspot/>` component provided by the l
 
 
 ### Hotspot Marker
-![image](https://user-images.githubusercontent.com/8204364/139121711-2f4e815d-9351-40c4-a90f-861225eadaa7.png)
+![image](https://user-images.githubusercontent.com/8204364/140197179-2d5e0772-65f8-411a-8d46-5661855c6729.png)
 
 ```jsx
 <Scene >
@@ -98,6 +98,10 @@ To place scene object on the scene, use `<Hotspot/>` component provided by the l
        type='hotspot'
        collider_transform={item.collider_transform}
        transform={item.transform}
+       
+       //Icon customization props
+       imageURL='http://abc.com/image.svg' //provide custom svg icon
+       iconConfig={{dotColor:'green'}}
    />
 </Scene>
 ```
@@ -116,6 +120,28 @@ To place scene object on the scene, use `<Hotspot/>` component provided by the l
        scale={item.scale}
        renderOrder={item.renderOrder}
        imageURL='http://abc.com/bgImage.jpg'
+   />
+</Scene>
+```
+
+
+## Hotspot UI/Modals (optional)
+Hotspot onClick event will show UI if any provided.  
+Add `UIConfig` property to configure hotspot UI.
+
+- Component (required): attach any custom component to render
+- style (optional): overwrite Scene ui element styles  
+- positionNextToTheElement (optional): render UI next to the click position 
+
+```jsx
+<Scene >
+   <Hotspot
+       ...
+       UIConfig={{
+            Component:HotspotMarkerUIForm,
+            style:{left:'0', top:'3em', background:'none'},
+            positionNextToTheElement:true,
+        }}
    />
 </Scene>
 ```
