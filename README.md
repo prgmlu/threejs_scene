@@ -145,3 +145,4 @@ Add `UIConfig` property to configure hotspot UI.
    />
 </Scene>
 ```
+![image](https://user-images.githubusercontent.com/8204364/140211013-ee046cc2-c25d-4327-ad39-d2f52efacaa8.png)
