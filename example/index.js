@@ -1,33 +1,14 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
-import Scene from "../src";
+import Scene, {Hotspot} from "../src";
 import './exampleStyles.scss';
-
+import scenes from './mock.json';
 
 
 
 const Page=()=>{
     const [sceneId, setSceneId]=useState(1);
-
-
-    const scenes=[
-        {
-                isFlatScene: true,
-                backgroundUrl: 'https://cdn.obsess-vr.com/obsess-cms-dev/clients/Mary_Kay/601c753bc1b4f781a3d1ec85/images/flat/mk-entrance-oct8.jpg'
-        },
-        {
-                isFlatScene: false,
-                backgroundUrl: 'https://cdn.obsess-vr.com/obsess-cms-dev/clients/Mary_Kay/601c753bc1b4f781a3d1ec85/scenes/5f5150fb1f2c164d4c0ac1b1/images/cube_map/'
-        },
-        {
-                isFlatScene: false,
-                backgroundUrl: 'https://cdn.obsess-vr.com/obsess-cms-dev/clients/Mary_Kay/601c753bc1b4f781a3d1ec85/scenes/5f5948292ea4e05c69283ced/images/cube_map/'
-        }
-    ]
-
-    const bgConf = scenes[sceneId-1];
-
-    console.log('-Page',{sceneId, bgConf});
+    const sceneData = scenes[sceneId-1];
 
     return(<div>
         <h2>ThreeJS Scene</h2>
@@ -37,9 +18,22 @@ const Page=()=>{
         />
         <Scene
             sceneId={sceneId}
-            bgConf={bgConf}
+            bgConf={sceneData.bg}
             useDebugger={true}
-        />
+        >
+            {sceneData?.hotspots?.map((item, i)=>{
+                return <Hotspot
+                    key={i}
+                    type={item.type}
+                    collider_transform={item.collider_transform}
+                    transform={item.transform}
+                    iconConfig={item.iconConfig}
+                    imageURL={item.imageURL}
+                />
+            })}
+
+
+        </Scene>
     </div>)
 }
 

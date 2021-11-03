@@ -1,0 +1,40 @@
+[
+  {
+    "bg":{
+      "isFlatScene": true,
+      "backgroundUrl": "https://cdn.obsess-vr.com/obsess-cms-dev/clients/Mary_Kay/601c753bc1b4f781a3d1ec85/images/flat/mk-entrance-oct8.jpg"
+    },
+    "hotspots":[
+      {
+        "type": "hotspot",
+        "collider_transform": [0.45,0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 2.865898397092683, 1.43918906884778, 1],
+        "transform": [0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 2.865898397092683, 1.43918906884778, 1],
+         "userData": {},
+         "UIConfig": {},
+         "iconConfig": {
+           "primaryColor": "green"
+         },
+        "imageURL": "https://cdn.obsess-vr.com/ralph-lauren/rl-bh/rl-hotspot-Icon.svg"
+      },
+      {
+        "type": "hotspot",
+        "collider_transform": [0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 1.2752308578575213, -0.7709265735984403, 1],
+        "transform": [0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 1.2752308578575213, -0.7709265735984403, 1],
+         "userData": {},
+         "UIConfig": {}
+      }
+    ]
+  },
+  {
+    "bg":{
+      "isFlatScene": false,
+      "backgroundUrl": "https://cdn.obsess-vr.com/obsess-cms-dev/clients/Mary_Kay/601c753bc1b4f781a3d1ec85/scenes/5f5150fb1f2c164d4c0ac1b1/images/cube_map/"
+    }
+  },
+  {
+    "bg":{
+      "isFlatScene": false,
+      "backgroundUrl": "https://cdn.obsess-vr.com/obsess-cms-dev/clients/Mary_Kay/601c753bc1b4f781a3d1ec85/scenes/5f5948292ea4e05c69283ced/images/cube_map/"
+    }
+  }
+]
