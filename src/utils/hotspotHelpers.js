@@ -1,8 +1,10 @@
 import {HotspotMarker} from "../Hotspot/_constructors";
 
 
-const createHotspotMarker=({userData={}, UIConfig})=>{
+const createHotspotMarker=({imageURL, iconConfig, userData={}, UIConfig})=>{
     return new HotspotMarker({
+        iconConfig,
+        imageURL,
         userData,
         UIConfig
         // UIConfig:{
@@ -43,7 +45,9 @@ export const renderHotspotRecord = (object={}, sceneRef) => {
     //1. Create
     const marker = createHotspotMarker({
         userData: object.userData,
-        UIConfig: object.UIConfig
+        UIConfig: object.UIConfig,
+        iconConfig: object.iconConfig,
+        imageURL: object.imageURL
     });
 
     //2.Add

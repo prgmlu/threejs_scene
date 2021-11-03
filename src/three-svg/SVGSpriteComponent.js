@@ -6,15 +6,16 @@ import SVGSprite from './SVGSprite';
 // because this is how all of the sprites behave and it only controls the color
 // interactions right now.
 export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
-    constructor() {
+    constructor(conf={}) {
+        const {primaryColor, secondaryColor, color} = conf;
         super();
 
         this.svgString = '';
-        this.primaryColor = 'black';
-        this.secondaryColor = 'gray';
+        this.primaryColor = primaryColor || 'black';
+        this.secondaryColor = secondaryColor || 'gray';
         // * IMPORTANT: This needs to be white on init,
         // * because by default the svg value that have modifiable fill colors are white.
-        this.color = 'white';
+        this.color =  color || 'white';
         // * IMPORTANT: This needs to be 0 on init,
         // * because by default the svg value that have modifiable transform x is 0.
         this.rotationX = 0;

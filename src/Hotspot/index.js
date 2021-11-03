@@ -4,23 +4,18 @@ import { createAndRenderHotspotMarkerOnEvent, renderHotspotRecord, renderImageHo
 
 
 //TODO: refactor setMaxRenderOrder
-//TODO: object with hotspot_type =='image_marker' has prop sceneObject null???
+//TODO: object with hotspot_type =='image_marker' has prop sceneObject == null???
 function Hotspot(props) {
     const { type, transform, collider_transform, sceneRef, setMaxRenderOrder } = props;
     const markerRef = useRef();
 
     useEffect(() => {
-        const isNewRecord = !!(
-            transform === undefined ||
-            transform?.length < 1 ||
-            collider_transform === undefined ||
-            collider_transform?.length < 1
-        );
+        const isNewRecord = !!(transform === undefined || collider_transform === undefined || transform?.length < 1 || collider_transform?.length < 1);
         const { e, point } = sceneRef.current.userData?.clickData || {};
 
         if (type == 'hotspot') {
             //new markers has no transform values. Currently interpreted as a new record
-            if (transform === undefined || transform?.length < 1 || collider_transform === undefined || collider_transform?.length < 1) {
+            if (isNewRecord) {
                 markerRef.current = createAndRenderHotspotMarkerOnEvent(e, props, point, sceneRef.current);
             } else {
                 markerRef.current = renderHotspotRecord(props, sceneRef);
