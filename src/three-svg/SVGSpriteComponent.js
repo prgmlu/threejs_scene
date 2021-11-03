@@ -7,11 +7,11 @@ import SVGSprite from './SVGSprite';
 // interactions right now.
 export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
     constructor(conf={}) {
-        const {primaryColor, secondaryColor, color} = conf;
+        const {dotColor, secondaryColor, color} = conf;
         super();
 
         this.svgString = '';
-        this.primaryColor = primaryColor || 'black';
+        this.primaryColor = dotColor || 'black';
         this.secondaryColor = secondaryColor || 'gray';
         // * IMPORTANT: This needs to be white on init,
         // * because by default the svg value that have modifiable fill colors are white.
@@ -34,14 +34,8 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
         this.svgSprite.scale.set(scale, scale, scale);
     }
 
-    setPrimaryColor = (color) => {
-        this.primaryColor = color;
-    }
 
-    setSecondaryColor =(color) => {
-        this.secondaryColor = color;
-    }
-
+    //TODO: implement properly color assignment for dot, background and border.
     setColor =(color) =>{
         if (!this.svgString) {
             console.error(`SVG string not set on SVGSpriteComponent: ${this}`); // eslint-disable-line no-console

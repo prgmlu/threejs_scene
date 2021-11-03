@@ -3,25 +3,24 @@ import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
 
 
 export default class HotspotMarker extends InteractionObject {
-    constructor({imageURL, iconConfig, userData, UIConfig}) {
+    constructor({imageURL, iconConfig={}, userData, UIConfig}) {
         super();
         this.sceneObject.name = 'marker';
         this.hotspot_type = 'hotspot_marker'; //type of marker
         this.userData = userData; //stores custom user data
         this.UIConfig = UIConfig; //could be used for modals
-        this.iconConfig = iconConfig;
+
         this.imageURL = imageURL;
+        this.isFlatBackground = false;
 
 
-
-        //Fetch Icon SVG from CDN
+        //SVG Icon
+        this.svgSpriteComponent = new SVGSpriteComponent(iconConfig);
+        this.svgSpriteComponent.name='sprite';
         this.fetchSVGIcon()
             .then(svgString=>{
                 this.svgSpriteComponent.setSVGString(svgString);
             });
-
-        this.svgSpriteComponent = null;
-        this.isFlatBackground = false;
     }
 
 
@@ -52,12 +51,12 @@ export default class HotspotMarker extends InteractionObject {
         }
     }
 
+
     addToScene = (scene) => {
         this.scene = scene;
         scene.add(this.sceneObject);
         this.isFlatBackground = this.scene.children.some((child) => child.name === 'flatBackground');
-        this.svgSpriteComponent = new SVGSpriteComponent(this.iconConfig);
-        this.svgSpriteComponent.name='sprite';
+
         this.attachComponent(this.svgSpriteComponent);
     }
 
