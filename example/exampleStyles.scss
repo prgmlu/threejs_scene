@@ -1,0 +1,17 @@
+$blueColor:#27a9e7;
+
+.sceneSelector{
+  display:flex;
+  list-style: none;
+  border: 1px solid $blueColor;
+  padding: 0;
+
+  li{padding: 0.5em;
+    border-right: 1px solid $blueColor;
+
+    &.active{
+      background-color: $blueColor;
+      color:#fff;
+    }
+  }
+}

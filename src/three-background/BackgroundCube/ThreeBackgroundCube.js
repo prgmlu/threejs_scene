@@ -100,9 +100,8 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 
     // Build load order of cubemaps
     buildLODUrls = (baseUrl) => {
-        if (!baseUrl) {
-            return null
-        }
+        if (!baseUrl) return null;
+
 
         // controls current configuration of cube object
         const loadObject = {

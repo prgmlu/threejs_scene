@@ -3,6 +3,10 @@
 ## Installation
 ```
 npm i -S git+ssh://git@gitlab.com:ObsessVR/npm-modules/threejs-scene.git
+
+
+//Install specific branch
+npm i -S git+ssh://git@gitlab.com:ObsessVR/npm-modules/threejs-scene.git#branch-name
 ```
 
 ## Usage

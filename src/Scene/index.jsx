@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
-import { setupRenderer, setupCamera } from './setupThreeEditor';
+import {initThreeJSScene, setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { Background, ColliderSphere } from '../three-background';
 import './main.scss';
@@ -10,7 +10,7 @@ import './main.scss';
 
 
 const Scene = (props) => {
-    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, children } = props;
+    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, children } = props;
     const [threeReady, setThreeReady] = useState(false);
     const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
     const [UI, setUI] = useState();
@@ -29,7 +29,7 @@ const Scene = (props) => {
     const canvasRef = useRef();
     const cameraRef = useRef();
     const controlsRef = useRef();
-    const clock = new THREE.Clock();
+
     sceneRef.current.setUI = setUI;
 
     const setMaxRenderOrder = (renderOrder) => {
@@ -38,21 +38,28 @@ const Scene = (props) => {
 
 
 
+    const animate = (controllerUpdate) => {
+        requestAnimationFrame(() => animate(controllerUpdate));
+        renderer.render(scene, cameraRef.current);
+
+        if (controllerUpdate) controllerUpdate();
+    };
+
+
+
 
 
     //1. Mount camera & setup renderer only once!!!
     useEffect(() => {
+        console.log('%c >INIT:1 - initThreeJSScene', 'color:green', JSON.parse(JSON.stringify({rendererRef:rendererRef.current})));
         const canvas = canvasRef.current;
-        const aspectRatio = canvas.offsetWidth / canvas.offsetHeight;
-        cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
-
-        setupRenderer(rendererRef.current, canvas);
-        scene.add(cameraRef.current);
+        initThreeJSScene(canvasRef, cameraRef, controlsRef, rendererRef, scene);
+        setThreeReady(true);
 
         const handleContextLoss=(e)=>{
             e.preventDefault();
             setTimeout((e) => {
-                console.log('restoring context...');
+                console.log('%c Context lost. restoring context...','color:red');
                 loseExtension?.restoreContext();
                 renderer.clear();
             }, 50);
@@ -78,34 +85,29 @@ const Scene = (props) => {
 
 
 
-    //New Scene INIT
-    useEffect(() => {
-        const aspectRatio = canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
+    const initSceneView=()=>{
 
         // set new reference for cameraRef.current here
+        const aspectRatio = canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
         controlsRef.current = ThreeController.setupControls(cameraRef.current, renderer);
-
-        const animate = (controllerUpdate) => {
-            requestAnimationFrame(() => animate(controllerUpdate));
-            renderer.render(scene, cameraRef.current);
-
-            if (controllerUpdate) controllerUpdate();
-        };
-
         setupCamera(aspectRatio, cameraRef.current);
 
-
-        clock.start();
         animate(controlsRef.current.update);
-        setThreeReady(true);
+    }
+
+
+    //New Scene INIT
+    useEffect(() => {
+        initSceneView();
+
 
         return () => {
             controlsRef.current.dispose();
             scene.dispose();
             setUI(false); //Hide UI Modal when scene changed
         };
-    }, [sceneId, cameraRef, controlsRef ]);
+    }, [sceneId ]);
 
 
     //Events
@@ -176,9 +178,8 @@ const Scene = (props) => {
 
 
 
-
     return (<>
-        {/*{true && <DebugUI renderer={rendererRef.current} scene={sceneRef.current} glContext={glContext}/>}*/}
+        {useDebugger && <DebugUI renderer={rendererRef.current} scene={sceneRef.current} glContext={glContext}/>}
             <div
                 id="canvas-wrapper"
                 className={'canvas-wrapper'}
@@ -209,20 +210,13 @@ const Scene = (props) => {
  */
 const DebugUI=({renderer, glContext, scene})=>{
     //Never use it on prod
-    if(window.location.hostname !== "127.0.0.1") return false;
+    if(!['localhost','127.0.0.1'].includes(window.location.hostname )) return false;
 
     // Note: WebGLRenderer.forceContextLoss() and WebGLRenderer.forceContextRestore()
     // are used to simulate a context loss and restore based on the WebGL extension WEBGL_lose_context.
     // If you have a real context loss, the mentioned events should be triggered automatically.
     const ext = glContext.getExtension('WEBGL_lose_context');
 
-    // console.log('%c ------- DEBUG ------- ', 'color:green', {
-    //     renderer,
-    //     glContext,
-    //     debug: renderer.debug,
-    //     info: renderer.info,
-    //     ext
-    // });
 
     const restore=(e)=>{
         ext.restoreContext();
@@ -239,7 +233,7 @@ const DebugUI=({renderer, glContext, scene})=>{
         <td>{ data }</td>
     </tr>);
 
-    return(<div style={{display:'block', width:'100%', margin: '3em 0 0em', fontSize:'12px', border:'1px dashed', padding:'1em', wordBreak: 'break-word'}}>
+    return(<div style={{display:'block', width:'100%', fontSize:'12px', border:'1px dashed', padding:'1em', wordBreak: 'break-word'}}>
         <table >
             <tbody>
                 <Tr label='Scene' data={JSON.stringify({children: scene.children.length}) } style={{minWidth:'10em'}}/>

@@ -1,3 +1,31 @@
+import * as THREE from "three";
+import ThreeController from "../three-controls/ThreeController";
+
+export const initThreeJSScene=(canvasRef, cameraRef, controlsRef, rendererRef, scene)=>{
+    // console.log('%c >initThreeJSScene ', 'color:green', JSON.parse(JSON.stringify({
+        // canvasRef:canvasRef.current,
+    // })));
+
+    const canvas = canvasRef.current;
+    const clock = new THREE.Clock();
+    clock.start();
+
+
+    const aspectRatio = canvas.offsetWidth / canvas.offsetHeight;
+    cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
+    controlsRef.current = ThreeController.setupControls(cameraRef.current, rendererRef.current);
+    setupCamera(aspectRatio, cameraRef.current);
+
+
+    setupRenderer(rendererRef.current, canvas);
+
+    scene.add(cameraRef.current);
+
+
+}
+
+
+
 
 
 export const setupRenderer = ( renderer, canvasContainer) => {

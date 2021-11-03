@@ -26,8 +26,8 @@ module.exports = (env, argv) => {
 
 
     const config = {
-        mode: argv.mode,
-        entry: buildMode ?  './src/index.js' : './example/App/index.js',
+        mode,
+        entry: buildMode ?  './src/index.js' : './example/index.js',
         // devtool: 'source-map',
         output: {
             path: path.resolve(__dirname, 'dist'),
@@ -52,7 +52,7 @@ module.exports = (env, argv) => {
             headers: {"Access-Control-Allow-Origin": "*"},
             historyApiFallback: true,
             disableHostCheck: true,
-            // open: true, //Opens the browser after launching the dev server.
+            open: true, //Opens the browser after launching the dev server.
             hot: true,
         },
 
@@ -61,10 +61,13 @@ module.exports = (env, argv) => {
             rules: [
                 {
                     test: /\.(js|jsx)$/,
-                    exclude: /(node_modules|example)/,
-                    use: {
-                        loader:'babel-loader'
-                    }
+                    // exclude: /(node_modules|example)/,
+                    exclude: /node_modules/,
+                    use: ['babel-loader'],
+
+                    // use: {
+                    //     loader:'babel-loader'
+                    // }
                 },
 
                 {
@@ -88,8 +91,8 @@ module.exports = (env, argv) => {
         },
 
         // Don't bundle react or react-dom
-        // use the React dependency of our lib instead of using our own React.
-        externals: {
+        // Enable rules only on compilation/build mode
+        externals: buildMode ? {
             // 'react': 'commonjs react'
             react: {
                 root: "React",
@@ -103,13 +106,13 @@ module.exports = (env, argv) => {
                 commonjs2: "react-dom",
                 amd: "react-dom",
             },
-            'prop-types': {
-                root: 'PropTypes',
-                commonjs2: 'prop-types',
-                commonjs: 'prop-types',
-                amd: 'prop-types'
-            }
-        },
+            // 'prop-types': {
+            //     root: 'PropTypes',
+            //     commonjs2: 'prop-types',
+            //     commonjs: 'prop-types',
+            //     amd: 'prop-types'
+            // }
+        }:{},
 
         plugins:pluginsArr
     };
