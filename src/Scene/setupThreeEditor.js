@@ -20,8 +20,6 @@ export const initThreeJSScene=(canvasRef, cameraRef, controlsRef, rendererRef, s
     setupRenderer(rendererRef.current, canvas);
 
     scene.add(cameraRef.current);
-
-
 }
 
 
