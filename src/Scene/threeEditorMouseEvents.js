@@ -80,8 +80,8 @@ export const threeEditorMouseEvents = (
         const mousePos = setMousePosition(mouseStart, e, isTouchEvent);
         raycaster.setFromCamera(mouseStart, cameraRef.current);
         const intersects = raycaster.intersectObjects(sceneRef.current.children);
-
         const marker = getIntersectedMarkerObject(intersects);
+
 
         if (marker) {
             isMarkerClicked = true;
@@ -101,6 +101,7 @@ export const threeEditorMouseEvents = (
 
 
     const onMouseUpTouchEndEvent = (e) => {
+        // console.log('-onMouseUp', {e});
         const isMobileEvent = e.type == "touchend";
         if (isMobileEvent && e.touches.length < 1) e.preventDefault();
 
@@ -146,8 +147,8 @@ export const threeEditorMouseEvents = (
 
     const onMouseMove = (e) => {
         const isMobileEvent = e.touches?.length > 0;
-        // const mousePosition = getMousePosition(mouseRef, e);
-        //public callback/interface
+        // console.log('%c __onMouseMove__', 'color:red', {e, focusedObject, isMarkerClicked});
+
 
         //update for mobile events
         if(isMobileEvent && focusedObject) setMousePosition(mouseRef, e, true);
@@ -165,6 +166,7 @@ export const threeEditorMouseEvents = (
 
 
     const moveFocusedObject = (e, isMobileEvent) => {
+        // console.log('-moveFocusedObject', {e, isMobileEvent, focusedObject});
         if (focusedObject) {
              setMousePosition(mouseRef, e, isMobileEvent);
             raycaster.setFromCamera(mouseRef, cameraRef.current);
