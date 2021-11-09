@@ -6,7 +6,7 @@ npm i -S git+ssh://git@gitlab.com:ObsessVR/npm-modules/threejs-scene.git
 
 
 //Or from specific branch
-npm i -S git+ssh://git@gitlab.com:ObsessVR/npm-modules/threejs-scene.git#branch-name
+npm i -S git+ssh://git@gitlab.com:ObsessVR/npm-modules/threejs-scene.git#develop
 
 //Or from specific tag
 npm i -S git+ssh://git@gitlab.com:ObsessVR/npm-modules/threejs-scene.git#v1.0.4

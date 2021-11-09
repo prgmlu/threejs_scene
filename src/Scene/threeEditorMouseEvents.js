@@ -145,6 +145,7 @@ export const threeEditorMouseEvents = (
 
     //TODO: move hotspot_type specific computation on the upper user level
     const moveFocusedObject = (e) => {
+        // console.log('-moveFocusedObject');
         if (focusedObject) {
             setMousePosition(mouseRef, e);
             raycaster.setFromCamera(mouseRef, cameraRef.current);
@@ -188,6 +189,11 @@ export const threeEditorMouseEvents = (
         renderer.domElement.addEventListener('contextmenu', preventContextMenu);
         renderer.domElement.addEventListener('mousemove', onMouseMove);
         renderer.domElement.addEventListener('wheel', mouseWheelHandler, { passive: true });
+
+        //Mobile
+        renderer.domElement.addEventListener('touchstart', onMouseDown);
+        renderer.domElement.addEventListener('touchmove', onMouseMove);
+        renderer.domElement.addEventListener('touchend', onMouseUp);
     };
 
     const removeThreeEditorMouseEventListeners = () => {
@@ -196,6 +202,11 @@ export const threeEditorMouseEvents = (
         renderer.domElement.removeEventListener('contextmenu', preventContextMenu);
         renderer.domElement.removeEventListener('mousemove', onMouseMove);
         renderer.domElement.removeEventListener('wheel', mouseWheelHandler);
+
+        //Mobile
+        renderer.domElement.removeEventListener('touchstart', onMouseDown);
+        renderer.domElement.removeEventListener('touchmove', onMouseMove);
+        renderer.domElement.removeEventListener('touchend', onMouseUp);
     };
 
     return {
