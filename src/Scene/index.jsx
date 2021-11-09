@@ -10,7 +10,7 @@ import './main.scss';
 
 
 const Scene = (props) => {
-    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, children } = props;
+    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, allowHotspotsToMove, children } = props;
     const [threeReady, setThreeReady] = useState(false);
     const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
     const [UI, setUI] = useState();
@@ -122,6 +122,7 @@ const Scene = (props) => {
             cameraRef,
             canvasContainer,
             allowEventsForMarkerTypeOnly,
+            allowHotspotsToMove,
             props.onMouseDown,
             props.onMouseUp,
             props.onMouseMove
@@ -132,7 +133,7 @@ const Scene = (props) => {
         return () => {
             removeThreeEditorMouseEventListeners();
         };
-    }, [sceneId, sceneRef, cameraRef, allowEventsForMarkerTypeOnly]); // eslint-disable-line
+    }, [sceneId, sceneRef, cameraRef, allowEventsForMarkerTypeOnly, allowHotspotsToMove]); // eslint-disable-line
 
 
 

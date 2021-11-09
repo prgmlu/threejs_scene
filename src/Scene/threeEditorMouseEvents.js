@@ -10,6 +10,7 @@ export const threeEditorMouseEvents = (
     cameraRef,
     canvasContainer,
     allowEventsForMarkerTypeOnly,
+    allowHotspotsToMove=true,
     onMouseDownCallback,
     onMouseUpCallback,
     onMouseMoveCallback
@@ -135,7 +136,7 @@ export const threeEditorMouseEvents = (
         //public callback/interface
         if(onMouseMoveCallback) onMouseMoveCallback(e, focusedObject, isMarkerClicked);
 
-        if (focusedObject && isMarkerClicked) {
+        if (allowHotspotsToMove && focusedObject && isMarkerClicked) {
             moveFocusedObject(e);
         } else if (focusedObject) {
             focusedObject = null;
@@ -144,7 +145,6 @@ export const threeEditorMouseEvents = (
 
     //TODO: move hotspot_type specific computation on the upper user level
     const moveFocusedObject = (e) => {
-
         if (focusedObject) {
             setMousePosition(mouseRef, e);
             raycaster.setFromCamera(mouseRef, cameraRef.current);

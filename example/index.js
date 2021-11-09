@@ -20,6 +20,7 @@ const Page=()=>{
             sceneId={sceneId}
             bgConf={sceneData.bg}
             useDebugger={true}
+            allowHotspotsToMove={false}
         >
             {sceneData?.hotspots?.map((item, i)=>{
                 return <Hotspot
