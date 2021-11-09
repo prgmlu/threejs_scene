@@ -28,16 +28,26 @@ export const threeEditorMouseEvents = (
 
     //Mouse positions
     const mouseRef = new THREE.Vector2();
-    const mouseStartRef = new THREE.Vector2();
+    const mouseStart = new THREE.Vector2();
 
     const raycaster = new THREE.Raycaster();
 
-    const setMousePosition = (refToUpdate, e) => {
+
+    const setMousePosition = (refToUpdate, e, isMobileEvent) => {
         const canvasDimensions = renderer.domElement.getBoundingClientRect();
-        const {top, left, width, height} = canvasDimensions;
-        const x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
-        const y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
-        // console.log('>setMousePosition', {top, left, width, height, x, y});
+        let x;
+        let y;
+
+        if(isMobileEvent){
+            const clientX = e.touches[0].pageX;
+            const clientY = e.touches[0].pageY;
+            x = ((clientX - canvasDimensions.left) / canvasDimensions.width) * 2 - 1;
+            y = -((clientY - canvasDimensions.top) / canvasDimensions.height) * 2 + 1;
+        }else{
+            const {top, left, width, height} = canvasDimensions;
+            x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
+            y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
+        }
 
         refToUpdate.x = x;
         refToUpdate.y = y;
@@ -65,13 +75,14 @@ export const threeEditorMouseEvents = (
      * In future, we may need/want to access intersection objects [] from provided callback function,
      * But I would recommend to avoid it if possible and keep computation of selected marker as part of the code.
      */
-    const onMouseDown = (e) => {
-        const mousePos = setMousePosition(mouseStartRef, e);
-        raycaster.setFromCamera(mouseStartRef, cameraRef.current);
+    const onMouseDownTouchStartEvent = (e) => {
+        const isTouchEvent = e.type == "touchstart";
+        const mousePos = setMousePosition(mouseStart, e, isTouchEvent);
+        raycaster.setFromCamera(mouseStart, cameraRef.current);
         const intersects = raycaster.intersectObjects(sceneRef.current.children);
 
         const marker = getIntersectedMarkerObject(intersects);
-     
+
         if (marker) {
             isMarkerClicked = true;
             controlsRef.current.enabled = false; //eslint-disable-line
@@ -89,11 +100,14 @@ export const threeEditorMouseEvents = (
 
 
 
-    const onMouseUp = (e) => {
-        setMousePosition(mouseRef, e);
+    const onMouseUpTouchEndEvent = (e) => {
+        const isMobileEvent = e.type == "touchend";
+        if (isMobileEvent && e.touches.length < 1) e.preventDefault();
+
+        if(!isMobileEvent) setMousePosition(mouseRef, e, isMobileEvent);
         controlsRef.current.enabled = true; //eslint-disable-line
 
-        const dragDistance = mouseRef.distanceTo(mouseStartRef);
+        const dragDistance = mouseRef.distanceTo(mouseStart);
         raycaster.setFromCamera(mouseRef, cameraRef.current);
         const intersects = raycaster.intersectObjects(sceneRef.current.children);
         const isDragEvent = (dragDistance > DESKTOP_THRESHOLD);
@@ -131,23 +145,28 @@ export const threeEditorMouseEvents = (
 
 
     const onMouseMove = (e) => {
+        const isMobileEvent = e.touches.length > 0;
         // const mousePosition = getMousePosition(mouseRef, e);
-        // console.log('%c __onMouseMove__', 'color:red', {focusedObject, isMarkerClicked});
         //public callback/interface
+
+        //update for mobile events
+        if(isMobileEvent && focusedObject) setMousePosition(mouseRef, e, true);
+
+        //call public callback
         if(onMouseMoveCallback) onMouseMoveCallback(e, focusedObject, isMarkerClicked);
 
+        //move object if any selected
         if (allowHotspotsToMove && focusedObject && isMarkerClicked) {
-            moveFocusedObject(e);
+            moveFocusedObject(e, isMobileEvent);
         } else if (focusedObject) {
             focusedObject = null;
         }
     };
 
-    //TODO: move hotspot_type specific computation on the upper user level
-    const moveFocusedObject = (e) => {
-        // console.log('-moveFocusedObject');
+
+    const moveFocusedObject = (e, isMobileEvent) => {
         if (focusedObject) {
-            setMousePosition(mouseRef, e);
+             setMousePosition(mouseRef, e, isMobileEvent);
             raycaster.setFromCamera(mouseRef, cameraRef.current);
 
             const intersects = raycaster.intersectObjects(sceneRef.current.children);
@@ -182,31 +201,35 @@ export const threeEditorMouseEvents = (
 
 
 
+
+
+
+
     // 2 main functions of event listeners
     const addThreeEditorMouseEventListeners = () => {
-        renderer.domElement.addEventListener('mousedown', onMouseDown);
-        renderer.domElement.addEventListener('mouseup', onMouseUp,  { passive: true });
+        renderer.domElement.addEventListener('mousedown', onMouseDownTouchStartEvent);
+        renderer.domElement.addEventListener('mouseup', onMouseUpTouchEndEvent,  { passive: true });
         renderer.domElement.addEventListener('contextmenu', preventContextMenu);
         renderer.domElement.addEventListener('mousemove', onMouseMove);
         renderer.domElement.addEventListener('wheel', mouseWheelHandler, { passive: true });
 
         //Mobile
-        renderer.domElement.addEventListener('touchstart', onMouseDown);
+        renderer.domElement.addEventListener('touchstart', onMouseDownTouchStartEvent);
         renderer.domElement.addEventListener('touchmove', onMouseMove);
-        renderer.domElement.addEventListener('touchend', onMouseUp);
+        renderer.domElement.addEventListener('touchend', onMouseUpTouchEndEvent);
     };
 
     const removeThreeEditorMouseEventListeners = () => {
-        renderer.domElement.removeEventListener('mousedown', onMouseDown);
-        renderer.domElement.removeEventListener('mouseup', onMouseUp);
+        renderer.domElement.removeEventListener('mousedown', onMouseDownTouchStartEvent);
+        renderer.domElement.removeEventListener('mouseup', onMouseUpTouchEndEvent);
         renderer.domElement.removeEventListener('contextmenu', preventContextMenu);
         renderer.domElement.removeEventListener('mousemove', onMouseMove);
         renderer.domElement.removeEventListener('wheel', mouseWheelHandler);
 
         //Mobile
-        renderer.domElement.removeEventListener('touchstart', onMouseDown);
+        renderer.domElement.removeEventListener('touchstart', onMouseDownTouchStartEvent);
         renderer.domElement.removeEventListener('touchmove', onMouseMove);
-        renderer.domElement.removeEventListener('touchend', onMouseUp);
+        renderer.domElement.removeEventListener('touchend', onMouseUpTouchEndEvent);
     };
 
     return {
