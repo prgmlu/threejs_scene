@@ -88,7 +88,7 @@ export const threeEditorMouseEvents = (
             controlsRef.current.enabled = false; //eslint-disable-line
             focusedObject = marker.object;
             const { point } = marker;
-            //TODO: what it does?
+            //TODO: describe what it does?
             if(!focusedObject?.parent) console.error('Prop Not Found');
             if(focusedObject?.parent) inverseMatrix.copy(focusedObject.parent.matrixWorld).getInverse(inverseMatrix);
             offset.copy(point).sub(worldPosition.setFromMatrixPosition(focusedObject.matrixWorld));
@@ -145,7 +145,7 @@ export const threeEditorMouseEvents = (
 
 
     const onMouseMove = (e) => {
-        const isMobileEvent = e.touches.length > 0;
+        const isMobileEvent = e.touches?.length > 0;
         // const mousePosition = getMousePosition(mouseRef, e);
         //public callback/interface
 
