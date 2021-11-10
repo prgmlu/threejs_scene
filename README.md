@@ -25,7 +25,7 @@ Available components:
 - Scene
 - Hotspot
 
-## Create the Scene
+## Create the Scene `<Scene/>`
 
 ```javascript
 <Scene
@@ -34,6 +34,11 @@ Available components:
 />
 ```
 ### Scene Options
+
+- sceneId (required)
+- bgConf (required)
+- allowHotspotsToMove (optional, true by default)
+- allowEventsForMarkerTypeOnly (optional)
 
 **_bgConf_** (required)
 ```javascript
@@ -65,7 +70,6 @@ Currently supported public callbacks:
     onMouseMove={onMouseMove}
     onDrop={onDrop}
 />
-    allowEventsForMarkerTypeOnly={selectedHotspotType}
 ```
 
 ### Filter
@@ -82,7 +86,7 @@ Sometimes we may want to allow access and events only to specific scene object t
 
 <hr/>
 
-# Scene Objects
+# Scene Objects `<Hotspot/>`
 
 To place scene object on the scene, use `<Hotspot/>` component provided by the library.
 
