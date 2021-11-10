@@ -549,6 +549,24 @@ var OrbitControls = function ( object, domElement ) {
 		if ( scope.enableRotate ) handleTouchStartRotate( event );
 	}
 
+	function getMousePosition( e, refToUpdate) {
+		const rect = scope.domElement.getBoundingClientRect();
+		const clientX = e.touches[0].pageX;
+		const clientY = e.touches[0].pageY;
+		const mousePosition = new THREE.Vector2(0, 0);
+		mousePosition.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+		mousePosition.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+		if(refToUpdate){
+			refToUpdate.x = mousePosition.x;
+			refToUpdate.y = mousePosition.y;
+		}
+
+		return mousePosition;
+	}
+
+
+
 	function handleTouchMoveRotate( event ) {
 		if ( event.touches.length == 1 ) {
 			rotateEnd.set( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY );
