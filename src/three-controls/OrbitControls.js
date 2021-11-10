@@ -98,7 +98,11 @@ var OrbitControls = function ( object, domElement ) {
 	};
 
 	// Touch fingers
-	this.touches = { ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN };
+	this.touches = {
+		ONE: TOUCH.ROTATE,
+		TWO: TOUCH.DOLLY_PAN
+	};
+	
 
 	// for reset
 	this.target0 = this.target.clone();
@@ -364,13 +368,11 @@ var OrbitControls = function ( object, domElement ) {
 				// we use only clientHeight here so aspect ratio does not distort speed
 				panLeft( 2 * deltaX * targetDistance / element.clientHeight, scope.object.matrix );
 				panUp( 2 * deltaY * targetDistance / element.clientHeight, scope.object.matrix );
-
 			} else if ( scope.object.isOrthographicCamera ) {
 
 				// orthographic
 				panLeft( deltaX * ( scope.object.right - scope.object.left ) / scope.object.zoom / element.clientWidth, scope.object.matrix );
 				panUp( deltaY * ( scope.object.top - scope.object.bottom ) / scope.object.zoom / element.clientHeight, scope.object.matrix );
-
 			}
 			else {
 				// camera neither orthographic nor perspective
