@@ -625,9 +625,7 @@ var OrbitControls = function ( object, domElement ) {
 		if ( scope.enableRotate ) handleTouchMoveRotate( event );
 	}
 
-	function handleTouchEnd( /*event*/ ) {
-		// no-op
-	}
+
 
 
 	// event handlers - FSM: listen for events and reset state
@@ -821,7 +819,6 @@ var OrbitControls = function ( object, domElement ) {
 
 	function onTouchMove( event ) {
 		if ( scope.enabled === false ) return;
-
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -855,24 +852,17 @@ var OrbitControls = function ( object, domElement ) {
 		}
 	}
 
+
 	function onTouchEnd( event ) {
-
 		if ( scope.enabled === false ) return;
-
-		handleTouchEnd( event );
-
+		// no-op
 		scope.dispatchEvent( endEvent );
-
 		state = STATE.NONE;
-
 	}
 
 	function onContextMenu( event ) {
-
 		if ( scope.enabled === false ) return;
-
 		event.preventDefault();
-
 	}
 
 	//
