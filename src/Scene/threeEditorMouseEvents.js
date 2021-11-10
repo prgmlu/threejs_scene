@@ -34,24 +34,24 @@ export const threeEditorMouseEvents = (
 
 
     const setMousePosition = (refToUpdate, e, isMobileEvent) => {
-        const canvasDimensions = renderer.domElement.getBoundingClientRect();
+        const rect = renderer.domElement.getBoundingClientRect();
         let x;
         let y;
 
         if(isMobileEvent){
             const clientX = e.touches[0].pageX;
             const clientY = e.touches[0].pageY;
-            x = ((clientX - canvasDimensions.left) / canvasDimensions.width) * 2 - 1;
-            y = -((clientY - canvasDimensions.top) / canvasDimensions.height) * 2 + 1;
+            x = ((clientX - rect.left) / rect.width) * 2 - 1;
+            y = -((clientY - rect.top) / rect.height) * 2 + 1;
         }else{
-            const {top, left, width, height} = canvasDimensions;
+            const {top, left, width, height} = rect;
             x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
             y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
         }
 
         refToUpdate.x = x;
         refToUpdate.y = y;
-        return { x, y, canvasDimensions }
+        return { x, y, rect }
     };
 
     const getMousePosition = () => {
