@@ -761,14 +761,17 @@ var OrbitControls = function ( object, domElement ) {
 		handleKeyDown( event );
 	}
 
-	function onTouchStart( event ) {
 
+
+	function onTouchStart( event ) {
 		if ( scope.enabled === false ) return;
 		event.preventDefault();
+		let touchActionID = scope.enablePan  ? STATE.TOUCH_PAN : STATE.TOUCH_ROTATE;
 
 		switch ( event.touches.length ) {
 			case 1:
-				switch ( scope.touches.ONE ) {
+				// switch ( scope.touches.ONE ) {
+				switch ( touchActionID ) {
 					case TOUCH.ROTATE:
 						if ( scope.enableRotate === false ) return;
 						handleTouchStartRotate( event );
@@ -788,7 +791,7 @@ var OrbitControls = function ( object, domElement ) {
 				break;
 
 			case 2:
-				switch ( scope.touches.TWO ) {
+				switch ( touchActionID ) {
 					case TOUCH.DOLLY_PAN:
 						if ( scope.enableZoom === false && scope.enablePan === false ) return;
 						handleTouchStartDollyPan( event );
