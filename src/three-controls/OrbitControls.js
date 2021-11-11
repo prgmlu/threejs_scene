@@ -1,3 +1,4 @@
+//https://github.com/mrdoob/three.js/blob/dev/examples/jsm/controls/OrbitControls.js
 import * as THREE from 'three';
 
 /**
@@ -591,6 +592,8 @@ var OrbitControls = function ( object, domElement ) {
 	}
 
 	function handleTouchMovePan( event ) {
+		const clientX = event.touches[0].pageX;
+		const clientY = event.touches[0].pageY;
 		if ( event.touches.length == 1 ) {
 			panEnd.set( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY );
 		} else {
@@ -764,15 +767,17 @@ var OrbitControls = function ( object, domElement ) {
 
 
 	function onTouchStart( event ) {
+		// const touchPos= getMousePosition(event, rotateStart);
 		if ( scope.enabled === false ) return;
 		event.preventDefault();
-		const touchPos= getMousePosition(event, rotateStart);
-		let touchActionID = scope.enablePan  ? STATE.TOUCH_PAN : STATE.TOUCH_ROTATE;
+
+		let actionID = scope.enablePan  ? STATE.TOUCH_PAN : STATE.TOUCH_ROTATE;
+
 
 		switch ( event.touches.length ) {
 			case 1:
 				// switch ( scope.touches.ONE ) {
-				switch ( touchActionID ) {
+				switch ( actionID ) {
 					case TOUCH.ROTATE:
 						if ( scope.enableRotate === false ) return;
 						handleTouchStartRotate( event );
@@ -792,7 +797,7 @@ var OrbitControls = function ( object, domElement ) {
 				break;
 
 			case 2:
-				switch ( touchActionID ) {
+				switch ( actionID ) {
 					case TOUCH.DOLLY_PAN:
 						if ( scope.enableZoom === false && scope.enablePan === false ) return;
 						handleTouchStartDollyPan( event );
@@ -821,21 +826,22 @@ var OrbitControls = function ( object, domElement ) {
 
 
 	function onTouchMove( event ) {
+		// const touchPos= getMousePosition(event, rotateEnd);
 		if ( scope.enabled === false ) return;
 		event.preventDefault();
 		event.stopPropagation();
-		const touchPos= getMousePosition(event, rotateEnd);
-		let touchActionID = scope.enablePan  ? STATE.TOUCH_PAN : STATE.TOUCH_ROTATE;
+
+		let actionID = scope.enablePan  ? STATE.TOUCH_PAN : STATE.TOUCH_ROTATE;
 
 
-		switch ( touchActionID ) {
+		switch ( actionID ) {
 			case STATE.TOUCH_ROTATE: //3
 				if ( scope.enableRotate === false ) return;
 				handleTouchMoveRotate( event );
 				scope.update();
 				break;
 
-			case STATE.TOUCH_PAN:
+			case STATE.TOUCH_PAN: //4
 				if ( scope.enablePan === false ) return;
 				handleTouchMovePan( event );
 				scope.update();
