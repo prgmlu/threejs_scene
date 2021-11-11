@@ -38,7 +38,7 @@ export const threeEditorMouseEvents = (
         let x;
         let y;
 
-        if(isMobileEvent){
+        if(isMobileEvent && e.touches[0]){
             const clientX = e.touches[0].pageX;
             const clientY = e.touches[0].pageY;
             x = ((clientX - rect.left) / rect.width) * 2 - 1;
@@ -78,50 +78,53 @@ export const threeEditorMouseEvents = (
     const onMouseDownTouchStartEvent = (e) => {
         const isTouchEvent = e.type == "touchstart";
         const mousePos = setMousePosition(mouseStart, e, isTouchEvent);
+
+
         raycaster.setFromCamera(mouseStart, cameraRef.current);
         const intersects = raycaster.intersectObjects(sceneRef.current.children);
-        const marker = getIntersectedMarkerObject(intersects);
+        const sceneObject = getIntersectedMarkerObject(intersects);
 
 
-        if (marker) {
+        if (sceneObject) {
             isMarkerClicked = true;
             controlsRef.current.enabled = false; //eslint-disable-line
-            focusedObject = marker.object;
-            const { point } = marker;
+            focusedObject = sceneObject.object;
+            const { point } = sceneObject;
             //TODO: describe what it does?
             if(!focusedObject?.parent) console.error('Prop Not Found');
             if(focusedObject?.parent) inverseMatrix.copy(focusedObject.parent.matrixWorld).getInverse(inverseMatrix);
             offset.copy(point).sub(worldPosition.setFromMatrixPosition(focusedObject.matrixWorld));
+        }else{
+            isMarkerClicked = false;
         }
 
         //Public interface
-        if(onMouseDownCallback)  onMouseDownCallback(e, marker, mousePos);
+        if(onMouseDownCallback)  onMouseDownCallback(e, sceneObject, mousePos);
     };
 
 
 
     const onMouseUpTouchEndEvent = (e) => {
-        // console.log('-onMouseUp', {e});
         const isMobileEvent = e.type == "touchend";
+
         if (isMobileEvent && e.touches.length < 1) e.preventDefault();
 
+        //'touchend' has no e.touches, to set mouseRef, but we can set it from 'touchmove'
         if(!isMobileEvent) setMousePosition(mouseRef, e, isMobileEvent);
+
         controlsRef.current.enabled = true; //eslint-disable-line
 
         const dragDistance = mouseRef.distanceTo(mouseStart);
-        raycaster.setFromCamera(mouseRef, cameraRef.current);
-        const intersects = raycaster.intersectObjects(sceneRef.current.children);
         const isDragEvent = (dragDistance > DESKTOP_THRESHOLD);
 
-        const markerIntersection = getIntersectedMarkerObject(intersects);
-        const sceneObject = markerIntersection?.object;
+        raycaster.setFromCamera(mouseRef, cameraRef.current);
+        const intersects = raycaster.intersectObjects(sceneRef.current.children);
+        // const markerIntersection = getIntersectedMarkerObject(intersects);
+        // const sceneObject = markerIntersection?.object;
+        const sceneObject = isMarkerClicked && focusedObject ? focusedObject : null;
 
-        //reset data
-        if (dragDistance > DESKTOP_THRESHOLD) {
-            if (isMarkerClicked) isMarkerClicked = false;
-        }else{
-            isMarkerClicked = false;
-        }
+
+
 
         //Find underlying scene background object
         const bgObject = intersects.find(item=> ['cubeBackground', 'flatBackground'].includes(item.object.name));
@@ -133,6 +136,14 @@ export const threeEditorMouseEvents = (
         //Get transforms
         const marker = sceneObject?.owner;
         if(marker) marker.transforms = marker.getTransforms();
+
+
+        //reset data
+        if (dragDistance > DESKTOP_THRESHOLD) {
+            if (isMarkerClicked) isMarkerClicked = false;
+        }else{
+            isMarkerClicked = false;
+        }
 
         // public method/callback
         if(onMouseUpCallback)  return onMouseUpCallback(e, sceneObject, marker,  isDragEvent);
@@ -150,7 +161,8 @@ export const threeEditorMouseEvents = (
         // console.log('%c __onMouseMove__', 'color:red', {e, focusedObject, isMarkerClicked});
 
 
-        //update for mobile events
+        //update for mobile events only
+        //'touchend' has no e.touches to set mouseRef, but we can set it from 'touchmove'
         if(isMobileEvent && focusedObject) setMousePosition(mouseRef, e, true);
 
         //call public callback
