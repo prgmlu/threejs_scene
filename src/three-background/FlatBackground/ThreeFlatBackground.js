@@ -6,6 +6,8 @@ import ThreeController from '../../three-controls/ThreeController';
 export default class ThreeFlatBackground extends ThreeSceneObject {
     constructor() {
         super();
+
+        this.geometry=null;
         this.loader = this.setupTextureLoader();
         this.controls = ThreeController.setupPanControls();
         this.setInitialObject();
@@ -15,9 +17,10 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
     setInitialObject = () => {
         const material = new THREE.MeshBasicMaterial({
             depthTest: false, depthWrite: false,
+            // wireframe:true
         });
-        const geometry = new THREE.PlaneGeometry(14.15, 14.15);
-        this.sceneObject = new THREE.Mesh(geometry, material);
+        this.geometry = new THREE.PlaneGeometry(14.15, 14.15);
+        this.sceneObject = new THREE.Mesh(this.geometry, material);
         this.sceneObject.rotateY(THREE.Math.degToRad(90));
         this.sceneObject.position.x = -10;
         this.sceneObject.name = 'flatBackground';
@@ -30,18 +33,7 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
         return loader;
     }
 
-    setMaterial(texture) {
-        const { image } = texture;
 
-        this.width = image.width / image.height;
-        if(this.sceneObject){
-            this.sceneObject.scale.set(this.width, 1, 1);
-            this.sceneObject.material.map = texture;
-            this.sceneObject.material.needsUpdate = true;
-        }
-
-        this.setPanArea();
-    }
 
     setPanArea() {
         const canvasWidth = this.controls.domElement.offsetWidth;
@@ -49,8 +41,8 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
         const ratio = (14.15 * this.width) / 2 - offset;
         const minMax = this.width > 1 ? ratio : 0;
 
-        this.controls.minPan = new THREE.Vector3(0, 0, -minMax);
-        this.controls.maxPan = new THREE.Vector3(0, 0, minMax);
+        this.controls.minPan = new THREE.Vector3(0, 0, 0);
+        this.controls.maxPan = new THREE.Vector3(0, 0, 0);
     }
 
     loadTexture = (url) => {
@@ -62,6 +54,19 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
             texture.wrapT = THREE.ClampToEdgeWrapping;
             this.setMaterial(texture);
         });
+    }
+
+    setMaterial(texture) {
+        const { image } = texture;
+        this.width = image.width / image.height;
+
+        if(this.sceneObject){
+            this.sceneObject.scale.set( this.width, 1, 1);
+            this.sceneObject.material.map = texture;
+            this.sceneObject.material.needsUpdate = true;
+        }
+
+        this.setPanArea();
     }
 
     dispose() {
