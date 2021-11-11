@@ -510,6 +510,7 @@ var OrbitControls = function ( object, domElement ) {
 	}
 
 	function handleTouchStartRotate( event ) {
+		// const touchPos= getMousePosition(event, rotateStart);
 		if ( event.touches.length == 1 ) {
 			rotateStart.set( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY );
 		} else {
@@ -765,6 +766,7 @@ var OrbitControls = function ( object, domElement ) {
 	function onTouchStart( event ) {
 		if ( scope.enabled === false ) return;
 		event.preventDefault();
+		const touchPos= getMousePosition(event, rotateStart);
 		let touchActionID = scope.enablePan  ? STATE.TOUCH_PAN : STATE.TOUCH_ROTATE;
 
 		switch ( event.touches.length ) {
@@ -822,9 +824,12 @@ var OrbitControls = function ( object, domElement ) {
 		if ( scope.enabled === false ) return;
 		event.preventDefault();
 		event.stopPropagation();
+		const touchPos= getMousePosition(event, rotateEnd);
+		let touchActionID = scope.enablePan  ? STATE.TOUCH_PAN : STATE.TOUCH_ROTATE;
 
-		switch ( state ) {
-			case STATE.TOUCH_ROTATE:
+
+		switch ( touchActionID ) {
+			case STATE.TOUCH_ROTATE: //3
 				if ( scope.enableRotate === false ) return;
 				handleTouchMoveRotate( event );
 				scope.update();
