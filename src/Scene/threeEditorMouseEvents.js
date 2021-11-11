@@ -96,6 +96,7 @@ export const threeEditorMouseEvents = (
             offset.copy(point).sub(worldPosition.setFromMatrixPosition(focusedObject.matrixWorld));
         }else{
             isMarkerClicked = false;
+            focusedObject = false;
         }
 
         //Public interface
