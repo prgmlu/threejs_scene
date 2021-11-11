@@ -4,21 +4,43 @@ import Scene, {Hotspot} from "../src";
 import './exampleStyles.scss';
 import scenes from './mock.json';
 
-
+const HotspotInfo=({Marker, Modal})=>{
+    return(<div style={{padding:'1em'}}>
+        <div onClick={e=>Modal.closeModal()} style={{position:'absolute', right:0, top:0}} >x</div>
+        {Marker?.userData?.name || 'Hotspot'}
+    </div>)
+}
 
 const Page=()=>{
     const [sceneId, setSceneId]=useState(1);
     const sceneData = scenes[sceneId-1];
 
+    const uiConf ={
+        Component: HotspotInfo,
+        positionNextToTheElement:true,
+    };
+
+
+    const onMouseUp=(e, sceneObject, marker)=>{
+        //Open marker UI
+        if (marker && marker?.sceneObject) marker.onClick(e);
+
+    }
+
     return(<div>
         <h2>ThreeJS Scene</h2>
+
+
         <SceneSelector
             sceneId={sceneId}
             setSceneId={setSceneId}
         />
+
+
         <Scene
             sceneId={sceneId}
             bgConf={sceneData.bg}
+            onMouseUp={onMouseUp}
             useDebugger={true}
             // allowHotspotsToMove={false}
         >
@@ -30,6 +52,8 @@ const Page=()=>{
                     transform={item.transform}
                     iconConfig={item.iconConfig}
                     imageURL={item.imageURL}
+                    userData={item.userData}
+                    UIConfig={uiConf}
                 />
             })}
 
