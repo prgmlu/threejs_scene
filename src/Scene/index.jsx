@@ -66,7 +66,7 @@ const Scene = (props) => {
         }
 
         const handleContextRestore=()=>{
-            console.log('Context restored');
+            console.log('%c Context restored', 'color:green');
             setupRenderer(rendererRef.current, canvas);
             scene.add(cameraRef.current);
         }
@@ -86,7 +86,6 @@ const Scene = (props) => {
 
 
     const initSceneView=()=>{
-
         // set new reference for cameraRef.current here
         const aspectRatio = canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
@@ -99,8 +98,8 @@ const Scene = (props) => {
 
     //New Scene INIT
     useEffect(() => {
+        console.log('%c >INIT:2 - sceneView', 'color:green' );
         initSceneView();
-
 
         return () => {
             controlsRef.current.dispose();
@@ -180,7 +179,12 @@ const Scene = (props) => {
 
 
     return (<>
-        {useDebugger && <DebugUI renderer={rendererRef.current} scene={sceneRef.current} glContext={glContext}/>}
+        {useDebugger && <DebugUI
+            renderer={rendererRef.current}
+            scene={sceneRef.current}
+            glContext={glContext}
+        />}
+
             <div
                 id="canvas-wrapper"
                 className={'canvas-wrapper'}
