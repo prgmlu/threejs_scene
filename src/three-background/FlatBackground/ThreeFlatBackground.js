@@ -56,6 +56,14 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
         });
     }
 
+    setDefaultMaterial=()=>{
+        //this.sceneObject.material.map = new THREE.Texture(drawCanvas);
+        if(this.sceneObject){
+            this.sceneObject.material.map = null;
+            this.sceneObject.material.needsUpdate = true;
+        }
+    }
+
     setMaterial(texture) {
         const { image } = texture;
         this.width = image.width / image.height;

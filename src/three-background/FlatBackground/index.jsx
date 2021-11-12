@@ -20,6 +20,8 @@ const FlatBackground = ({ scene, backgroundUrl }) => {
     useEffect(() => {
         if (backgroundUrl) {
             flatBackground.current.loadTexture(`${backgroundUrl}?v=${formatDate(new Date(), "mmddyyyyhh")}`);
+        }else{
+            flatBackground.current.setDefaultMaterial();
         }
     }, [backgroundUrl]);
 
