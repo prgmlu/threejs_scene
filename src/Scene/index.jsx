@@ -10,7 +10,7 @@ import './main.scss';
 
 
 const Scene = (props) => {
-    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, allowHotspotsToMove, children } = props;
+    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, allowHotspotsToMove, resetBGBeforeImageLoaded=false, children } = props;
     const [threeReady, setThreeReady] = useState(false);
     const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
     const [UI, setUI] = useState();
@@ -198,7 +198,11 @@ const Scene = (props) => {
                 {threeReady && (
                     <>
                         <ColliderSphere scene={scene} />
-                        <Background bgConf={bgConf} scene={scene} resetBeforeImageLoaded={true}/>
+                        <Background
+                            bgConf={bgConf}
+                            scene={scene}
+                            resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
+                        />
                     </>
                 )}
 

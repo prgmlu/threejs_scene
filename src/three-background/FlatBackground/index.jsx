@@ -23,7 +23,7 @@ const FlatBackground = ({ scene, backgroundUrl, resetBeforeImageLoaded }) => {
             resetBeforeImageLoaded
         });
         if(resetBeforeImageLoaded){
-            flatBackground.current.setDefaultMaterial();
+            flatBackground.current.resetMaterial();
         }
         if (backgroundUrl) {
             flatBackground.current.loadTexture(`${backgroundUrl}?v=${formatDate(new Date(), "mmddyyyyhh")}`);

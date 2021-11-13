@@ -19,6 +19,7 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
             depthTest: false, depthWrite: false,
             // wireframe:true
         });
+        console.log('material',material);
         this.geometry = new THREE.PlaneGeometry(14.15, 14.15);
         this.sceneObject = new THREE.Mesh(this.geometry, material);
         this.sceneObject.rotateY(THREE.Math.degToRad(90));
@@ -46,7 +47,9 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
     }
 
     loadTexture = (url) => {
+        console.log('___load_texture');
         this.loader.load(url, (loadedTexture) => {
+            console.log('__Texture_loaded');
             const texture = loadedTexture;
             texture.minFilter = THREE.LinearFilter;
             texture.magFilter = THREE.LinearFilter;
@@ -56,7 +59,7 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
         });
     }
 
-    setDefaultMaterial=()=>{
+    resetMaterial=()=>{
         console.log('_setDefaultMaterial');
         //this.sceneObject.material.map = new THREE.Texture(drawCanvas);
         if(this.sceneObject){
