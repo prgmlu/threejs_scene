@@ -9,7 +9,9 @@
         "type": "hotspot",
         "collider_transform": [0.45,0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 1.865898397092683, 0.43918906884778, 1],
         "transform": [0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 2.865898397092683, 1.43918906884778, 1],
-         "userData": {},
+         "userData": {
+           "name": "Green Hotspot"
+         },
          "UIConfig": {},
          "iconConfig": {
            "dotColor": "green"
@@ -19,7 +21,9 @@
         "type": "hotspot",
         "collider_transform": [0.45,0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 2.865898397092683, 1.43918906884778, 1],
         "transform": [0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 2.865898397092683, 1.43918906884778, 1],
-        "userData": {},
+        "userData": {
+          "name": "Custom Image From CDN Hotspot"
+        },
         "UIConfig": {},
         "imageURL": "https://cdn.obsess-vr.com/ralph-lauren/rl-bh/rl-hotspot-Icon.svg"
       },
@@ -27,7 +31,9 @@
         "type": "hotspot",
         "collider_transform": [0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 1.2752308578575213, -0.7709265735984403, 1],
         "transform": [0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0.45, 0, -10, 1.2752308578575213, -0.7709265735984403, 1],
-         "userData": {},
+         "userData": {
+           "name": "Just a Hotspot"
+         },
          "UIConfig": {}
       }
     ]

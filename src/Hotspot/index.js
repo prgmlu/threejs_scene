@@ -51,7 +51,7 @@ Hotspot.propTypes = {
     transform: PropTypes.array,
     userData: PropTypes.object,
     UIConfig: PropTypes.shape({
-        Component: PropTypes.object.isRequired,
+        // Component: PropTypes.object.isRequired,
         style: PropTypes.object,
         positionNextToTheElement: PropTypes.bool,
     }),
