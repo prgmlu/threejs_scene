@@ -18,6 +18,10 @@ const FlatBackground = ({ scene, backgroundUrl, resetBeforeImageLoaded }) => {
     }, []);
 
     useEffect(() => {
+        console.log('___FlatBG:image changed', {
+            flatBackground: flatBackground.current,
+            resetBeforeImageLoaded
+        });
         if(resetBeforeImageLoaded){
             flatBackground.current.setDefaultMaterial();
         }
