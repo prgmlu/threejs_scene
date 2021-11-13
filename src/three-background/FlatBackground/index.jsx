@@ -18,13 +18,10 @@ const FlatBackground = ({ scene, backgroundUrl, resetBGBeforeImageLoaded }) => {
     }, []);
 
     useEffect(() => {
-        console.log('___FlatBG:image changed', {
-            flatBackground: flatBackground.current,
-            resetBGBeforeImageLoaded
-        });
-        if(resetBGBeforeImageLoaded){
-            flatBackground.current.resetMaterial();
-        }
+        //sometimes we want to erase previously loaded image texture
+        //to avoid flickering
+        if(resetBGBeforeImageLoaded) flatBackground.current.resetMaterial();
+
         if (backgroundUrl) {
             flatBackground.current.loadTexture(`${backgroundUrl}?v=${formatDate(new Date(), "mmddyyyyhh")}`);
         }
