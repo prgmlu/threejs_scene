@@ -198,7 +198,7 @@ const Scene = (props) => {
                 {threeReady && (
                     <>
                         <ColliderSphere scene={scene} />
-                        <Background bgConf={bgConf} scene={scene} />
+                        {bgConf && (<Background bgConf={bgConf} scene={scene} />)}
                     </>
                 )}
 
