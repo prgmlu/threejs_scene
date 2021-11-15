@@ -62,6 +62,9 @@ const Scene = (props) => {
             setTimeout((e) => {
                 console.log('%c Context lost. restoring context...','color:red');
                 loseExtension?.restoreContext();
+                //restoreContext() will ONLY simulate restoring the context
+                //run restore only if context lost, otherwise error will be thrown
+               if(!glContext) loseExtension?.restoreContext();
                 renderer.clear();
             }, 50);
         }
