@@ -8,7 +8,6 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, argv) => {
     const { mode } = argv;
-    const devMode = mode === 'development';
     const buildMode = argv.env.build == true;
 
 
@@ -46,8 +45,8 @@ module.exports = (env, argv) => {
 
 
         devServer: {
-            host: 'localhost',
-            port: 5555,
+            host: '0.0.0.0',
+            port: 4000,
             publicPath: '/', //webpack output is served from /
             headers: {"Access-Control-Allow-Origin": "*"},
             historyApiFallback: true,
