@@ -69,18 +69,19 @@ const Scene = (props) => {
             }, 50);
         }
 
-        const handleContextRestore=()=>{
+
+        const handleContextRestored=()=>{
             console.log('%c Context restored', 'color:green');
             setupRenderer(rendererRef.current, canvas);
             scene.add(cameraRef.current);
         }
 
         renderer.domElement.addEventListener('webglcontextlost', handleContextLoss );
-        renderer.domElement.addEventListener('webglcontextrestored', handleContextRestore);
+        renderer.domElement.addEventListener('webglcontextrestored', handleContextRestored);
 
         return ()=>{
             renderer.domElement.removeEventListener('webglcontextlost', handleContextLoss);
-            renderer.domElement.removeEventListener('webglcontextrestored', handleContextRestore);
+            renderer.domElement.removeEventListener('webglcontextrestored', handleContextRestored);
             renderer.dispose();
             // renderer.forceContextLoss();//test
             //cameraRef.current.dispose();
