@@ -35,16 +35,16 @@ export const threeEditorMouseEvents = (
 
     const setMousePosition = (refToUpdate, e, isMobileEvent) => {
         const rect = renderer.domElement.getBoundingClientRect();
+        const {top, left, width, height} = rect;
         let x;
         let y;
 
         if(isMobileEvent && e.touches[0]){
             const clientX = e.touches[0].pageX;
             const clientY = e.touches[0].pageY;
-            x = ((clientX - rect.left) / rect.width) * 2 - 1;
-            y = -((clientY - rect.top) / rect.height) * 2 + 1;
+            x = ((clientX - left) / width) * 2 - 1;
+            y = -((clientY - top) / height) * 2 + 1;
         }else{
-            const {top, left, width, height} = rect;
             x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
             y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
         }
