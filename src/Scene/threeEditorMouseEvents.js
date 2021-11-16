@@ -38,20 +38,26 @@ export const threeEditorMouseEvents = (
         const {top, left, width, height} = rect;
         let x;
         let y;
+        let clientX = e.clientX;
+        let clientY = e.clientY;
 
-        if(isMobileEvent && e.touches[0]){
-            const clientX = e.touches[0].pageX;
-            const clientY = e.touches[0].pageY;
-            x = ((clientX - left) / width) * 2 - 1;
-            y = -((clientY - top) / height) * 2 + 1;
-        }else{
-            x = -1 + 2 * (e.clientX - left) / width; // eslint-disable-line
-            y = 1 - 2 * (e.clientY - top) / height; // eslint-disable-line
+        if(isMobileEvent){
+            const eventData = e.type === "touchend" ? e.changedTouches : e.touches;
+            //Do not use pageX/pageY here!!!!
+            clientX= eventData[0].clientX;
+            clientY= eventData[0].clientY;
+
         }
 
-        refToUpdate.x = x;
-        refToUpdate.y = y;
-        return { x, y, rect }
+
+        x = ((clientX - left) / width) * 2 - 1;
+        y = -((clientY - top ) / height) * 2 + 1;
+
+
+        if(!x || !y) console.error('Wrong mouse coordinate computation');
+
+        refToUpdate.set(x,y)
+        return { x, y }
     };
 
     const getMousePosition = () => {
@@ -76,8 +82,8 @@ export const threeEditorMouseEvents = (
      * But I would recommend to avoid it if possible and keep computation of selected marker as part of the code.
      */
     const onMouseDownTouchStartEvent = (e) => {
-        const isTouchEvent = e.type == "touchstart";
-        const coord = setMousePosition(mouseStart, e, isTouchEvent);
+        const isMobileEvent = e.type == "touchstart";
+        const coord = setMousePosition(mouseStart, e, isMobileEvent);
         mouseCoord.set(coord.x, coord.y); //mouseCoord should keep initial click position
 
 
@@ -109,10 +115,8 @@ export const threeEditorMouseEvents = (
     const onMouseUpTouchEndEvent = (e) => {
         const isMobileEvent = e.type == "touchend";
 
-        if (isMobileEvent && e.touches.length < 1) e.preventDefault();
-
-        //'touchend' has no e.touches, to set mouseCoord, but we can set it from 'touchmove'
-        if(!isMobileEvent) setMousePosition(mouseCoord, e, isMobileEvent);
+        if (isMobileEvent) e.preventDefault();
+         setMousePosition(mouseCoord, e, isMobileEvent);
 
         controlsRef.current.enabled = true; //eslint-disable-line
 
