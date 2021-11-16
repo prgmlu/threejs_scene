@@ -46,7 +46,6 @@ export const threeEditorMouseEvents = (
             //Do not use pageX/pageY here!!!!
             clientX= eventData[0].clientX;
             clientY= eventData[0].clientY;
-
         }
 
 

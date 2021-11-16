@@ -22,8 +22,8 @@ const Page=()=>{
     };
 
 
-    const onMouseUp=(e, sceneObject, marker, isDragEvent, point, sceneRef)=>{
-        // console.log('-onMouseUp',{e, sceneObject, marker, point, sceneRef, isDragEvent});
+    const onMouseUp=(e, sceneObject, marker, isDragEvent)=>{
+        // console.log('-onMouseUp',{e, sceneObject, marker, isDragEvent});
         //Open marker UI
         if (marker && marker?.sceneObject) marker.onClick(e);
         else{
