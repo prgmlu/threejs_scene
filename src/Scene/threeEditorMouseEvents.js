@@ -129,7 +129,7 @@ export const threeEditorMouseEvents = (
 
 
         //Find underlying scene background object
-        const bgObject = intersects.find(item=> ['cubeBackground', 'flatBackground'].includes(item.object.name));
+        const bgObject = intersects.find(item=> ['cubeBackground', 'flatBackground','colliderSphere'].includes(item.object.name));
         const point = bgObject.point;
 
         //save clickData
