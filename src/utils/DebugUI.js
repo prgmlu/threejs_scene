@@ -16,7 +16,7 @@ export default function DebugUI({renderer, glContext, scene}){
     const ext = glContext.getExtension('WEBGL_lose_context');
     const supportedExt = glContext.getSupportedExtensions() ;
 
-    console.log('>BebugUI', 'color:blue', {supportedExt});
+    console.log('%c >BebugUI', 'color:blue', {supportedExt});
 
     const restore=(e)=>{
         ext.restoreContext();

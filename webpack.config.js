@@ -32,8 +32,6 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, 'dist'),
             filename: 'index.js',
 
-            //CommonJS
-            // libraryTarget: 'commonjs2',
 
             //UMD
             libraryTarget: 'umd', //document undefined

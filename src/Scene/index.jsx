@@ -58,20 +58,23 @@ const Scene = (props) => {
         setThreeReady(true);
 
         const handleContextLoss=(e)=>{
+            console.log('%c Context lost. restoring context...','color:red;text-decoration:underline');
+
             e.preventDefault();
             setTimeout((e) => {
-                console.log('%c Context lost. restoring context...','color:red');
-                loseExtension?.restoreContext();
-                //restoreContext() will ONLY simulate restoring the context
+                console.log('%c Context lost. restoring context 2...','color:red;text-decoration:underline');
+
+                //restoreContext() will ONLY simulate restoring of the context
                 //run restore only if context lost, otherwise error will be thrown
-               if(!glContext) loseExtension?.restoreContext();
+               // if(!glContext) loseExtension?.restoreContext();
+                loseExtension?.restoreContext();
                 renderer.clear();
             }, 50);
         }
 
 
         const handleContextRestored=()=>{
-            console.log('%c Context restored', 'color:green');
+            console.log('%c Context restored', 'color:green;text-decoration:underline');
             setupRenderer(rendererRef.current, canvas);
             scene.add(cameraRef.current);
         }
@@ -80,6 +83,7 @@ const Scene = (props) => {
         renderer.domElement.addEventListener('webglcontextrestored', handleContextRestored);
 
         return ()=>{
+            console.log('%c >INIT:1 - unmounted','color:gray');
             renderer.domElement.removeEventListener('webglcontextlost', handleContextLoss);
             renderer.domElement.removeEventListener('webglcontextrestored', handleContextRestored);
             renderer.dispose();
