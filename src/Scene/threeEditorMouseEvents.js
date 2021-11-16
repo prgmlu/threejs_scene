@@ -78,9 +78,8 @@ export const threeEditorMouseEvents = (
     const onMouseDownTouchStartEvent = (e) => {
         const isTouchEvent = e.type == "touchstart";
         const coord = setMousePosition(mouseStart, e, isTouchEvent);
-        //mouseCoord should keep initial click position
-        mouseCoord.x = coord.x;
-        mouseCoord.y = coord.y;
+        mouseCoord.set(coord.x, coord.y); //mouseCoord should keep initial click position
+
 
         raycaster.setFromCamera(mouseStart, cameraRef.current);
         const intersects = raycaster.intersectObjects(sceneRef.current.children);
