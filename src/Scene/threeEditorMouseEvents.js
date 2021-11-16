@@ -160,11 +160,9 @@ export const threeEditorMouseEvents = (
 
     const onMouseMove = (e) => {
         const isMobileEvent = e.type=="touchmove";
+        setMousePosition(mouseCoord, e, isMobileEvent);
 
 
-        //update for mobile events only
-        //'touchend' has no e.touches to set mouseCoord, but we can set it from 'touchmove'
-        if(isMobileEvent && focusedObject) setMousePosition(mouseCoord, e, true);
 
         //call public callback
         if(onMouseMoveCallback) onMouseMoveCallback(e, focusedObject, isMarkerClicked);
@@ -180,8 +178,8 @@ export const threeEditorMouseEvents = (
 
     const moveFocusedObject = (e, isMobileEvent) => {
         // console.log('-moveFocusedObject', {e, isMobileEvent, focusedObject});
+
         if (focusedObject) {
-             setMousePosition(mouseCoord, e, isMobileEvent);
             raycaster.setFromCamera(mouseCoord, cameraRef.current);
 
             const intersects = raycaster.intersectObjects(sceneRef.current.children);
