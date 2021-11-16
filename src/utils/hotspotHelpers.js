@@ -7,11 +7,6 @@ const createHotspotMarker=({imageURL, iconConfig, userData={}, UIConfig})=>{
         imageURL,
         userData,
         UIConfig
-        // UIConfig:{
-        //     Component:HotspotMarkerUIForm,
-        //     positionNextToTheElement:true,
-        //     style:{background:'none'}
-        // }
     });
 }
 
