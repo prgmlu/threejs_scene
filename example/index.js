@@ -14,7 +14,8 @@ const HotspotInfo=({Marker, Modal})=>{
 
 const Page=()=>{
     const [sceneId, setSceneId]=useState(1);
-    const [sceneData, setSceneData] = useState(scenes[sceneId-1]);
+    const [scenesArr, setScenesArr] = useState(scenes);
+    const sceneData = scenesArr[sceneId-1];
 
     const uiConf ={
         Component: HotspotInfo,
@@ -34,8 +35,7 @@ const Page=()=>{
                     userData:{},
                 })
 
-                setSceneData(newData);
-
+                setScenesArr(newData);
             }
         }
     }
