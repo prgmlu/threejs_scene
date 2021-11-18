@@ -16,7 +16,7 @@ export default function DebugUI({renderer, glContext, scene}){
     const ext = glContext.getExtension('WEBGL_lose_context');
     const supportedExt = glContext.getSupportedExtensions() ;
 
-    console.log('%c >BebugUI', 'color:blue', {supportedExt});
+
 
     const restore=(e)=>{
         ext.restoreContext();
@@ -32,6 +32,9 @@ export default function DebugUI({renderer, glContext, scene}){
         <td>{label}:</td>
         <td>{ data }</td>
     </tr>);
+
+
+    console.log('%c >BebugUI', 'color:blue', {supportedExt, renderer, info});
 
     return(<div style={{display:'block', width:'100%', fontSize:'12px', border:'1px dashed', padding:'1em', wordBreak: 'break-word'}}>
         <table >
