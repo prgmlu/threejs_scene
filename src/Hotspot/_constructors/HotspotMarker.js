@@ -68,26 +68,11 @@ export default class HotspotMarker extends InteractionObject {
         const { x, y, z } = this.sceneObject.position;
         this.setPosition(x, y, z);
     }
-
-    // setPosition=(x, y, z)=>{
-    //     super.setPosition(x, y, z);
-    // }
+    
 
     setScale = (scale = 0.45) => {
         this.sceneObject.scale.x = scale;
         this.sceneObject.scale.y = scale;
         this.sceneObject.scale.z = scale;
     }
-
-
-
-    // dispose() {
-    //     this.scene.remove(this.visualObject);
-    //     this.scene.remove(this.sceneObject);
-    //     this.scene.remove(this.svgSpriteComponent);
-    //     super.dispose();
-    //
-    //     this.setVisualObject(null);
-    //     this.sceneObject = null;
-    // }
 }
