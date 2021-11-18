@@ -16,7 +16,7 @@ export default class HotspotMarker extends InteractionObject {
 
         //SVG Icon
         this.svgSpriteComponent = new SVGSpriteComponent(iconConfig);
-        this.svgSpriteComponent.name='sprite';
+
         this.fetchSVGIcon()
             .then(svgString=>{
                 this.svgSpriteComponent.setSVGString(svgString);
