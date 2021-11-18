@@ -92,6 +92,9 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
             texture.minFilter = THREE.LinearMipmapNearestFilter
             texture.magFilter = THREE.LinearFilter
 
+            //ADD TEXTURE TO COMPONENTS SO IT COULD BE REMOVED ON UNMOUNT
+            //AND FREE USED MEMORY
+            this.components.push(texture);
             return new THREE.MeshBasicMaterial({ map: texture })
         })
 
