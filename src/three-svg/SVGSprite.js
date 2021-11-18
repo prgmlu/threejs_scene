@@ -27,12 +27,14 @@ export default class SVGSprite extends THREE.Sprite {
         );
 
         v.render();
-        if (this.material.map) {
-            this.material.map.dispose();
-        }
+        if (this.material.map) this.material.map.dispose();
 
         this.material.map = new THREE.Texture(drawCanvas);
         this.material.map.needsUpdate = true;
         this.material.needsUpdate = true;
+    }
+
+    dispose =()=>{
+        if (this.material.map) this.material.map.dispose();
     }
 }

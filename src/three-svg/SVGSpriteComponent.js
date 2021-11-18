@@ -9,7 +9,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
     constructor(conf={}) {
         const {dotColor, secondaryColor, color} = conf;
         super();
-
+        this.name='sprite';
         this.svgString = '';
         this.primaryColor = dotColor || 'black';
         this.secondaryColor = secondaryColor || 'gray';
@@ -96,6 +96,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
     }
 
     dispose() {
+        this.svgSprite.dispose();
         this.removeOwner();
     }
 }
