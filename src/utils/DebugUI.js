@@ -34,7 +34,7 @@ export default function DebugUI({renderer, glContext, scene}){
     </tr>);
 
 
-    console.log('%c >BebugUI', 'color:blue', {supportedExt, renderer, info});
+    console.log('%c >BebugUI', 'color:blue', {supportedExt, renderer, info, memory:info.memory});
 
     return(<div style={{display:'block', width:'100%', fontSize:'12px', border:'1px dashed', padding:'1em', wordBreak: 'break-word'}}>
         <table >
