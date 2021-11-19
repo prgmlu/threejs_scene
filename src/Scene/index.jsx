@@ -9,6 +9,14 @@ import './main.scss';
 
 
 
+function createRenderer(){
+    // var renderer = new THREE.WebGLRenderer();
+    var ret = null;
+    ret = window.renderer?window.renderer: new THREE.WebGLRenderer();
+    window.renderer = ret;
+    window.renderers?window.renderers.push(ret):window.renderers=[ret];
+    return ret;
+}
 
 const Scene = (props) => {
     const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, allowHotspotsToMove, resetBGBeforeImageLoaded=false, children } = props;
@@ -21,7 +29,8 @@ const Scene = (props) => {
     const scene = sceneRef.current;
 
     //Renderer
-    const rendererRef = useRef(new THREE.WebGLRenderer());
+    const rendererRef = useRef(createRenderer());
+
     let renderer = rendererRef.current;
     const glContext = renderer?.domElement.getContext('webgl');
     const loseExtension = glContext.getExtension("WEBGL_lose_context");
