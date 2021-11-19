@@ -32,6 +32,7 @@ function Hotspot(props) {
         }
 
         return () => {
+            // console.log('REMOVE MARKER', markerRef.current);
             markerRef.current.dispose();
             markerRef.current.components?.map((item) => item.dispose());
             markerRef.current.sceneObject?.dispose();
