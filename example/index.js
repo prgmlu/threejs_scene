@@ -5,12 +5,7 @@ import './exampleStyles.scss';
 import scenes from './mock.json';
 
 
-const HotspotInfo=({Marker, Modal})=>{
-    return(<div style={{padding:'1em'}}>
-        <div onClick={e=>Modal.closeModal()} style={{position:'absolute', right:0, top:0}} >x</div>
-        {Marker?.userData?.name || 'Hotspot'}
-    </div>)
-}
+
 
 const Page=()=>{
     const [sceneId, setSceneId]=useState(1);
@@ -56,7 +51,6 @@ const Page=()=>{
             bgConf={sceneData.bg}
             onMouseUp={onMouseUp}
             useDebugger={true}
-            // allowHotspotsToMove={false}
         >
             {sceneData?.hotspots?.map((item, i)=>{
                 return <Hotspot
@@ -76,7 +70,12 @@ const Page=()=>{
     </div>)
 }
 
-
+const HotspotInfo=({Marker, Modal})=>{
+    return(<div style={{padding:'1em'}}>
+        <div onClick={e=>Modal.closeModal()} style={{position:'absolute', right:0, top:0}} >x</div>
+        {Marker?.userData?.name || 'Hotspot'}
+    </div>)
+}
 
 
 const SceneSelector=({sceneId, setSceneId})=>{
@@ -84,6 +83,7 @@ const SceneSelector=({sceneId, setSceneId})=>{
         <li className={sceneId==1 ? 'active':''} onClick={e=>setSceneId(1)}>Scene #1</li>
         <li className={sceneId==2 ? 'active':''} onClick={e=>setSceneId(2)}>Scene #2</li>
         <li className={sceneId==3 ? 'active':''} onClick={e=>setSceneId(3)}>Scene #3</li>
+        <li className={sceneId==4 ? 'active':''} onClick={e=>setSceneId(4)}>Scene #4</li>
     </ul>);
 }
 
