@@ -35,7 +35,7 @@ const Page=()=>{
         }
     }
 
-
+    console.log('-----Scene-----',{sceneId, sceneData});
     return(<div>
         <h2>ThreeJS Scene</h2>
 

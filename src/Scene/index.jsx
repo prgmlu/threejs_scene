@@ -24,7 +24,7 @@ const Scene = (props) => {
     const rendererRef = useRef(new THREE.WebGLRenderer());
     let renderer = rendererRef.current;
     const glContext = renderer?.domElement.getContext('webgl');
-    const loseExtension = glContext.getExtension("WEBGL_lose_context");
+
 
     // useRef used to prevent Scene from losing variable references.
     const canvasRef = useRef();
@@ -67,7 +67,7 @@ const Scene = (props) => {
                 //restoreContext() will ONLY simulate restoring of the context
                 //run restore only if context lost, otherwise error will be thrown
                // if(!glContext) loseExtension?.restoreContext();
-                loseExtension?.restoreContext();
+                glContext.getExtension("WEBGL_lose_context").restoreContext();
                 renderer.clear();
             }, 50);
         }
@@ -107,12 +107,13 @@ const Scene = (props) => {
 
     //New Scene INIT
     useEffect(() => {
-        console.log('%c >INIT:2 - sceneView', 'color:green' );
+        console.log('%c >INIT:2 - sceneView', 'color:green', {scene, cameraRef, controlsRef,renderer } );
         initSceneView();
 
         return () => {
             controlsRef.current.dispose();
             scene.dispose();
+            renderer.dispose();
             setUI(false); //Hide UI Modal when scene changed
         };
     }, [sceneId ]);
