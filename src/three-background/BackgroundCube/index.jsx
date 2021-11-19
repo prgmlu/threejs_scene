@@ -22,9 +22,8 @@ const BackgroundCube = ({ scene, backgroundUrl }) => {
     }, []); // eslint-disable-line
 
     useEffect(() => {
-        if (backgroundUrl) {
-            cube.current.loadCubeTexture(backgroundUrl);
-        }
+        if (backgroundUrl) cube.current.loadCubeTexture(backgroundUrl);
+
     }, [backgroundUrl]);
 
     return null;
