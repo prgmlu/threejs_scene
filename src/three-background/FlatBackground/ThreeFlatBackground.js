@@ -72,9 +72,6 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
             this.sceneObject.material.map = texture;
             this.sceneObject.material.needsUpdate = true;
         }
-        //ADD TEXTURE TO COMPONENTS SO IT COULD BE REMOVED ON UNMOUNT
-        //AND FREE USED MEMORY
-        this.components.push(texture);
         this.setPanArea();
     }
 
@@ -82,6 +79,7 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
         super.dispose();
 
         this.sceneObject.material.dispose();
+        this.sceneObject.material.map.dispose();
         this.sceneObject.geometry.dispose();
         this.sceneObject = null;
     }
