@@ -11,9 +11,11 @@ import './main.scss';
 
 function createRenderer(){
     // var renderer = new THREE.WebGLRenderer();
-    var ret = null;
-    ret = window.renderer?window.renderer: new THREE.WebGLRenderer();
+    const ret = window.renderer ||  new THREE.WebGLRenderer();
     window.renderer = ret;
+    
+    //this line just counts how many times we requested createRenderer()
+    //and not how many times we initialized ret
     window.renderers?window.renderers.push(ret):window.renderers=[ret];
     return ret;
 }
