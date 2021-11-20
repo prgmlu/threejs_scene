@@ -51,7 +51,7 @@ const Scene = (props) => {
 
 
     const animate = (controllerUpdate) => {
-        requestAnimationFrame(() => animate(controllerUpdate));
+        window.animationId = requestAnimationFrame(() => animate(controllerUpdate));
         renderer.render(scene, cameraRef.current);
 
         if (controllerUpdate) controllerUpdate();
@@ -112,6 +112,7 @@ const Scene = (props) => {
         controlsRef.current = ThreeController.setupControls(cameraRef.current, renderer);
         setupCamera(aspectRatio, cameraRef.current);
 
+        window.cancelAnimationFrame(window.animationId);
         animate(controlsRef.current.update);
     }
 
