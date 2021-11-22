@@ -34,12 +34,25 @@ export default class ThreeSceneObject {
         return results;
     }
 
+
+    disposeMaterials() {
+        if (this.sceneObject?.material.length) {
+            this.sceneObject.material.map((mesh) => {
+                mesh.map.dispose();
+                mesh.dispose();
+            })
+        } else if (this.sceneObject?.material) {
+            this.sceneObject.material.dispose();
+        }
+    }
+
     dispose() {
+
+        this.disposeMaterials();
+
         if (this.scene) {
             this.components.forEach((component) => {
-                if (component.dispose) {
-                    component.dispose();
-                }
+                if (component.dispose) component.dispose();
             });
             this.components = [];
             this.removeFromScene();
