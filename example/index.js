@@ -24,18 +24,19 @@ const Page=()=>{
         if (marker && marker?.sceneObject) marker.onClick(e);
         else{
             if(!isDragEvent){
-                const newData = {...sceneData};
-                newData.hotspots.push({
+                //Create new hotspot
+                const newScenesArr = {...scenesArr};
+                newScenesArr[sceneId-1].hotspots.push({
                     type:'hotspot',
                     userData:{},
                 })
 
-                setScenesArr(newData);
+                setScenesArr(newScenesArr);
             }
         }
     }
 
-    console.log('-----Scene-----',{sceneId, sceneData});
+    console.log('-----Scene-----',{sceneId, scenes, scenesArr, sceneData});
     return(<div>
         <h2>ThreeJS Scene</h2>
 
