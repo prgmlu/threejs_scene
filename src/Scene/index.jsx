@@ -110,6 +110,13 @@ const Scene = (props) => {
         const aspectRatio = canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
         controlsRef.current = ThreeController.setupControls(cameraRef.current, renderer);
+
+
+        //TODO: properly initialize FlatScene.js
+        if(bgConf?.isFlatScene) controlsRef.current.enableRotate = false;
+
+        
+
         setupCamera(aspectRatio, cameraRef.current);
 
         window.cancelAnimationFrame(window.animationId);
