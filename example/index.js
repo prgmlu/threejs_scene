@@ -25,13 +25,15 @@ const Page=()=>{
         else{
             if(!isDragEvent){
                 //Create new hotspot
-                const newScenesArr = {...scenesArr};
-                newScenesArr[sceneId-1].hotspots.push({
+                const newArr = [...scenesArr];
+             
+                if(!newArr?.[sceneId-1]?.hotspots) newArr[sceneId-1].hotspots=[];
+                newArr?.[sceneId-1]?.hotspots.push({
                     type:'hotspot',
                     userData:{},
                 })
 
-                setScenesArr(newScenesArr);
+                setScenesArr(newArr);
             }
         }
     }
