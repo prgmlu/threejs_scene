@@ -39,8 +39,10 @@ export default class ThreeSceneObject {
         if (this.sceneObject.material?.length) {
             this.sceneObject.material.forEach((mesh) => {
                 mesh?.map?.dispose();
+                // mesh.map=null;
                 mesh.dispose();
             });
+            // this.sceneObject.material=null;
         } else if (this.sceneObject.material) {
             this.sceneObject.material.dispose();
         }
