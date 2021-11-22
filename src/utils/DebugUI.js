@@ -1,8 +1,6 @@
 import React from 'react';
 
 
-
-
 /**
  * DebugUI - could be used to see memory usage and other interesting things :)
  */
@@ -34,7 +32,9 @@ export default function DebugUI({renderer, glContext, scene}){
     </tr>);
 
 
-    console.log('%c >DebugUI', 'color:blue', {supportedExt, renderer, info, memory:info.memory});
+
+    console.log('%c >DebugUI', 'color:blue', {  renderer, info, scene});
+    console.table(info.memory);
 
     return(<div style={{display:'block', width:'100%', fontSize:'12px', border:'1px dashed', padding:'1em', wordBreak: 'break-word'}}>
         <table >

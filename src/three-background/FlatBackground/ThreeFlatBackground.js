@@ -78,8 +78,8 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
     dispose() {
         super.dispose();
 
-        this.sceneObject.material.dispose();
-        this.sceneObject.material?.map.dispose();
+        this.sceneObject.material?.dispose();
+        this.sceneObject.material?.map?.dispose();
         this.sceneObject.geometry.dispose();
         this.sceneObject = null;
     }

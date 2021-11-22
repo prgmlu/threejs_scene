@@ -124,6 +124,19 @@ const Scene = (props) => {
 
         return () => {
             controlsRef.current.dispose();
+
+            //ThreeBackgroundCube textures disposal.
+            //TODO: investigate where and when the reference on the objects was lost.
+            // and place cleanup solution in appropriate place.
+            scene?.children?.map(child=>{
+                if(child?.material?.length){
+                    child.material.forEach(mesh=>{
+                        mesh?.map?.dispose();
+                        mesh?.dispose();
+                    })
+                }
+            });
+
             scene.dispose();
             renderer.dispose();
             setUI(false); //Hide UI Modal when scene changed

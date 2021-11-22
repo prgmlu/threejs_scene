@@ -35,13 +35,13 @@ export default class ThreeSceneObject {
     }
 
 
-    disposeMaterials() {
-        if (this.sceneObject?.material.length) {
-            this.sceneObject.material.map((mesh) => {
-                mesh.map.dispose();
+    disposeMaterials = () => {
+        if (this.sceneObject.material?.length) {
+            this.sceneObject.material.forEach((mesh) => {
+                mesh?.map?.dispose();
                 mesh.dispose();
-            })
-        } else if (this.sceneObject?.material) {
+            });
+        } else if (this.sceneObject.material) {
             this.sceneObject.material.dispose();
         }
     }

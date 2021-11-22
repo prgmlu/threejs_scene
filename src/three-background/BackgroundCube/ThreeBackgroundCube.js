@@ -83,22 +83,23 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         //     `${baseUrl}/1k_left.jpg`,
         // ];
 
-        const loadOrder = this.buildLODUrls(url) || [];
+
+        //dispose Mesh & textures from memory
+        this.reset();
 
         this.loader = this.setupTextureLoader()
+        const loadOrder = this.buildLODUrls(url) || [];
+
+
         
         const meshMaterials = loadOrder.map((img) => {
             const texture = this.loader.load(img)
             texture.minFilter = THREE.LinearMipmapNearestFilter
             texture.magFilter = THREE.LinearFilter
-
-            //ADD TEXTURE TO COMPONENTS SO IT COULD BE REMOVED ON UNMOUNT
-            //AND FREE USED MEMORY
-            this.components.push(texture);
             return new THREE.MeshBasicMaterial({ map: texture })
         })
 
-        this.sceneObject.material = meshMaterials
+        this.sceneObject.material = meshMaterials;
     }
 
     // Build load order of cubemaps
@@ -174,20 +175,17 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         /* eslint-enable */
     }
 
-    disposeMaterials() {
-        if (this.sceneObject.material.length) {
-            this.sceneObject.material.forEach((texture) => texture.dispose())
-        } else if (this.sceneObject.material) {
-            this.sceneObject.material.dispose();
-        }
+
+    reset=()=>{
+        this.disposeMaterials();
     }
 
     dispose() {
         super.dispose()
 
-        this.objectWireframe.dispose()
         this.sceneObject.geometry.dispose()
-        this.disposeMaterials()
+        this.disposeMaterials();
+        this.objectWireframe?.dispose();
 
         this.sceneObject = null
         this.objectWireframe = null
