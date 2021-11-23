@@ -106,6 +106,8 @@ const Scene = (props) => {
 
 
     const initSceneView=()=>{
+        renderer.info.autoReset = true;
+
         // set new reference for cameraRef.current here
         const aspectRatio = canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
         cameraRef.current = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
@@ -130,7 +132,15 @@ const Scene = (props) => {
         initSceneView();
 
         return () => {
+            renderer.info.autoReset = false;
+            renderer.info.memory.textures = 0;
+            renderer.info.memory.geometries = 0;
+            renderer.renderLists.dispose();
+            renderer.info.reset();
+            renderer.state.reset();
             controlsRef.current.dispose();
+
+            // console.log('%c >INIT:2 - sceneView dispose', 'color:red', renderer.info )
 
             //ThreeBackgroundCube textures disposal.
             //TODO: investigate where and when the reference on the objects was lost.
@@ -143,6 +153,7 @@ const Scene = (props) => {
                     })
                 }
             });
+
 
             scene.dispose();
             renderer.dispose();
