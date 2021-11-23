@@ -105,7 +105,7 @@ const Scene = (props) => {
 
 
 
-    const initSceneView=()=>{
+    const initRoom=()=>{
         renderer.info.autoReset = true;
 
         // set new reference for cameraRef.current here
@@ -129,7 +129,7 @@ const Scene = (props) => {
     //New Scene INIT
     useEffect(() => {
         console.log('%c >INIT:2 - sceneView', 'color:green', {scene, cameraRef, controlsRef,renderer } );
-        initSceneView();
+        initRoom();
 
         return () => {
             renderer.info.autoReset = false;
