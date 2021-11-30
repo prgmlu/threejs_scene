@@ -91,7 +91,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         const loadOrder = this.buildLODUrls(url) || [];
 
 
-        
+
         const meshMaterials = loadOrder.map((img) => {
             const texture = this.loader.load(img)
             texture.minFilter = THREE.LinearMipmapNearestFilter
@@ -119,6 +119,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 
         const iterations = this.gridSegments
         const resolution = LOD_TO_RESOLUTION[this.LOD]
+
         // resolution definition:
         // LOD1 = '1k'
         // LOD2 = '2k'
