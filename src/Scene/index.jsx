@@ -13,7 +13,7 @@ function createRenderer(){
     // var renderer = new THREE.WebGLRenderer();
     const ret = window.renderer ||  new THREE.WebGLRenderer();
     window.renderer = ret;
-    
+
     //this line just counts how many times we requested createRenderer()
     //and not how many times we initialized ret
     window.renderers?window.renderers.push(ret):window.renderers=[ret];
@@ -106,6 +106,8 @@ const Scene = (props) => {
 
 
     const initRoom=()=>{
+        console.log('%c >INIT:3 - initRoom', 'color:green');
+
         renderer.info.autoReset = true;
 
         // set new reference for cameraRef.current here
@@ -117,12 +119,14 @@ const Scene = (props) => {
         //TODO: properly initialize FlatScene.js
         if(bgConf?.isFlatScene) controlsRef.current.enableRotate = false;
 
-        
+
 
         setupCamera(aspectRatio, cameraRef.current);
 
         window.cancelAnimationFrame(window.animationId);
         animate(controlsRef.current.update);
+        console.log('%c >INIT:3 - initRoom:end', 'color:green');
+
     }
 
 
