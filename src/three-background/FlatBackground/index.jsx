@@ -7,6 +7,7 @@ const FlatBackground = ({ scene, backgroundUrl, resetBGBeforeImageLoaded }) => {
     const flatBackground = useRef();
 
     useEffect(() => {
+        console.log('%c >INIT:1 - FlatBackground', 'color:green', backgroundUrl);
         flatBackground.current = new ThreeFlatBackground();
         if(scene) flatBackground.current.addToScene(scene);
         window.addEventListener('resize', flatBackground.current.setPanArea);
