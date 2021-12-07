@@ -1,16 +1,12 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-
-
-
+const { ModuleFederationPlugin } = require("webpack").container;
 
 
 module.exports = (env, argv) => {
     const { mode } = argv;
-    const buildMode = argv.env.build == true;
-
-
+    const buildMode = argv.env.build === true;
 
     //Plugins
     const pluginsArr=[new MiniCssExtractPlugin()];
@@ -21,8 +17,24 @@ module.exports = (env, argv) => {
         }));
     }
 
-
-
+    pluginsArr.push(new ModuleFederationPlugin({
+        name: "threejs_scene",
+        filename: "remoteEntry.js",
+        exposes:{
+            "./lib": "./src"
+        },
+        shared: {
+            react: {
+                singleton: true,
+            },
+            three: {
+                import: "three",
+                singleton: true,
+                shareScope: "default",
+                requiredVersion: '^17.0.2'
+            },
+        }
+    }));
 
     const config = {
         mode,
@@ -31,16 +43,12 @@ module.exports = (env, argv) => {
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: 'index.js',
-
-
             //UMD
             libraryTarget: 'umd', //document undefined
             globalObject: 'this',
             // umdNamedDefine: true,
-
             clean: true,//erase old build
         },
-
 
         devServer: {
             host: '0.0.0.0',
@@ -49,10 +57,9 @@ module.exports = (env, argv) => {
             headers: {"Access-Control-Allow-Origin": "*"},
             historyApiFallback: true,
             disableHostCheck: true,
-            open: true, //Opens the browser after launching the dev server.
+            // open: true, //Opens the browser after launching the dev server.
             hot: true,
         },
-
 
         module: {
             rules: [
@@ -110,8 +117,7 @@ module.exports = (env, argv) => {
             //     amd: 'prop-types'
             // }
         }:{},
-
-        plugins:pluginsArr
+        plugins:pluginsArr,
     };
 
     return config;
