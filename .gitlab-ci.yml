@@ -1,0 +1,79 @@
+image: registry.gitlab.com/obsessvr/ci-scripts/frontend_build_agent_1.1.0:latest
+
+stages:
+  - build
+  - deploy
+
+
+variables:
+  DEPLOY_PATH_BASE: s3://obsess-modules-federation
+  CF_DISTRIBUTION_ID: E10BMWEDQJOONN
+
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+
+.build-template: &build-template
+  stage: build
+  script:
+    - BUILD_IMAGE=$CI_REGISTRY_IMAGE/${CURRENT_ENV}:${CI_COMMIT_SHORT_SHA}
+    - MODULE_PATH=${CURRENT_ENV}/${CI_PROJECT_PATH}/${CI_COMMIT_REF_NAME}
+    - docker build --build-arg BUILD_ENV=${CURRENT_ENV} --build-arg MODULE_PATH=${MODULE_PATH} --compress --rm -f Dockerfile -t $BUILD_IMAGE .
+    - docker push $BUILD_IMAGE
+
+
+.deploy-template: &deploy-template
+  stage: deploy
+  script:
+    - BUILD_IMAGE=$CI_REGISTRY_IMAGE/${CURRENT_ENV}:${CI_COMMIT_SHORT_SHA}
+    - MODULE_PATH=${CURRENT_ENV}/${CI_PROJECT_PATH}/${CI_COMMIT_REF_NAME}
+    - DEPLOY_PATH=${DEPLOY_PATH_BASE}/${MODULE_PATH}
+    - IMAGE_CONTAINER=deploy_${CI_COMMIT_SHORT_SHA}_${CURRENT_ENV}
+    - docker create --name $IMAGE_CONTAINER $BUILD_IMAGE
+    - mkdir /dist
+    - docker cp $IMAGE_CONTAINER:/dist /
+    - aws s3 cp --acl public-read --recursive /dist $DEPLOY_PATH
+    - aws s3 sync --acl public-read --delete /dist $DEPLOY_PATH
+    - aws cloudfront create-invalidation
+      --distribution-id ${CF_DISTRIBUTION_ID}
+      --paths "/${DEPLOY_PATH}/*"
+    - docker rm $IMAGE_CONTAINER
+    - docker rmi $BUILD_IMAGE
+
+
+build:beta:
+  <<: *build-template
+  variables:
+    CURRENT_ENV: beta
+  only:
+    - feature/wp-federated
+
+build:production:
+  <<: *build-template
+  variables:
+    CURRENT_ENV: production
+  only:
+    - feature/wp-federated
+  when: manual
+
+beta:
+  <<: *deploy-template
+  variables:
+    CURRENT_ENV: beta
+  needs:
+    - build:beta
+  when: on_success
+  only:
+    - feature/wp-federated
+
+production:
+  <<: *deploy-template
+  variables:
+    CURRENT_ENV: production
+  needs:
+    - build:production
+  when: manual
+  only:
+    - feature/wp-federated
+

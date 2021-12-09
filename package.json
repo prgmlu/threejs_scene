@@ -7,8 +7,9 @@
   "license": "ISC",
   "scripts": {
     "dev": "webpack serve --config webpack.config.js --mode=development --env=development",
-    "build:dev": "webpack --config webpack.config.js --mode=development --env=build",
-    "build:prod": "webpack --config webpack.config.js --mode=production --env=build"
+    "build:beta": "webpack --config webpack.config.js --env buildMode buildEnv=beta",
+    "build:prod": "webpack --config webpack.config.js --env buildMode buildEnv=production",
+    "build-ci": "webpack --config webpack.config.js --env buildMode buildEnv=$BUILD_ENV modulePath=$MODULE_PATH"
   },
   "files": [
     "README.md",

@@ -3,11 +3,24 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { ModuleFederationPlugin } = require("webpack").container;
 
+const getMode = (env) => {
+    if (env === 'production') {
+        return env;
+    }
+    return 'development';
+};
 
-module.exports = (env, argv) => {
-    const { mode } = argv;
-    const buildMode = argv.env.build === true;
+const getPublicPath = (env = 'development', modulePath = '') => {
+    if (env === 'development') {
+        return 'http://localhost:3003/';
+    }
+    return `https://modules.obsess-vr.com/${modulePath}/`;
+};
 
+
+module.exports = (env) => {
+    const { buildMode, buildEnv, modulePath } = env;
+    // const buildMode = argv.env.build === true;
     //Plugins
     const pluginsArr=[new MiniCssExtractPlugin()];
     if(!buildMode){
@@ -31,36 +44,25 @@ module.exports = (env, argv) => {
                 import: "three",
                 singleton: true,
                 shareScope: "default",
-                requiredVersion: '^17.0.2'
+                requiredVersion: '0.114.0'
             },
         }
     }));
 
     const config = {
-        mode,
+        mode: getMode(buildEnv),
         entry: buildMode ?  './src/index.js' : './example/index.js',
         // devtool: 'source-map',
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: 'index.js',
+            publicPath: getPublicPath(buildEnv, modulePath),
             //UMD
             libraryTarget: 'umd', //document undefined
             globalObject: 'this',
             // umdNamedDefine: true,
             clean: true,//erase old build
         },
-
-        devServer: {
-            host: '0.0.0.0',
-            port: 4000,
-            publicPath: '/', //webpack output is served from /
-            headers: {"Access-Control-Allow-Origin": "*"},
-            historyApiFallback: true,
-            disableHostCheck: true,
-            // open: true, //Opens the browser after launching the dev server.
-            hot: true,
-        },
-
         module: {
             rules: [
                 {
@@ -97,7 +99,6 @@ module.exports = (env, argv) => {
         // Don't bundle react or react-dom
         // Enable rules only on compilation/build mode
         externals: buildMode ? {
-            // 'react': 'commonjs react'
             react: {
                 root: "React",
                 commonjs: "react",
@@ -110,15 +111,22 @@ module.exports = (env, argv) => {
                 commonjs2: "react-dom",
                 amd: "react-dom",
             },
-            // 'prop-types': {
-            //     root: 'PropTypes',
-            //     commonjs2: 'prop-types',
-            //     commonjs: 'prop-types',
-            //     amd: 'prop-types'
-            // }
         }:{},
         plugins:pluginsArr,
     };
+
+    if (buildEnv === 'development') {
+        config.devServer = {
+            host: '0.0.0.0',
+            port: 4000,
+            publicPath: '/', //webpack output is served from /
+            headers: {"Access-Control-Allow-Origin": "*"},
+            historyApiFallback: true,
+            disableHostCheck: true,
+            // open: true, //Opens the browser after launching the dev server.
+            hot: true,
+        };
+    }
 
     return config;
 };

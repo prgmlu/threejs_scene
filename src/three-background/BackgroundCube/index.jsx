@@ -4,7 +4,7 @@ import ThreeBackgroundCube from './ThreeBackgroundCube';
 
 
 // SET LOD
-const LOD = 3;
+const LOD = 1;
 
 const BackgroundCube = ({ scene, backgroundUrl }) => {
     const cube = useRef();
@@ -34,3 +34,6 @@ BackgroundCube.propTypes = {
 };
 
 export default BackgroundCube;
+
+
+
