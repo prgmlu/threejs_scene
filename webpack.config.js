@@ -45,7 +45,7 @@ module.exports = (env) => {
     ];
 
     const config = {
-        entry: './src/index.jsx',
+        entry: './src/index.js',
         mode: getMode(buildEnv),
         devtool: 'source-map',
         output: {
