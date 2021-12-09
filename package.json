@@ -23,10 +23,6 @@
     "three": "^0.114.0",
     "uuid": "^8.3.2"
   },
-  "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.8",
