@@ -37,7 +37,7 @@ before_script:
     - aws s3 sync --acl public-read --delete /dist $DEPLOY_PATH
     - aws cloudfront create-invalidation
       --distribution-id ${CF_DISTRIBUTION_ID}
-      --paths "/${DEPLOY_PATH}/*"
+      --paths "/${MODULE_PATH}/*"
     - docker rm $IMAGE_CONTAINER
     - docker rmi $BUILD_IMAGE
 
