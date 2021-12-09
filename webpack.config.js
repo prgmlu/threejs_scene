@@ -39,14 +39,10 @@ module.exports = (env) => {
         },
         shared: {
             react: {
-                requiredVersion: deps.react,
-                import: 'react',
-                shareKey: 'react',
                 shareScope: 'default',
                 singleton: true,
             },
             'react-dom': {
-                requiredVersion: deps['react-dom'],
                 singleton: true,
             },
             three: {
