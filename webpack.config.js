@@ -2,7 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { ModuleFederationPlugin } = require("webpack").container;
-const deps = require('../package.json').dependencies;
+const deps = require('./package.json').dependencies;
 
 const getMode = (env) => {
     if (env === 'production') {
