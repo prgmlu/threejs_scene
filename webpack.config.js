@@ -38,6 +38,10 @@ module.exports = (env) => {
         },
         shared: {
             react: {
+                requiredVersion: deps.react,
+                import: 'react',
+                shareKey: 'react',
+                shareScope: 'default',
                 singleton: true,
             },
             three: {
