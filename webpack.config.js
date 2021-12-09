@@ -1,7 +1,5 @@
-const path = require('path');
+const { ModuleFederationPlugin } = require('webpack').container;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const { ModuleFederationPlugin } = require("webpack").container;
 const deps = require('./package.json').dependencies;
 
 const getMode = (env) => {
@@ -18,114 +16,72 @@ const getPublicPath = (env = 'development', modulePath = '') => {
     return `https://modules.obsess-vr.com/${modulePath}/`;
 };
 
-
 module.exports = (env) => {
-    const { buildMode, buildEnv, modulePath } = env;
-    // const buildMode = argv.env.build === true;
-    //Plugins
-    const pluginsArr=[new MiniCssExtractPlugin()];
-    if(!buildMode){
-        pluginsArr.push( new HtmlWebPackPlugin({
-            template: path.resolve(__dirname, 'example/index.html'),
-            inject: true,
-        }));
-    }
+    const { buildEnv, modulePath } = env;
 
-    pluginsArr.push(new ModuleFederationPlugin({
-        name: "threejs_scene",
-        filename: "remoteEntry.js",
-        exposes:{
-            "./lib": "./src"
-        },
-        shared: {
-            ...deps,
-            react: {
-                shareScope: 'default',
-                singleton: true,
+    const plugins = [
+        new ModuleFederationPlugin({
+            name: 'threejs_scene',
+            filename: 'remoteEntry.js',
+            exposes: {
+                './lib': './src',
             },
-            'react-dom': {
-                singleton: true,
+            shared: {
+                ...deps,
+                react: {
+                    requiredVersion: deps.react,
+                    import: 'react',
+                    shareKey: 'react',
+                    shareScope: 'default',
+                    singleton: true,
+                },
+                'react-dom': {
+                    requiredVersion: deps['react-dom'],
+                    singleton: true,
+                },
             },
-            three: {
-                import: "three",
-                singleton: true,
-                shareScope: "default",
-                requiredVersion: '0.114.0'
-            },
-        }
-    }));
+        }),
+        new MiniCssExtractPlugin(),
+    ];
 
     const config = {
+        entry: './src/index.jsx',
         mode: getMode(buildEnv),
-        entry: buildMode ?  './src/index.js' : './example/index.js',
-        // devtool: 'source-map',
+        devtool: 'source-map',
         output: {
-            // path: path.resolve(__dirname, 'dist'),
-            filename: 'index.js',
             publicPath: getPublicPath(buildEnv, modulePath),
-            //UMD
-            libraryTarget: 'umd', //document undefined
-            // globalObject: 'this',
-            // umdNamedDefine: true,
-            clean: true,//erase old build
+            clean: true,
+        },
+        resolve: {
+            extensions: ['.jsx', '.js', '.json', '.css', '.scss'],
         },
         module: {
             rules: [
                 {
-                    test: /\.(js|jsx)$/,
+                    test: /\.jsx?$/,
+                    loader: 'babel-loader',
                     exclude: /node_modules/,
-                    use: ['babel-loader'],
+                    options: {
+                        presets: ['@babel/preset-react'],
+                    },
                 },
                 {
                     test: /\.(sa|sc|c)ss$/,
                     use: [
                         MiniCssExtractPlugin.loader,
-                        "css-loader",
-                        "postcss-loader",
-                        "sass-loader",
-                    ]
+                        'css-loader',
+                        'postcss-loader',
+                        'sass-loader',
+                    ],
                 },
             ],
         },
-
-        resolve: {
-            extensions: ['.ts', '.tsx', '.js', '.jsx'],
-            // alias: {
-            //     'react': path.resolve(path.join(__dirname, './node_modules/react')),
-            //     'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-            // }
-        },
-
-        // Don't bundle react or react-dom
-        // Enable rules only on compilation/build mode
-        // externals: buildMode ? {
-        //     react: {
-        //         root: "React",
-        //         commonjs: "react",
-        //         commonjs2: "react",
-        //         amd: "react"
-        //     },
-        //     "react-dom": {
-        //         root: "ReactDOM",
-        //         commonjs: "react-dom",
-        //         commonjs2: "react-dom",
-        //         amd: "react-dom",
-        //     },
-        // }:{},
-
-        plugins:pluginsArr,
+        plugins,
     };
 
     if (buildEnv === 'development') {
         config.devServer = {
-            host: '0.0.0.0',
-            port: 4000,
-            publicPath: '/', //webpack output is served from /
-            headers: {"Access-Control-Allow-Origin": "*"},
-            historyApiFallback: true,
-            disableHostCheck: true,
-            // open: true, //Opens the browser after launching the dev server.
-            hot: true,
+            port: 3003,
         };
     }
 
