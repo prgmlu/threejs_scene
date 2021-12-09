@@ -2,6 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { ModuleFederationPlugin } = require("webpack").container;
+const deps = require('../package.json').dependencies;
 
 const getMode = (env) => {
     if (env === 'production') {
@@ -42,6 +43,10 @@ module.exports = (env) => {
                 import: 'react',
                 shareKey: 'react',
                 shareScope: 'default',
+                singleton: true,
+            },
+            'react-dom': {
+                requiredVersion: deps['react-dom'],
                 singleton: true,
             },
             three: {
