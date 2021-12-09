@@ -38,19 +38,20 @@ module.exports = (env) => {
             "./lib": "./src"
         },
         shared: {
-            react: {
-                shareScope: 'default',
-                singleton: true,
-            },
-            'react-dom': {
-                singleton: true,
-            },
-            three: {
-                import: "three",
-                singleton: true,
-                shareScope: "default",
-                requiredVersion: '0.114.0'
-            },
+            ...deps,
+            // react: {
+            //     shareScope: 'default',
+            //     singleton: true,
+            // },
+            // 'react-dom': {
+            //     singleton: true,
+            // },
+            // three: {
+            //     import: "three",
+            //     singleton: true,
+            //     shareScope: "default",
+            //     requiredVersion: '0.114.0'
+            // },
         }
     }));
 
