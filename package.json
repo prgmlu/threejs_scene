@@ -18,12 +18,14 @@
   "dependencies": {
     "canvg": "^3.0.9",
     "prop-types": "^15.7.2",
+    "react": ">=17.10.2",
+    "react-dom": ">=17.10.2",
     "three": "^0.114.0",
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "react": ">=16.10.2",
-    "react-dom": ">=16.10.2"
+    "react": ">=17.10.2",
+    "react-dom": ">=17.10.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
