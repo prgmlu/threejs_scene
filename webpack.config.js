@@ -76,15 +76,9 @@ module.exports = (env) => {
             rules: [
                 {
                     test: /\.(js|jsx)$/,
-                    // exclude: /(node_modules|example)/,
                     exclude: /node_modules/,
                     use: ['babel-loader'],
-
-                    // use: {
-                    //     loader:'babel-loader'
-                    // }
                 },
-
                 {
                     test: /\.(sa|sc|c)ss$/,
                     use: [
@@ -99,28 +93,29 @@ module.exports = (env) => {
 
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.jsx'],
-            alias: {
-                'react': path.resolve(path.join(__dirname, './node_modules/react')),
-                'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-            }
+            // alias: {
+            //     'react': path.resolve(path.join(__dirname, './node_modules/react')),
+            //     'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
+            // }
         },
 
         // Don't bundle react or react-dom
         // Enable rules only on compilation/build mode
-        externals: buildMode ? {
-            react: {
-                root: "React",
-                commonjs: "react",
-                commonjs2: "react",
-                amd: "react"
-            },
-            "react-dom": {
-                root: "ReactDOM",
-                commonjs: "react-dom",
-                commonjs2: "react-dom",
-                amd: "react-dom",
-            },
-        }:{},
+        // externals: buildMode ? {
+        //     react: {
+        //         root: "React",
+        //         commonjs: "react",
+        //         commonjs2: "react",
+        //         amd: "react"
+        //     },
+        //     "react-dom": {
+        //         root: "ReactDOM",
+        //         commonjs: "react-dom",
+        //         commonjs2: "react-dom",
+        //         amd: "react-dom",
+        //     },
+        // }:{},
+
         plugins:pluginsArr,
     };
 
