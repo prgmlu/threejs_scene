@@ -6,7 +6,7 @@
   "author": "Obsess, Inc.",
   "license": "ISC",
   "scripts": {
-    "dev": "webpack serve --config webpack.config.js --mode=development --env=development",
+    "dev": "webpack serve --config webpack.config.js --mode=development --env buildEnv=development",
     "build:beta": "webpack --config webpack.config.js --env buildMode buildEnv=beta",
     "build:prod": "webpack --config webpack.config.js --env buildMode buildEnv=production",
     "build-ci": "webpack --config webpack.config.js --env buildMode buildEnv=$BUILD_ENV modulePath=$MODULE_PATH"
