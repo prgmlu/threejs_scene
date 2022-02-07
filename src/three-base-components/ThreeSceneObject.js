@@ -1,4 +1,5 @@
 import ThreeSceneObjectComponent from './ThreeSceneObjectComponent';
+import * as THREE from 'three';
 
 export default class ThreeSceneObject {
     constructor() {
@@ -9,6 +10,10 @@ export default class ThreeSceneObject {
         this.scene = null;
         this.components = [];
         this.sceneObject = null;
+
+        // Enable Three Cache
+        THREE.Cache.enabled = true
+
     }
 
     addToScene(scene) {
@@ -30,28 +35,28 @@ export default class ThreeSceneObject {
             console.error(`Can't get type ${type.name}of non ThreeSceneObjectComponent!`); // eslint-disable-line no-console
             return null;
         }
-        const results = this.components.filter((component) => component instanceof type);
-        return results;
+        return this.components.filter((component) => component instanceof type);
     }
-
 
     disposeMaterials = () => {
-        if (this.sceneObject.material?.length) {
-            this.sceneObject.material.forEach((mesh) => {
-                mesh?.map?.dispose();
-                // mesh.map=null;
-                mesh.dispose();
-            });
-            // this.sceneObject.material=null;
-        } else if (this.sceneObject.material) {
-            this.sceneObject.material.dispose();
-        }
+        const sceneObjInArray = this.sceneObject.type === 'Group'? this.sceneObject.children : [this.sceneObject];
+        sceneObjInArray.forEach((obj)=>{
+            if (obj.material?.length) {
+                obj.material.forEach((mesh) => {
+                    mesh?.map?.dispose();
+                    // mesh.map=null;
+                    mesh.dispose();
+                });
+                // obj.material=null;
+            } else if (obj.material) {
+                obj.material.dispose();
+            }
+        })
     }
 
+
     dispose() {
-
         this.disposeMaterials();
-
         if (this.scene) {
             this.components.forEach((component) => {
                 if (component.dispose) component.dispose();
@@ -60,4 +65,6 @@ export default class ThreeSceneObject {
             this.removeFromScene();
         }
     }
+
+
 }

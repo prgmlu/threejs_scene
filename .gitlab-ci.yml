@@ -47,14 +47,15 @@ build:beta:
   variables:
     CURRENT_ENV: beta
   only:
-    - feature/wp-federated
+    - /^feature\/.*$/
+
 
 build:production:
   <<: *build-template
   variables:
     CURRENT_ENV: production
   only:
-    - feature/wp-federated
+    - /^feature\/.*$/
   when: manual
 
 beta:
@@ -65,7 +66,7 @@ beta:
     - build:beta
   when: on_success
   only:
-    - feature/wp-federated
+    - /^feature\/.*$/
 
 production:
   <<: *deploy-template
@@ -75,5 +76,5 @@ production:
     - build:production
   when: manual
   only:
-    - feature/wp-federated
+    - /^feature\/.*$/
 

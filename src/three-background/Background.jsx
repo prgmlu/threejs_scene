@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BackgroundCube from './BackgroundCube';
 import FlatBackground from './FlatBackground';
 
-const Background = ({ scene, bgConf, resetBGBeforeImageLoaded }) => {
+const Background = ({ scene, bgConf, resetBGBeforeImageLoaded, camera, linkedScenes }) => {
     const [backgroundUrl, setBackgroundUrl] = useState('');
     const [isFlatScene, setFlatScene] = useState(false);
     console.log('%c >INIT: - Background', 'color:green', bgConf);
@@ -17,7 +17,7 @@ const Background = ({ scene, bgConf, resetBGBeforeImageLoaded }) => {
     return (
         isFlatScene
             ? <FlatBackground backgroundUrl={backgroundUrl} scene={scene} resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}/>
-            : <BackgroundCube backgroundUrl={backgroundUrl} scene={scene}/>
+            : <BackgroundCube backgroundUrl={backgroundUrl} camera={camera} scene={scene} linkedScenes={linkedScenes}/>
     );
 };
 
