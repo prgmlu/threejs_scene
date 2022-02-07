@@ -50,7 +50,7 @@ module.exports = (env) => {
                 import: "three",
                 singleton: true,
                 shareScope: "default",
-                requiredVersion: '0.114.0'
+                requiredVersion: '0.137.0'
             },
         }
     }));
@@ -58,7 +58,7 @@ module.exports = (env) => {
     const config = {
         mode: getMode(buildEnv),
         entry: buildMode ?  './src/index.js' : './example/index.js',
-        // devtool: 'source-map',
+        devtool: 'source-map',
         output: {
             // path: path.resolve(__dirname, 'dist'),
             filename: 'index.js',

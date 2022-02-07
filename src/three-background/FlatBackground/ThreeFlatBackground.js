@@ -28,10 +28,8 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
     }
 
     setupTextureLoader = () => {
-        const loadingManager = new THREE.LoadingManager();
-        const loader = new THREE.TextureLoader(loadingManager);
-
-        return loader;
+        // const loadingManager = new THREE.LoadingManager();
+        return new THREE.TextureLoader();
     }
 
 
@@ -62,6 +60,8 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
             this.sceneObject.material.needsUpdate = true;
         }
     }
+
+
 
     setMaterial(texture) {
         const { image } = texture;

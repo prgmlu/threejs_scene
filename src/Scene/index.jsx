@@ -20,14 +20,23 @@ function createRenderer(){
     return ret;
 }
 
+function createScene(){
+    const ret = window.scene ||  new THREE.Scene();
+    window.scene = ret;
+
+    //this line just counts how many times we requested createRenderer()
+    //and not how many times we initialized ret
+    window.scenes?window.scenes.push(ret):window.scenes=[ret];
+    return ret;
+}
+
 const Scene = (props) => {
     const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, allowHotspotsToMove, resetBGBeforeImageLoaded=false, children } = props;
     const [threeReady, setThreeReady] = useState(false);
     const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
     const [UI, setUI] = useState();
-
     //Scene
-    const sceneRef = useRef(new THREE.Scene());
+    const sceneRef = useRef(createScene());
     const scene = sceneRef.current;
 
     //Renderer
@@ -258,7 +267,9 @@ const Scene = (props) => {
                         <Background
                             bgConf={bgConf}
                             scene={scene}
+                            camera={cameraRef.current}
                             resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
+                            linkedScenes={props.linkedScenes}
                         />
                     </>
                 )}

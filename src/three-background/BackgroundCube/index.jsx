@@ -3,28 +3,31 @@ import PropTypes from 'prop-types';
 import ThreeBackgroundCube from './ThreeBackgroundCube';
 
 
-// SET LOD
-const LOD = 1;
-
-const BackgroundCube = ({ scene, backgroundUrl }) => {
+const BackgroundCube = ({ scene, backgroundUrl , camera, linkedScenes}) => {
     const cube = useRef();
 
     useEffect(() => {
-        cube.current = new ThreeBackgroundCube(LOD);
-        cube.current.resolveFaceMaterialIndexes(1);
-
+        cube.current = new ThreeBackgroundCube(camera);
         cube.current.addToScene(scene);
-        cube.current.objectWireframe.addToScene(scene);
 
         return () => {
             cube.current.dispose();
+            cube.current.removeFromScene();
         };
     }, []); // eslint-disable-line
 
     useEffect(() => {
-        if (backgroundUrl) cube.current.loadCubeTexture(backgroundUrl);
+        if (backgroundUrl) cube.current.loadCubeTextureFromPriorityArray(backgroundUrl);
 
     }, [backgroundUrl]);
+
+    useEffect(() => {
+        cube.current.preLoadConnectedScenes(linkedScenes)
+    }, [linkedScenes])
+
+    useEffect(() => {
+        cube.current.camera = camera;
+    }, [camera]);
 
     return null;
 };
@@ -34,6 +37,3 @@ BackgroundCube.propTypes = {
 };
 
 export default BackgroundCube;
-
-
-
