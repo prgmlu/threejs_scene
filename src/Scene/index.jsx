@@ -153,8 +153,6 @@ const Scene = (props) => {
             renderer.state.reset();
             controlsRef.current.dispose();
 
-            // console.log('%c >INIT:2 - sceneView dispose', 'color:red', renderer.info )
-
             //ThreeBackgroundCube textures disposal.
             //TODO: investigate where and when the reference on the objects was lost.
             // and place cleanup solution in appropriate place.
@@ -168,7 +166,7 @@ const Scene = (props) => {
             });
 
 
-            scene.dispose();
+            // scene.dispose();
             renderer.dispose();
             setUI(false); //Hide UI Modal when scene changed
         };
