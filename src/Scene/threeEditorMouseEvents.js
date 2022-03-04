@@ -81,7 +81,7 @@ export const threeEditorMouseEvents = (
      * But I would recommend to avoid it if possible and keep computation of selected marker as part of the code.
      */
     const onMouseDownTouchStartEvent = (e) => {
-        const isMobileEvent = e.type == "touchstart";
+        const isMobileEvent = e.type === "touchstart";
         const coord = setMousePosition(mouseStart, e, isMobileEvent);
         mouseCoord.set(coord.x, coord.y); //mouseCoord should keep initial click position
 
@@ -98,7 +98,7 @@ export const threeEditorMouseEvents = (
             const { point } = sceneObject;
             //TODO: describe what it does?
             if(!focusedObject?.parent) console.error('Prop Not Found');
-            if(focusedObject?.parent) inverseMatrix.copy(focusedObject.parent.matrixWorld).getInverse(inverseMatrix);
+            if(focusedObject?.parent) inverseMatrix.copy(focusedObject.parent.matrixWorld).invert(inverseMatrix);
             offset.copy(point).sub(worldPosition.setFromMatrixPosition(focusedObject.matrixWorld));
         }else{
             isMarkerClicked = false;
@@ -112,7 +112,7 @@ export const threeEditorMouseEvents = (
 
 
     const onMouseUpTouchEndEvent = (e) => {
-        const isMobileEvent = e.type == "touchend";
+        const isMobileEvent = e.type === "touchend";
 
         if (isMobileEvent) e.preventDefault();
          setMousePosition(mouseCoord, e, isMobileEvent);
@@ -211,14 +211,6 @@ export const threeEditorMouseEvents = (
             cameraRef.current.updateProjectionMatrix();
         }
     };
-
-
-
-
-
-
-
-
 
 
     // 2 main functions of event listeners

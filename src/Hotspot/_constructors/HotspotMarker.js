@@ -3,7 +3,7 @@ import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
 
 
 export default class HotspotMarker extends InteractionObject {
-    constructor({imageURL, iconConfig={}, userData, UIConfig}) {
+    constructor({imageURL, iconConfig={}, userData, UIConfig, primaryColor='#000000', secondaryColor='#00000050', arrowColor=null}) {
         super();
         this.sceneObject.name = 'marker';
         this.hotspot_type = 'hotspot_marker'; //type of marker
@@ -13,13 +13,35 @@ export default class HotspotMarker extends InteractionObject {
         this.imageURL = imageURL;
         this.isFlatBackground = false;
 
+        this.primaryColor = primaryColor;
+        this.secondaryColor = secondaryColor;
+
+        this.arrowColor = arrowColor? arrowColor : primaryColor;
 
         //SVG Icon
         this.svgSpriteComponent = new SVGSpriteComponent(iconConfig);
 
         this.fetchSVGIcon()
             .then(svgString=>{
+                if(userData.props.sprite_rotation_degree){
+                    svgString = svgString.replace('rotate(','rotate('+userData.props.sprite_rotation_degree)
+                }
+                if (userData.type === 'NavMarker'){
+                    //change arrow color
+                    svgString = svgString.replace("path fill='#FFFFFF","path fill='"+this.arrowColor)
+                    svgString = svgString.replace(/\<path/g,"<path opacity='.5'")
+                    svgString = svgString.replace(/\<circle/g,"<circle opacity='.5'")
+                    // alert(svgString)
+                }
+
+                if (userData.type === 'HotspotMarker'){
+                    //change dot color
+                    svgString = svgString.replace("white",this.primaryColor)
+                    svgString = svgString.replace(/\<path/g,"<path opacity='.5'")
+                    svgString = svgString.replace(/\<circle/g,"<circle opacity='.5'")
+                }
                 this.svgSpriteComponent.setSVGString(svgString);
+
             });
     }
 
@@ -68,7 +90,7 @@ export default class HotspotMarker extends InteractionObject {
         const { x, y, z } = this.sceneObject.position;
         this.setPosition(x, y, z);
     }
-    
+
 
     setScale = (scale = 0.45) => {
         this.sceneObject.scale.x = scale;

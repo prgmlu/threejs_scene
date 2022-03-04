@@ -13,7 +13,7 @@ function Hotspot(props) {
         const isNewRecord = !!(transform === undefined || collider_transform === undefined || transform?.length < 1 || collider_transform?.length < 1);
         const { e, point } = sceneRef.current.userData?.clickData || {};
 
-        if (type == 'hotspot') {
+        if (type === 'hotspot') {
             //new markers has no transform values. Currently interpreted as a new record
             if (isNewRecord) {
                 markerRef.current = createAndRenderHotspotMarkerOnEvent(e, props, point, sceneRef.current);
@@ -23,7 +23,7 @@ function Hotspot(props) {
         }
 
         // Image Hotspot
-        else if (type == 'image_hotspot') {
+        else if (type === 'image_hotspot') {
             if (isNewRecord) {
                 markerRef.current = createAndRenderImageHotspot(props, sceneRef, point);
             } else {
