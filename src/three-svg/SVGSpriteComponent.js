@@ -11,8 +11,8 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
         super();
         this.name='sprite';
         this.svgString = '';
-        this.primaryColor = dotColor || 'black';
-        this.secondaryColor = secondaryColor || 'gray';
+        // this.primaryColor = dotColor || 'black';
+        // this.secondaryColor = secondaryColor || 'gray';
         // * IMPORTANT: This needs to be white on init,
         // * because by default the svg value that have modifiable fill colors are white.
         this.color =  color || 'white';
@@ -27,7 +27,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
     setSVGString = (svgString) =>{
         this.svgString = svgString;
         this.svgSprite.setSVGString(svgString);
-        this.setColor(this.primaryColor);
+        // this.setColor(this.primaryColor);
     }
 
     setScale(scale) {

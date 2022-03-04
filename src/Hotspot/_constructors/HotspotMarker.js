@@ -18,6 +18,7 @@ export default class HotspotMarker extends InteractionObject {
 
         this.arrowColor = arrowColor? arrowColor : primaryColor;
 
+
         //SVG Icon
         this.svgSpriteComponent = new SVGSpriteComponent(iconConfig);
 

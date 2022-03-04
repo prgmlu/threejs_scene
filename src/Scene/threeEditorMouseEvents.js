@@ -1,7 +1,18 @@
 import { Vector3, Matrix4 } from 'three';
 import * as THREE from 'three';
 
+const resetHovers = (hovererdMarkers,hoveredObjectsOriginalSvgStrings ) =>{
+    // alert('hi')
+    for (let i = 0; i < hovererdMarkers.length; i++) {
+        const _marker = hovererdMarkers[i];
+        const originalString = hoveredObjectsOriginalSvgStrings.get(_marker);
+        _marker.svgSpriteComponent.setSVGString(originalString);
+        console.log(originalString)
+        hoveredObjectsOriginalSvgStrings.delete(_marker);
+        
+    }
 
+}
 
 export const threeEditorMouseEvents = (
     sceneRef,
@@ -25,6 +36,7 @@ export const threeEditorMouseEvents = (
     // reference to the object that is clicked/being dragged
     let isMarkerClicked = false;
     let focusedObject = null;
+    var hoveredObjectsOriginalSvgStrings = new Map();
 
     //Mouse positions
     const mouseCoord = new THREE.Vector2();
@@ -165,6 +177,42 @@ export const threeEditorMouseEvents = (
         const isMobileEvent = e.type=="touchmove";
         setMousePosition(mouseCoord, e, isMobileEvent);
 
+        const coord = setMousePosition(mouseStart, e, isMobileEvent);
+        mouseCoord.set(coord.x, coord.y);
+        raycaster.setFromCamera(mouseStart, cameraRef.current);
+        const intersects = raycaster.intersectObjects(sceneRef.current.children);
+        const sceneObject = getIntersectedMarkerObject(intersects);
+        const marker = sceneObject?.object?.owner;
+        // console.log(marker);
+        var hovererdMarkers = Array.from(hoveredObjectsOriginalSvgStrings.keys());
+
+        //three cases,
+        // 1- new hover, 2- already hovered, 3- no hovers
+
+        //new hover, append to array and change svg string
+        // console.log(hoveredObjectsOriginalSvgStrings);
+        if (marker && ! hovererdMarkers.includes(marker) ){
+            resetHovers(hovererdMarkers,hoveredObjectsOriginalSvgStrings )
+            
+            //a hovered marker, change opacity
+            // marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace('#c70a4c','black'))
+            hoveredObjectsOriginalSvgStrings.set(marker,marker.svgSpriteComponent.svgString);
+            // marker.userData.onHover(marker);
+            // console.log(marker.svgSpriteComponent.svgString.replace(/$\<path/g,"<path opacity='.9'"))
+            // debugger;
+            // marker.svgSpriteComponent.onHover();
+            marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace(/opacity='\.5'/g,"opacity='.9'"))
+            marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace(/opacity='\.5'/g,"opacity='.9'"))
+            // console.log('EDITED')
+            // console.log(marker.svgSpriteComponent.svgString)
+        }
+        //second case, already hovered, do nothing
+        //no hovers, reset array
+        if (!marker && Array.from(hoveredObjectsOriginalSvgStrings.keys()).length!=0){
+            resetHovers(hovererdMarkers,hoveredObjectsOriginalSvgStrings )
+            
+        }
+            // console.log(sceneObject)
 
 
         //call public callback

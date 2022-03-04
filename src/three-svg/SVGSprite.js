@@ -10,7 +10,7 @@ export default class SVGSprite extends THREE.Sprite {
     }
 
     setSVGString(svgString) {
-        this.scale.set(0.45, 0.45, 0.45);
+        // this.scale.set(0.45, 0.45, 0.45);
         const drawCanvas = document.createElement('canvas');
         drawCanvas.width = 256;
         drawCanvas.height = 256;
