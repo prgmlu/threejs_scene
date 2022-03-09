@@ -81,6 +81,10 @@ class OrbitControls extends EventDispatcher {
 		this.autoRotate = false;
 		this.autoRotateSpeed = 2.0; // 30 seconds per orbit when fps is 60
 
+		// For arrow key press (accessibility)
+		this.rotateUp = rotateUp;
+		this.rotateLeft = rotateLeft;
+
 		// The four arrow keys
 		this.keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' };
 
