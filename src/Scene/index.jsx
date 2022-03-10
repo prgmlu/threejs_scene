@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
 import {initThreeJSScene, setupRenderer, setupCamera } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
+import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
 import { Background, ColliderSphere } from '../three-background';
 import DebugUI from "../utils/DebugUI";
 import './main.scss';
@@ -31,7 +32,7 @@ function createScene(){
 }
 
 const Scene = (props) => {
-    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, allowHotspotsToMove, resetBGBeforeImageLoaded=false, children } = props;
+    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, allowHotspotsToMove, resetBGBeforeImageLoaded=false, children, allData, dispatch } = props;
     const [threeReady, setThreeReady] = useState(false);
     const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
     const [UI, setUI] = useState();
@@ -65,10 +66,6 @@ const Scene = (props) => {
 
         if (controllerUpdate) controllerUpdate();
     };
-
-
-
-
 
     //1. Mount camera & setup renderer only once!!!
     useEffect(() => {
@@ -191,12 +188,21 @@ const Scene = (props) => {
             props.onMouseMove
         );
 
+        // keyboard event listeners
+        const { addThreeEditorKeyboardEvents, removeThreeEditorKeyboardEvents } = threeEditorKeyboardEvents(
+            controlsRef,
+            dispatch,
+            allData,
+        )
+
         addThreeEditorMouseEventListeners();
+        addThreeEditorKeyboardEvents();
 
         return () => {
             removeThreeEditorMouseEventListeners();
+            removeThreeEditorKeyboardEvents();
         };
-    }, [sceneId, sceneRef, cameraRef, allowEventsForMarkerTypeOnly, allowHotspotsToMove]); // eslint-disable-line
+    }, [sceneId, sceneRef, cameraRef, allowEventsForMarkerTypeOnly, allowHotspotsToMove, allData]); // eslint-disable-line
 
 
 
