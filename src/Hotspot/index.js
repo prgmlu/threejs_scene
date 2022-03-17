@@ -16,9 +16,9 @@ const Hotspot = (props) => {
             userData,
             onEnterKeyToSelectNavMarker,
         } = props;
-    // const { currentAccessibilityNavIdx = null } = allReduxStoreData?.accessibility;
-    const currentAccessibilityNavIdx = null; // WIP debugging by MT
 
+    const { currentAccessibilityNavIdx } = allReduxStoreData?.accessibility;
+    
     const [isNavMarkerActive, setIsNavMarkerActive] = useState(false);
 
     const markerRef = useRef();
@@ -52,33 +52,43 @@ const Hotspot = (props) => {
         };
     }, []);
 
-    // useEffect(()=> {
-    //     let replacedSvgString;
 
-    //     if (userData.type === 'NavMarker' && navMarkerIdx === currentAccessibilityNavIdx) {
-    //         replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.5'/g,"opacity='.9'");
-    //         markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
-    //         setIsNavMarkerActive(true)
-            
-    //     } else if (userData.type === 'NavMarker' && currentAccessibilityNavIdx !== undefined && navMarkerIdx !== currentAccessibilityNavIdx) {
-    //         replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.9'/g,"opacity='.5'");
-    //         markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
-    //         setIsNavMarkerActive(false)
-    //     }
-    // }, [currentAccessibilityNavIdx])
+    useEffect(()=> {
+        if (userData.type !== 'NavMarker') return;
+        if (navMarkerIdx === undefined) return;
+        if (currentAccessibilityNavIdx === undefined) return;
+        
+        let replacedSvgString;
 
-    // useEffect(()=> {
-    //     if (userData.type === 'NavMarker') {
-    //         document.addEventListener('keyup', (e) => onEnterKeyToSelectNavMarker(e, markerRef.current, isNavMarkerActive));
-    //     }
+        if (navMarkerIdx === currentAccessibilityNavIdx) {
+            replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.5'/g,"opacity='.9'");
+            markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
+            setIsNavMarkerActive(true)
 
-    //     return () => {
-    //         if (userData.type === 'NavMarker') {
-    //             document.removeEventListener('keyup', onEnterKeyToSelectNavMarker);
-    //         }
-    //     }
+        } else if (navMarkerIdx !== currentAccessibilityNavIdx) {
+            replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.9'/g,"opacity='.5'");
+            markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
+            setIsNavMarkerActive(false)
+        }
 
-    // }, [isNavMarkerActive])
+    }, [currentAccessibilityNavIdx])
+
+
+    const onEnterPressAccessibilityEvent = (e) => {
+        onEnterKeyToSelectNavMarker(e,  markerRef.current, isNavMarkerActive)
+    }
+
+    useEffect(()=> {
+        if (userData.type !== 'NavMarker') return;
+        if (navMarkerIdx === undefined) return;
+        
+        document.addEventListener('keyup', onEnterPressAccessibilityEvent);
+
+        return () => {
+            document.removeEventListener('keyup', onEnterPressAccessibilityEvent);
+        }
+
+    }, [isNavMarkerActive])
 
     return false;
 }
