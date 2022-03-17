@@ -31,7 +31,6 @@ export const threeEditorKeyboardEvents = (
         }
 
         if (needsUpdate) {
-            e.preventDefault;
             controlsRef.current.update();
         }
     }
