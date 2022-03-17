@@ -16,7 +16,7 @@ const Hotspot = (props) => {
             userData,
             onEnterKeyToSelectNavMarker,
         } = props;
-    const { currentAccessibilityNavIdx } = allReduxStoreData?.accessibility;
+    const { currentAccessibilityNavIdx = null } = allReduxStoreData?.accessibility;
 
     const [isNavMarkerActive, setIsNavMarkerActive] = useState(false);
 
