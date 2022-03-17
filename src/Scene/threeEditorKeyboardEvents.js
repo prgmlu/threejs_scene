@@ -6,7 +6,7 @@ export const threeEditorKeyboardEvents = (
     const onArrowKeysForSceneRotation = (e) => {
         if (e.shiftKey === false) return;
 
-        e.preventDefault();
+        e.stopPropagation();
         let needsUpdate = false;
 
         switch(e.key) {
