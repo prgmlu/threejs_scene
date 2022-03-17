@@ -16,7 +16,8 @@ const Hotspot = (props) => {
             userData,
             onEnterKeyToSelectNavMarker,
         } = props;
-    const { currentAccessibilityNavIdx = null } = allReduxStoreData?.accessibility;
+    // const { currentAccessibilityNavIdx = null } = allReduxStoreData?.accessibility;
+    const currentAccessibilityNavIdx = null; // WIP debugging by MT
 
     const [isNavMarkerActive, setIsNavMarkerActive] = useState(false);
 
@@ -51,33 +52,33 @@ const Hotspot = (props) => {
         };
     }, []);
 
-    useEffect(()=> {
-        let replacedSvgString;
+    // useEffect(()=> {
+    //     let replacedSvgString;
 
-        if (userData.type === 'NavMarker' && navMarkerIdx === currentAccessibilityNavIdx) {
-            replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.5'/g,"opacity='.9'");
-            markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
-            setIsNavMarkerActive(true)
+    //     if (userData.type === 'NavMarker' && navMarkerIdx === currentAccessibilityNavIdx) {
+    //         replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.5'/g,"opacity='.9'");
+    //         markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
+    //         setIsNavMarkerActive(true)
             
-        } else if (userData.type === 'NavMarker' && currentAccessibilityNavIdx !== undefined && navMarkerIdx !== currentAccessibilityNavIdx) {
-            replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.9'/g,"opacity='.5'");
-            markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
-            setIsNavMarkerActive(false)
-        }
-    }, [currentAccessibilityNavIdx])
+    //     } else if (userData.type === 'NavMarker' && currentAccessibilityNavIdx !== undefined && navMarkerIdx !== currentAccessibilityNavIdx) {
+    //         replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.9'/g,"opacity='.5'");
+    //         markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
+    //         setIsNavMarkerActive(false)
+    //     }
+    // }, [currentAccessibilityNavIdx])
 
-    useEffect(()=> {
-        if (userData.type === 'NavMarker') {
-            document.addEventListener('keyup', (e) => onEnterKeyToSelectNavMarker(e, markerRef.current, isNavMarkerActive));
-        }
+    // useEffect(()=> {
+    //     if (userData.type === 'NavMarker') {
+    //         document.addEventListener('keyup', (e) => onEnterKeyToSelectNavMarker(e, markerRef.current, isNavMarkerActive));
+    //     }
 
-        return () => {
-            if (userData.type === 'NavMarker') {
-                document.removeEventListener('keyup', onEnterKeyToSelectNavMarker);
-            }
-        }
+    //     return () => {
+    //         if (userData.type === 'NavMarker') {
+    //             document.removeEventListener('keyup', onEnterKeyToSelectNavMarker);
+    //         }
+    //     }
 
-    }, [isNavMarkerActive])
+    // }, [isNavMarkerActive])
 
     return false;
 }
