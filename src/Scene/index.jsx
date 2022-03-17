@@ -32,7 +32,7 @@ function createScene(){
 }
 
 const Scene = (props) => {
-    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, allowHotspotsToMove, resetBGBeforeImageLoaded=false, children, allData, dispatch } = props;
+    const { sceneId, allowEventsForMarkerTypeOnly, bgConf, useDebugger=false, allowHotspotsToMove, resetBGBeforeImageLoaded=false, children, allReduxStoreData, dispatch } = props;
     const [threeReady, setThreeReady] = useState(false);
     const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
     const [UI, setUI] = useState();
@@ -192,7 +192,8 @@ const Scene = (props) => {
         const { addThreeEditorKeyboardEvents, removeThreeEditorKeyboardEvents } = threeEditorKeyboardEvents(
             controlsRef,
             dispatch,
-            allData,
+            allReduxStoreData,
+            props.onEnterKeyToSelectNavMarker,
         )
 
         addThreeEditorMouseEventListeners();
@@ -202,7 +203,7 @@ const Scene = (props) => {
             removeThreeEditorMouseEventListeners();
             removeThreeEditorKeyboardEvents();
         };
-    }, [sceneId, sceneRef, cameraRef, allowEventsForMarkerTypeOnly, allowHotspotsToMove, allData]); // eslint-disable-line
+    }, [sceneId, sceneRef, cameraRef, allowEventsForMarkerTypeOnly, allowHotspotsToMove, allReduxStoreData]); // eslint-disable-line
 
 
 

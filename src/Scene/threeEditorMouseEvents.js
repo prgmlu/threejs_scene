@@ -2,12 +2,10 @@ import { Vector3, Matrix4 } from 'three';
 import * as THREE from 'three';
 
 const resetHovers = (hovererdMarkers,hoveredObjectsOriginalSvgStrings ) =>{
-    // alert('hi')
     for (let i = 0; i < hovererdMarkers.length; i++) {
         const _marker = hovererdMarkers[i];
         const originalString = hoveredObjectsOriginalSvgStrings.get(_marker);
         _marker.svgSpriteComponent.setSVGString(originalString);
-        console.log(originalString)
         hoveredObjectsOriginalSvgStrings.delete(_marker);
         
     }
@@ -24,7 +22,8 @@ export const threeEditorMouseEvents = (
     allowHotspotsToMove=true,
     onMouseDownCallback,
     onMouseUpCallback,
-    onMouseMoveCallback
+    onMouseMoveCallback,
+    allReduxStoreData
 ) => {
     const DESKTOP_THRESHOLD = 0.005;
     const MIN_ZOOM_FOV = 20;
@@ -192,7 +191,7 @@ export const threeEditorMouseEvents = (
         //new hover, append to array and change svg string
         // console.log(hoveredObjectsOriginalSvgStrings);
         if (marker && ! hovererdMarkers.includes(marker) ){
-            resetHovers(hovererdMarkers,hoveredObjectsOriginalSvgStrings )
+            resetHovers(hovererdMarkers, hoveredObjectsOriginalSvgStrings)
             
             //a hovered marker, change opacity
             // marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace('#c70a4c','black'))
@@ -201,7 +200,6 @@ export const threeEditorMouseEvents = (
             // console.log(marker.svgSpriteComponent.svgString.replace(/$\<path/g,"<path opacity='.9'"))
             // debugger;
             // marker.svgSpriteComponent.onHover();
-            marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace(/opacity='\.5'/g,"opacity='.9'"))
             marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace(/opacity='\.5'/g,"opacity='.9'"))
             // console.log('EDITED')
             // console.log(marker.svgSpriteComponent.svgString)
