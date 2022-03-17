@@ -1,12 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { createAndRenderHotspotMarkerOnEvent, renderHotspotRecord, renderImageHotspotRecord, createAndRenderImageHotspot } from '../utils';
 
 
 //TODO: refactor setMaxRenderOrder
 //TODO: object with hotspot_type =='image_marker' has prop sceneObject == null???
-function Hotspot(props) {
-    const { type, transform, collider_transform, sceneRef, setMaxRenderOrder } = props;
+const Hotspot = (props) => {
+    const { type,
+            transform,
+            collider_transform,
+            sceneRef,
+            setMaxRenderOrder,
+            navMarkerIdx,
+            allReduxStoreData,
+            userData,
+            onEnterKeyToSelectNavMarker,
+        } = props;
+    const { currentAccessibilityNavIdx } = allReduxStoreData.accessibility;
+
+    const [isNavMarkerActive, setIsNavMarkerActive] = useState(false);
+
     const markerRef = useRef();
 
     useEffect(() => {
@@ -30,14 +43,41 @@ function Hotspot(props) {
                 markerRef.current = renderImageHotspotRecord(props, sceneRef, setMaxRenderOrder);
             }
         }
-
+        
         return () => {
-            // console.log('REMOVE MARKER', markerRef.current);
             markerRef.current.dispose();
             markerRef.current.components?.map((item) => item.dispose());
             markerRef.current.sceneObject?.dispose();
         };
     }, []);
+
+    useEffect(()=> {
+        let replacedSvgString;
+
+        if (userData.type === 'NavMarker' && navMarkerIdx === currentAccessibilityNavIdx) {
+            replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.5'/g,"opacity='.9'");
+            markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
+            setIsNavMarkerActive(true)
+            
+        } else if (userData.type === 'NavMarker' && currentAccessibilityNavIdx !== undefined && navMarkerIdx !== currentAccessibilityNavIdx) {
+            replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.9'/g,"opacity='.5'");
+            markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
+            setIsNavMarkerActive(false)
+        }
+    }, [currentAccessibilityNavIdx])
+
+    useEffect(()=> {
+        if (userData.type === 'NavMarker') {
+            document.addEventListener('keyup', (e) => onEnterKeyToSelectNavMarker(e, markerRef.current, isNavMarkerActive));
+        }
+
+        return () => {
+            if (userData.type === 'NavMarker') {
+                document.removeEventListener('keyup', onEnterKeyToSelectNavMarker);
+            }
+        }
+
+    }, [isNavMarkerActive])
 
     return false;
 }

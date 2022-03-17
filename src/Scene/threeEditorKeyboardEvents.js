@@ -1,25 +1,12 @@
 export const threeEditorKeyboardEvents = (
     controlsRef,
     dispatch,
-    allData,
+    allReduxStoreData,
 ) => {
-    const onShiftPressed = (e) => {
-        e.preventDefault;
-        if (e.key === 'Shift') {
-            dispatch(allData.accessibility.setIsShiftKeyPressed(true))
-        }
-    }
-    
-    const onShiftReleased = (e) => {
-        e.preventDefault;
-        if (e.key === 'Shift') {
-            dispatch(allData.accessibility.setIsShiftKeyPressed(false))
-        }
-    }
+    const onArrowKeysForSceneRotation = (e) => {
+        if (e.shiftKey === false) return;
 
-    const handleKeyDown = (e) => {
-        if (!allData?.accessibility?.isShiftKeyPressed) return;
-
+        e.preventDefault();
         let needsUpdate = false;
 
         switch(e.key) {
@@ -47,19 +34,32 @@ export const threeEditorKeyboardEvents = (
             e.preventDefault;
             controlsRef.current.update();
         }
+    }
 
+    const onArrowKeysToHighlightNavMarker = (e) => {
+        if (e.altKey === false) return;
+
+        e.preventDefault();
+        switch(e.key) {
+            case 'ArrowLeft':
+                dispatch(allReduxStoreData.accessibility.handleLeftArrowKeyAccessibilityNavIdx())
+                break;
+            case 'ArrowRight':
+                dispatch(allReduxStoreData.accessibility.handleRightArrowKeyAccessibilityNavIdx())
+                break;
+            default:
+                return;
+        }
     }
 
     const addThreeEditorKeyboardEvents = () => {
-        document.addEventListener('keydown', onShiftPressed);
-        document.addEventListener('keyup', onShiftReleased);
-        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keydown', onArrowKeysForSceneRotation);
+        document.addEventListener('keyup', onArrowKeysToHighlightNavMarker);
     };
 
     const removeThreeEditorKeyboardEvents = () => {
-        document.removeEventListener('keydown', onShiftPressed)
-        document.removeEventListener('keyup', onShiftReleased);
-        document.removeEventListener('keydown', handleKeyDown);
+        document.removeEventListener('keydown', onArrowKeysForSceneRotation);
+        document.removeEventListener('keyup', onArrowKeysToHighlightNavMarker);
     };
 
     return {
