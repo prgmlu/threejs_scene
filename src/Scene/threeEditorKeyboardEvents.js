@@ -42,10 +42,10 @@ export const threeEditorKeyboardEvents = (
         e.preventDefault();
         switch(e.key) {
             case 'ArrowLeft':
-                dispatch(allReduxStoreData.accessibility.handleLeftArrowKeyAccessibilityNavIdx())
+                dispatch(allReduxStoreData?.accessibility.handleLeftArrowKeyAccessibilityNavIdx())
                 break;
             case 'ArrowRight':
-                dispatch(allReduxStoreData.accessibility.handleRightArrowKeyAccessibilityNavIdx())
+                dispatch(allReduxStoreData?.accessibility.handleRightArrowKeyAccessibilityNavIdx())
                 break;
             default:
                 return;
