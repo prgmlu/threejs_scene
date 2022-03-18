@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ThreeFlatBackground from './ThreeFlatBackground';
 import  {formatDate} from "../../utils";
 
-const FlatBackground = ({ scene, backgroundUrl, resetBGBeforeImageLoaded }) => {
+const FlatBackground = ({ scene, backgroundUrl, resetBGBeforeImageLoaded, imageIntegrity }) => {
     const flatBackground = useRef();
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const FlatBackground = ({ scene, backgroundUrl, resetBGBeforeImageLoaded }) => {
         if(resetBGBeforeImageLoaded) flatBackground.current.resetMaterial();
 
         if (backgroundUrl) {
-            flatBackground.current.loadTexture(`${backgroundUrl}?v=${formatDate(new Date(), "mmddyyyyhh")}`);
+            flatBackground.current.loadTexture(`${backgroundUrl}?v=${imageIntegrity ? imageIntegrity : formatDate(new Date(), "mmddyyyyhh")}`);
         }
     }, [backgroundUrl]);
 

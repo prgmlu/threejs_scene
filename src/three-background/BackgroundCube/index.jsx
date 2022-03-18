@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import ThreeBackgroundCube from './ThreeBackgroundCube';
 
 
-const BackgroundCube = ({ scene, backgroundUrl , camera, linkedScenes}) => {
+const BackgroundCube = ({ scene, backgroundUrl , camera, linkedScenes, imageIntegrity, useWebp}) => {
     const cube = useRef();
-
     useEffect(() => {
         cube.current = new ThreeBackgroundCube(camera);
         cube.current.addToScene(scene);
@@ -17,13 +16,13 @@ const BackgroundCube = ({ scene, backgroundUrl , camera, linkedScenes}) => {
     }, []); // eslint-disable-line
 
     useEffect(() => {
-        if (backgroundUrl) cube.current.loadCubeTextureFromPriorityArray(backgroundUrl);
+        if (backgroundUrl) cube.current.loadCubeTextureFromPriorityArray(backgroundUrl, imageIntegrity, useWebp);
 
     }, [backgroundUrl]);
 
-    useEffect(() => {
-        cube.current.preLoadConnectedScenes(linkedScenes)
-    }, [linkedScenes])
+    // useEffect(() => {
+    //     cube.current.preLoadConnectedScenes(linkedScenes)
+    // }, [linkedScenes])
 
     useEffect(() => {
         cube.current.camera = camera;

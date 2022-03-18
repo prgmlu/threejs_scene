@@ -221,7 +221,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
         }
     }
 
-    loadCubeTextureFromPriorityArray = async (url) => {
+    loadCubeTextureFromPriorityArray = async (url, imageIntegrity, useWebp) => {
         this.url = url;
         this.dispose();
         this.initPriorityArray();
@@ -235,7 +235,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
             const priorityObject = this.priorityArrayMap[this.url].shift();
             let {face, level} = priorityObject;
             initiatorUrl = priorityObject.initiatorUrl;
-            const faceLODUrls = this.buildLODUrls(url, face, level);
+            const faceLODUrls = this.buildLODUrls(url, face, level, imageIntegrity, useWebp);
             const tiles = await this.loadFaceTexturesAsync(faceLODUrls, face, level);
             if (initiatorUrl !== this.url){
                 return;
@@ -274,7 +274,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
     }
 
     // Build load order of cubemaps
-    buildLODUrls = (baseUrl, face, LOD) => {
+    buildLODUrls = (baseUrl, face, LOD, imageIntegrity, useWebp=false) => {
         if (!baseUrl) return null;
 
         const loadOrder = [];
@@ -283,7 +283,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 
         for (let i = iterations - 1; i >= 0; i -= 1) {
             for (let j = 0; j < iterations; j += 1) {
-                const imageName = `${baseUrl}${resolution}_${face}_${i}_${j}.jpg`;
+                const imageName = `${baseUrl}${resolution}_${face}_${i}_${j}.${useWebp ? "webp" : "jpg"}?v=${imageIntegrity}`;
                 loadOrder.push(imageName);
             }
         }
