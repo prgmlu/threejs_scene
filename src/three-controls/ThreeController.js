@@ -18,7 +18,7 @@ class ThreeController {
 
         //     this.startDistance = dist;
         // }
-    
+
         // })
 
         if(!window.counter){
@@ -31,7 +31,7 @@ class ThreeController {
         if (window.counter>1){
         renderer.domElement.addEventListener('touchend', (event)=>{
             this.startDistance = null;
-        })
+        }, {passive: true})
         renderer.domElement.addEventListener('touchmove', (event)=>{
 
         if (event.touches.length != 1) {
@@ -45,7 +45,7 @@ class ThreeController {
             var deltaDist = this.startDistance - dist;
             var temp = this.camera.fov + (deltaDist * .2);
             // this.camera.position.x+=1;
-            
+
             if (temp > 20 && temp < 70) {
                 this.camera.fov += deltaDist * .2;
                 this.camera.updateProjectionMatrix();
@@ -57,9 +57,9 @@ class ThreeController {
         // if (!this.deviceOrientationEventFired) {
         //     this.deviceOrientationHandler(event);
         // }
-        });
+        }, {passive: true});
     }
-    
+
 
 
         window.c=this.controls;

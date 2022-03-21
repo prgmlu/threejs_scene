@@ -7,7 +7,7 @@ const resetHovers = (hovererdMarkers,hoveredObjectsOriginalSvgStrings ) =>{
         const originalString = hoveredObjectsOriginalSvgStrings.get(_marker);
         _marker.svgSpriteComponent.setSVGString(originalString);
         hoveredObjectsOriginalSvgStrings.delete(_marker);
-        
+
     }
 
 }
@@ -192,7 +192,7 @@ export const threeEditorMouseEvents = (
         // console.log(hoveredObjectsOriginalSvgStrings);
         if (marker && ! hovererdMarkers.includes(marker) ){
             resetHovers(hovererdMarkers, hoveredObjectsOriginalSvgStrings)
-            
+
             //a hovered marker, change opacity
             // marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace('#c70a4c','black'))
             hoveredObjectsOriginalSvgStrings.set(marker,marker.svgSpriteComponent.svgString);
@@ -208,7 +208,7 @@ export const threeEditorMouseEvents = (
         //no hovers, reset array
         if (!marker && Array.from(hoveredObjectsOriginalSvgStrings.keys()).length!=0){
             resetHovers(hovererdMarkers,hoveredObjectsOriginalSvgStrings )
-            
+
         }
             // console.log(sceneObject)
 
@@ -268,9 +268,9 @@ export const threeEditorMouseEvents = (
         renderer.domElement.addEventListener('wheel', mouseWheelHandler, { passive: true });
 
         //Mobile
-        renderer.domElement.addEventListener('touchstart', onMouseDownTouchStartEvent);
-        renderer.domElement.addEventListener('touchmove', onMouseMove);
-        renderer.domElement.addEventListener('touchend', onMouseUpTouchEndEvent);
+        renderer.domElement.addEventListener('touchstart', onMouseDownTouchStartEvent, {passive: true});
+        renderer.domElement.addEventListener('touchmove', onMouseMove, {passive: true});
+        renderer.domElement.addEventListener('touchend', onMouseUpTouchEndEvent, {passive: true});
     };
 
     const removeThreeEditorMouseEventListeners = () => {
@@ -281,9 +281,9 @@ export const threeEditorMouseEvents = (
         renderer.domElement.removeEventListener('wheel', mouseWheelHandler);
 
         //Mobile
-        renderer.domElement.removeEventListener('touchstart', onMouseDownTouchStartEvent);
-        renderer.domElement.removeEventListener('touchmove', onMouseMove);
-        renderer.domElement.removeEventListener('touchend', onMouseUpTouchEndEvent);
+        renderer.domElement.removeEventListener('touchstart', onMouseDownTouchStartEvent, {passive: true});
+        renderer.domElement.removeEventListener('touchmove', onMouseMove, {passive: true});
+        renderer.domElement.removeEventListener('touchend', onMouseUpTouchEndEvent, {passive: true});
     };
 
     return {
