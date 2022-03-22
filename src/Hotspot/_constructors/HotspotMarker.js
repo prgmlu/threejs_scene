@@ -16,9 +16,6 @@ export default class HotspotMarker extends InteractionObject {
         this.primaryColor = primaryColor;
         this.secondaryColor = secondaryColor;
 
-        this.arrowColor = arrowColor? arrowColor : primaryColor;
-
-
         //SVG Icon
         this.svgSpriteComponent = new SVGSpriteComponent(iconConfig);
 
@@ -27,25 +24,24 @@ export default class HotspotMarker extends InteractionObject {
                 if(userData.props.sprite_rotation_degree){
                     svgString = svgString.replace('rotate(','rotate('+userData.props.sprite_rotation_degree)
                 }
-                if (userData.type === 'NavMarker'){
-                    //change arrow color
-                    svgString = svgString.replace("path fill='#FFFFFF","path fill='"+this.arrowColor)
-                    svgString = svgString.replace(/\<path/g,"<path opacity='.5'")
-                    svgString = svgString.replace(/\<circle/g,"<circle opacity='.5'")
-                    // alert(svgString)
-                }
-
+                // if (userData.type === 'NavMarker'){
+                //     //change arrow color
+                //     svgString = svgString.replace("path fill='#FFFFFF","path fill='"+this.arrowColor)
+                //     svgString = svgString.replace(/\<path/g,"<path opacity='.5'")
+                //     svgString = svgString.replace(/\<circle/g,"<circle opacity='.5'")
+                //     // alert(svgString)
+                // }
+                //
                 if (userData.type === 'HotspotMarker'){
                     //change dot color
                     svgString = svgString.replace("white",this.primaryColor)
-                    svgString = svgString.replace(/\<path/g,"<path opacity='.5'")
-                    svgString = svgString.replace(/\<circle/g,"<circle opacity='.5'")
+                    svgString = svgString.replace(/\<path/g,"<path opacity='1'")
+                    svgString = svgString.replace(/\<circle/g,"<circle opacity='1'")
                 }
                 this.svgSpriteComponent.setSVGString(svgString);
 
             });
     }
-
 
 
     fetchSVGIcon = async( )=>{
@@ -85,7 +81,6 @@ export default class HotspotMarker extends InteractionObject {
 
 
     setTransform = (colliderTransform, visualTransform) => {
-        // console.log('--setTransform', {this:this});
         super.setTransform(colliderTransform, visualTransform);
 
         const { x, y, z } = this.sceneObject.position;

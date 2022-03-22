@@ -35,7 +35,9 @@ module.exports = (env) => {
         name: "threejs_scene",
         filename: "remoteEntry.js",
         exposes:{
-            "./lib": "./src"
+            "./Scene": "./src/Scene",
+            "./Hotspot": "./src/Hotspot",
+            "./InSceneVidComponent": "./src/in-scene-video/InSceneVidComponent"
         },
         shared: {
             ...deps,
@@ -60,13 +62,10 @@ module.exports = (env) => {
         entry: buildMode ?  './src/index.js' : './example/index.js',
         devtool: 'source-map',
         output: {
-            // path: path.resolve(__dirname, 'dist'),
             filename: 'index.js',
             publicPath: getPublicPath(buildEnv, modulePath),
             //UMD
             libraryTarget: 'umd', //document undefined
-            // globalObject: 'this',
-            // umdNamedDefine: true,
             clean: true,//erase old build
         },
         module: {
@@ -87,32 +86,9 @@ module.exports = (env) => {
                 },
             ],
         },
-
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.jsx'],
-            // alias: {
-            //     'react': path.resolve(path.join(__dirname, './node_modules/react')),
-            //     'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-            // }
         },
-
-        // Don't bundle react or react-dom
-        // Enable rules only on compilation/build mode
-        // externals: buildMode ? {
-        //     react: {
-        //         root: "React",
-        //         commonjs: "react",
-        //         commonjs2: "react",
-        //         amd: "react"
-        //     },
-        //     "react-dom": {
-        //         root: "ReactDOM",
-        //         commonjs: "react-dom",
-        //         commonjs2: "react-dom",
-        //         amd: "react-dom",
-        //     },
-        // }:{},
-
         plugins:pluginsArr,
     };
 

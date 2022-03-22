@@ -11,7 +11,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
         super();
         this.name='sprite';
         this.svgString = '';
-        // this.primaryColor = dotColor || 'black';
+        this.primaryColor = dotColor || 'black';
         // this.secondaryColor = secondaryColor || 'gray';
         // * IMPORTANT: This needs to be white on init,
         // * because by default the svg value that have modifiable fill colors are white.
@@ -22,9 +22,11 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 
         this.svgSprite = new SVGSprite();
         this.dispose = this.dispose.bind(this);
+
     }
 
     setSVGString = (svgString) =>{
+        console.log("=> setSVGString")
         this.svgString = svgString;
         this.svgSprite.setSVGString(svgString);
         // this.setColor(this.primaryColor);
@@ -36,14 +38,15 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 
 
     //TODO: implement properly color assignment for dot, background and border.
-    setColor =(color) =>{
+    setColor = (color) =>{
         if (!this.svgString) {
             console.error(`SVG string not set on SVGSpriteComponent: ${this}`); // eslint-disable-line no-console
             return;
         }
         const regexString = this.color.replace(/\(|\)/g, '\\$&');
-        const coloredSVGString = this.svgString.replace(new RegExp(`fill="${regexString}"`, 'g'), `fill=\"${color}\"`); // eslint-disable-line
-        this.svgString = coloredSVGString;
+         // eslint-disable-line
+        this.svgString = this.svgString.replace(new RegExp(`fill="${regexString}"`, 'g'),
+            `fill=\"${color}\"`);
         this.svgSprite.setSVGString(this.svgString);
         this.color = color;
     }
@@ -53,18 +56,21 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
             console.error(`SVG string not set on SVGSpriteComponent: ${this}`); // eslint-disable-line no-console
             return;
         }
-        const rotatedSVGString = this.svgString.replace(`rotate(${this.rotationX} 256 256)`, `rotate(${rotX} 256 256)`);
-        this.svgString = rotatedSVGString;
+        this.svgString = this.svgString.replace(`rotate(${this.rotationX} 256 256)`,
+            `rotate(${rotX} 256 256)`);
         this.svgSprite.setSVGString(this.svgString);
         this.rotationX = rotX;
     }
 
-    onHover() {
-        if (this.color === this.secondaryColor) return;
-        this.setColor(this.secondaryColor);
+    onHover = () => {
+        console.log("=> SVG onHover", document.body.style.cursor)
+        document.body.style.cursor = 'grab'
+        // if (this.color === this.secondaryColor) return;
+        // this.setColor(this.secondaryColor);
     }
 
-    onUnhover() {
+    onUnhover = () => {
+        document.body.style.cursor = 'default'
         if (this.color === this.primaryColor) return;
         this.setColor(this.primaryColor);
     }

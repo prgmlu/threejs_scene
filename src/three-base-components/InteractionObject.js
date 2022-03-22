@@ -44,15 +44,11 @@ export default class InteractionObject extends ThreeSceneObject {
     }
 
 
-
-
-
     /**
      * Call all the onClick function on the components attached to this InteractableObject.
      * Call when the collider attached to this InteractableObject is clicked.
      */
     onClick = (e) => {
-
         //Display UI
         this.openUI(e);
     }
@@ -135,10 +131,6 @@ export default class InteractionObject extends ThreeSceneObject {
     // }
     setPosition(x, y, z){
         this.sceneObject.position.set(x, y, z);
-
-        if (this.isFlatBackground) this.sceneObject.position.x = -10;
-        else this.sceneObject.position.clampLength(10, 10);
-
         this.visualObject.position.copy(this.sceneObject.position);
     }
 
