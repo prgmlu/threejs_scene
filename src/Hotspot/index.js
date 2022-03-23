@@ -1,112 +1,145 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { createAndRenderHotspotMarkerOnEvent, renderHotspotRecord, renderImageHotspotRecord, createAndRenderImageHotspot } from '../utils';
-
+import {
+	createAndRenderHotspotMarkerOnEvent,
+	renderHotspotRecord,
+	renderImageHotspotRecord,
+	createAndRenderImageHotspot,
+} from '../utils';
 
 //TODO: refactor setMaxRenderOrder
 //TODO: object with hotspot_type =='image_marker' has prop sceneObject == null???
 const Hotspot = (props) => {
-    const { type,
-            transform,
-            collider_transform,
-            sceneRef,
-            setMaxRenderOrder,
-            navMarkerIdx,
-            allReduxStoreData,
-            userData,
-            onEnterKeyToSelectNavMarker,
-        } = props;
+	const {
+		type,
+		transform,
+		collider_transform,
+		sceneRef,
+		setMaxRenderOrder,
+		navMarkerIdx,
+		allReduxStoreData,
+		userData,
+		onEnterKeyToSelectNavMarker,
+	} = props;
 
-    const { currentAccessibilityNavIdx } = allReduxStoreData?.accessibility;
-    
-    const [isNavMarkerActive, setIsNavMarkerActive] = useState(false);
+	const { currentAccessibilityNavIdx } = allReduxStoreData?.accessibility;
 
-    const markerRef = useRef();
+	const [isNavMarkerActive, setIsNavMarkerActive] = useState(false);
 
-    useEffect(() => {
-        const isNewRecord = !!(transform === undefined || collider_transform === undefined || transform?.length < 1 || collider_transform?.length < 1);
-        const { e, point } = sceneRef.current.userData?.clickData || {};
+	const markerRef = useRef();
 
-        if (type === 'hotspot') {
-            //new markers has no transform values. Currently interpreted as a new record
-            if (isNewRecord) {
-                markerRef.current = createAndRenderHotspotMarkerOnEvent(e, props, point, sceneRef.current);
-            } else {
-                markerRef.current = renderHotspotRecord(props, sceneRef);
-            }
-        }
+	useEffect(() => {
+		const isNewRecord = !!(
+			transform === undefined ||
+			collider_transform === undefined ||
+			transform?.length < 1 ||
+			collider_transform?.length < 1
+		);
+		const { e, point } = sceneRef.current.userData?.clickData || {};
 
-        // Image Hotspot
-        else if (type === 'image_hotspot') {
-            if (isNewRecord) {
-                markerRef.current = createAndRenderImageHotspot(props, sceneRef, point);
-            } else {
-                markerRef.current = renderImageHotspotRecord(props, sceneRef, setMaxRenderOrder);
-            }
-        }
-        
-        return () => {
-            markerRef.current.dispose();
-            markerRef.current.components?.map((item) => item.dispose());
-            markerRef.current.sceneObject?.dispose();
-        };
-    }, []);
+		if (type === 'hotspot') {
+			//new markers has no transform values. Currently interpreted as a new record
+			if (isNewRecord) {
+				markerRef.current = createAndRenderHotspotMarkerOnEvent(
+					e,
+					props,
+					point,
+					sceneRef.current,
+				);
+			} else {
+				markerRef.current = renderHotspotRecord(props, sceneRef);
+			}
+		}
 
+		// Image Hotspot
+		else if (type === 'image_hotspot') {
+			if (isNewRecord) {
+				markerRef.current = createAndRenderImageHotspot(
+					props,
+					sceneRef,
+					point,
+				);
+			} else {
+				markerRef.current = renderImageHotspotRecord(
+					props,
+					sceneRef,
+					setMaxRenderOrder,
+				);
+			}
+		}
 
-    useEffect(()=> {
-        if (userData.type !== 'NavMarker') return;
-        if (navMarkerIdx === undefined) return;
-        if (currentAccessibilityNavIdx === undefined) return;
-        
-        let replacedSvgString;
+		return () => {
+			markerRef.current.dispose();
+			markerRef.current.components?.map((item) => item.dispose());
+			markerRef.current.sceneObject?.dispose();
+		};
+	}, []);
 
-        if (navMarkerIdx === currentAccessibilityNavIdx) {
-            replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.5'/g,"opacity='.9'");
-            markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
-            setIsNavMarkerActive(true)
+	useEffect(() => {
+		if (userData.type !== 'NavMarker') return;
+		if (navMarkerIdx === undefined) return;
+		if (currentAccessibilityNavIdx === undefined) return;
 
-        } else if (navMarkerIdx !== currentAccessibilityNavIdx) {
-            replacedSvgString = markerRef.current.svgSpriteComponent?.svgString.replace(/opacity='\.9'/g,"opacity='.5'");
-            markerRef.current.svgSpriteComponent.setSVGString(replacedSvgString);
-            setIsNavMarkerActive(false)
-        }
+		let replacedSvgString;
 
-    }, [currentAccessibilityNavIdx])
+		if (navMarkerIdx === currentAccessibilityNavIdx) {
+			replacedSvgString =
+				markerRef.current.svgSpriteComponent?.svgString.replace(
+					/opacity='\.5'/g,
+					"opacity='.9'",
+				);
+			markerRef.current.svgSpriteComponent.setSVGString(
+				replacedSvgString,
+			);
+			setIsNavMarkerActive(true);
+		} else if (navMarkerIdx !== currentAccessibilityNavIdx) {
+			replacedSvgString =
+				markerRef.current.svgSpriteComponent?.svgString.replace(
+					/opacity='\.9'/g,
+					"opacity='.5'",
+				);
+			markerRef.current.svgSpriteComponent.setSVGString(
+				replacedSvgString,
+			);
+			setIsNavMarkerActive(false);
+		}
+	}, [currentAccessibilityNavIdx]);
 
+	const onEnterPressAccessibilityEvent = (e) => {
+		onEnterKeyToSelectNavMarker(e, markerRef.current, isNavMarkerActive);
+	};
 
-    const onEnterPressAccessibilityEvent = (e) => {
-        onEnterKeyToSelectNavMarker(e,  markerRef.current, isNavMarkerActive)
-    }
+	useEffect(() => {
+		if (userData.type !== 'NavMarker') return;
+		if (navMarkerIdx === undefined) return;
 
-    useEffect(()=> {
-        if (userData.type !== 'NavMarker') return;
-        if (navMarkerIdx === undefined) return;
-        
-        document.addEventListener('keyup', onEnterPressAccessibilityEvent);
+		document.addEventListener('keyup', onEnterPressAccessibilityEvent);
 
-        return () => {
-            document.removeEventListener('keyup', onEnterPressAccessibilityEvent);
-        }
+		return () => {
+			document.removeEventListener(
+				'keyup',
+				onEnterPressAccessibilityEvent,
+			);
+		};
+	}, [isNavMarkerActive]);
 
-    }, [isNavMarkerActive])
-
-    return false;
-}
+	return false;
+};
 
 Hotspot.defaultProps = {
-    type: 'hotspot', //hotspot/image_hotspot
+	type: 'hotspot', //hotspot/image_hotspot
 };
 
 Hotspot.propTypes = {
-    type: PropTypes.string.isRequired,
-    collider_transform: PropTypes.array,
-    transform: PropTypes.array,
-    userData: PropTypes.object,
-    UIConfig: PropTypes.shape({
-        // Component: PropTypes.object.isRequired,
-        style: PropTypes.object,
-        positionNextToTheElement: PropTypes.bool,
-    }),
+	type: PropTypes.string.isRequired,
+	collider_transform: PropTypes.array,
+	transform: PropTypes.array,
+	userData: PropTypes.object,
+	UIConfig: PropTypes.shape({
+		// Component: PropTypes.object.isRequired,
+		style: PropTypes.object,
+		positionNextToTheElement: PropTypes.bool,
+	}),
 };
 
 export default Hotspot;

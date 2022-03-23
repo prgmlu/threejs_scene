@@ -1,40 +1,40 @@
 import { ImageMarker } from '../Hotspot/_constructors';
 
 export const renderImageHotspotRecord = (data, sceneRef, setMaxRenderOrder) => {
-    const marker = new ImageMarker(data);
-    marker.addToScene(sceneRef.current);
+	const marker = new ImageMarker(data);
+	marker.addToScene(sceneRef.current);
 
-    if (data.renderOrder) setMaxRenderOrder(data.renderOrder);
+	if (data.renderOrder) setMaxRenderOrder(data.renderOrder);
 
-    return marker;
+	return marker;
 };
 
 export const createAndRenderImageHotspot = (props, sceneRef, point) => {
-    //1. Create Image Marker
-    const marker = new ImageMarker({
-        imageURL: props.imageURL,
-        renderOrder: props.renderOrder,
-        scale: props.scale,
-        userData: props.userData,
-        UIConfig: props.UIConfig,
-    });
+	//1. Create Image Marker
+	const marker = new ImageMarker({
+		imageURL: props.imageURL,
+		renderOrder: props.renderOrder,
+		scale: props.scale,
+		userData: props.userData,
+		UIConfig: props.UIConfig,
+	});
 
-    //2. Render Marker
-    marker.addToScene(sceneRef.current);
+	//2. Render Marker
+	marker.addToScene(sceneRef.current);
 
-    //3. Set Position
-    marker.setPosition(point.x, point.y, point.z);
-    marker.lookAt();
-    // marker.setUserData({imageId});
+	//3. Set Position
+	marker.setPosition(point.x, point.y, point.z);
+	marker.lookAt();
+	// marker.setUserData({imageId});
 
-    //4. Get Transform data
-    // const transforms = marker.getTransforms();
-    // await sleep(1000); //Important!!! Do not delete sleep method from here!!!!!
+	//4. Get Transform data
+	// const transforms = marker.getTransforms();
+	// await sleep(1000); //Important!!! Do not delete sleep method from here!!!!!
 
-    //7. Update marker.userData value
-    // marker.setUserData(record);
-    marker.onClick();
-    return marker;
+	//7. Update marker.userData value
+	// marker.setUserData(record);
+	marker.onClick();
+	return marker;
 };
 
 // export const addImageHotspotOnDrop = async (e, position, storeId, currentSceneId, cameraRef, folderId, products, maxRenderOrder, scene, setMaxRenderOrder, reduxDispatch) => {

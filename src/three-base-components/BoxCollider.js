@@ -11,13 +11,16 @@ import Collider from './Collider';
  * @param {function} onClick - callback for when the collider is clicked
  */
 export default class BoxCollider extends Collider {
-    constructor(width, height, depth, onHover, onUnhover, onClick) {
-        const boxGeometry = new THREE.BoxGeometry(width, height, depth);
-        const colliderMaterial = new THREE.MeshBasicMaterial({
-            color: 0xFFFFFF, opacity: 0, transparent: true, depthTest: false,
-        });
+	constructor(width, height, depth, onHover, onUnhover, onClick) {
+		const boxGeometry = new THREE.BoxGeometry(width, height, depth);
+		const colliderMaterial = new THREE.MeshBasicMaterial({
+			color: 0xffffff,
+			opacity: 0,
+			transparent: true,
+			depthTest: false,
+		});
 
-        // colliderMaterial.wireframe = true;
-        super(boxGeometry, colliderMaterial, onHover, onUnhover, onClick);
-    }
+		// colliderMaterial.wireframe = true;
+		super(boxGeometry, colliderMaterial, onHover, onUnhover, onClick);
+	}
 }

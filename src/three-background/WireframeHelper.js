@@ -3,24 +3,24 @@ import * as THREE from 'three';
 import ThreeSceneObject from '../three-base-components/ThreeSceneObject';
 
 export default class WireframeHelper extends ThreeSceneObject {
-    constructor(geometry) {
-        super();
-        const wireframe = new THREE.WireframeGeometry(geometry);
+	constructor(geometry) {
+		super();
+		const wireframe = new THREE.WireframeGeometry(geometry);
 
-        const line = new THREE.LineSegments(wireframe);
+		const line = new THREE.LineSegments(wireframe);
 
-        line.material.depthTest = false;
-        line.material.opacity = 0.5;
-        line.material.transparent = true;
+		line.material.depthTest = false;
+		line.material.opacity = 0.5;
+		line.material.transparent = true;
 
-        this.sceneObject = line;
-    }
+		this.sceneObject = line;
+	}
 
-    dispose() {
-        super.dispose();
+	dispose() {
+		super.dispose();
 
-        this.sceneObject.material.dispose();
-        this.sceneObject.geometry.dispose();
-        this.sceneObject = null;
-    }
+		this.sceneObject.material.dispose();
+		this.sceneObject.geometry.dispose();
+		this.sceneObject = null;
+	}
 }

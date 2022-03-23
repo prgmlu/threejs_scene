@@ -4,83 +4,80 @@ import ThreeSceneObject from '../../three-base-components/ThreeSceneObject';
 import ThreeController from '../../three-controls/ThreeController';
 
 export default class ThreeFlatBackground extends ThreeSceneObject {
-    constructor() {
-        super();
+	constructor() {
+		super();
 
-        this.geometry=null;
-        this.loader = this.setupTextureLoader();
-        this.controls = ThreeController.setupPanControls();
-        this.setInitialObject();
-        this.setPanArea = this.setPanArea.bind(this);
-    }
+		this.geometry = null;
+		this.loader = this.setupTextureLoader();
+		this.controls = ThreeController.setupPanControls();
+		this.setInitialObject();
+		this.setPanArea = this.setPanArea.bind(this);
+	}
 
-    setInitialObject = () => {
-        const material = new THREE.MeshBasicMaterial({
-            depthTest: false, depthWrite: false,
-            // wireframe:true
-        });
+	setInitialObject = () => {
+		const material = new THREE.MeshBasicMaterial({
+			depthTest: false,
+			depthWrite: false,
+			// wireframe:true
+		});
 
-        this.geometry = new THREE.PlaneGeometry(14.15, 14.15);
-        this.sceneObject = new THREE.Mesh(this.geometry, material);
-        this.sceneObject.rotateY(THREE.Math.degToRad(90));
-        this.sceneObject.position.x = -10;
-        this.sceneObject.name = 'flatBackground';
-    }
+		this.geometry = new THREE.PlaneGeometry(14.15, 14.15);
+		this.sceneObject = new THREE.Mesh(this.geometry, material);
+		this.sceneObject.rotateY(THREE.Math.degToRad(90));
+		this.sceneObject.position.x = -10;
+		this.sceneObject.name = 'flatBackground';
+	};
 
-    setupTextureLoader = () => {
-        // const loadingManager = new THREE.LoadingManager();
-        return new THREE.TextureLoader();
-    }
+	setupTextureLoader = () => {
+		// const loadingManager = new THREE.LoadingManager();
+		return new THREE.TextureLoader();
+	};
 
+	setPanArea() {
+		const canvasWidth = this.controls.domElement.offsetWidth;
+		const offset = (10.6 * canvasWidth) / 900;
+		const ratio = (14.15 * this.width) / 2 - offset;
+		const minMax = this.width > 1 ? ratio : 0;
 
+		this.controls.minPan = new THREE.Vector3(0, 0, 0);
+		this.controls.maxPan = new THREE.Vector3(0, 0, 0);
+	}
 
-    setPanArea() {
-        const canvasWidth = this.controls.domElement.offsetWidth;
-        const offset = (10.6 * canvasWidth) / 900;
-        const ratio = (14.15 * this.width) / 2 - offset;
-        const minMax = this.width > 1 ? ratio : 0;
+	loadTexture = (url) => {
+		this.loader.load(url, (texture) => {
+			texture.minFilter = THREE.LinearFilter;
+			texture.magFilter = THREE.LinearFilter;
+			texture.wrapS = THREE.ClampToEdgeWrapping;
+			texture.wrapT = THREE.ClampToEdgeWrapping;
+			this.setMaterial(texture);
+		});
+	};
 
-        this.controls.minPan = new THREE.Vector3(0, 0, 0);
-        this.controls.maxPan = new THREE.Vector3(0, 0, 0);
-    }
+	resetMaterial = () => {
+		if (this.sceneObject) {
+			this.sceneObject.material.map = null;
+			this.sceneObject.material.needsUpdate = true;
+		}
+	};
 
-    loadTexture = (url) => {
-        this.loader.load(url, (texture) => {
-            texture.minFilter = THREE.LinearFilter;
-            texture.magFilter = THREE.LinearFilter;
-            texture.wrapS = THREE.ClampToEdgeWrapping;
-            texture.wrapT = THREE.ClampToEdgeWrapping;
-            this.setMaterial(texture);
-        });
-    }
+	setMaterial(texture) {
+		const { image } = texture;
+		this.width = image.width / image.height;
 
-    resetMaterial=()=>{
-        if(this.sceneObject){
-            this.sceneObject.material.map = null;
-            this.sceneObject.material.needsUpdate = true;
-        }
-    }
+		if (this.sceneObject) {
+			this.sceneObject.scale.set(this.width, 1, 1);
+			this.sceneObject.material.map = texture;
+			this.sceneObject.material.needsUpdate = true;
+		}
+		this.setPanArea();
+	}
 
+	dispose() {
+		super.dispose();
 
-
-    setMaterial(texture) {
-        const { image } = texture;
-        this.width = image.width / image.height;
-
-        if(this.sceneObject){
-            this.sceneObject.scale.set( this.width, 1, 1);
-            this.sceneObject.material.map = texture;
-            this.sceneObject.material.needsUpdate = true;
-        }
-        this.setPanArea();
-    }
-
-    dispose() {
-        super.dispose();
-
-        this.sceneObject.material?.dispose();
-        this.sceneObject.material?.map?.dispose();
-        this.sceneObject.geometry.dispose();
-        this.sceneObject = null;
-    }
+		this.sceneObject.material?.dispose();
+		this.sceneObject.material?.map?.dispose();
+		this.sceneObject.geometry.dispose();
+		this.sceneObject = null;
+	}
 }
