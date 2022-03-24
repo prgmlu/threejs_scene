@@ -78,3 +78,21 @@ production:
   only:
     - /^feature\/.*$/
 
+build:client:
+  <<: *build-template
+  variables:
+    CURRENT_ENV: client
+  only:
+    - /^feature\/.*$/
+    - /^variant\/.*$/
+
+client:
+  <<: *deploy-template
+  variables:
+    CURRENT_ENV: client
+  needs:
+    - build:client
+  when: manual
+  only:
+    - /^feature\/.*$/
+    - /^variant\/.*$/
