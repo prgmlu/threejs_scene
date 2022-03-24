@@ -3,9 +3,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { ModuleFederationPlugin } = require('webpack').container;
 const deps = require('./package.json').dependencies;
+const TerserPlugin = require('terser-webpack-plugin')
+const prodEnvs = ['production', 'client'];
 
 const getMode = (env) => {
-	const prodEnvs = ['production', 'client'];
 	if (prodEnvs.includes(env)) {
 		return 'production';
 	}
@@ -111,5 +112,16 @@ module.exports = (env) => {
 		};
 	}
 
+	if (prodEnvs.includes(buildEnv)) {
+		config.optimization = {minimizer : [
+			new TerserPlugin({
+				terserOptions: {
+					compress: {
+						drop_console: true
+					}
+				}
+			})
+		]}
+	}
 	return config;
 };
