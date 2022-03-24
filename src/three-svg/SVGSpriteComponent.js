@@ -65,7 +65,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 	}
 
 	onHover = () => {
-		document.body.style.cursor = 'grab';
+		document.body.style.cursor = 'pointer';
 		// if (this.color === this.secondaryColor) return;
 		// this.setColor(this.secondaryColor);
 	};
