@@ -118,7 +118,8 @@ module.exports = (env) => {
 				terserOptions: {
 					compress: {
 						drop_console: true
-					}
+					},
+					mangle: true,
 				}
 			})
 		]}
