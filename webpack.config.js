@@ -35,34 +35,32 @@ module.exports = (env) => {
 		);
 	}
 
-	pluginsArr.push(
-		new ModuleFederationPlugin({
-			name: 'threejs_scene',
-			filename: 'remoteEntry.js',
-			exposes: {
-				'./Scene': './src/Scene',
-				'./Hotspot': './src/Hotspot',
-				'./InSceneVidComponent':
-					'./src/in-scene-video/InSceneVidComponent',
-			},
-			shared: {
-				...deps,
-				react: {
-					shareScope: 'default',
-					singleton: true,
-				},
-				'react-dom': {
-					singleton: true,
-				},
-				three: {
-					import: 'three',
-					singleton: true,
-					shareScope: 'default',
-					requiredVersion: '0.137.0',
-				},
-			},
-		}),
-	);
+    pluginsArr.push(new ModuleFederationPlugin({
+        name: "threejs_scene",
+        filename: "remoteEntry.js",
+        exposes:{
+            "./Scene": "./src/Scene",
+            "./Hotspot": "./src/Hotspot",
+            "./InSceneVidComponent": "./src/in-scene-video/InSceneVidComponent",
+            "./AnimatedGLB": "./src/AnimatedGLB"
+        },
+        shared: {
+            ...deps,
+            react: {
+                shareScope: 'default',
+                singleton: true,
+            },
+            'react-dom': {
+                singleton: true,
+            },
+            three: {
+                import: "three",
+                singleton: true,
+                shareScope: "default",
+                requiredVersion: '0.137.0'
+            },
+        }
+    }));
 
 	const config = {
 		mode: getMode(buildEnv),
