@@ -47,7 +47,7 @@ const objsPosConfig = {
 		lashes: [5, 0.4, -0.3],
 		matte: [-0.901, -0.9, 5],
 	}
-	
+
 }
 
 const createCube = function (x, y) {
@@ -69,18 +69,18 @@ class AnimatedGLBs extends Component {
 
 			if(window.constructionCount > 1)
 				return
-		
+
 		}else{
 			window.animatedGlbsConstructed = true;
 			window.constructionCount = 1;
 			this.myCount = 1;
 		}
-			
-			
+
+
 		// alert('cons')
 
 		// alert(props.roomId)
-		
+
 		this.setEnvMap(props.sceneRef.current);
 
 		this.setCanTween = this.setCanTween.bind(this);
@@ -150,10 +150,9 @@ class AnimatedGLBs extends Component {
 
 		window.animatedGlbsConstructed = false;
 	}
-
 	render() {
 		if (this.myCount > 1) return(<div></div>);
-		else if(! objsPosConfig.hasOwnProperty(this.props.roomId)) { return (<div></div>)}
+		else if(! objsPosConfig.hasOwnProperty(this.props.scene)) { return (<div></div>)}
 		else return (
 			<>
 				{
@@ -166,7 +165,7 @@ class AnimatedGLBs extends Component {
 						sceneModalVisible={this.state.sceneModalVisible}
 						setSceneModalVisible={this.setSceneModalVisible}
 						id={0}
-						pos={objsPosConfig[this.props.roomId].cream}
+						pos={objsPosConfig[this.props.scene].cream}
 
 						rotation={[0,0,0]}
 						scene={null}
@@ -189,7 +188,7 @@ class AnimatedGLBs extends Component {
 						sceneModalVisible={this.state.sceneModalVisible}
 						setSceneModalVisible={this.setSceneModalVisible}
 						id={1}
-						pos={objsPosConfig[this.props.roomId].lashes}
+						pos={objsPosConfig[this.props.scene].lashes}
 						// rotation={[0,1.4,0]}
 						rotation={[0,0,0]}
 						scene={null}
@@ -213,7 +212,7 @@ class AnimatedGLBs extends Component {
 						sceneModalVisible={this.state.sceneModalVisible}
 						setSceneModalVisible={this.setSceneModalVisible}
 						id={2}
-						pos={objsPosConfig[this.props.roomId].matte}
+						pos={objsPosConfig[this.props.scene].matte}
 						rotation={[0,0,0]}
 						scene={null}
 						renderer={null}
