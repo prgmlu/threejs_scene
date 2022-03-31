@@ -74,6 +74,7 @@ const Scene = (props) => {
 		window.animationId = requestAnimationFrame(() =>
 			animate(controllerUpdate),
 		);
+
 		renderer.render(scene, cameraRef.current);
 
 		if (controllerUpdate) controllerUpdate();
