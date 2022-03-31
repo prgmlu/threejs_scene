@@ -78,13 +78,15 @@ class GLBObj extends Component {
 			this.handleClickingLogic(e);
 		});
 		window.addEventListener('touchstart', (e) => {
+			if (!this.props.canTween) return;
 			this.lastEvent = e;
 		});
 		window.addEventListener('touchmove', (e) => {
+			if (!this.props.canTween) return;
 			this.lastEvent = e;
 		});
 		window.addEventListener('touchend', (e) => {
-			this.lastEvent = e;
+			if (!this.props.canTween) return;
 			this.handleClickingLogic(e);
 		});
 	}
@@ -99,6 +101,11 @@ class GLBObj extends Component {
 			!this.props.sceneModalVisible
 		) {
 			var point = hit[0].point;
+			var id = hit[0].object.userData.id;
+			if (id!=this.props.id) return;
+			if(! this.props.canClick) return;
+			this.props.setCanClick(false);
+
 			var camDistance = this.camera.position.length();
 			var originalPos = this.camera.position.clone();
 			var targetPos = new THREE.Vector3(point.x, point.y, point.z);
@@ -305,6 +312,7 @@ class GLBObj extends Component {
 				<SceneModal
 					setCanTween={this.props.setCanTween}
 					canTween={this.props.canTween}
+					setCanClick={this.props.setCanClick}
 					animationCount={this.props.animationCount}
 					type={this.props.type}
 					setSceneModalVisible={this.props.setSceneModalVisible}

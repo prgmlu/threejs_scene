@@ -307,7 +307,7 @@ class SceneModal extends Component {
 				this.first = true;
 
 				if (e.touches.length == 2) {
-					console.log('2');
+					// console.log('2');
 					var dx = e.touches[ 0 ].pageX - e.touches[ 1 ].pageX;
 					var dy = e.touches[ 0 ].pageY - e.touches[ 1 ].pageY;
 					this._touchZoomDistanceEnd = this._touchZoomDistanceStart = Math.sqrt( dx * dx + dy * dy );
@@ -520,7 +520,7 @@ class SceneModal extends Component {
 	}
 
 	setText(counter) {
-		console.log(counter,this.animationClips.length )
+		// console.log(counter,this.animationClips.length )
 		if (counter>this.animationClips.length) return false;
 		var text = document.getElementById('text');
 		if (window.aa) {
@@ -982,6 +982,7 @@ class SceneModal extends Component {
 						onClick={(e) => {
 							e.stopPropagation();
 							this.props.setCanTween(true);
+							this.props.setCanClick(true);
 							// window.canTween = true;
 							// window.aModalVisible = false;
 							this.props.setSceneModalVisible(false);

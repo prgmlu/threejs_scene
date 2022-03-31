@@ -84,6 +84,7 @@ class AnimatedGLBs extends Component {
 		this.setEnvMap(props.sceneRef.current);
 
 		this.setCanTween = this.setCanTween.bind(this);
+		this.setCanClick = this.setCanClick.bind(this);
 		this.animate = this.animate.bind(this);
 		this.setEnvMap = this.setEnvMap.bind(this);
 		this.setSceneModalVisible = this.setSceneModalVisible.bind(this);
@@ -91,6 +92,7 @@ class AnimatedGLBs extends Component {
 		this.state = {
 			sceneModalVisible: false,
 			canTween: true,
+			canClick: true,
 		};
 		if(!window.rotationAnim){
 			window.rotationAnim = true;
@@ -143,6 +145,11 @@ class AnimatedGLBs extends Component {
 			canTween: val,
 		});
 	}
+	setCanClick(val) {
+		this.setState({
+			canClick: val,
+		});
+	}
 
 	componentWillUnmount(){
 		// if (window.constructionCount >1) return;
@@ -159,6 +166,8 @@ class AnimatedGLBs extends Component {
 					<GLBObj
 						canTween={this.state.canTween}
 						setCanTween={this.setCanTween}
+						canClick={this.state.canClick}
+						setCanClick={this.setCanClick}
 						{...this.props}
 						animationCount={3}
 						type="cream"
@@ -166,7 +175,7 @@ class AnimatedGLBs extends Component {
 						setSceneModalVisible={this.setSceneModalVisible}
 						id={0}
 						pos={objsPosConfig[this.props.scene].cream}
-
+						
 						rotation={[0,0,0]}
 						scene={null}
 						renderer={null}
@@ -175,11 +184,13 @@ class AnimatedGLBs extends Component {
 						url={
 							'https://cdn.obsess-vr.com/charlotte-tilbury/MagicCream_anim_v004.glb'
 						}
-					/>
-				}
+						/>
+					}
 
 				{
 					<GLBObj
+						canClick={this.state.canClick}
+						setCanClick={this.setCanClick}
 						canTween={this.state.canTween}
 						setCanTween={this.setCanTween}
 						{...this.props}
@@ -206,6 +217,8 @@ class AnimatedGLBs extends Component {
 					<GLBObj
 						canTween={this.state.canTween}
 						setCanTween={this.setCanTween}
+						canClick={this.state.canClick}
+						setCanClick={this.setCanClick}
 						{...this.props}
 						animationCount={3}
 						type="matte"
