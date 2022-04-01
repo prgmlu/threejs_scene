@@ -220,6 +220,7 @@ const Scene = (props) => {
 		const {
 			addThreeEditorMouseEventListeners,
 			removeThreeEditorMouseEventListeners,
+			resetHovers
 		} = threeEditorMouseEvents(
 			sceneRef,
 			renderer,
@@ -246,6 +247,7 @@ const Scene = (props) => {
 
 		addThreeEditorMouseEventListeners();
 		addThreeEditorKeyboardEvents();
+		resetHovers()
 
 		return () => {
 			removeThreeEditorMouseEventListeners();

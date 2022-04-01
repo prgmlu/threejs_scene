@@ -53,6 +53,6 @@ export const renderHotspotRecord = (object = {}, sceneRef) => {
 
 	//3. config
 	marker.setTransform(object.collider_transform, object.transform);
-	marker.setScale();
+	// marker.setScale();
 	return marker;
 };

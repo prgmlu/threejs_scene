@@ -326,5 +326,6 @@ export const threeEditorMouseEvents = (
 	return {
 		addThreeEditorMouseEventListeners,
 		removeThreeEditorMouseEventListeners,
+		resetHovers
 	};
 };
