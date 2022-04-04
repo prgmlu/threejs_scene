@@ -7,7 +7,6 @@ import {
 	setupCamera,
 } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
-import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
 import { Background, ColliderSphere } from '../three-background';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
@@ -42,8 +41,6 @@ const Scene = (props) => {
 		allowHotspotsToMove,
 		resetBGBeforeImageLoaded = false,
 		children,
-		allReduxStoreData,
-		dispatch,
 	} = props;
 	const [threeReady, setThreeReady] = useState(false);
 	const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
@@ -235,23 +232,20 @@ const Scene = (props) => {
 		);
 
 		// keyboard event listeners
-		const {
-			addThreeEditorKeyboardEvents,
-			removeThreeEditorKeyboardEvents,
-		} = threeEditorKeyboardEvents(
-			controlsRef,
-			dispatch,
-			allReduxStoreData,
-			props.onEnterKeyToSelectNavMarker,
-		);
-
-		addThreeEditorMouseEventListeners();
-		addThreeEditorKeyboardEvents();
-		resetHovers()
+		// const {
+		// 	addThreeEditorKeyboardEvents,
+		// 	removeThreeEditorKeyboardEvents,
+		// } = threeEditorKeyboardEvents(
+		// 	controlsRef,
+		// );
+		//
+		// addThreeEditorMouseEventListeners();
+		// addThreeEditorKeyboardEvents();
 
 		return () => {
 			removeThreeEditorMouseEventListeners();
-			removeThreeEditorKeyboardEvents();
+			resetHovers()
+			// removeThreeEditorKeyboardEvents();
 		};
 	}, [
 		sceneId,
@@ -259,7 +253,6 @@ const Scene = (props) => {
 		cameraRef,
 		allowEventsForMarkerTypeOnly,
 		allowHotspotsToMove,
-		allReduxStoreData,
 	]); // eslint-disable-line
 
 	//windowResizer placed separately because it requires to track and call UI & setUI

@@ -17,12 +17,10 @@ const Hotspot = (props) => {
 		sceneRef,
 		setMaxRenderOrder,
 		navMarkerIdx,
-		allReduxStoreData,
 		userData,
 		onEnterKeyToSelectNavMarker,
 	} = props;
 
-	const { currentAccessibilityNavIdx } = allReduxStoreData?.accessibility;
 
 	const [isNavMarkerActive, setIsNavMarkerActive] = useState(false);
 
@@ -75,35 +73,35 @@ const Hotspot = (props) => {
 		};
 	}, []);
 
-	useEffect(() => {
-		if (userData.type !== 'NavMarker') return;
-		if (navMarkerIdx === undefined) return;
-		if (currentAccessibilityNavIdx === undefined) return;
-
-		let replacedSvgString;
-
-		if (navMarkerIdx === currentAccessibilityNavIdx) {
-			replacedSvgString =
-				markerRef.current.svgSpriteComponent?.svgString.replace(
-					/opacity='\.5'/g,
-					"opacity='.9'",
-				);
-			markerRef.current.svgSpriteComponent.setSVGString(
-				replacedSvgString,
-			);
-			setIsNavMarkerActive(true);
-		} else if (navMarkerIdx !== currentAccessibilityNavIdx) {
-			replacedSvgString =
-				markerRef.current.svgSpriteComponent?.svgString.replace(
-					/opacity='\.9'/g,
-					"opacity='.5'",
-				);
-			markerRef.current.svgSpriteComponent.setSVGString(
-				replacedSvgString,
-			);
-			setIsNavMarkerActive(false);
-		}
-	}, [currentAccessibilityNavIdx]);
+	// useEffect(() => {
+	// 	if (userData.type !== 'NavMarker') return;
+	// 	if (navMarkerIdx === undefined) return;
+	// 	if (currentAccessibilityNavIdx === undefined) return;
+	//
+	// 	let replacedSvgString;
+	//
+	// 	if (navMarkerIdx === currentAccessibilityNavIdx) {
+	// 		replacedSvgString =
+	// 			markerRef.current.svgSpriteComponent?.svgString.replace(
+	// 				/opacity='\.5'/g,
+	// 				"opacity='.9'",
+	// 			);
+	// 		markerRef.current.svgSpriteComponent.setSVGString(
+	// 			replacedSvgString,
+	// 		);
+	// 		setIsNavMarkerActive(true);
+	// 	} else if (navMarkerIdx !== currentAccessibilityNavIdx) {
+	// 		replacedSvgString =
+	// 			markerRef.current.svgSpriteComponent?.svgString.replace(
+	// 				/opacity='\.9'/g,
+	// 				"opacity='.5'",
+	// 			);
+	// 		markerRef.current.svgSpriteComponent.setSVGString(
+	// 			replacedSvgString,
+	// 		);
+	// 		setIsNavMarkerActive(false);
+	// 	}
+	// }, [currentAccessibilityNavIdx]);
 
 	const onEnterPressAccessibilityEvent = (e) => {
 		onEnterKeyToSelectNavMarker(e, markerRef.current, isNavMarkerActive);

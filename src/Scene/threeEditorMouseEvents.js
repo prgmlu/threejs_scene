@@ -12,7 +12,6 @@ export const threeEditorMouseEvents = (
 	onMouseDownCallback,
 	onMouseUpCallback,
 	onMouseMoveCallback,
-	allReduxStoreData,
 ) => {
 	const DESKTOP_THRESHOLD = 0.005;
 	const MIN_ZOOM_FOV = 20;
