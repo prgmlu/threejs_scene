@@ -239,7 +239,7 @@ const Scene = (props) => {
 		// 	controlsRef,
 		// );
 		//
-		// addThreeEditorMouseEventListeners();
+		addThreeEditorMouseEventListeners();
 		// addThreeEditorKeyboardEvents();
 
 		return () => {
