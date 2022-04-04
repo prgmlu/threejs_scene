@@ -185,7 +185,7 @@ class GLBObj extends Component {
 			this.setTransparency(this.obj);
 			if(!window.outerObjs) window.outerObjs = [this.obj];
 			else window.outerObjs.push(this.obj)
-			
+
 
 			gltf.scene.traverse((o) => {
 				// this.rayCastingCheckingOjbs.push(o);
@@ -234,11 +234,13 @@ class GLBObj extends Component {
 			},
 			this.camera,
 		);
-		var hit = this.raycaster.intersectObjects(
-			window.rayCastingCheckingObjs,
-		);
+		if (window?.rayCastingCheckingObjs) {
+			return this.raycaster.intersectObjects(
+				window.rayCastingCheckingObjs,
+			);
+		}
+		return [];
 
-		return hit;
 	}
 
 	animate() {
