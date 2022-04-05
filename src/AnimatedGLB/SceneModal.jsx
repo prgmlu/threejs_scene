@@ -9,13 +9,22 @@ import { DRACOLoader } from '../../node_modules/three/examples/jsm/loaders/DRACO
 
 import { RGBELoader } from '../../node_modules/three/examples/jsm/loaders/RGBELoader.js';
 
-
 const TEXTS_MAP = {
-	'cream': ['Tap to unbox me, darling!', 'Open me up, darling!', 'Now, let me show you how I refill!'],
-	'lashes': ['Tap to unbox me, darling!', 'Open up! Let me show you my fabulous wand!'],
-	'matte': ['Tap to unbox me, darling!', 'Uncap me!', 'Tap me to twist me, darling!'],
-}
-
+	cream: [
+		'Tap to unbox me, darling!',
+		'Open me up, darling!',
+		'Now, let me show you how I refill!',
+	],
+	lashes: [
+		'Tap to unbox me, darling!',
+		'Open up! Let me show you my fabulous wand!',
+	],
+	matte: [
+		'Tap to unbox me, darling!',
+		'Uncap me!',
+		'Tap me to twist me, darling!',
+	],
+};
 
 const ANIMATION_SPEED = 1;
 const OPACITY_TRANS_RATE = 4;
@@ -35,7 +44,7 @@ const createRenderer = function () {
 	window.modalRenderer.setSize(window.innerWidth, window.innerHeight);
 	window.modalRenderer.setClearColor(0xffcaca, 0);
 	window.modalRenderer.domElement.style.touchAction = 'none';
-}
+};
 
 function handleOpacitiesByAnimation(
 	animationNumber,
@@ -54,7 +63,6 @@ function handleOpacitiesByAnimation(
 	// console.log(progressRatio);
 	//finite state machine
 	if (type == 'cream') {
-
 		if (animationNumber == 1) {
 			box.material.transparent = false;
 			box.material.opacity = 1;
@@ -169,8 +177,6 @@ function handleOpacitiesByAnimation(
 	}
 }
 
-
-
 class SceneModal extends Component {
 	initAnimationConditions() {
 		// if(this.animationPlaying && this.props.sceneModalVisible) return;
@@ -253,10 +259,8 @@ class SceneModal extends Component {
 		}
 		super(props);
 
-
 		this._touchZoomDistanceStart = 0;
 		this._touchZoomDistanceEnd = 0;
-
 
 		this.clock = new THREE.Clock();
 		this.clock.start();
@@ -303,7 +307,6 @@ class SceneModal extends Component {
 		this.playNextAction = this.playNextAction.bind(this);
 		this.mouseWheelHandler = this.mouseWheelHandler.bind(this);
 		this.rotateObject = this.rotateObject.bind(this);
-
 	}
 
 	handleRendererMouseMove = (e) => {
@@ -315,12 +318,12 @@ class SceneModal extends Component {
 		// } else {
 		// 	document.body.style.cursor = 'default';
 		// }
-	}
+	};
 
 	handleMouseDown = () => {
 		this.canRotate = true;
 		this.first = true;
-	}
+	};
 
 	handleTouchStart = (e) => {
 		this.canRotate = true;
@@ -330,14 +333,14 @@ class SceneModal extends Component {
 			// console.log('2');
 			var dx = e.touches[0].pageX - e.touches[1].pageX;
 			var dy = e.touches[0].pageY - e.touches[1].pageY;
-			this._touchZoomDistanceEnd = this._touchZoomDistanceStart = Math.sqrt(dx * dx + dy * dy);
-
+			this._touchZoomDistanceEnd = this._touchZoomDistanceStart =
+				Math.sqrt(dx * dx + dy * dy);
 		}
-	}
+	};
 
 	handleMouseUp = () => {
 		this.canRotate = false;
-	}
+	};
 
 	handleDocumentClick = (e) => {
 		// var hit = this.getRaycastIntersects(e);
@@ -345,7 +348,7 @@ class SceneModal extends Component {
 		// if (hit.length > 0) {
 		this.playNextAction();
 		// }
-	}
+	};
 
 	handleResize = () => {
 		var blur = document.getElementById('blur');
@@ -356,13 +359,14 @@ class SceneModal extends Component {
 		this.camera.updateProjectionMatrix();
 		// window.modalRenderer.setSize(window.innerHeight/2);
 
-		this._mounted && this.setState({
-			width: window.innerWidth,
-			height: window.innerHeight,
-			top: 0,
-			left: 0,
-		});
-	}
+		this._mounted &&
+			this.setState({
+				width: window.innerWidth,
+				height: window.innerHeight,
+				top: 0,
+				left: 0,
+			});
+	};
 
 	mouseWheelHandler = (e) => {
 		const fovDelta = e.deltaY;
@@ -380,18 +384,16 @@ class SceneModal extends Component {
 		this.rotateObject(e);
 
 		if (e.touches.length == 2) {
-
 			var dx = e.touches[0].pageX - e.touches[1].pageX;
 			var dy = e.touches[0].pageY - e.touches[1].pageY;
 			this._touchZoomDistanceEnd = Math.sqrt(dx * dx + dy * dy);
 
-			var factor = this._touchZoomDistanceStart / this._touchZoomDistanceEnd;
+			var factor =
+				this._touchZoomDistanceStart / this._touchZoomDistanceEnd;
 			this._touchZoomDistanceStart = this._touchZoomDistanceEnd;
 			this.setZoom(this.camera.fov * factor);
-
 		}
 	}
-
 
 	playNextAction() {
 		// console.log(this.currentAnimationCounter);
@@ -412,7 +414,10 @@ class SceneModal extends Component {
 		this.currentAction.paused = false;
 		this.animationPlaying = true;
 		this.currentAnimationCounter += 1;
-		this._mounted && this.setState({ animationCounter: this.state.animationCounter + 1 });
+		this._mounted &&
+			this.setState({
+				animationCounter: this.state.animationCounter + 1,
+			});
 	}
 
 	animate() {
@@ -515,7 +520,6 @@ class SceneModal extends Component {
 		}
 	}
 
-
 	sizingLogic() {
 		// window.modalRenderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
 		window.modalRenderer.setSize(window.innerWidth, window.innerHeight);
@@ -551,7 +555,9 @@ class SceneModal extends Component {
 		text.style.color = `rgba(52, 12, 12,${1 - progress})`;
 		if (progress == 1) {
 			var textSet = this.setText(this.currentAnimationCounter + 1);
-			textSet ? text.style.color = `rgba(52, 12, 12,1)` : text.style.color = `rgba(52, 12, 12,0)`;
+			textSet
+				? (text.style.color = `rgba(52, 12, 12,1)`)
+				: (text.style.color = `rgba(52, 12, 12,0)`);
 		}
 	}
 
@@ -560,30 +566,21 @@ class SceneModal extends Component {
 		if (counter > this.animationClips.length) return false;
 		var text = document.getElementById('text');
 		if (window.aa) {
-			text.innerText =
-				TEXTS_MAP['cream'][
-				Math.max(0, counter - 1)
-				];
+			text.innerText = TEXTS_MAP['cream'][Math.max(0, counter - 1)];
 		}
 
 		if (window.bb) {
-			text.innerText =
-				TEXTS_MAP['lashes'][
-				Math.max(0, counter - 1)
-				];
+			text.innerText = TEXTS_MAP['lashes'][Math.max(0, counter - 1)];
 		}
 
 		if (window.cc) {
-			text.innerText =
-				TEXTS_MAP['matte'][
-				Math.max(0, counter - 1)
-				];
+			text.innerText = TEXTS_MAP['matte'][Math.max(0, counter - 1)];
 		}
 		return true;
 	}
 
 	componentWillUpdate(nextProps, nextState) {
-		if(!this._mounted) return;
+		if (!this._mounted) return;
 		this.setText(this.currentAnimationCounter);
 		if (nextProps.sceneModalVisible && !this.props.sceneModalVisible) {
 			//visibiity change from not visible to visible
@@ -603,9 +600,6 @@ class SceneModal extends Component {
 		}
 	}
 
-
-
-
 	loadModel() {
 		const loader = new GLTFLoader();
 		const dracoLoader = new DRACOLoader();
@@ -616,141 +610,142 @@ class SceneModal extends Component {
 
 		loader.crossOrigin = true;
 		// loader.load(this.props.url, (gltf) => {
-			// debugger;
-			let gltf = this.props.gltf;
-			if (window.objs) {
-				window.objs.push(gltf.scene);
-			} else {
-				window.objs = [gltf.scene];
-			}
-			this.obj = gltf.scene;
+		// debugger;
+		let gltf = this.props.gltf;
+		if (window.objs) {
+			window.objs.push(gltf.scene);
+		} else {
+			window.objs = [gltf.scene];
+		}
+		this.obj = gltf.scene;
 
-			this.obj.traverse((o) => {
-				// this.positionMap[o.name] = o.position.clone();
-				// window.positionMap = this.positionMap;
+		this.obj.traverse((o) => {
+			// this.positionMap[o.name] = o.position.clone();
+			// window.positionMap = this.positionMap;
 
-				if (this.props.type == 'cream') {
-					if (o.name == 'Box_GEO') {
-						this.box = o;
-						this.box.material = this.box.material.clone();
-						// if(this.box.material.map)
-						//     this.box.material.map = this.box.material.map.clone();
-						this.boxParent = this.box.parent;
-						window.box = this.box;
-						window.boxParent = this.boxParent;
-					}
-					if (o.name == 'Mesh') {
-						this.outerPart_0 = o;
-						this.outerPart_0.material =
-							this.outerPart_0.material.clone();
-						// if(this.outerPart_0.material.map)
-						//     this.outerPart_0.material.map = this.outerPart_0.material.map.clone();
-						window.outerPart_0 = this.outerPart_0;
-						this.outerPart_0Parent = this.outerPart_0.parent;
-						window.outerPart_0Parent = this.outerPart_0.parent;
-					}
-
-					if (o.name == 'Mesh_1') {
-						this.outerPart_1 = o;
-						this.outerPart_1.material =
-							this.outerPart_1.material.clone();
-						// if(this.outerPart_1.material.map)
-						//     this.outerPart_1.material.map = this.outerPart_1.material.map.clone();
-						window.outerPart_1 = this.outerPart_1;
-						this.outerPart_1Parent = this.outerPart_1.parent;
-						window.outerPart_1Parent = this.outerPart_1.parent;
-					}
-
-					if (o.name == 'Mesh_2') {
-						this.innerPart_0 = o;
-						this.innerPart_0.material =
-							this.innerPart_0.material.clone();
-						// if(this.innerPart_0.material.map)
-						//     this.innerPart_0.material.map = this.innerPart_0.material.map.clone();
-						window.innerPart_0 = this.innerPart_0;
-					}
-					if (o.name == 'Mesh_3') {
-						this.innerPart_1 = o;
-						this.innerPart_1.material =
-							this.innerPart_1.material.clone();
-						// if(this.innerPart_1.material.map)
-						//     this.innerPart_1.material.map = this.innerPart_1.material.map.clone();
-						window.innerPart_1 = this.innerPart_1;
-					}
-				}
-				if (this.props.type == 'lashes') {
-					if (o.name == 'Box_GEO') {
-						this.box = o;
-						this.box.material = this.box.material.clone();
-						// if(this.box.material.map)
-						//     this.box.material.map = this.box.material.map.clone();
-						this.boxParent = this.box.parent;
-						window.box = this.box;
-						window.boxParent = this.boxParent;
-					}
-				}
-				if (this.props.type == 'matte') {
-					// debugger;
-					if (o.name == 'Box_GEO') {
-						this.box = o;
-						this.box.material = this.box.material.clone();
-						// if(this.box.material.map)
-						//     this.box.material.map = this.box.material.map.clone();
-						this.boxParent = this.box.parent;
-						window.box = this.box;
-						window.boxParent = this.boxParent;
-					}
-				}
-			});
-
-			this.obj.position.set(0, .035, -0.3);
-			this.obj.rotation.x = 0.5;
-			this.obj.scale.set(...this.props.scale);
-
-
-			this.obj.traverse((o) => {
-				this.obj.traverse((o) => {
-					o.material && (o.material.envMapIntensity = 1.81);
-				});
-				o.userData.id = this.props.id;
-			});
-
-			this.scene.add(this.obj);
-			this.mixer = new THREE.AnimationMixer(this.obj);
-			window.mixer = this.mixer;
-			this.mixer.addEventListener('finished', () => {
-				this.animationPlaying = false;
-			});
-
-			gltf.animations.forEach((clip) => {
-				this.animationClips.push(clip);
-			});
 			if (this.props.type == 'cream') {
-				var tmp = this.animationClips[0];
-				this.animationClips[0] = this.animationClips[1];
-				this.animationClips[1] = tmp;
+				if (o.name == 'Box_GEO') {
+					this.box = o;
+					this.box.material = this.box.material.clone();
+					// if(this.box.material.map)
+					//     this.box.material.map = this.box.material.map.clone();
+					this.boxParent = this.box.parent;
+					window.box = this.box;
+					window.boxParent = this.boxParent;
+				}
+				if (o.name == 'Mesh') {
+					this.outerPart_0 = o;
+					this.outerPart_0.material =
+						this.outerPart_0.material.clone();
+					// if(this.outerPart_0.material.map)
+					//     this.outerPart_0.material.map = this.outerPart_0.material.map.clone();
+					window.outerPart_0 = this.outerPart_0;
+					this.outerPart_0Parent = this.outerPart_0.parent;
+					window.outerPart_0Parent = this.outerPart_0.parent;
+				}
+
+				if (o.name == 'Mesh_1') {
+					this.outerPart_1 = o;
+					this.outerPart_1.material =
+						this.outerPart_1.material.clone();
+					// if(this.outerPart_1.material.map)
+					//     this.outerPart_1.material.map = this.outerPart_1.material.map.clone();
+					window.outerPart_1 = this.outerPart_1;
+					this.outerPart_1Parent = this.outerPart_1.parent;
+					window.outerPart_1Parent = this.outerPart_1.parent;
+				}
+
+				if (o.name == 'Mesh_2') {
+					this.innerPart_0 = o;
+					this.innerPart_0.material =
+						this.innerPart_0.material.clone();
+					// if(this.innerPart_0.material.map)
+					//     this.innerPart_0.material.map = this.innerPart_0.material.map.clone();
+					window.innerPart_0 = this.innerPart_0;
+				}
+				if (o.name == 'Mesh_3') {
+					this.innerPart_1 = o;
+					this.innerPart_1.material =
+						this.innerPart_1.material.clone();
+					// if(this.innerPart_1.material.map)
+					//     this.innerPart_1.material.map = this.innerPart_1.material.map.clone();
+					window.innerPart_1 = this.innerPart_1;
+				}
 			}
 			if (this.props.type == 'lashes') {
-				var tmp = this.animationClips[0];
-				this.animationClips[0] = this.animationClips[1];
-				this.animationClips[1] = tmp;
+				if (o.name == 'Box_GEO') {
+					this.box = o;
+					this.box.material = this.box.material.clone();
+					// if(this.box.material.map)
+					//     this.box.material.map = this.box.material.map.clone();
+					this.boxParent = this.box.parent;
+					window.box = this.box;
+					window.boxParent = this.boxParent;
+				}
 			}
-
 			if (this.props.type == 'matte') {
-				this.animationClips = [this.animationClips[1], this.animationClips[0], this.animationClips[2]];
+				// debugger;
+				if (o.name == 'Box_GEO') {
+					this.box = o;
+					this.box.material = this.box.material.clone();
+					// if(this.box.material.map)
+					//     this.box.material.map = this.box.material.map.clone();
+					this.boxParent = this.box.parent;
+					window.box = this.box;
+					window.boxParent = this.boxParent;
+				}
 			}
+		});
 
-			// this.playNextAction();
-			// this.mixer.clipAction( this.animationClips[this.currentAnimationCounter] ).play();
-			// this.currentAnimationCounter += 1;
-			// this.mixer.clipAction( this.animationClips[this.currentAnimationCounter] ).play();
-			// this.animationPlaying = true;
+		this.obj.position.set(0, 0.035, -0.3);
+		this.obj.rotation.x = 0.5;
+		this.obj.scale.set(...this.props.scale);
 
-			// const controls = new DragControls( [data.scene], this.camera, window.modalRenderer.domElement );
+		this.obj.traverse((o) => {
+			this.obj.traverse((o) => {
+				o.material && (o.material.envMapIntensity = 1.81);
+			});
+			o.userData.id = this.props.id;
+		});
+
+		this.scene.add(this.obj);
+		this.mixer = new THREE.AnimationMixer(this.obj);
+		window.mixer = this.mixer;
+		this.mixer.addEventListener('finished', () => {
+			this.animationPlaying = false;
+		});
+
+		gltf.animations.forEach((clip) => {
+			this.animationClips.push(clip);
+		});
+		if (this.props.type == 'cream') {
+			var tmp = this.animationClips[0];
+			this.animationClips[0] = this.animationClips[1];
+			this.animationClips[1] = tmp;
+		}
+		if (this.props.type == 'lashes') {
+			var tmp = this.animationClips[0];
+			this.animationClips[0] = this.animationClips[1];
+			this.animationClips[1] = tmp;
+		}
+
+		if (this.props.type == 'matte') {
+			this.animationClips = [
+				this.animationClips[1],
+				this.animationClips[0],
+				this.animationClips[2],
+			];
+		}
+
+		// this.playNextAction();
+		// this.mixer.clipAction( this.animationClips[this.currentAnimationCounter] ).play();
+		// this.currentAnimationCounter += 1;
+		// this.mixer.clipAction( this.animationClips[this.currentAnimationCounter] ).play();
+		// this.animationPlaying = true;
+
+		// const controls = new DragControls( [data.scene], this.camera, window.modalRenderer.domElement );
 		// }
-		
-		
-		
+
 		// );
 	}
 
@@ -779,33 +774,38 @@ class SceneModal extends Component {
 
 		this.resizeEventListener = window.addEventListener(
 			'resize',
-			this.handleResize);
+			this.handleResize,
+		);
 
 		this.documentClickEventListener = document.addEventListener(
 			'click',
-			this.handleDocumentClick);
+			this.handleDocumentClick,
+		);
 
 		if (!window.modalRenderer) {
 			createRenderer();
 		}
-		this.rendererWheelListener = window.modalRenderer.domElement.addEventListener(
-			'wheel',
-			this.mouseWheelHandler,
-			{ passive: true },
-		);
+		this.rendererWheelListener =
+			window.modalRenderer.domElement.addEventListener(
+				'wheel',
+				this.mouseWheelHandler,
+				{ passive: true },
+			);
 
 		this.myRef.current.appendChild(window.modalRenderer.domElement);
 
-		this.rendererTouchMoveListener = window.modalRenderer.domElement.addEventListener(
-			'touchmove',
-			this.handleTouchMove,
-			false,
-		);
-		this.rendererMouseMoveListener = window.modalRenderer.domElement.addEventListener(
-			'mousemove',
-			this.handleRendererMouseMove,
-			true,
-		);
+		this.rendererTouchMoveListener =
+			window.modalRenderer.domElement.addEventListener(
+				'touchmove',
+				this.handleTouchMove,
+				false,
+			);
+		this.rendererMouseMoveListener =
+			window.modalRenderer.domElement.addEventListener(
+				'mousemove',
+				this.handleRendererMouseMove,
+				true,
+			);
 
 		// if(!this.scene){
 		this.scene = new THREE.Scene();
@@ -888,48 +888,31 @@ class SceneModal extends Component {
 		// this.scene.remove(this.ambLight);
 		// this.scene.remove(this.directionalLight);
 
-		document.removeEventListener(
-			'mousedown',
-			this.handleMouseDown,
-		)
+		document.removeEventListener('mousedown', this.handleMouseDown);
 
-		document.removeEventListener(
-			'touchstart',
-			this.handleTouchStart,
-		)
+		document.removeEventListener('touchstart', this.handleTouchStart);
 
-		document.removeEventListener(
-			'mouseup',
-			this.handleMouseUp,
-		)
+		document.removeEventListener('mouseup', this.handleMouseUp);
 
-		window.removeEventListener(
-			'resize',
-			this.handleResize)
+		window.removeEventListener('resize', this.handleResize);
 
-
-		document.removeEventListener(
-			'click',
-			this.handleDocumentClick)
-			;
+		document.removeEventListener('click', this.handleDocumentClick);
 
 		window.modalRenderer.domElement.removeEventListener(
 			'wheel',
 			this.mouseWheelHandler,
-		)
+		);
 
 		window.modalRenderer.domElement.removeEventListener(
 			'touchmove',
 			this.handleTouchMove,
-		)
+		);
 
 		window.modalRenderer.domElement.removeEventListener(
 			'mousemove',
 			this.handleRendererMouseMove,
-		)
+		);
 	}
-
-
 
 	setZoom(fov) {
 		this.camera.fov = fov;
@@ -951,12 +934,8 @@ class SceneModal extends Component {
 		// debugger;
 		// this.camera.lookAt(lerpdPos.x,lerpdPos.y,lerpdPos.z);
 
-
 		this.camera.updateProjectionMatrix();
-
 	}
-
-
 
 	render() {
 		return (
@@ -974,8 +953,8 @@ class SceneModal extends Component {
 						display: this.props.sceneModalVisible
 							? 'inline'
 							: 'none',
-						'backdropFilter': `blur(${this.props.blurRadius}px)`,
-						'WebkitBackdropFilter': `blur(${this.props.blurRadius}px)`,
+						backdropFilter: `blur(${this.props.blurRadius}px)`,
+						WebkitBackdropFilter: `blur(${this.props.blurRadius}px)`,
 						top: '0px',
 						left: '0px',
 						width: window.innerWidth + 'px',
@@ -1009,7 +988,7 @@ class SceneModal extends Component {
 							textAlign: 'center',
 							fontSize: '2rem',
 							padding: '0% 5% 0% 5%',
-							paddingTop: "10%",
+							paddingTop: '10%',
 							marginBottom: this.state.height / 7 + 'px',
 							touchAction: 'none',
 							pointerEvents: 'none',

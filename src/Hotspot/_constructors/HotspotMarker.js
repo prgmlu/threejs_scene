@@ -10,6 +10,7 @@ export default class HotspotMarker extends InteractionObject {
 		primaryColor = '#000000',
 		secondaryColor = '#00000050',
 		arrowColor = null,
+		onClick = () => {},
 	}) {
 		super();
 		this.sceneObject.name = 'marker';
@@ -19,6 +20,8 @@ export default class HotspotMarker extends InteractionObject {
 
 		this.imageURL = imageURL;
 		this.isFlatBackground = false;
+
+		this.onClickCallBack = onClick;
 
 		this.primaryColor = primaryColor;
 		this.secondaryColor = secondaryColor;
@@ -53,6 +56,12 @@ export default class HotspotMarker extends InteractionObject {
 			this.svgSpriteComponent.setSVGString(svgString);
 		});
 	}
+
+	onClick = () => {
+		if (this.onClickCallBack) {
+			this.onClickCallBack();
+		}
+	};
 
 	fetchSVGIcon = async () => {
 		const fileData = this.imageURL

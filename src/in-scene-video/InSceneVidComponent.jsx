@@ -14,10 +14,7 @@ const createVidDom = function (src) {
 	return video;
 };
 
-export const createVidScreen = function (
-	vid_source,
-	transform,
-) {
+export const createVidScreen = function (vid_source, transform) {
 	const video = createVidDom(vid_source);
 	const videoTexture = new THREE.VideoTexture(video);
 	videoTexture.minFilter = THREE.LinearFilter;
@@ -28,7 +25,7 @@ export const createVidScreen = function (
 
 	var materialParams = {
 		transparent: true,
-        side:THREE.DoubleSide,
+		side: THREE.DoubleSide,
 		opacity: 1,
 		toneMapped: false,
 		map: videoTexture,
@@ -39,7 +36,11 @@ export const createVidScreen = function (
 	const screen = new THREE.PlaneGeometry(1, 1);
 	const videoScreen = new THREE.Mesh(screen, videoMaterial);
 
-    transform.decompose(videoScreen.position, videoScreen.quaternion, videoScreen.scale);
+	transform.decompose(
+		videoScreen.position,
+		videoScreen.quaternion,
+		videoScreen.scale,
+	);
 	// videoScreen.position.set(position.x, position.y, position.z);
 	// videoScreen.rotation.set(rotation.x, rotation.y, rotation.z);
 	// videoScreen.scale.set(scale.x, scale.y, scale.z);
@@ -49,7 +50,7 @@ export const createVidScreen = function (
 
 export const InSceneVidComponent = (props) => {
 	// let {src, position, scale, rotation, scene, sceneRef} = props;
-	let {src, transform, scene, sceneRef} = props;
+	let { src, transform, scene, sceneRef } = props;
 	scene = sceneRef?.current || scene;
 	var vidScreen = useRef(null);
 	useEffect(() => {

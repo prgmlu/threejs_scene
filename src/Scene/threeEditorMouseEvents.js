@@ -28,6 +28,9 @@ export const threeEditorMouseEvents = (
 	const mouseCoord = new THREE.Vector2();
 	const mouseStart = new THREE.Vector2();
 
+	const eventMouseStart = new THREE.Vector2();
+	const eventMouseEnd = new THREE.Vector2();
+
 	const raycaster = new THREE.Raycaster();
 	const hoveredMarkers = new Set();
 
@@ -83,37 +86,37 @@ export const threeEditorMouseEvents = (
 	 */
 	const onMouseDownTouchStartEvent = (e) => {
 		const isMobileEvent = e.type === 'touchstart';
-		const coord = setMousePosition(mouseStart, e, isMobileEvent);
+		const coord = setMousePosition(eventMouseStart, e, isMobileEvent);
 		mouseCoord.set(coord.x, coord.y); //mouseCoord should keep initial click position
 
-		raycaster.setFromCamera(mouseStart, cameraRef.current);
-		const intersects = raycaster.intersectObjects(
-			sceneRef.current.children,
-		);
-		const sceneObject = getIntersectedMarkerObject(intersects);
-
-		if (sceneObject) {
-			isMarkerClicked = true;
-			controlsRef.current.enabled = false; //eslint-disable-line
-			focusedObject = sceneObject.object;
-			const { point } = sceneObject;
-			//TODO: describe what it does?
-			if (!focusedObject?.parent) console.error('Prop Not Found');
-			if (focusedObject?.parent)
-				inverseMatrix
-					.copy(focusedObject.parent.matrixWorld)
-					.invert(inverseMatrix);
-			offset
-				.copy(point)
-				.sub(
-					worldPosition.setFromMatrixPosition(
-						focusedObject.matrixWorld,
-					),
-				);
-		} else {
-			isMarkerClicked = false;
-			focusedObject = false;
-		}
+		// raycaster.setFromCamera(mouseStart, cameraRef.current);
+		// const intersects = raycaster.intersectObjects(
+		// 	sceneRef.current.children,
+		// );
+		// const sceneObject = getIntersectedMarkerObject(intersects);
+		//
+		// if (sceneObject) {
+		// 	isMarkerClicked = true;
+		// 	controlsRef.current.enabled = false; //eslint-disable-line
+		// 	focusedObject = sceneObject.object;
+		// 	const { point } = sceneObject;
+		// 	//TODO: describe what it does?
+		// 	if (!focusedObject?.parent) console.error('Prop Not Found');
+		// 	if (focusedObject?.parent)
+		// 		inverseMatrix
+		// 			.copy(focusedObject.parent.matrixWorld)
+		// 			.invert(inverseMatrix);
+		// 	offset
+		// 		.copy(point)
+		// 		.sub(
+		// 			worldPosition.setFromMatrixPosition(
+		// 				focusedObject.matrixWorld,
+		// 			),
+		// 		);
+		// } else {
+		// 	isMarkerClicked = false;
+		// 	focusedObject = false;
+		// }
 
 		//Public interface
 		if (onMouseDownCallback)
@@ -124,43 +127,54 @@ export const threeEditorMouseEvents = (
 		const isMobileEvent = e.type === 'touchend';
 
 		if (isMobileEvent) e.preventDefault();
-		setMousePosition(mouseCoord, e, isMobileEvent);
+		setMousePosition(eventMouseEnd, e, isMobileEvent);
 
 		controlsRef.current.enabled = true; //eslint-disable-line
 
-		const dragDistance = mouseCoord.distanceTo(mouseStart);
+		const dragDistance = eventMouseStart.distanceTo(eventMouseEnd);
+
 		const isDragEvent = dragDistance > DESKTOP_THRESHOLD;
+
+		if (isDragEvent) {
+			return;
+		}
 
 		raycaster.setFromCamera(mouseCoord, cameraRef.current);
 		const intersects = raycaster.intersectObjects(
 			sceneRef.current.children,
 		);
-		// const markerIntersection = getIntersectedMarkerObject(intersects);
+
+		const sceneObject = getIntersectedMarkerObject(intersects);
+
 		// const sceneObject = markerIntersection?.object;
-		const sceneObject =
-			isMarkerClicked && focusedObject ? focusedObject : null;
+		// const sceneObject =
+		// 	isMarkerClicked && focusedObject ? focusedObject : null;
 
-		//Find underlying scene background object
-		const bgObject = intersects.find((item) =>
-			['cubeBackground', 'flatBackground', 'colliderSphere'].includes(
-				item.object.name,
-			),
-		);
-		const point = bgObject.point;
-
-		//save clickData
-		sceneRef.current.userData.clickData = { e, point };
-
-		//Get transforms
-		const marker = sceneObject?.owner;
-		if (marker) marker.transforms = marker.getTransforms();
-
-		//reset data
-		if (dragDistance > DESKTOP_THRESHOLD) {
-			if (isMarkerClicked) isMarkerClicked = false;
-		} else {
-			isMarkerClicked = false;
+		if (sceneObject?.object?.owner?.onClick) {
+			sceneObject.object?.owner.onClick();
 		}
+		const marker = sceneObject?.object?.owner;
+		//Find underlying scene background object
+		// const bgObject = intersects.find((item) =>
+		// 	['cubeBackground', 'flatBackground', 'colliderSphere'].includes(
+		// 		item.object.name,
+		// 	),
+		// );
+		// const point = bgObject.point;
+		//
+		// //save clickData
+		// sceneRef.current.userData.clickData = { e, point };
+		//
+		// //Get transforms
+		// const marker = sceneObject?.owner;
+		// if (marker) marker.transforms = marker.getTransforms();
+		//
+		// //reset data
+		// if (dragDistance > DESKTOP_THRESHOLD) {
+		// 	if (isMarkerClicked) isMarkerClicked = false;
+		// } else {
+		// 	isMarkerClicked = false;
+		// }
 
 		// public method/callback
 		if (onMouseUpCallback)
@@ -325,6 +339,6 @@ export const threeEditorMouseEvents = (
 	return {
 		addThreeEditorMouseEventListeners,
 		removeThreeEditorMouseEventListeners,
-		resetHovers
+		resetHovers,
 	};
 };

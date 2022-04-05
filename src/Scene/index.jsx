@@ -41,7 +41,7 @@ const Scene = (props) => {
 		allowHotspotsToMove,
 		resetBGBeforeImageLoaded = false,
 		children,
-		fps=60
+		fps = 60,
 	} = props;
 	const [threeReady, setThreeReady] = useState(false);
 	const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
@@ -69,12 +69,11 @@ const Scene = (props) => {
 	};
 
 	const animate = (controllerUpdate) => {
-
-		setTimeout( () => {
+		setTimeout(() => {
 			window.animationId = requestAnimationFrame(() =>
 				animate(controllerUpdate),
 			);
-		}, 1000 / fps );
+		}, 1000 / fps);
 
 		renderer.render(scene, cameraRef.current);
 
@@ -221,7 +220,7 @@ const Scene = (props) => {
 		const {
 			addThreeEditorMouseEventListeners,
 			removeThreeEditorMouseEventListeners,
-			resetHovers
+			resetHovers,
 		} = threeEditorMouseEvents(
 			sceneRef,
 			renderer,
@@ -248,7 +247,7 @@ const Scene = (props) => {
 
 		return () => {
 			removeThreeEditorMouseEventListeners();
-			resetHovers()
+			resetHovers();
 			// removeThreeEditorKeyboardEvents();
 		};
 	}, [
