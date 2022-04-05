@@ -273,6 +273,7 @@ class AnimatedGLBs extends Component {
 							scene={null}
 							renderer={null}
 							camera={null}
+							collect={this.props.collect}
 							// outerObjScale={[20, 20, 20]}
 							outerObjScale={[1, 2, 1]}
 							innerObjScale={innerScale}
@@ -301,6 +302,7 @@ class AnimatedGLBs extends Component {
 							scene={null}
 							renderer={null}
 							camera={null}
+							collect={this.props.collect}
 							// outerObjScale={[60, 22, 60]}
 							outerObjScale={[1.5, 3, 1]}
 							innerObjScale={innerScale}
@@ -328,6 +330,7 @@ class AnimatedGLBs extends Component {
 							scene={null}
 							renderer={null}
 							camera={null}
+							collect={this.props.collect}
 							// outerObjScale={[30, 40, 30]}
 							outerObjScale={[1, 2, 1]}
 							innerObjScale={innerScale}
