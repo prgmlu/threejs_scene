@@ -19,8 +19,8 @@ const Hotspot = (props) => {
 		navMarkerIdx,
 		userData,
 		onEnterKeyToSelectNavMarker,
+		onClick,
 	} = props;
-
 
 	const [isNavMarkerActive, setIsNavMarkerActive] = useState(false);
 

@@ -29,7 +29,7 @@ const BackgroundCube = ({
 				backgroundUrl,
 				imageIntegrity,
 				useWebp,
-				skipLargest
+				skipLargest,
 			);
 	}, [backgroundUrl]);
 

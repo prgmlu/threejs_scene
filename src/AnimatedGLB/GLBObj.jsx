@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
 
-
 import { GLTFLoader } from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from '../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
 import SceneModal from './SceneModal.jsx';
@@ -18,16 +17,21 @@ const TWEEN = require('@tweenjs/tween.js');
 const CUSTOM_OBJ = true;
 // const CUSTOM_OBJ = false;
 
-
-const updateCastingObjs = function(){
-	window.scene.children.forEach((i)=>{if(i.position.x!=0 && i.position.y!=0 && i.position.z!=0 &&i.type!='PerspectiveCamera'){console.log(i.position); 
-		if(window.rayCastingCheckingObjs){
-			if( ! window.rayCastingCheckingObjs.includes(i))
-				window.rayCastingCheckingObjs.push(i);
+const updateCastingObjs = function () {
+	window.scene.children.forEach((i) => {
+		if (
+			i.position.x != 0 &&
+			i.position.y != 0 &&
+			i.position.z != 0 &&
+			i.type != 'PerspectiveCamera'
+		) {
+			if (window.rayCastingCheckingObjs) {
+				if (!window.rayCastingCheckingObjs.includes(i))
+					window.rayCastingCheckingObjs.push(i);
+			} else window.rayCastingCheckingObjs = [i];
 		}
-		else window.rayCastingCheckingObjs = [i] ;
-	}})
-}
+	});
+};
 const createCube = function (x, y) {
 	const geometry = new THREE.BoxGeometry(1, 1, 1);
 	const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -37,11 +41,9 @@ const createCube = function (x, y) {
 	return cube;
 };
 
-
-
 import { GUI } from 'dat.gui';
-const createDatGui = function(obj, folderName){
-	if (!window.DATGUI_DEFINED){
+const createDatGui = function (obj, folderName) {
+	if (!window.DATGUI_DEFINED) {
 		var guiDiv = document.createElement('div');
 		guiDiv.style.zIndex = 99;
 		guiDiv.style.position = 'fixed';
@@ -49,13 +51,12 @@ const createDatGui = function(obj, folderName){
 		var bod = document.getElementsByTagName('body')[0];
 		bod.appendChild(guiDiv);
 
-		const gui = new GUI({autoPlace:false});
+		const gui = new GUI({ autoPlace: false });
 		window.gui = gui;
 		// gui.close();
 		// var cont = document.getElementById('datgui');
 		guiDiv.appendChild(gui.domElement);
 		window.DATGUI_DEFINED = true;
-
 	}
 	const folder = gui.addFolder(folderName);
 
@@ -73,41 +74,53 @@ const createDatGui = function(obj, folderName){
 	folder.add(obj.scale, 'y').name('scale y').min(-70).max(70).step(0.001);
 	folder.add(obj.scale, 'z').name('scale z').min(-70).max(70).step(0.001);
 
-	folder.add(obj.position, 'x').name('position x').min(-70).max(70).step(0.001);
-	folder.add(obj.position, 'y').name('position y').min(-70).max(70).step(0.001);
-	folder.add(obj.position, 'z').name('position z').min(-70).max(70).step(0.001);
-}
-
-
+	folder
+		.add(obj.position, 'x')
+		.name('position x')
+		.min(-70)
+		.max(70)
+		.step(0.001);
+	folder
+		.add(obj.position, 'y')
+		.name('position y')
+		.min(-70)
+		.max(70)
+		.step(0.001);
+	folder
+		.add(obj.position, 'z')
+		.name('position z')
+		.min(-70)
+		.max(70)
+		.step(0.001);
+};
 
 class GLBObj extends Component {
 	setLastEvent = (e) => {
 		if (!this.props.canTween) return;
 		this.lastEvent = e;
-	}
-	
+	};
+
 	handleTouchEnd = (e) => {
 		if (!this.props.canTween) return;
 		this.handleClickingLogic(e);
-	}
+	};
 
 	handleWindowClick = (e) => {
 		if (!this.props.canTween) return;
 		this.lastEvent = e;
 		this.handleClickingLogic(e);
-	}
+	};
 
 	handleMouseMove = (e) => {
-			// console.log(this.val);
-			// alert('hi')
-			var hit = this.getRaycastIntersects(e);
-			if (hit && hit.length > 0) {
-				this.renderer.domElement.style.cursor = 'pointer';
-			}
-			 else {
-				this.renderer.domElement.style.cursor = 'default';
-			}
-	}
+		// console.log(this.val);
+		// alert('hi')
+		var hit = this.getRaycastIntersects(e);
+		if (hit && hit.length > 0) {
+			this.renderer.domElement.style.cursor = 'pointer';
+		} else {
+			this.renderer.domElement.style.cursor = 'default';
+		}
+	};
 
 	constructor(props) {
 		super(props);
@@ -127,10 +140,7 @@ class GLBObj extends Component {
 		window.addEventListener('touchstart', this.setLastEvent);
 		window.addEventListener('touchmove', this.setLastEvent);
 		window.addEventListener('touchend', this.handleTouchEnd);
-		document.addEventListener('mousemove',this.handleMouseMove,false,);
-
-
-
+		document.addEventListener('mousemove', this.handleMouseMove, false);
 	}
 
 	handleClickingLogic(e) {
@@ -144,8 +154,8 @@ class GLBObj extends Component {
 		) {
 			var point = hit[0].point;
 			var id = hit[0].object.userData.id;
-			if (id!=this.props.id) return;
-			if(! this.props.canClick) return;
+			if (id != this.props.id) return;
+			if (!this.props.canClick) return;
 			this.props.setCanClick(false);
 
 			var camDistance = this.camera.position.length();
@@ -180,9 +190,10 @@ class GLBObj extends Component {
 						new TWEEN.Tween(x)
 							.to({ radius: 10 }, 500)
 							.onUpdate(() => {
-								this._mounted && this.setState({
-									blurRadius: x.radius,
-								});
+								this._mounted &&
+									this.setState({
+										blurRadius: x.radius,
+									});
 							})
 							.start()
 							.onComplete(() => {
@@ -205,13 +216,13 @@ class GLBObj extends Component {
 			// this.camera.position.copy(point).normalize().multiplyScalar(-camDistance);
 		}
 	}
-	setTransparency(obj){
-		obj.traverse((o)=>{
-			if(o.material){
+	setTransparency(obj) {
+		obj.traverse((o) => {
+			if (o.material) {
 				o.material.transparent = true;
-				o.material.opacity = .5 ;
+				o.material.opacity = 0.5;
 			}
-		})
+		});
 	}
 
 	loadModel(url, scene) {
@@ -225,9 +236,8 @@ class GLBObj extends Component {
 		loader.load(url, (gltf) => {
 			this.obj = gltf.scene;
 			this.setTransparency(this.obj);
-			if(!window.outerObjs) window.outerObjs = [this.obj];
-			else window.outerObjs.push(this.obj)
-
+			if (!window.outerObjs) window.outerObjs = [this.obj];
+			else window.outerObjs.push(this.obj);
 
 			gltf.scene.traverse((o) => {
 				// this.rayCastingCheckingOjbs.push(o);
@@ -245,7 +255,7 @@ class GLBObj extends Component {
 			this.animate();
 
 			gltf.scene.traverse((o) => {
-			o.material && (o.material.envMapIntensity = 1.81);
+				o.material && (o.material.envMapIntensity = 1.81);
 
 				if (window.rayCastingCheckingObjs) {
 					window.rayCastingCheckingObjs.push(o);
@@ -279,11 +289,12 @@ class GLBObj extends Component {
 		// console.log(window.rayCastingCheckingObjs+ window.scene.children.filter((i)=>i.type=='Sprite'));
 		if (window?.rayCastingCheckingObjs) {
 			return this.raycaster.intersectObjects(
-				window.rayCastingCheckingObjs.concat(window.scene.children.filter((i)=>i.type=='Sprite'))
-			);	
+				window.rayCastingCheckingObjs.concat(
+					window.scene.children.filter((i) => i.type == 'Sprite'),
+				),
+			);
 		}
 		return [];
-
 	}
 
 	animate() {
@@ -296,7 +307,6 @@ class GLBObj extends Component {
 	componentDidMount() {
 		this._mounted = true;
 		// alert('should be adding')
-
 
 		this.scene = this.props.scene || this.props.sceneRef.current;
 		this.camera = this.props?.camera || window.c.object;
@@ -345,7 +355,7 @@ class GLBObj extends Component {
 	componentWillUnmount() {
 		this._mounted = false;
 		// alert('Glb unmount');
-		window.rayCastingCheckingObjs = []
+		window.rayCastingCheckingObjs = [];
 		this.scene.remove(this.obj);
 		document.removeEventListener('mousemove', this.handleMouseMove);
 
@@ -353,14 +363,10 @@ class GLBObj extends Component {
 		window.removeEventListener('touchstart', this.setLastEvent);
 		window.removeEventListener('touchmove', this.setLastEvent);
 		window.removeEventListener('touchend', this.handleTouchEnd);
-
-
-
 	}
 
-
-	componentWillUpdate(){
-		// alert('update')		
+	componentWillUpdate() {
+		// alert('update')
 	}
 
 	render() {
@@ -369,7 +375,14 @@ class GLBObj extends Component {
 			cream: creamUrl,
 			matte: matteUrl,
 		};
-		var scale = this.props.type=='matte'? [this.props.innerObjScale[0]* 1.5,this.props.innerObjScale[1]* 1.5,this.props.innerObjScale[2]* 1.5] : this.props.innerObjScale;
+		var scale =
+			this.props.type == 'matte'
+				? [
+						this.props.innerObjScale[0] * 1.5,
+						this.props.innerObjScale[1] * 1.5,
+						this.props.innerObjScale[2] * 1.5,
+				  ]
+				: this.props.innerObjScale;
 		return (
 			<div>
 				<SceneModal
