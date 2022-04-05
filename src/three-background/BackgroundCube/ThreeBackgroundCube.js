@@ -235,7 +235,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 		}
 	};
 
-	loadCubeTextureFromPriorityArray = async (url, imageIntegrity, useWebp) => {
+	loadCubeTextureFromPriorityArray = async (url, imageIntegrity, useWebp, skipLargest) => {
 		this.url = url;
 		this.dispose();
 		this.initPriorityArray();
@@ -251,6 +251,9 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			}
 			const priorityObject = this.priorityArrayMap[this.url].shift();
 			let { face, level } = priorityObject;
+			if (skipLargest && level === 3) {
+				continue
+			}
 			initiatorUrl = priorityObject.initiatorUrl;
 			const faceLODUrls = this.buildLODUrls(
 				url,

@@ -13,6 +13,7 @@ const Background = ({
 	const [isFlatScene, setFlatScene] = useState(false);
 	const [imageIntegrity, setImageIntegrity] = useState(null);
 	const [useWebp, setUseWebp] = useState(false);
+	const [skipLargest, setSkipLargest] = useState(false);
 
 	console.log('%c >INIT: - Background', 'color:green', bgConf);
 
@@ -22,6 +23,7 @@ const Background = ({
 			setBackgroundUrl(bgConf.backgroundUrl);
 			setImageIntegrity(bgConf?.imageIntegrity);
 			setUseWebp(bgConf?.useWebp);
+			setSkipLargest(bgConf?.skipLargest);
 		}
 	}, [bgConf]);
 
@@ -40,6 +42,7 @@ const Background = ({
 			linkedScenes={linkedScenes}
 			imageIntegrity={imageIntegrity}
 			useWebp={useWebp}
+			skipLargest={skipLargest}
 		/>
 	);
 };

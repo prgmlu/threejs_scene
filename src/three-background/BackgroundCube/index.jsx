@@ -9,8 +9,10 @@ const BackgroundCube = ({
 	linkedScenes,
 	imageIntegrity,
 	useWebp,
+	skipLargest,
 }) => {
 	const cube = useRef();
+
 	useEffect(() => {
 		cube.current = new ThreeBackgroundCube(camera);
 		cube.current.addToScene(scene);
@@ -27,6 +29,7 @@ const BackgroundCube = ({
 				backgroundUrl,
 				imageIntegrity,
 				useWebp,
+				skipLargest
 			);
 	}, [backgroundUrl]);
 
