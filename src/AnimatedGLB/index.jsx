@@ -20,68 +20,78 @@ const matteUrl =
 
 const TWEEN = require('@tweenjs/tween.js');
 
+const isMobileDevice = function(){
+	const touch = matchMedia('(hover: none), (pointer: coarse)').matches;
+	return touch;
+}
+
 // const CUSTOM_OBJ = true;
-const CUSTOM_OBJ = false;
+// const CUSTOM_OBJ = false;
 
 const objsPosConfig = {
 	//disco-game
 	// 6242242a42f102f9875fa895
 	'6242242a42f102f9875fa895' : {
-		cream: [5, -1, -0.1],
-		lashes: [-0.5, .6, 5],
-		matte: [-1.3, -0.9, -5],
+		cream: [5, -0.4, -0.1],
+		lashes: [-0.8, .2, 5],
+		matte: [-1.3, -0.3, -5],
 	},
 
 	//disco-bts
 	// 624221a9daa2aa92c9fd575f
 	'624221a9daa2aa92c9fd575f' : {
-		cream: [-1.2, -1.2, 5],
-		lashes: [-1, .6, -5],
-		matte: [5, -0.9, 0],
+		cream: [-1.2, -.6, 5],
+		lashes: [-1.2, .3, -5],
+		matte: [5, -0.5, 0],
 	},
 
 	//disco-masterclass
 	// 623b5325b452e0eb474fd84f
 	'623b5325b452e0eb474fd84f' : {
-		cream: [-1.441, -1.1, -5],
+		cream: [-1.3, -0.7, -5],
 		lashes: [5, 0.4, -0.3],
-		matte: [-0.901, -0.9, 5],
+		matte: [-0.901, -0.5, 5],
 	}
 
 }
 
-const createCube = function (x, y) {
-	const geometry = new THREE.BoxGeometry(1, 1, 1);
-	const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-	const cube = new THREE.Mesh(geometry, material);
-	cube.scale.set(1, 1, 1);
-	cube.position.set(x, y, 5);
-	return cube;
-};
 
 
 class AnimatedGLBs extends Component {
 	constructor(props) {
 		super(props);
-		if (window.animatedGlbsConstructed) {
-			window.constructionCount+=1;
-			this.myCount = window.constructionCount;
+		// if (window.animatedGlbsConstructed) {
+		// 	window.constructionCount+=1;
+		// 	this.myCount = window.constructionCount;
 
-			if(window.constructionCount > 1)
-				return
+		// 	if(window.constructionCount > 1)
+		// 		return
 
-		}else{
-			window.animatedGlbsConstructed = true;
-			window.constructionCount = 1;
-			this.myCount = 1;
+		// }else{
+		// 	window.animatedGlbsConstructed = true;
+		// 	window.constructionCount = 1;
+		// 	this.myCount = 1;
+		// }
+
+
+		this.state = {
+			modelsLoaded : false
 		}
 
 
-		// alert('cons')
+		this.creamLoaded = false;
+		this.lashesLoaded = false;
+		this.matteLoaded = false;
+		
+		this.cream = null;
+		this.lashes = null;
+		this.matte = null;
+		
 
+			
 		// alert(props.roomId)
 
-		this.setEnvMap(props.sceneRef.current);
+		// this.setEnvMap(props.sceneRef.current);
 
 		this.setCanTween = this.setCanTween.bind(this);
 		this.setCanClick = this.setCanClick.bind(this);
@@ -123,7 +133,7 @@ class AnimatedGLBs extends Component {
 
 	componentWillUpdate(nextProps, nextState) {
 		if (window.constructionCount >1) return;
-		this.setEnvMap(nextProps.sceneRef.current);
+		// this.setEnvMap(nextProps.sceneRef.current);
 	}
 
 	animate(){
@@ -136,34 +146,102 @@ class AnimatedGLBs extends Component {
 	}
 
 	setSceneModalVisible(val) {
-		this.setState({
+		this._mounted && this.setState({
 			sceneModalVisible: val,
 		});
 	}
 	setCanTween(val) {
-		this.setState({
+		this._mounted && this.setState({
 			canTween: val,
 		});
 	}
 	setCanClick(val) {
-		this.setState({
+		this._mounted && this.setState({
 			canClick: val,
 		});
 	}
 
+	componentDidMount(){
+
+		this._mounted = true;
+
+		const loader = new GLTFLoader();
+		const dracoLoader = new DRACOLoader();
+		dracoLoader.setDecoderPath(
+			'https://www.gstatic.com/draco/v1/decoders/',
+		);
+		loader.setDRACOLoader(dracoLoader);
+
+		loader.crossOrigin = true;
+
+		loader.load(creamUrl, (gltf) => {
+			// alert('cream loaded');
+			
+			this.cream = gltf;
+			this._mounted && this.setState({
+				creamLoaded:true
+			})
+
+			if(this.state.creamLoaded && this.state.lashesLoaded && this.state.matteLoaded){
+				this._mounted && this.setState({
+					modelsLoaded:true
+				});
+				// alert('loads');
+			}
+		})
+
+		loader.load(lashesUrl, (gltf) => {
+			// alert('lashes loaded');
+			
+			this.lashes = gltf;
+			this._mounted && this.setState({
+				lashesLoaded:true
+			})
+
+			if(this.state.creamLoaded && this.state.lashesLoaded && this.state.matteLoaded){
+				this._mounted && this.setState({
+					modelsLoaded:true
+				});
+				// alert('loads');
+			}
+		})
+		
+		loader.load(matteUrl, (gltf) => {
+				// alert('matte loaded');
+				
+				this.matte = gltf;
+				this._mounted && this.setState({
+					matteLoaded:true
+				})
+
+				if(this.state.creamLoaded && this.state.lashesLoaded && this.state.matteLoaded){
+					this._mounted && this.setState({
+						modelsLoaded:true
+					});
+					// alert('loads');
+				}
+			})
+
+	}
+
 	componentWillUnmount(){
+		this._mounted = false;
 		// if (window.constructionCount >1) return;
 		// alert('unmountin')
 
 		window.animatedGlbsConstructed = false;
 	}
 	render() {
-		if (this.myCount > 1) return(<div></div>);
+		var desktopScaleMultiplier = 1.5;
+		var innerScale = isMobileDevice() ? [1,1,1] : [1*desktopScaleMultiplier,1*desktopScaleMultiplier,1*desktopScaleMultiplier]
+		// if (this.myCount > 1) return(<div></div>);
+		if (!this.state.modelsLoaded) return (<div></div>);
 		else if(! objsPosConfig.hasOwnProperty(this.props.scene)) { return (<div></div>)}
 		else return (
 			<>
 				{
 					<GLBObj
+						gltf={this.cream}
 						canTween={this.state.canTween}
 						setCanTween={this.setCanTween}
 						canClick={this.state.canClick}
@@ -180,7 +258,9 @@ class AnimatedGLBs extends Component {
 						scene={null}
 						renderer={null}
 						camera={null}
-						scale={[20, 20, 20]}
+						// outerObjScale={[20, 20, 20]}
+						outerObjScale={[1, 2, 1]}
+						innerObjScale={innerScale}
 						url={
 							'https://cdn.obsess-vr.com/charlotte-tilbury/MagicCream_anim_v004.glb'
 						}
@@ -189,6 +269,7 @@ class AnimatedGLBs extends Component {
 
 				{
 					<GLBObj
+						gltf={this.lashes}
 						canClick={this.state.canClick}
 						setCanClick={this.setCanClick}
 						canTween={this.state.canTween}
@@ -205,8 +286,9 @@ class AnimatedGLBs extends Component {
 						scene={null}
 						renderer={null}
 						camera={null}
-						scale={[60, 22, 60]}
-						// scale={[22, 22, 22]}
+						// outerObjScale={[60, 22, 60]}
+						outerObjScale={[1.5, 3, 1]}
+						innerObjScale={innerScale}
 						url={
 							'https://cdn.obsess-vr.com/charlotte-tilbury/PushUpLashes_anim_v006.glb'
 						}
@@ -215,6 +297,7 @@ class AnimatedGLBs extends Component {
 
 				{
 					<GLBObj
+						gltf={this.matte}
 						canTween={this.state.canTween}
 						setCanTween={this.setCanTween}
 						canClick={this.state.canClick}
@@ -230,8 +313,9 @@ class AnimatedGLBs extends Component {
 						scene={null}
 						renderer={null}
 						camera={null}
-						scale={[30, 40, 30]}
-						// scale={[22, 22, 22]}
+						// outerObjScale={[30, 40, 30]}
+						outerObjScale={[1,2,1]}
+						innerObjScale={innerScale}
 						url={
 							'https://cdn.obsess-vr.com/charlotte-tilbury/MatteRevolution_anim_v004.glb'
 						}

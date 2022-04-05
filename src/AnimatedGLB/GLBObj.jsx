@@ -15,7 +15,31 @@ const matteUrl =
 
 const TWEEN = require('@tweenjs/tween.js');
 
-// import { GUI } from 'dat.gui';
+const CUSTOM_OBJ = true;
+// const CUSTOM_OBJ = false;
+
+
+const updateCastingObjs = function(){
+	window.scene.children.forEach((i)=>{if(i.position.x!=0 && i.position.y!=0 && i.position.z!=0 &&i.type!='PerspectiveCamera'){console.log(i.position); 
+		if(window.rayCastingCheckingObjs){
+			if( ! window.rayCastingCheckingObjs.includes(i))
+				window.rayCastingCheckingObjs.push(i);
+		}
+		else window.rayCastingCheckingObjs = [i] ;
+	}})
+}
+const createCube = function (x, y) {
+	const geometry = new THREE.BoxGeometry(1, 1, 1);
+	const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+	const cube = new THREE.Mesh(geometry, material);
+	cube.scale.set(1, 1, 1);
+	cube.position.set(x, y, 5);
+	return cube;
+};
+
+
+
+import { GUI } from 'dat.gui';
 const createDatGui = function(obj, folderName){
 	if (!window.DATGUI_DEFINED){
 		var guiDiv = document.createElement('div');
@@ -55,12 +79,39 @@ const createDatGui = function(obj, folderName){
 }
 
 
-// const CUSTOM_OBJ = true;
-const CUSTOM_OBJ = false;
 
 class GLBObj extends Component {
+	setLastEvent = (e) => {
+		if (!this.props.canTween) return;
+		this.lastEvent = e;
+	}
+	
+	handleTouchEnd = (e) => {
+		if (!this.props.canTween) return;
+		this.handleClickingLogic(e);
+	}
+
+	handleWindowClick = (e) => {
+		if (!this.props.canTween) return;
+		this.lastEvent = e;
+		this.handleClickingLogic(e);
+	}
+
+	handleMouseMove = (e) => {
+			// console.log(this.val);
+			// alert('hi')
+			var hit = this.getRaycastIntersects(e);
+			if (hit && hit.length > 0) {
+				this.renderer.domElement.style.cursor = 'pointer';
+			}
+			 else {
+				this.renderer.domElement.style.cursor = 'default';
+			}
+	}
+
 	constructor(props) {
 		super(props);
+		this.val = Math.random();
 		this.loadModel = this.loadModel.bind(this);
 		this.animate = this.animate.bind(this);
 		this.handleClickingLogic = this.handleClickingLogic.bind(this);
@@ -72,23 +123,14 @@ class GLBObj extends Component {
 			modalVisible: false,
 			blurRadius: 1,
 		};
-		window.addEventListener('click', (e) => {
-			if (!this.props.canTween) return;
-			this.lastEvent = e;
-			this.handleClickingLogic(e);
-		});
-		window.addEventListener('touchstart', (e) => {
-			if (!this.props.canTween) return;
-			this.lastEvent = e;
-		});
-		window.addEventListener('touchmove', (e) => {
-			if (!this.props.canTween) return;
-			this.lastEvent = e;
-		});
-		window.addEventListener('touchend', (e) => {
-			if (!this.props.canTween) return;
-			this.handleClickingLogic(e);
-		});
+		window.addEventListener('click', this.handleWindowClick);
+		window.addEventListener('touchstart', this.setLastEvent);
+		window.addEventListener('touchmove', this.setLastEvent);
+		window.addEventListener('touchend', this.handleTouchEnd);
+		document.addEventListener('mousemove',this.handleMouseMove,false,);
+
+
+
 	}
 
 	handleClickingLogic(e) {
@@ -138,7 +180,7 @@ class GLBObj extends Component {
 						new TWEEN.Tween(x)
 							.to({ radius: 10 }, 500)
 							.onUpdate(() => {
-								this.setState({
+								this._mounted && this.setState({
 									blurRadius: x.radius,
 								});
 							})
@@ -167,7 +209,7 @@ class GLBObj extends Component {
 		obj.traverse((o)=>{
 			if(o.material){
 				o.material.transparent = true;
-				o.material.opacity = 0 ;
+				o.material.opacity = .5 ;
 			}
 		})
 	}
@@ -196,7 +238,7 @@ class GLBObj extends Component {
 			// this.obj.rotation.x = .5;
 			// this.obj.rotation.y = 4.488;
 			this.obj.scale.set(...this.props.rotation);
-			this.obj.scale.set(...this.props.scale);
+			this.obj.scale.set(...this.props.outerObjScale);
 			scene.add(this.obj);
 			// createDatGui(this.obj,Math.random());
 			window.o = this.obj;
@@ -234,10 +276,11 @@ class GLBObj extends Component {
 			},
 			this.camera,
 		);
+		// console.log(window.rayCastingCheckingObjs+ window.scene.children.filter((i)=>i.type=='Sprite'));
 		if (window?.rayCastingCheckingObjs) {
 			return this.raycaster.intersectObjects(
-				window.rayCastingCheckingObjs,
-			);
+				window.rayCastingCheckingObjs.concat(window.scene.children.filter((i)=>i.type=='Sprite'))
+			);	
 		}
 		return [];
 
@@ -251,19 +294,9 @@ class GLBObj extends Component {
 	}
 
 	componentDidMount() {
-		document.addEventListener(
-			'mousemove',
-			(e) => {
-				// alert('hi')
-				var hit = this.getRaycastIntersects(e);
-				if (hit && hit.length > 0) {
-					document.body.style.cursor = 'pointer';
-				} else {
-					document.body.style.cursor = 'default';
-				}
-			},
-			false,
-		);
+		this._mounted = true;
+		// alert('should be adding')
+
 
 		this.scene = this.props.scene || this.props.sceneRef.current;
 		this.camera = this.props?.camera || window.c.object;
@@ -273,10 +306,18 @@ class GLBObj extends Component {
 		if (CUSTOM_OBJ) {
 			const light = new THREE.DirectionalLight(0xffffff, 0.8);
 			// this.scene.add(light);
-			this.scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+			// this.scene.add(new THREE.AmbientLight(0xffffff, 0.8));
 			this.obj = createCube(3 * Math.random(), 3 * Math.random());
 			this.scene.add(this.obj);
+			this.obj.position.set(...this.props.pos);
+			// alert(this.props.outerObjScale);
+			this.obj.scale.set(...this.props.outerObjScale);
+			this.obj.material.transparent = true;
+
+			this.obj.material.opacity = 0;
+
 			this.obj.userData.id = this.props.id;
+			// createDatGui(this.obj,Math.random())
 			if (window.rayCastingCheckingObjs) {
 				window.rayCastingCheckingObjs.push(this.obj);
 			} else {
@@ -293,14 +334,33 @@ class GLBObj extends Component {
 		}
 
 		this.raycaster = new THREE.Raycaster();
+
+		updateCastingObjs();
 	}
 
 	setVis(val) {
-		this.setState({ modalVisible: val });
+		this._mounted && this.setState({ modalVisible: val });
 	}
 
 	componentWillUnmount() {
+		this._mounted = false;
+		// alert('Glb unmount');
+		window.rayCastingCheckingObjs = []
 		this.scene.remove(this.obj);
+		document.removeEventListener('mousemove', this.handleMouseMove);
+
+		window.removeEventListener('click', this.handleWindowClick);
+		window.removeEventListener('touchstart', this.setLastEvent);
+		window.removeEventListener('touchmove', this.setLastEvent);
+		window.removeEventListener('touchend', this.handleTouchEnd);
+
+
+
+	}
+
+
+	componentWillUpdate(){
+		// alert('update')		
 	}
 
 	render() {
@@ -309,9 +369,11 @@ class GLBObj extends Component {
 			cream: creamUrl,
 			matte: matteUrl,
 		};
+		var scale = this.props.type=='matte'? [this.props.innerObjScale[0]* 1.5,this.props.innerObjScale[1]* 1.5,this.props.innerObjScale[2]* 1.5] : this.props.innerObjScale;
 		return (
 			<div>
 				<SceneModal
+					gltf={this.props.gltf}
 					setCanTween={this.props.setCanTween}
 					canTween={this.props.canTween}
 					setCanClick={this.props.setCanClick}
@@ -321,7 +383,7 @@ class GLBObj extends Component {
 					sceneModalVisible={this.props.sceneModalVisible}
 					id={this.props.id}
 					url={typeUrlMap[this.props.type]}
-					scale={[1,1,1]}
+					scale={scale}
 					blurRadius={this.state.blurRadius}
 					setVis={this.setVis}
 					modalVisible={this.state.modalVisible}
