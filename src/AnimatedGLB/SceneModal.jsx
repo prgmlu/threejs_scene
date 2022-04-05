@@ -11,9 +11,9 @@ import { RGBELoader } from '../../node_modules/three/examples/jsm/loaders/RGBELo
 
 
 const TEXTS_MAP = {
-	'cream':['Tap to unbox me, darling!','Open me up, darling!', 'Now, let me show you how I refill!' ],
-	'lashes':['Tap to unbox me, darling!','Open up! Let me show you my fabulous wand!' ],
-	'matte':['Tap to unbox me, darling!','Uncap me!', 'Tap me to twist me, darling!' ],
+	'cream': ['Tap to unbox me, darling!', 'Open me up, darling!', 'Now, let me show you how I refill!'],
+	'lashes': ['Tap to unbox me, darling!', 'Open up! Let me show you my fabulous wand!'],
+	'matte': ['Tap to unbox me, darling!', 'Uncap me!', 'Tap me to twist me, darling!'],
 }
 
 
@@ -21,6 +21,21 @@ const ANIMATION_SPEED = 1;
 const OPACITY_TRANS_RATE = 4;
 const MIN_FOV = 50;
 const MAX_FOV = 70;
+
+const createRenderer = function () {
+	window.modalRenderer = new THREE.WebGLRenderer({
+		antialias: false,
+		alpha: true,
+		// preserveDrawingBuffer: true,
+	});
+	window.modalRenderer.physicallyCorrectLights = true;
+	window.modalRenderer.outputEncoding = THREE.sRGBEncoding;
+
+	window.modalRenderer.setPixelRatio(window.devicePixelRatio);
+	window.modalRenderer.setSize(window.innerWidth, window.innerHeight);
+	window.modalRenderer.setClearColor(0xffcaca, 0);
+	window.modalRenderer.domElement.style.touchAction = 'none';
+}
 
 function handleOpacitiesByAnimation(
 	animationNumber,
@@ -172,12 +187,12 @@ class SceneModal extends Component {
 
 		this.obj.rotation.y = 0;
 
-		if(this.props.type == 'cream'){
-			this.obj.rotation.y = Math.PI/2;
+		if (this.props.type == 'cream') {
+			this.obj.rotation.y = Math.PI / 2;
 		}
 
 		this.currentAnimationCounter = 0;
-		this.setState({ animationCounter: 0 });
+		this._mounted && this.setState({ animationCounter: 0 });
 		this.animationPlaying = false;
 		for (var i = 0; i < this.animationClips.length; i++) {
 			this.mixer.clipAction(this.animationClips[i]).reset();
@@ -289,63 +304,94 @@ class SceneModal extends Component {
 		this.mouseWheelHandler = this.mouseWheelHandler.bind(this);
 		this.rotateObject = this.rotateObject.bind(this);
 
-		document.addEventListener(
-			'mousedown',
-			() => {
-				this.drag = false;
-				this.canRotate = true;
-				this.first = true;
-			},
-			true,
-		);
+	}
 
-		document.addEventListener(
-			'touchstart',
-			(e) => {
-				this.drag = false;
-				this.canRotate = true;
-				this.first = true;
+	handleRendererMouseMove = (e) => {
+		// e.stopPropagation();
+		this.rotateObject(e);
+		// var hit = this.getRaycastIntersects(e);
+		// if (hit && hit.length > 0) {
+		// 	document.body.style.cursor = 'pointer';
+		// } else {
+		// 	document.body.style.cursor = 'default';
+		// }
+	}
 
-				if (e.touches.length == 2) {
-					// console.log('2');
-					var dx = e.touches[ 0 ].pageX - e.touches[ 1 ].pageX;
-					var dy = e.touches[ 0 ].pageY - e.touches[ 1 ].pageY;
-					this._touchZoomDistanceEnd = this._touchZoomDistanceStart = Math.sqrt( dx * dx + dy * dy );
-			
-				}
-			
+	handleMouseDown = () => {
+		this.canRotate = true;
+		this.first = true;
+	}
 
+	handleTouchStart = (e) => {
+		this.canRotate = true;
+		this.first = true;
 
+		if (e.touches.length == 2) {
+			// console.log('2');
+			var dx = e.touches[0].pageX - e.touches[1].pageX;
+			var dy = e.touches[0].pageY - e.touches[1].pageY;
+			this._touchZoomDistanceEnd = this._touchZoomDistanceStart = Math.sqrt(dx * dx + dy * dy);
 
-			},
-			true,
-		);
+		}
+	}
 
-		document.addEventListener(
-			'mouseup',
-			() => {
-				this.canRotate = false;
-			},
-			true,
-		);
+	handleMouseUp = () => {
+		this.canRotate = false;
+	}
 
-		window.addEventListener('resize', () => {
-			var blur = document.getElementById('blur');
+	handleDocumentClick = (e) => {
+		// var hit = this.getRaycastIntersects(e);
 
-			window.modalRenderer.setSize(window.innerWidth, window.innerHeight);
+		// if (hit.length > 0) {
+		this.playNextAction();
+		// }
+	}
 
-			this.camera.aspect = window.innerWidth / window.innerHeight;
-			this.camera.updateProjectionMatrix();
-			// window.modalRenderer.setSize(window.innerHeight/2);
+	handleResize = () => {
+		var blur = document.getElementById('blur');
 
-			this.setState({
-				width: window.innerWidth,
-				height: window.innerHeight,
-				top: 0,
-				left: 0,
-			});
+		window.modalRenderer.setSize(window.innerWidth, window.innerHeight);
+
+		this.camera.aspect = window.innerWidth / window.innerHeight;
+		this.camera.updateProjectionMatrix();
+		// window.modalRenderer.setSize(window.innerHeight/2);
+
+		this._mounted && this.setState({
+			width: window.innerWidth,
+			height: window.innerHeight,
+			top: 0,
+			left: 0,
 		});
 	}
+
+	mouseWheelHandler = (e) => {
+		const fovDelta = e.deltaY;
+		const temp = this.camera.fov + Math.round(fovDelta * 0.04);
+
+		this.setZoom(temp);
+
+		// if (temp >= MIN_FOV && temp <= MAX_FOV) {
+		// 	this.camera.fov = temp; // eslint-disable-line
+		// 	this.camera.updateProjectionMatrix();
+		// }
+	};
+
+	handleTouchMove(e) {
+		this.rotateObject(e);
+
+		if (e.touches.length == 2) {
+
+			var dx = e.touches[0].pageX - e.touches[1].pageX;
+			var dy = e.touches[0].pageY - e.touches[1].pageY;
+			this._touchZoomDistanceEnd = Math.sqrt(dx * dx + dy * dy);
+
+			var factor = this._touchZoomDistanceStart / this._touchZoomDistanceEnd;
+			this._touchZoomDistanceStart = this._touchZoomDistanceEnd;
+			this.setZoom(this.camera.fov * factor);
+
+		}
+	}
+
 
 	playNextAction() {
 		// console.log(this.currentAnimationCounter);
@@ -366,10 +412,11 @@ class SceneModal extends Component {
 		this.currentAction.paused = false;
 		this.animationPlaying = true;
 		this.currentAnimationCounter += 1;
-		this.setState({ animationCounter: this.state.animationCounter + 1 });
+		this._mounted && this.setState({ animationCounter: this.state.animationCounter + 1 });
 	}
 
 	animate() {
+		// console.log(this.scene.uuid);
 		if (
 			(window.aa && this.props.id == 0) ||
 			(window.bb && this.props.id == 1) ||
@@ -468,17 +515,6 @@ class SceneModal extends Component {
 		}
 	}
 
-	mouseWheelHandler = (e) => {
-		const fovDelta = e.deltaY;
-		const temp = this.camera.fov + Math.round(fovDelta * 0.04);
-
-		this.setZoom(temp);
-
-		// if (temp >= MIN_FOV && temp <= MAX_FOV) {
-		// 	this.camera.fov = temp; // eslint-disable-line
-		// 	this.camera.updateProjectionMatrix();
-		// }
-	};
 
 	sizingLogic() {
 		// window.modalRenderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
@@ -513,44 +549,45 @@ class SceneModal extends Component {
 	setTextOpacity(progress) {
 		var text = document.getElementById('text');
 		text.style.color = `rgba(52, 12, 12,${1 - progress})`;
-		if(progress==1){
-			var textSet = this.setText(this.currentAnimationCounter+1);
-			textSet? text.style.color = `rgba(52, 12, 12,1)` : text.style.color = `rgba(52, 12, 12,0)`;
+		if (progress == 1) {
+			var textSet = this.setText(this.currentAnimationCounter + 1);
+			textSet ? text.style.color = `rgba(52, 12, 12,1)` : text.style.color = `rgba(52, 12, 12,0)`;
 		}
 	}
 
 	setText(counter) {
 		// console.log(counter,this.animationClips.length )
-		if (counter>this.animationClips.length) return false;
+		if (counter > this.animationClips.length) return false;
 		var text = document.getElementById('text');
 		if (window.aa) {
 			text.innerText =
 				TEXTS_MAP['cream'][
-					Math.max(0, counter - 1)
+				Math.max(0, counter - 1)
 				];
 		}
 
 		if (window.bb) {
 			text.innerText =
 				TEXTS_MAP['lashes'][
-					Math.max(0, counter - 1)
+				Math.max(0, counter - 1)
 				];
 		}
 
 		if (window.cc) {
 			text.innerText =
 				TEXTS_MAP['matte'][
-					Math.max(0, counter - 1)
+				Math.max(0, counter - 1)
 				];
 		}
 		return true;
 	}
 
 	componentWillUpdate(nextProps, nextState) {
+		if(!this._mounted) return;
 		this.setText(this.currentAnimationCounter);
 		if (nextProps.sceneModalVisible && !this.props.sceneModalVisible) {
 			//visibiity change from not visible to visible
-			this.setState({ visible: true });
+			this._mounted && this.setState({ visible: true });
 			window.cancelAnimationFrame(window.modalAnim);
 			window.modalAnim = this.animate();
 
@@ -562,9 +599,12 @@ class SceneModal extends Component {
 			!nextProps.sceneModalVisible &&
 			this.state.visible != nextState.visible
 		) {
-			this.setState({ visible: false });
+			this._mounted && this.setState({ visible: false });
 		}
 	}
+
+
+
 
 	loadModel() {
 		const loader = new GLTFLoader();
@@ -575,8 +615,9 @@ class SceneModal extends Component {
 		loader.setDRACOLoader(dracoLoader);
 
 		loader.crossOrigin = true;
-		loader.load(this.props.url, (gltf) => {
-			window.gltf = gltf;
+		// loader.load(this.props.url, (gltf) => {
+			// debugger;
+			let gltf = this.props.gltf;
 			if (window.objs) {
 				window.objs.push(gltf.scene);
 			} else {
@@ -666,25 +707,16 @@ class SceneModal extends Component {
 			this.obj.rotation.x = 0.5;
 			this.obj.scale.set(...this.props.scale);
 
-			// this.obj.traverse((o)=>{if(o.name=='Box'){o.material.transparent=true}})
 
-			// window.objs[0].traverse((o)=>{if(o.material){o.material.transparent=false; }})
-
-			// this.obj.scale.set(0,0,0)
-			// thi
-
-			gltf.scene.traverse((o) => {
-				this.rayCastingCheckingObjs.push(o);
-				// window.rayCastingCheckingObjs.push(o);
+			this.obj.traverse((o) => {
 				this.obj.traverse((o) => {
 					o.material && (o.material.envMapIntensity = 1.81);
-					// o.material && (o.material.opacity = 0);
 				});
 				o.userData.id = this.props.id;
 			});
 
 			this.scene.add(this.obj);
-			this.mixer = new THREE.AnimationMixer(gltf.scene);
+			this.mixer = new THREE.AnimationMixer(this.obj);
 			window.mixer = this.mixer;
 			this.mixer.addEventListener('finished', () => {
 				this.animationPlaying = false;
@@ -705,10 +737,7 @@ class SceneModal extends Component {
 			}
 
 			if (this.props.type == 'matte') {
-				var first = this.animationClips[0];
-				var second = this.animationClips[1];
-				var third = this.animationClips[2];
-				this.animationClips = [second, first, third];
+				this.animationClips = [this.animationClips[1], this.animationClips[0], this.animationClips[2]];
 			}
 
 			// this.playNextAction();
@@ -718,68 +747,63 @@ class SceneModal extends Component {
 			// this.animationPlaying = true;
 
 			// const controls = new DragControls( [data.scene], this.camera, window.modalRenderer.domElement );
-		});
+		// }
+		
+		
+		
+		// );
 	}
 
 	componentDidMount() {
+		this._mounted = true;
 		this.rayCastingCheckingObjs = [];
 
 		this.raycaster = new THREE.Raycaster();
+		this.mouseDownEventListener = document.addEventListener(
+			'mousedown',
+			this.handleMouseDown,
+			true,
+		);
 
-		document.addEventListener('click', (e) => {
-			// var hit = this.getRaycastIntersects(e);
+		this.touchStartEventListener = document.addEventListener(
+			'touchstart',
+			this.handleTouchStart,
+			true,
+		);
 
-			// if (hit.length > 0) {
-				this.playNextAction();
-			// }
-		});
+		this.mouseUpEventListener = document.addEventListener(
+			'mouseup',
+			this.handleMouseUp,
+			true,
+		);
+
+		this.resizeEventListener = window.addEventListener(
+			'resize',
+			this.handleResize);
+
+		this.documentClickEventListener = document.addEventListener(
+			'click',
+			this.handleDocumentClick);
 
 		if (!window.modalRenderer) {
-			window.modalRenderer = new THREE.WebGLRenderer({
-				antialias: true,
-				alpha: true,
-				preserveDrawingBuffer: true,
-			});
-			window.modalRenderer.physicallyCorrectLights = true;
-			window.modalRenderer.outputEncoding = THREE.sRGBEncoding;
-
-			window.modalRenderer.setPixelRatio(window.devicePixelRatio);
-			window.modalRenderer.setSize(window.innerWidth, window.innerHeight);
-			window.modalRenderer.setClearColor(0xffcaca, 0);
-			window.modalRenderer.domElement.style.touchAction = 'none';
+			createRenderer();
 		}
-		window.modalRenderer.domElement.addEventListener(
+		this.rendererWheelListener = window.modalRenderer.domElement.addEventListener(
 			'wheel',
 			this.mouseWheelHandler,
 			{ passive: true },
 		);
-		// window.modalRenderer.domElement.style.border = "5px solid #340c0c"
 
-		// this.root = document.getElementById('sceneModalContainer');
-
-		// this.root.appendChild(window.modalRenderer.domElement);
 		this.myRef.current.appendChild(window.modalRenderer.domElement);
 
-		window.modalRenderer.domElement.addEventListener(
+		this.rendererTouchMoveListener = window.modalRenderer.domElement.addEventListener(
 			'touchmove',
-			(e) => {
-				this.handleTouchMove(e);
-			},
+			this.handleTouchMove,
 			false,
 		);
-		window.modalRenderer.domElement.addEventListener(
+		this.rendererMouseMoveListener = window.modalRenderer.domElement.addEventListener(
 			'mousemove',
-			(e) => {
-				// e.stopPropagation();
-				this.drag = true;
-				this.rotateObject(e);
-				var hit = this.getRaycastIntersects(e);
-				if (hit && hit.length > 0) {
-					document.body.style.cursor = 'pointer';
-				} else {
-					document.body.style.cursor = 'default';
-				}
-			},
+			this.handleRendererMouseMove,
 			true,
 		);
 
@@ -854,33 +878,63 @@ class SceneModal extends Component {
 		// this.animate();
 	}
 
-	componentWillUnmount() {}
+	componentWillUnmount() {
+		this._mounted = false;
+		// alert('modal unmounts')
+		// this.scene.remove(this.obj);
+		// this.obj.traverse((o) => {
+		// 	if (o.dispose) o.dispose();
+		// })
+		// this.scene.remove(this.ambLight);
+		// this.scene.remove(this.directionalLight);
 
-	handleTouchMove(e) {
-		this.drag = true;
-		this.rotateObject(e);
+		document.removeEventListener(
+			'mousedown',
+			this.handleMouseDown,
+		)
 
-		if (e.touches.length == 2) {
+		document.removeEventListener(
+			'touchstart',
+			this.handleTouchStart,
+		)
 
-			var dx = e.touches[ 0 ].pageX - e.touches[ 1 ].pageX;
-			var dy = e.touches[ 0 ].pageY - e.touches[ 1 ].pageY;
-			this._touchZoomDistanceEnd = Math.sqrt( dx * dx + dy * dy );
- 
-		 var factor = this._touchZoomDistanceStart / this._touchZoomDistanceEnd;
-		 this._touchZoomDistanceStart = this._touchZoomDistanceEnd;
-		 this.setZoom(this.camera.fov * factor);
- 
-	 }
- 
+		document.removeEventListener(
+			'mouseup',
+			this.handleMouseUp,
+		)
+
+		window.removeEventListener(
+			'resize',
+			this.handleResize)
 
 
+		document.removeEventListener(
+			'click',
+			this.handleDocumentClick)
+			;
+
+		window.modalRenderer.domElement.removeEventListener(
+			'wheel',
+			this.mouseWheelHandler,
+		)
+
+		window.modalRenderer.domElement.removeEventListener(
+			'touchmove',
+			this.handleTouchMove,
+		)
+
+		window.modalRenderer.domElement.removeEventListener(
+			'mousemove',
+			this.handleRendererMouseMove,
+		)
 	}
 
 
-	setZoom(fov){
+
+	setZoom(fov) {
 		this.camera.fov = fov;
-		if(this.camera.fov < MIN_FOV) this.camera.fov = MIN_FOV;
-		if(this.camera.fov > MAX_FOV) this.camera.fov = MAX_FOV;
+		if (this.camera.fov < MIN_FOV) this.camera.fov = MIN_FOV;
+		if (this.camera.fov > MAX_FOV) this.camera.fov = MAX_FOV;
 
 		// this.camera.updateProjectionMatrix();
 
@@ -888,7 +942,7 @@ class SceneModal extends Component {
 		// var endVec = this.obj.position.clone();
 
 		// window.objs[0].position;
-		
+
 		// var alpha = 1 - ((this.camera.fov-MIN_FOV) / 65 );
 		// console.log('alpha', alpha);
 
@@ -897,9 +951,9 @@ class SceneModal extends Component {
 		// debugger;
 		// this.camera.lookAt(lerpdPos.x,lerpdPos.y,lerpdPos.z);
 
-	
+
 		this.camera.updateProjectionMatrix();
-	
+
 	}
 
 
@@ -921,7 +975,7 @@ class SceneModal extends Component {
 							? 'inline'
 							: 'none',
 						'backdropFilter': `blur(${this.props.blurRadius}px)`,
-						'WebkitBackdropFilter':`blur(${this.props.blurRadius}px)`,
+						'WebkitBackdropFilter': `blur(${this.props.blurRadius}px)`,
 						top: '0px',
 						left: '0px',
 						width: window.innerWidth + 'px',
@@ -948,14 +1002,14 @@ class SceneModal extends Component {
 							zIndex: 1000,
 							display: this.state.visible ? 'inline' : 'none',
 							color: '#340c0c',
-							fontWeight:'bold',
-							fontFamily:'HelveticaNeue',
+							// fontWeight: 'bold',
+							fontFamily: 'HelveticaNeueLTStd-HvCn',
 							alignSelf: 'flex-end',
-							flexDirection:'column',
+							flexDirection: 'column',
 							textAlign: 'center',
 							fontSize: '2rem',
-							padding:'0% 5% 0% 5%',
-							paddingTop:"10%",
+							padding: '0% 5% 0% 5%',
+							paddingTop: "10%",
 							marginBottom: this.state.height / 7 + 'px',
 							touchAction: 'none',
 							pointerEvents: 'none',
