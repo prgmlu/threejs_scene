@@ -18,7 +18,7 @@ function createRenderer() {
 
 	//this line just counts how many times we requested createRenderer()
 	//and not how many times we initialized ret
-	window.renderers ? window.renderers.push(ret) : (window.renderers = [ret]);
+	// window.renderers ? window.renderers.push(ret) : (window.renderers = [ret]);
 	return ret;
 }
 
@@ -28,7 +28,7 @@ function createScene() {
 
 	//this line just counts how many times we requested createRenderer()
 	//and not how many times we initialized ret
-	window.scenes ? window.scenes.push(ret) : (window.scenes = [ret]);
+	// window.scenes ? window.scenes.push(ret) : (window.scenes = [ret]);
 	return ret;
 }
 
@@ -46,6 +46,7 @@ const Scene = (props) => {
 	const [threeReady, setThreeReady] = useState(false);
 	const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
 	const [UI, setUI] = useState();
+
 	//Scene
 	const sceneRef = useRef(createScene());
 	const scene = sceneRef.current;
@@ -147,8 +148,6 @@ const Scene = (props) => {
 	}, []);
 
 	const initRoom = () => {
-		console.log('%c >INIT:3 - initRoom', 'color:green');
-
 		renderer.info.autoReset = true;
 
 		// set new reference for cameraRef.current here
@@ -172,17 +171,10 @@ const Scene = (props) => {
 
 		window.cancelAnimationFrame(window.animationId);
 		animate(controlsRef.current.update);
-		console.log('%c >INIT:3 - initRoom:end', 'color:green');
 	};
 
 	//New Scene INIT
 	useEffect(() => {
-		console.log('%c >INIT:2 - sceneView', 'color:green', {
-			scene,
-			cameraRef,
-			controlsRef,
-			renderer,
-		});
 		initRoom();
 
 		return () => {
@@ -234,14 +226,6 @@ const Scene = (props) => {
 			props.onMouseMove,
 		);
 
-		// keyboard event listeners
-		// const {
-		// 	addThreeEditorKeyboardEvents,
-		// 	removeThreeEditorKeyboardEvents,
-		// } = threeEditorKeyboardEvents(
-		// 	controlsRef,
-		// );
-		//
 		addThreeEditorMouseEventListeners();
 		// addThreeEditorKeyboardEvents();
 

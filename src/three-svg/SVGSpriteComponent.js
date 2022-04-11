@@ -13,10 +13,12 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 		this.svgString = '';
 		this.primaryColor = dotColor || 'black';
 		this.showIcon = showIcon;
+
 		// this.secondaryColor = secondaryColor || 'gray';
 		// * IMPORTANT: This needs to be white on init,
 		// * because by default the svg value that have modifiable fill colors are white.
 		this.color = color || 'white';
+
 		// * IMPORTANT: This needs to be 0 on init,
 		// * because by default the svg value that have modifiable transform x is 0.
 		this.rotationX = 0;
@@ -87,6 +89,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 				'Interactable Object can only have a single SVGSpriteComponent attached!',
 			);
 		}
+
 		if (this.showIcon) {
 			this.owner.setVisualObject(this.svgSprite);
 			this.owner.visualObject.renderOrder = 1000;

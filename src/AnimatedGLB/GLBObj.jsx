@@ -160,8 +160,8 @@ class GLBObj extends Component {
 			this.props.collect({
 				eventCategory: 'Intrepidations',
 				eventAction: this.props.type,
-				eventLabel: "Pick me up! Take me for a spin!",
-			})
+				eventLabel: 'Pick me up! Take me for a spin!',
+			});
 			var camDistance = this.camera.position.length();
 			var originalPos = this.camera.position.clone();
 			var targetPos = new THREE.Vector3(point.x, point.y, point.z);

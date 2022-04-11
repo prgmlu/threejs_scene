@@ -104,9 +104,6 @@ export default class HotspotMarker extends InteractionObject {
 
 	setTransform = (colliderTransform, visualTransform) => {
 		super.setTransform(colliderTransform, visualTransform);
-
-		const { x, y, z } = this.sceneObject.position;
-		this.setPosition(x, y, z);
 	};
 
 	setScale = (scale = 0.45) => {
