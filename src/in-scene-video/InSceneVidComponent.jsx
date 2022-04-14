@@ -48,7 +48,7 @@ export const createVidScreen = function (vid_source, transform) {
 	return videoScreen;
 };
 
-export const InSceneVidComponent = (props) => {
+const InSceneVidComponent = (props) => {
 	// let {src, position, scale, rotation, scene, sceneRef} = props;
 	let { src, transform, scene, sceneRef } = props;
 	scene = sceneRef?.current || scene;
@@ -66,3 +66,5 @@ export const InSceneVidComponent = (props) => {
 
 	return <div></div>;
 };
+
+export default InSceneVidComponent;
