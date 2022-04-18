@@ -42,6 +42,7 @@ const Scene = (props) => {
 		resetBGBeforeImageLoaded = false,
 		children,
 		fps = 60,
+		orbitControlsConfig = {},
 	} = props;
 	const [threeReady, setThreeReady] = useState(false);
 	const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
@@ -162,6 +163,7 @@ const Scene = (props) => {
 		controlsRef.current = ThreeController.setupControls(
 			cameraRef.current,
 			renderer,
+			orbitControlsConfig,
 		);
 
 		//TODO: properly initialize FlatScene.js

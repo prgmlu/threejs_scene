@@ -2,10 +2,14 @@ import * as THREE from 'three';
 import OrbitControls from './OrbitControls';
 
 class ThreeController {
-	setupControls(camera, renderer) {
+	setupControls(camera, renderer, orbitControlsConfig) {
 		this.startDistance = null;
 		this.camera = camera;
-		this.controls = new OrbitControls(this.camera, renderer.domElement);
+		this.controls = new OrbitControls(
+			this.camera,
+			renderer.domElement,
+			orbitControlsConfig,
+		);
 		// renderer.domElement.addEventListener('touchstart', (event)=>{
 		// if (event.touches.length != 1) {
 		//     event.preventDefault();

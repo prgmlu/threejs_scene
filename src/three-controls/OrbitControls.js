@@ -1,5 +1,6 @@
 import {
 	EventDispatcher,
+	MathUtils,
 	MOUSE,
 	Quaternion,
 	Spherical,
@@ -20,7 +21,7 @@ const _startEvent = { type: 'start' };
 const _endEvent = { type: 'end' };
 
 class OrbitControls extends EventDispatcher {
-	constructor(object, domElement) {
+	constructor(object, domElement, orbitControlsConfig) {
 		super();
 
 		if (domElement === undefined)
@@ -52,19 +53,28 @@ class OrbitControls extends EventDispatcher {
 
 		// How far you can orbit vertically, upper and lower limits.
 		// Range is 0 to Math.PI radians.
-		this.minPolarAngle = 0; // radians
-		this.maxPolarAngle = Math.PI; // radians
+		this.minPolarAngle = MathUtils.degToRad(
+			orbitControlsConfig?.min_vertical_angle || 0,
+		); // radians
+		this.maxPolarAngle = MathUtils.degToRad(
+			orbitControlsConfig?.max_vertical_angle || 180,
+		); // radians
 
 		// How far you can orbit horizontally, upper and lower limits.
 		// If set, the interval [ min, max ] must be a sub-interval of [ - 2 PI, 2 PI ], with ( max - min < 2 PI )
-		this.minAzimuthAngle = -Infinity; // radians
-		this.maxAzimuthAngle = Infinity; // radians
+		this.minAzimuthAngle = MathUtils.degToRad(
+			orbitControlsConfig?.min_horizontal_angle || 0,
+		); // radians
+		this.maxAzimuthAngle = MathUtils.degToRad(
+			orbitControlsConfig?.max_horizontal_angle || 359,
+		); // radians
 
 		// Set to true to enable damping (inertia)
 		// If damping is enabled, you must call controls.update() in your animation loop
 		this.enableDamping = false;
 		this.dampingFactor = 0.1;
 		this.dampingWindow = 250;
+
 		// This option actually enables dollying in and out; left as "zoom" for backwards compatibility.
 		// Set to false to disable zooming
 		this.enableZoom = true;
