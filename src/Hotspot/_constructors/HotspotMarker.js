@@ -44,15 +44,15 @@ export default class HotspotMarker extends InteractionObject {
 			//     // alert(svgString)
 			// }
 			//
-			if (userData.type === 'HotspotMarker') {
-				//change dot color
-				svgString = svgString.replace('white', this.primaryColor);
-				svgString = svgString.replace(/\<path/g, "<path opacity='1'");
-				svgString = svgString.replace(
-					/\<circle/g,
-					"<circle opacity='1'",
-				);
-			}
+			// if (userData.type === 'HotspotMarker') {
+			// 	//change dot color
+			// 	svgString = svgString.replace('white', this.primaryColor);
+			// 	svgString = svgString.replace(/\<path/g, "<path opacity='1'");
+			// 	svgString = svgString.replace(
+			// 		/\<circle/g,
+			// 		"<circle opacity='1'",
+			// 	);
+			// }
 			this.svgSpriteComponent.setSVGString(svgString);
 		});
 	}
@@ -74,7 +74,7 @@ export default class HotspotMarker extends InteractionObject {
 		const iconName = `hotspot-${fileName}-icon`;
 		const svgUrl =
 			this.imageURL ||
-			'https://cdn.obsess-vr.com/product-hotspot-icon-circle.svg';
+			'https://cdn.obsess-vr.com/default_icons/black_dot_in_white_circle.svg';
 		let svgFile = sessionStorage.getItem(iconName);
 
 		if (svgFile) return svgFile;
