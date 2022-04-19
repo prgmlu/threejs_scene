@@ -17,7 +17,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 		// this.secondaryColor = secondaryColor || 'gray';
 		// * IMPORTANT: This needs to be white on init,
 		// * because by default the svg value that have modifiable fill colors are white.
-		this.color = color || 'white';
+		this.color = color || 'black';
 
 		// * IMPORTANT: This needs to be 0 on init,
 		// * because by default the svg value that have modifiable transform x is 0.
