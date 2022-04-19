@@ -7,6 +7,7 @@ import {
 	setupCamera,
 } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
+import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
 import { Background, ColliderSphere } from '../three-background';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
@@ -228,13 +229,18 @@ const Scene = (props) => {
 			props.onMouseMove,
 		);
 
-		addThreeEditorMouseEventListeners();
-		// addThreeEditorKeyboardEvents();
 
+		const { addThreeEditorKeyboardEvents, removeThreeEditorKeyboardEvents } = threeEditorKeyboardEvents(
+			controlsRef,
+		)
+
+		addThreeEditorMouseEventListeners();
+		addThreeEditorKeyboardEvents();
+		
 		return () => {
 			removeThreeEditorMouseEventListeners();
+			removeThreeEditorKeyboardEvents();
 			resetHovers();
-			// removeThreeEditorKeyboardEvents();
 		};
 	}, [
 		sceneId,
