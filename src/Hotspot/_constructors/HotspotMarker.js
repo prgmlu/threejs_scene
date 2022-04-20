@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
 
@@ -11,6 +12,7 @@ export default class HotspotMarker extends InteractionObject {
 		secondaryColor = '#00000050',
 		arrowColor = null,
 		onClick = () => {},
+		animation = {},
 	}) {
 		super();
 		this.sceneObject.name = 'marker';
@@ -20,6 +22,9 @@ export default class HotspotMarker extends InteractionObject {
 
 		this.imageURL = imageURL;
 		this.isFlatBackground = false;
+
+		this.animation = animation;
+		this.clock = new THREE.Clock();
 
 		this.onClickCallBack = onClick;
 
@@ -100,6 +105,11 @@ export default class HotspotMarker extends InteractionObject {
 		);
 
 		this.attachComponent(this.svgSpriteComponent);
+
+		// Pulsing effect
+		if (this.animation) {
+			this.setHotspotAnimation();
+		}
 	};
 
 	setTransform = (colliderTransform, visualTransform) => {
@@ -110,5 +120,24 @@ export default class HotspotMarker extends InteractionObject {
 		this.sceneObject.scale.x = scale;
 		this.sceneObject.scale.y = scale;
 		this.sceneObject.scale.z = scale;
+		this.visualObject?.scale.copy(this.sceneObject.scale);
+	};
+
+	setHotspotAnimation = () => {
+		switch (this.animation.type) {
+			case 'pulsing': {
+				this.setPulsingHotspot();
+				break;
+			}
+			default:
+				break;
+		}
+	};
+
+	setPulsingHotspot = () => {
+		const elapsedTime = this.clock.getElapsedTime();
+		const { magnitude, speed, multiplier } = this.animation
+		this.setScale(magnitude + Math.sin(elapsedTime * multiplier) * speed);
+		requestAnimationFrame(this.setPulsingHotspot);
 	};
 }

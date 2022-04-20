@@ -4,12 +4,12 @@ import ThreeSceneObject from '../../three-base-components/ThreeSceneObject';
 import ThreeController from '../../three-controls/ThreeController';
 
 export default class ThreeFlatBackground extends ThreeSceneObject {
-	constructor() {
+	constructor(enablePan, type) {
 		super();
-
+		this.type = type;
 		this.geometry = null;
 		this.loader = this.setupTextureLoader();
-		this.controls = ThreeController.setupPanControls();
+		this.controls = ThreeController.setupPanControls(enablePan);
 		this.setInitialObject();
 		this.setPanArea = this.setPanArea.bind(this);
 	}
@@ -21,7 +21,8 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 			// wireframe:true
 		});
 
-		this.geometry = new THREE.PlaneGeometry(14.15, 14.15);
+		const width = this.type === 'zoom' ? 19.15 : 14.15 // Temp fix, we need to adjust this for different canvas sizes
+		this.geometry = new THREE.PlaneGeometry(width, 14.15);
 		this.sceneObject = new THREE.Mesh(this.geometry, material);
 		this.sceneObject.rotateY(THREE.Math.degToRad(90));
 		this.sceneObject.position.x = -10;
@@ -34,13 +35,12 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 	};
 
 	setPanArea() {
-		const canvasWidth = this.controls.domElement.offsetWidth;
-		const offset = (10.6 * canvasWidth) / 900;
-		const ratio = (14.15 * this.width) / 2 - offset;
-		const minMax = this.width > 1 ? ratio : 0;
-
-		this.controls.minPan = new THREE.Vector3(0, 0, 0);
-		this.controls.maxPan = new THREE.Vector3(0, 0, 0);
+		// const canvasWidth = this.controls.domElement.offsetWidth;
+		// const offset = (10.6 * canvasWidth) / 900;
+		// const ratio = (14.15 * this.width) / 2 - offset;
+		// const minMax = this.width > 1 ? ratio : 0;
+		// this.controls.minPan = new THREE.Vector3(0, 0, 0);
+		// this.controls.maxPan = new THREE.Vector3(0, 0, 0);
 	}
 
 	loadTexture = (url) => {
