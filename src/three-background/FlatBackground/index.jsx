@@ -8,6 +8,8 @@ const FlatBackground = ({
 	backgroundUrl,
 	resetBGBeforeImageLoaded,
 	imageIntegrity,
+	enablePan = false,
+	type,
 }) => {
 	const flatBackground = useRef();
 
@@ -17,7 +19,7 @@ const FlatBackground = ({
 			'color:green',
 			backgroundUrl,
 		);
-		flatBackground.current = new ThreeFlatBackground();
+		flatBackground.current = new ThreeFlatBackground(enablePan, type);
 		if (scene) flatBackground.current.addToScene(scene);
 		window.addEventListener('resize', flatBackground.current.setPanArea);
 

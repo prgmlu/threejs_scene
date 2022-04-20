@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { isMobile } from 'react-device-detect';
 import ThreeController from '../three-controls/ThreeController';
 import {
 	initThreeJSScene,
@@ -12,24 +13,23 @@ import { Background, ColliderSphere } from '../three-background';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 
-function createRenderer() {
-	// var renderer = new THREE.WebGLRenderer();
-	const ret = window.renderer || new THREE.WebGLRenderer();
-	window.renderer = ret;
 
-	//this line just counts how many times we requested createRenderer()
-	//and not how many times we initialized ret
-	// window.renderers ? window.renderers.push(ret) : (window.renderers = [ret]);
-	return ret;
-}
+function createRenderer(sceneId = 'asdf', type) {
+    let rendererKey;
 
-function createScene() {
-	const ret = window.scene || new THREE.Scene();
-	window.scene = ret;
+    switch(type){
+        case 'containerInstance':
+            rendererKey = `${type}_renderer`;
+        break;
+        case 'zoom':
+            rendererKey = `${sceneId}_renderer`;
+        break;
+    }
 
-	//this line just counts how many times we requested createRenderer()
-	//and not how many times we initialized ret
-	// window.scenes ? window.scenes.push(ret) : (window.scenes = [ret]);
+	const ret = window[rendererKey] || new THREE.WebGLRenderer();
+
+	window[rendererKey] = ret;
+
 	return ret;
 }
 
@@ -43,21 +43,24 @@ const Scene = (props) => {
 		resetBGBeforeImageLoaded = false,
 		children,
 		fps = 60,
+		type,
+		enablePan = false,
 		orbitControlsConfig = {},
 	} = props;
 	const [threeReady, setThreeReady] = useState(false);
 	const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
+    const [animationId, setAnimationId] = useState();
+    const timeOutRef = useRef(null);
 	const [UI, setUI] = useState();
-
 	//Scene
-	const sceneRef = useRef(createScene());
+	const sceneRef = useRef(new THREE.Scene());
 	const scene = sceneRef.current;
 
 	//Renderer
-	const rendererRef = useRef(createRenderer());
+	const rendererRef = useRef(createRenderer(sceneId, type));
 
 	let renderer = rendererRef.current;
-	const glContext = renderer?.domElement.getContext('webgl');
+	const glContext = renderer?.getContext('webgl');
 
 	// useRef used to prevent Scene from losing variable references.
 	const canvasRef = useRef();
@@ -71,16 +74,49 @@ const Scene = (props) => {
 			setMaxRenderOrderAction(renderOrder + 1);
 	};
 
-	const animate = (controllerUpdate) => {
-		setTimeout(() => {
-			window.animationId = requestAnimationFrame(() =>
-				animate(controllerUpdate),
+	const animate = (controllerUpdate = false, animationKey) => {
+		timeOutRef.current = setTimeout(() => {
+			if(animationKey){
+                window[animationKey] = requestAnimationFrame(() =>
+				animate(controllerUpdate, animationKey),
 			);
+            }
 		}, 1000 / fps);
 
-		renderer.render(scene, cameraRef.current);
+		renderer?.render(scene, cameraRef.current);
 
 		if (controllerUpdate) controllerUpdate();
+	};
+
+	const handleContextLoss = (e) => {
+		console.log(
+			'%c Context lost. restoring context...',
+			'color:red;text-decoration:underline',
+		);
+
+		e.preventDefault();
+		setTimeout((e) => {
+			console.log(
+				'%c Context lost. restoring context 2...',
+				'color:red;text-decoration:underline',
+			);
+
+			//restoreContext() will ONLY simulate restoring of the context
+			//run restore only if context lost, otherwise error will be thrown
+			// if(!glContext) loseExtension?.restoreContext();
+			glContext.getExtension('WEBGL_lose_context').restoreContext();
+			renderer.clear();
+		}, 50);
+	};
+
+	const handleContextRestored = () => {
+		console.log(
+			'%c Context restored',
+			'color:green;text-decoration:underline',
+		);
+		setupRenderer(rendererRef.current, canvas);
+		scene.add(cameraRef.current);
+		window.containerInstance_renderer?.forceContextRestore();
 	};
 
 	//1. Mount camera & setup renderer only once!!!
@@ -90,39 +126,9 @@ const Scene = (props) => {
 			'color:green',
 			JSON.parse(JSON.stringify({ rendererRef: rendererRef.current })),
 		);
-		const canvas = canvasRef.current;
+		let canvas = canvasRef.current;
 		initThreeJSScene(canvasRef, cameraRef, controlsRef, rendererRef, scene);
 		setThreeReady(true);
-
-		const handleContextLoss = (e) => {
-			console.log(
-				'%c Context lost. restoring context...',
-				'color:red;text-decoration:underline',
-			);
-
-			e.preventDefault();
-			setTimeout((e) => {
-				console.log(
-					'%c Context lost. restoring context 2...',
-					'color:red;text-decoration:underline',
-				);
-
-				//restoreContext() will ONLY simulate restoring of the context
-				//run restore only if context lost, otherwise error will be thrown
-				// if(!glContext) loseExtension?.restoreContext();
-				glContext.getExtension('WEBGL_lose_context').restoreContext();
-				renderer.clear();
-			}, 50);
-		};
-
-		const handleContextRestored = () => {
-			console.log(
-				'%c Context restored',
-				'color:green;text-decoration:underline',
-			);
-			setupRenderer(rendererRef.current, canvas);
-			scene.add(cameraRef.current);
-		};
 
 		renderer.domElement.addEventListener(
 			'webglcontextlost',
@@ -143,9 +149,10 @@ const Scene = (props) => {
 				'webglcontextrestored',
 				handleContextRestored,
 			);
-			renderer.dispose();
-			// renderer.forceContextLoss();//test
-			//cameraRef.current.dispose();
+			// canvas
+			canvasRef.current = null;
+			// Dispose the renderer and scene
+			clearRoom();
 		};
 	}, []);
 
@@ -171,9 +178,21 @@ const Scene = (props) => {
 		if (bgConf?.isFlatScene) controlsRef.current.enableRotate = false;
 
 		setupCamera(aspectRatio, cameraRef.current);
+		// window.cancelAnimationFrame(window.animationId);
+        
+        let animationKey;
 
-		window.cancelAnimationFrame(window.animationId);
-		animate(controlsRef.current.update);
+        switch(type){
+            case 'containerInstance':
+                animationKey = `${type}_animationId`;
+            break;
+            case 'zoom':
+                animationKey = `${sceneId}_animationId`;
+            break;
+        }
+        window[animationKey] = '';
+        setAnimationId(animationKey);
+		animate(controlsRef.current.update, animationKey);
 	};
 
 	//New Scene INIT
@@ -181,14 +200,6 @@ const Scene = (props) => {
 		initRoom();
 
 		return () => {
-			renderer.info.autoReset = false;
-			renderer.info.memory.textures = 0;
-			renderer.info.memory.geometries = 0;
-			renderer.renderLists.dispose();
-			renderer.info.reset();
-			renderer.state.reset();
-			controlsRef.current.dispose();
-
 			//ThreeBackgroundCube textures disposal.
 			//TODO: investigate where and when the reference on the objects was lost.
 			// and place cleanup solution in appropriate place.
@@ -199,17 +210,18 @@ const Scene = (props) => {
 						mesh?.dispose();
 					});
 				}
+				if (child?.type == 'PerspectiveCamera') {
+					scene.remove(child);
+				}
 			});
 
-			// scene.dispose();
-			renderer.dispose();
 			setUI(false); //Hide UI Modal when scene changed
 		};
 	}, [sceneId]);
 
 	//Events
 	useEffect(() => {
-		const canvasContainer = canvasRef.current;
+		let canvasContainer = canvasRef.current;
 
 		// mouse event listeners
 		const {
@@ -241,6 +253,8 @@ const Scene = (props) => {
 			removeThreeEditorMouseEventListeners();
 			removeThreeEditorKeyboardEvents();
 			resetHovers();
+			canvasContainer = null;
+			// removeThreeEditorKeyboardEvents();
 		};
 	}, [
 		sceneId,
@@ -249,6 +263,18 @@ const Scene = (props) => {
 		allowEventsForMarkerTypeOnly,
 		allowHotspotsToMove,
 	]); // eslint-disable-line
+
+    useEffect(()=>{
+        return(()=>{
+            // Clear Animation loop
+            if(animationId) {
+                window.cancelAnimationFrame(window[animationId])
+                clearTimeout(timeOutRef.current);
+                delete window[animationId];
+            }
+            
+        })
+    }, [animationId])
 
 	//windowResizer placed separately because it requires to track and call UI & setUI
 	//while at same time we DO NOT WANT to remount all events each time when UI changed
@@ -271,6 +297,28 @@ const Scene = (props) => {
 			window.removeEventListener('resize', windowResizeHandler);
 		};
 	}, [UI]);
+
+	const clearRoom = () => {
+		// Renderer
+		const rendererKey = `${sceneId}_renderer`;
+		delete window[rendererKey];
+
+		if (renderer) {
+			renderer.info.autoReset = false;
+			renderer.info.memory.textures = 0;
+			renderer.info.memory.geometries = 0;
+			renderer.renderLists.dispose();
+			renderer.info.reset();
+			renderer.state.reset();
+			renderer.forceContextLoss();
+			renderer.domElement.remove();
+			renderer.dispose();
+			renderer = null;
+			rendererRef.current = null;
+		}
+		// Controls
+		controlsRef.current.dispose();
+	};
 
 	const onDropEvent = (e) => {
 		e.preventDefault();
@@ -295,8 +343,8 @@ const Scene = (props) => {
 			)}
 
 			<div
-				id="canvas-wrapper"
-				className={'canvas-wrapper'}
+				id={props.id ? props.id : 'canvas-wrapper'}
+				className={props.id ? props.id : 'canvas-wrapper'}
 				ref={canvasRef}
 				onDragOver={(e) => e.preventDefault()}
 				onDrop={onDropEvent}
@@ -319,6 +367,8 @@ const Scene = (props) => {
 							camera={cameraRef.current}
 							resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
 							linkedScenes={props.linkedScenes}
+							enablePan={enablePan && isMobile}
+                            type={type}
 						/>
 					</>
 				)}

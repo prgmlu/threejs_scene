@@ -8,6 +8,8 @@ const Background = ({
 	resetBGBeforeImageLoaded,
 	camera,
 	linkedScenes,
+	enablePan = false,
+	type,
 }) => {
 	const [backgroundUrl, setBackgroundUrl] = useState('');
 	const [isFlatScene, setFlatScene] = useState(false);
@@ -33,6 +35,8 @@ const Background = ({
 			scene={scene}
 			resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
 			imageIntegrity={imageIntegrity}
+			enablePan={enablePan}
+			type={type}
 		/>
 	) : (
 		<BackgroundCube

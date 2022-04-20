@@ -122,6 +122,8 @@ class OrbitControls extends EventDispatcher {
 		this.position0 = this.object.position.clone();
 		this.zoom0 = this.object.zoom;
 
+		this.minPan = new Vector3(-3, 0, -3);
+		this.maxPan = new Vector3(3, 0, 3);
 		// the target DOM element for key events
 		this._domElementKeyEvents = null;
 
@@ -257,6 +259,9 @@ class OrbitControls extends EventDispatcher {
 					scope.target.add(panOffset);
 				}
 
+				if (scope.enablePan) {
+					scope.target.clamp(scope.minPan, scope.maxPan);
+				}
 				offset.setFromSpherical(spherical);
 
 				// rotate offset back to "camera-up-vector-is-up" space
