@@ -17,8 +17,8 @@ const TWEEN = require('@tweenjs/tween.js');
 const CUSTOM_OBJ = true;
 // const CUSTOM_OBJ = false;
 
-const updateCastingObjs = function () {
-	window.scene.children.forEach((i) => {
+const updateCastingObjs = function (scene) {
+	scene.children.forEach((i) => {
 		if (
 			i.position.x != 0 &&
 			i.position.y != 0 &&
@@ -294,7 +294,7 @@ class GLBObj extends Component {
 		if (window?.rayCastingCheckingObjs) {
 			return this.raycaster.intersectObjects(
 				window.rayCastingCheckingObjs.concat(
-					window.scene.children.filter((i) => i.type == 'Sprite'),
+					this.props.sceneRef.current.children.filter((i) => i.type == 'Sprite'),
 				),
 			);
 		}
@@ -315,7 +315,7 @@ class GLBObj extends Component {
 		this.scene = this.props.scene || this.props.sceneRef.current;
 		this.camera = this.props?.camera || window.c.object;
 		this.controls = this.props?.controlers || window.c;
-		this.renderer = this.props.renderer || window.renderer;
+		this.renderer = this.props.renderer || window['containerInstance_renderer'];
 
 		if (CUSTOM_OBJ) {
 			const light = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -349,7 +349,7 @@ class GLBObj extends Component {
 
 		this.raycaster = new THREE.Raycaster();
 
-		updateCastingObjs();
+		updateCastingObjs(this.props.sceneRef.current);
 	}
 
 	setVis(val) {

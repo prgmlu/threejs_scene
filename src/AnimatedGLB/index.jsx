@@ -112,7 +112,7 @@ class AnimatedGLBs extends Component {
 		rgbeLoader.load(
 			'https://cdn.obsess-vr.com/charlotte-tilbury/Footprint_Court_Env_v002.hdr',
 			(texture) => {
-				const generator = new THREE.PMREMGenerator(window.renderer);
+				const generator = new THREE.PMREMGenerator(window['containerInstance_renderer']);
 				generator.compileEquirectangularShader();
 				var envMap = generator.fromEquirectangular(texture).texture;
 				scene.environment = envMap;
