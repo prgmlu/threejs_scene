@@ -13,25 +13,86 @@ import { Background, ColliderSphere } from '../three-background';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 
+const createRenderer = (sceneId = '', type) => {
+	let rendererKey;
 
-function createRenderer(sceneId = 'asdf', type) {
-    let rendererKey;
-
-    switch(type){
-        case 'containerInstance':
-            rendererKey = `${type}_renderer`;
-        break;
-        case 'zoom':
-            rendererKey = `${sceneId}_renderer`;
-        break;
-    }
+	switch (type) {
+		case 'containerInstance':
+			rendererKey = `${type}_renderer`;
+			break;
+		case 'zoom':
+			rendererKey = `${sceneId}_renderer`;
+			break;
+	}
 
 	const ret = window[rendererKey] || new THREE.WebGLRenderer();
 
 	window[rendererKey] = ret;
-
+	ret.info.autoReset = true;
 	return ret;
-}
+};
+
+const createOrGetCamera = (camType, canvasRef, sceneId = '', type) => {
+	const aspectRatio =
+		canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
+	const camera = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
+
+	let cameraKey;
+
+	switch (type) {
+		case 'containerInstance':
+			cameraKey = `${type}_${camType}_camera`;
+			break;
+		case 'zoom':
+			cameraKey = `${sceneId}_${camType}_camera`;
+			break;
+	}
+
+	if (window[cameraKey]) {
+		return window[cameraKey];
+	}
+
+	window[cameraKey] = camera;
+	setupCamera(camera);
+	return window[cameraKey];
+};
+
+const createOrGetControls = (
+	camType,
+	cameraRef,
+	renderer,
+	orbitControlsConfig,
+	sceneId,
+	type,
+) => {
+	let controllerKey;
+
+	switch (type) {
+		case 'containerInstance':
+			controllerKey = `${type}_${camType}_controller`;
+			break;
+		case 'zoom':
+			controllerKey = `${sceneId}_${camType}_controller`;
+			break;
+	}
+
+	if (window[controllerKey]) {
+		return window[controllerKey];
+	}
+
+	const controls = ThreeController.setupControls(
+		cameraRef.current,
+		renderer,
+		orbitControlsConfig,
+	);
+
+	if (camType === 'flat') {
+		controls.enableRotate = false;
+	}
+
+	window[controllerKey] = controls;
+	return window[controllerKey];
+};
 
 const Scene = (props) => {
 	const {
@@ -49,8 +110,8 @@ const Scene = (props) => {
 	} = props;
 	const [threeReady, setThreeReady] = useState(false);
 	const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
-    const [animationId, setAnimationId] = useState();
-    const timeOutRef = useRef(null);
+	const [animationId, setAnimationId] = useState();
+	const timeOutRef = useRef(null);
 	const [UI, setUI] = useState();
 	//Scene
 	const sceneRef = useRef(new THREE.Scene());
@@ -76,11 +137,11 @@ const Scene = (props) => {
 
 	const animate = (controllerUpdate = false, animationKey) => {
 		timeOutRef.current = setTimeout(() => {
-			if(animationKey){
-                window[animationKey] = requestAnimationFrame(() =>
-				animate(controllerUpdate, animationKey),
-			);
-            }
+			if (animationKey) {
+				window[animationKey] = requestAnimationFrame(() =>
+					animate(controllerUpdate, animationKey),
+				);
+			}
 		}, 1000 / fps);
 
 		renderer?.render(scene, cameraRef.current);
@@ -157,41 +218,43 @@ const Scene = (props) => {
 	}, []);
 
 	const initRoom = () => {
-		renderer.info.autoReset = true;
+		let camType = 'cube';
+
+		if (bgConf?.isFlatScene) {
+			camType = 'flat';
+		} else if (Object.keys(orbitControlsConfig).length > 0) {
+			camType = 'custom';
+		}
 
 		// set new reference for cameraRef.current here
-		const aspectRatio =
-			canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
-		cameraRef.current = new THREE.PerspectiveCamera(
-			70,
-			aspectRatio,
-			0.1,
-			1000,
+		cameraRef.current = createOrGetCamera(
+			camType,
+			canvasRef,
+			sceneId,
+			type,
 		);
-		controlsRef.current = ThreeController.setupControls(
-			cameraRef.current,
+
+		controlsRef.current = createOrGetControls(
+			camType,
+			cameraRef,
 			renderer,
 			orbitControlsConfig,
+			sceneId,
+			type,
 		);
 
-		//TODO: properly initialize FlatScene.js
-		if (bgConf?.isFlatScene) controlsRef.current.enableRotate = false;
+		let animationKey;
 
-		setupCamera(aspectRatio, cameraRef.current);
-		// window.cancelAnimationFrame(window.animationId);
-        
-        let animationKey;
-
-        switch(type){
-            case 'containerInstance':
-                animationKey = `${type}_animationId`;
-            break;
-            case 'zoom':
-                animationKey = `${sceneId}_animationId`;
-            break;
-        }
-        window[animationKey] = '';
-        setAnimationId(animationKey);
+		switch (type) {
+			case 'containerInstance':
+				animationKey = `${type}_animationId`;
+				break;
+			case 'zoom':
+				animationKey = `${sceneId}_animationId`;
+				break;
+		}
+		window[animationKey] = '';
+		setAnimationId(animationKey);
 		animate(controlsRef.current.update, animationKey);
 	};
 
@@ -241,20 +304,19 @@ const Scene = (props) => {
 			props.onMouseMove,
 		);
 
-
-		const { addThreeEditorKeyboardEvents, removeThreeEditorKeyboardEvents } = threeEditorKeyboardEvents(
-			controlsRef,
-		)
+		const {
+			addThreeEditorKeyboardEvents,
+			removeThreeEditorKeyboardEvents,
+		} = threeEditorKeyboardEvents(controlsRef);
 
 		addThreeEditorMouseEventListeners();
 		addThreeEditorKeyboardEvents();
-		
+
 		return () => {
 			removeThreeEditorMouseEventListeners();
 			removeThreeEditorKeyboardEvents();
 			resetHovers();
 			canvasContainer = null;
-			// removeThreeEditorKeyboardEvents();
 		};
 	}, [
 		sceneId,
@@ -264,17 +326,16 @@ const Scene = (props) => {
 		allowHotspotsToMove,
 	]); // eslint-disable-line
 
-    useEffect(()=>{
-        return(()=>{
-            // Clear Animation loop
-            if(animationId) {
-                window.cancelAnimationFrame(window[animationId])
-                clearTimeout(timeOutRef.current);
-                delete window[animationId];
-            }
-            
-        })
-    }, [animationId])
+	useEffect(() => {
+		return () => {
+			// Clear Animation loop
+			if (animationId) {
+				window.cancelAnimationFrame(window[animationId]);
+				clearTimeout(timeOutRef.current);
+				delete window[animationId];
+			}
+		};
+	}, [animationId]);
 
 	//windowResizer placed separately because it requires to track and call UI & setUI
 	//while at same time we DO NOT WANT to remount all events each time when UI changed
@@ -368,7 +429,8 @@ const Scene = (props) => {
 							resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
 							linkedScenes={props.linkedScenes}
 							enablePan={enablePan && isMobile}
-                            type={type}
+							type={type}
+							controller={controlsRef.current}
 						/>
 					</>
 				)}

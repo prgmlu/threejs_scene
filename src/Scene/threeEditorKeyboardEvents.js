@@ -1,6 +1,4 @@
-export const threeEditorKeyboardEvents = (
-	controlsRef,
-) => {
+export const threeEditorKeyboardEvents = (controlsRef) => {
 	const onArrowKeysForSceneRotation = (e) => {
 		if (e.shiftKey === false) return;
 
@@ -32,7 +30,6 @@ export const threeEditorKeyboardEvents = (
 			controlsRef.current.update();
 		}
 	};
-
 
 	const addThreeEditorKeyboardEvents = () => {
 		document.addEventListener('keydown', onArrowKeysForSceneRotation);

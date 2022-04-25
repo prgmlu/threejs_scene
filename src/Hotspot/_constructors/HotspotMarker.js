@@ -136,7 +136,7 @@ export default class HotspotMarker extends InteractionObject {
 
 	setPulsingHotspot = () => {
 		const elapsedTime = this.clock.getElapsedTime();
-		const { magnitude, speed, multiplier } = this.animation
+		const { magnitude, speed, multiplier } = this.animation;
 		this.setScale(magnitude + Math.sin(elapsedTime * multiplier) * speed);
 		requestAnimationFrame(this.setPulsingHotspot);
 	};

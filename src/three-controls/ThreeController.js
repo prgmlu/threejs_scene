@@ -31,7 +31,7 @@ class ThreeController {
 			window.counter += 1;
 		}
 
-		if (window.counter > 1) {
+		if (window.count > 1) {
 			renderer.domElement.addEventListener('touchend', (event) => {
 				this.startDistance = null;
 			});

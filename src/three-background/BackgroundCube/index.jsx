@@ -10,11 +10,12 @@ const BackgroundCube = ({
 	imageIntegrity,
 	useWebp,
 	skipLargest,
+	controller,
 }) => {
 	const cube = useRef();
 
 	useEffect(() => {
-		cube.current = new ThreeBackgroundCube(camera);
+		cube.current = new ThreeBackgroundCube(camera, controller);
 		cube.current.addToScene(scene);
 
 		return () => {
@@ -24,13 +25,14 @@ const BackgroundCube = ({
 	}, []); // eslint-disable-line
 
 	useEffect(() => {
-		if (backgroundUrl)
+		if (backgroundUrl) {
 			cube.current.loadCubeTextureFromPriorityArray(
 				backgroundUrl,
 				imageIntegrity,
 				useWebp,
 				skipLargest,
 			);
+		}
 	}, [backgroundUrl]);
 
 	// useEffect(() => {
