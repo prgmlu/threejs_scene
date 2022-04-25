@@ -10,6 +10,7 @@ const Background = ({
 	linkedScenes,
 	enablePan = false,
 	type,
+	controller,
 }) => {
 	const [backgroundUrl, setBackgroundUrl] = useState('');
 	const [isFlatScene, setFlatScene] = useState(false);
@@ -47,6 +48,7 @@ const Background = ({
 			imageIntegrity={imageIntegrity}
 			useWebp={useWebp}
 			skipLargest={skipLargest}
+			controller={controller}
 		/>
 	);
 };

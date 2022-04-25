@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import ThreeSceneObject from '../../three-base-components/ThreeSceneObject';
-import ThreeController from '../../three-controls/ThreeController';
+import { setupCamera } from '../../Scene/setupThreeEditor';
 import { Geometry } from 'three/examples/jsm/deprecated/Geometry';
 
 const LOD_TO_GRID_SEGMENTS_MAP = Object.freeze({
@@ -20,7 +20,7 @@ const LOD_TO_RESOLUTION = Object.freeze({
 //units length of the store
 const STORE_SIZE = 20;
 //how many points to sample on the plane.  Used to check if the face is visible or not
-const PTS_COUNT = 100;
+const PTS_COUNT = 16;
 // how many requests to prioritize, currently prioritizing level 2 and 3
 // so 6 * 2 = 12
 const PRIORITIZED_COUNT = 12;
@@ -69,7 +69,7 @@ const defaultPriorityArray = [
 ];
 
 export default class ThreeBackgroundCube extends ThreeSceneObject {
-	constructor(camera) {
+	constructor(camera, controller) {
 		super();
 
 		//get initialized from loadCubeTextureFromPriorityArray
@@ -92,7 +92,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			this.sceneObject.add(this.faces[face].mesh);
 		});
 
-		this.controls = ThreeController.setupRotateControls();
+		this.controller = controller;
 	}
 
 	getDefaultFaces = () => {
@@ -242,14 +242,20 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 		skipLargest,
 	) => {
 		this.url = url;
-		this.dispose();
+		// this.dispose();
 		this.initPriorityArray();
 		window.addEventListener(
 			'click',
 			this.updateViewableFacesAndSortPriorityArray,
 		);
+		window.addEventListener(
+			'touchstart',
+			this.updateViewableFacesAndSortPriorityArray,
+		);
 		//transform into a while loop, and pop elements from the front
 		let initiatorUrl = this.url;
+		this.didCameraReset = false;
+
 		while (this.priorityArrayMap[this.url].length > 0) {
 			if (initiatorUrl !== this.url) {
 				return;
@@ -278,10 +284,21 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			this.updateFace(face, level);
 			this.faces[face].mesh.material = tiles;
 			this.faces[face].LOD += 1;
+
+			if (!this.didCameraReset) {
+				setupCamera(this.camera);
+				this.controller.update();
+				this.didCameraReset = true;
+			}
 		}
+
 		this.updateViewableFacesAndSortPriorityArray();
 		window.removeEventListener(
 			'click',
+			this.updateViewableFacesAndSortPriorityArray,
+		);
+		window.removeEventListener(
+			'touchstart',
 			this.updateViewableFacesAndSortPriorityArray,
 		);
 	};
@@ -397,6 +414,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 		Object.keys(this.faces).forEach((face) => {
 			let currentFace = this.faces[face];
 			currentFace?.mesh?.geometry?.dispose();
+			// debugger;
 			// if (currentFace.mesh.geometry) {
 			//     console.log("dispose geometry ", face)
 			// }

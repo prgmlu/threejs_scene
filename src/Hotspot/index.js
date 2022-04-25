@@ -27,7 +27,6 @@ const Hotspot = (props) => {
 		accessibilityHighlightColor,
 	} = props;
 
-
 	const markerRef = useRef();
 
 	useEffect(() => {
@@ -84,18 +83,24 @@ const Hotspot = (props) => {
 		e.preventDefault();
 		e.stopPropagation();
 		onMouseUp(e, undefined, markerRef.current, undefined);
-	}
-	
+	};
+
 	const highlightMarker = (marker) => {
 		if (!marker.svgSpriteComponent.svgString) return;
-		if (navMarkerIndex === activeNavIndex && marker.userData.type === 'NavMarker') {
+		if (
+			navMarkerIndex === activeNavIndex &&
+			marker.userData.type === 'NavMarker'
+		) {
 			marker.svgSpriteComponent.setColor(accessibilityHighlightColor);
-		} else if (hotspotMarkerIndex === activeHotspotIndex && marker.userData.type === 'HotspotMarker') {
+		} else if (
+			hotspotMarkerIndex === activeHotspotIndex &&
+			marker.userData.type === 'HotspotMarker'
+		) {
 			marker.svgSpriteComponent.setColor(accessibilityHighlightColor);
 		} else {
 			marker.svgSpriteComponent.setColor(marker.primaryColor);
 		}
-	}
+	};
 
 	useEffect(() => {
 		highlightMarker(markerRef.current);

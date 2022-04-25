@@ -12,4 +12,3 @@ export const formatDate = (date, format) => {
 
 	return format.replace(/mm|dd|hh|yy|yyy/gi, (matched) => map[matched]);
 };
-
