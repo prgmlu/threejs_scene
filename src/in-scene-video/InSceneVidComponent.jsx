@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import React, { useEffect, useRef } from 'react';
-import { vShader, fShader } from './shaders';
+import { fShader, vShader } from './shaders';
 
 export const createNormalVidMaterial = function (video, geometry) {
 	const videoTexture = new THREE.VideoTexture(video);
@@ -10,7 +10,7 @@ export const createNormalVidMaterial = function (video, geometry) {
 	const loader = new THREE.TextureLoader();
 	loader.crossOrigin = '';
 
-	var materialParams = {
+	let materialParams = {
 		transparent: true,
 		side: THREE.DoubleSide,
 		opacity: 1,
@@ -18,119 +18,95 @@ export const createNormalVidMaterial = function (video, geometry) {
 		map: videoTexture,
 	};
 
-	var videoMaterial = new THREE.MeshBasicMaterial({ ...materialParams });
-
-	return videoMaterial;
+	return new THREE.MeshBasicMaterial({ ...materialParams });
 };
 
-export const createGreenScreenMaterial = function (keyColor){
-	var width = 1280;
-	var height = 720;
-	var keyColor = keyColor;
+export const createGreenScreenMaterial = function (keyColor) {
+	let width = 1280;
+	let height = 720;
 
-	var vals = {
-        uniforms: {
-          tex: {
-            value: null
-          },
-          keyColor: {
-            value: new THREE.Color(keyColor)
-          },
-          texWidth: {
-            value: width
-          },
-          texHeight: {
-            value: height
-          },
-          similarity: {
-            value: .4
-          },
-          smoothness: {
-            value: 0.08
-          },
-          spill: {
-            value: .1
-          }
+	let vals = {
+		uniforms: {
+			tex: {
+				value: null,
+			},
+			keyColor: {
+				value: new THREE.Color(keyColor),
+			},
+			texWidth: {
+				value: width,
+			},
+			texHeight: {
+				value: height,
+			},
+			similarity: {
+				value: 0.4,
+			},
+			smoothness: {
+				value: 0.08,
+			},
+			spill: {
+				value: 0.1,
+			},
+		},
+		vertexShader: vShader,
+		fragmentShader: fShader,
 
-        },
-        vertexShader: vShader,
-        fragmentShader: fShader,
-
-        transparent: true,
-        opacity: 0
-      };
-	var sMat = new THREE.ShaderMaterial();
+		transparent: true,
+		opacity: 0,
+	};
+	let sMat = new THREE.ShaderMaterial();
+	sMat.side = THREE.DoubleSide;
 	sMat.setValues(vals);
 
-  return sMat;
-}
+	return sMat;
+};
 
-
-const createVidDomForNormalVid = function (src) {
-	var video = document.createElement('video');
+const createVidDom = function (src) {
+	let video = document.createElement('video');
 	video.src = src;
 	video.setAttribute('webkit-playsinline', '');
 	video.crossOrigin = 'anonymous';
 	video.setAttribute('playsinline', '');
 	video.setAttribute('loop', 'loop');
 	video.setAttribute('autoplay', 'autoplay');
-	video.muted = true;
-	video.play();
+	video.autoplay = true;
+	// video.muted = true;
+	// video.play();
 	return video;
 };
-
-
-
-const createVidDomForGreenScreen = function (src, scene, vidMesh) {
-	var video = document.createElement('video');
-	video.addEventListener('loadeddata', () => {
-
-		window.addEventListener('click', () => {
-			video.play();
-			scene.add(vidMesh);
-		})
-		window.addEventListener('touchend', () => {
-			video.play();
-			scene.add(vidMesh);
-		})
-	})
-	video.src = src;
-	video.setAttribute('webkit-playsinline', '');
-	video.crossOrigin = 'anonymous';
-	video.setAttribute('playsinline', '');
-	//   video.setAttribute('loop', 'loop');
-	// video.setAttribute('autoplay', 'false');
-	video.muted = false;
-	return video;
-}
-
 
 const InSceneVidComponent = (props) => {
 	let { src, scene, transform, keyColor, sceneRef } = props;
 	scene = sceneRef?.current || scene;
-	var vidMesh = useRef(null);
 
+	let domVid = useRef(null);
+	let vidMesh = useRef(null);
+
+	const onVideoCanPlay = () => {
+		scene.add(vidMesh.current);
+	};
 
 	useEffect(() => {
-		var geometry = new THREE.PlaneGeometry(1, 1);
-		geometry.scale(- 1, 1, 1);
+		let geometry = new THREE.PlaneGeometry(1, 1);
+		geometry.scale(-1, 1, 1);
 
 		if (keyColor) {
-			var material = createGreenScreenMaterial(keyColor);
+			//green screen
+			let material = createGreenScreenMaterial(keyColor);
 			vidMesh.current = new THREE.Mesh(geometry, material);
-			const video = createVidDomForGreenScreen(src, scene, vidMesh.current);
+			domVid.current = createVidDom(src);
+			// domVid.current.loop = false;
 
-			var texture = new THREE.VideoTexture(video);
-			vidMesh.current.material.uniforms.tex.value = texture;
+			vidMesh.current.material.uniforms.tex.value =
+				new THREE.VideoTexture(domVid.current);
+		} else {
+			domVid.current = createVidDom(src);
+			let material = createNormalVidMaterial(domVid.current, geometry);
+			vidMesh.current = new THREE.Mesh(geometry, material);
 		}
 
-		else {
-			const video = createVidDomForNormalVid(src);
-			var material = createNormalVidMaterial(video, geometry);
-			vidMesh.current = new THREE.Mesh(geometry, material);
-			 
-			scene.add(vidMesh.current);
-		}
+		domVid.current.addEventListener('canplay', onVideoCanPlay);
 
 		let transformMatrix = new THREE.Matrix4();
 		transformMatrix.elements = transform;
@@ -142,7 +118,10 @@ const InSceneVidComponent = (props) => {
 		);
 
 		return () => {
+			domVid.current.removeEventListener('canplay', onVideoCanPlay);
+
 			scene.remove(vidMesh.current);
+			domVid.current.pause();
 		};
 	}, [scene]);
 
