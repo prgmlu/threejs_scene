@@ -8,6 +8,12 @@ import {
 	Vector2,
 	Vector3,
 } from 'three';
+import {
+	MAX_AZIMUTH_ANGLE,
+	MAX_POLAR_ANGLE,
+	MIN_AZIMUTH_ANGLE,
+	MIN_POLAR_ANGLE,
+} from '../utils/constants';
 
 // This set of controls performs orbiting, dollying (zooming), and panning.
 // Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
@@ -51,23 +57,7 @@ class OrbitControls extends EventDispatcher {
 		this.minZoom = 0;
 		this.maxZoom = Infinity;
 
-		// How far you can orbit vertically, upper and lower limits.
-		// Range is 0 to Math.PI radians.
-		this.minPolarAngle = MathUtils.degToRad(
-			orbitControlsConfig?.min_vertical_angle || 0,
-		); // radians
-		this.maxPolarAngle = MathUtils.degToRad(
-			orbitControlsConfig?.max_vertical_angle || 180,
-		); // radians
-
-		// How far you can orbit horizontally, upper and lower limits.
-		// If set, the interval [ min, max ] must be a sub-interval of [ - 2 PI, 2 PI ], with ( max - min < 2 PI )
-		this.minAzimuthAngle = MathUtils.degToRad(
-			orbitControlsConfig?.min_horizontal_angle || 0,
-		); // radians
-		this.maxAzimuthAngle = MathUtils.degToRad(
-			orbitControlsConfig?.max_horizontal_angle || 359,
-		); // radians
+		this.setupRotateControls(orbitControlsConfig);
 
 		// Set to true to enable damping (inertia)
 		// If damping is enabled, you must call controls.update() in your animation loop
@@ -1093,25 +1083,29 @@ class OrbitControls extends EventDispatcher {
 	}
 
 	setupRotateControls(orbitControlsConfig) {
-		// this.controls.enableRotate = true;
-		// // this.controls.enablePan = false;
-		// this.controls.rotateSpeed = 0.3;
-		console.log('=> setupRotateControls', orbitControlsConfig);
 		this.minPolarAngle = MathUtils.degToRad(
-			orbitControlsConfig?.min_vertical_angle || 0,
+			'min_vertical_angle' in orbitControlsConfig
+				? orbitControlsConfig.min_vertical_angle
+				: MIN_POLAR_ANGLE,
 		);
 
 		this.maxPolarAngle = MathUtils.degToRad(
-			orbitControlsConfig?.max_vertical_angle || 180,
+			'max_vertical_angle' in orbitControlsConfig
+				? orbitControlsConfig.max_vertical_angle
+				: MAX_POLAR_ANGLE,
 		);
 
 		this.minAzimuthAngle = MathUtils.degToRad(
-			orbitControlsConfig?.min_horizontal_angle || 0,
+			'min_horizontal_angle' in orbitControlsConfig
+				? orbitControlsConfig.min_horizontal_angle
+				: MIN_AZIMUTH_ANGLE,
 		); // radians
 
 		this.maxAzimuthAngle = MathUtils.degToRad(
-			orbitControlsConfig?.max_horizontal_angle || 359,
-		); // radians
+			'max_horizontal_angle' in orbitControlsConfig
+				? orbitControlsConfig.max_horizontal_angle
+				: MAX_AZIMUTH_ANGLE,
+		);
 	}
 }
 

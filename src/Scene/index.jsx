@@ -92,7 +92,6 @@ const createOrGetControls = (
 	}
 
 	window[controllerKey] = controls;
-	console.log('=> controls', controls);
 	return window[controllerKey];
 };
 
@@ -221,13 +220,11 @@ const Scene = (props) => {
 
 	const initRoom = () => {
 		let camType = 'cube';
-		console.log('=> initRoom', orbitControlsConfig);
 		if (bgConf?.isFlatScene) {
 			camType = 'flat';
 		} else if (Object.keys(orbitControlsConfig).length > 0) {
 			camType = 'custom';
 		}
-		console.log('=> camType', camType);
 		// set new reference for cameraRef.current here
 		cameraRef.current = createOrGetCamera(
 			camType,
@@ -279,7 +276,7 @@ const Scene = (props) => {
 						mesh?.dispose();
 					});
 				}
-				if (child?.type == 'PerspectiveCamera') {
+				if (child?.type === 'PerspectiveCamera') {
 					scene.remove(child);
 				}
 			});
