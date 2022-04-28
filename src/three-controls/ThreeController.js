@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import OrbitControls from './OrbitControls';
+import { MathUtils } from 'three';
 
 class ThreeController {
 	setupControls(camera, renderer, orbitControlsConfig) {
@@ -88,15 +89,6 @@ class ThreeController {
 		}
 		// this.controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
 		// this.controls.mouseButtons.RIGHT = THREE.MOUSE.DOLLY;
-		return this.controls;
-	}
-
-	setupRotateControls() {
-		// this.controls.enableRotate = true;
-		// // this.controls.enablePan = false;
-		// this.controls.rotateSpeed = 0.3;
-		// this.controls.maxPolarAngle = Math.PI;
-
 		return this.controls;
 	}
 }

@@ -1091,6 +1091,28 @@ class OrbitControls extends EventDispatcher {
 
 		this.update();
 	}
+
+	setupRotateControls(orbitControlsConfig) {
+		// this.controls.enableRotate = true;
+		// // this.controls.enablePan = false;
+		// this.controls.rotateSpeed = 0.3;
+		console.log('=> setupRotateControls', orbitControlsConfig);
+		this.minPolarAngle = MathUtils.degToRad(
+			orbitControlsConfig?.min_vertical_angle || 0,
+		);
+
+		this.maxPolarAngle = MathUtils.degToRad(
+			orbitControlsConfig?.max_vertical_angle || 180,
+		);
+
+		this.minAzimuthAngle = MathUtils.degToRad(
+			orbitControlsConfig?.min_horizontal_angle || 0,
+		); // radians
+
+		this.maxAzimuthAngle = MathUtils.degToRad(
+			orbitControlsConfig?.max_horizontal_angle || 359,
+		); // radians
+	}
 }
 
 // This set of controls performs orbiting, dollying (zooming), and panning.

@@ -35,7 +35,6 @@ const createRenderer = (sceneId = '', type) => {
 const createOrGetCamera = (camType, canvasRef, sceneId = '', type) => {
 	const aspectRatio =
 		canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
-	const camera = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
 
 	let cameraKey;
 
@@ -51,6 +50,8 @@ const createOrGetCamera = (camType, canvasRef, sceneId = '', type) => {
 	if (window[cameraKey]) {
 		return window[cameraKey];
 	}
+
+	const camera = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
 
 	window[cameraKey] = camera;
 	setupCamera(camera);
@@ -91,6 +92,7 @@ const createOrGetControls = (
 	}
 
 	window[controllerKey] = controls;
+	console.log('=> controls', controls);
 	return window[controllerKey];
 };
 
@@ -219,13 +221,13 @@ const Scene = (props) => {
 
 	const initRoom = () => {
 		let camType = 'cube';
-
+		console.log('=> initRoom', orbitControlsConfig);
 		if (bgConf?.isFlatScene) {
 			camType = 'flat';
 		} else if (Object.keys(orbitControlsConfig).length > 0) {
 			camType = 'custom';
 		}
-
+		console.log('=> camType', camType);
 		// set new reference for cameraRef.current here
 		cameraRef.current = createOrGetCamera(
 			camType,
@@ -242,6 +244,10 @@ const Scene = (props) => {
 			sceneId,
 			type,
 		);
+
+		if (Object.keys(orbitControlsConfig).length > 0) {
+			controlsRef.current.setupRotateControls(orbitControlsConfig);
+		}
 
 		let animationKey;
 
