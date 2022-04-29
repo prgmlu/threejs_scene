@@ -121,7 +121,15 @@ const InSceneVidComponent = (props) => {
 			domVid.current.removeEventListener('canplay', onVideoCanPlay);
 
 			scene.remove(vidMesh.current);
+			vidMesh.material.map=null;
+			vidMesh.material.dispose();
+			vidMesh.geometry.dispose();
+
 			domVid.current.pause();
+			domVid.current.empty()     
+			domVid.current.load()      
+			delete domVid.current;
+			domVid.current.remove()
 		};
 	}, [scene]);
 
