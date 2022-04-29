@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
+import { browserName } from 'react-device-detect';
+import { VRButton } from 'three/examples/jsm/webxr/VRButton';
 
 export const initThreeJSScene = (
 	canvasRef,
@@ -33,6 +35,16 @@ export const setupRenderer = (renderer, canvasContainer) => {
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 	renderer.setClearColor('black');
+
+	// Enable XR and other features per browser name
+	switch(browserName){
+		case "Oculus Browser":
+			document.body.appendChild(VRButton.createButton(renderer));
+			renderer.xr.enabled = true;
+			break;
+		default:
+			renderer.xr.enabled = false;
+	}
 	canvasContainer.appendChild(renderer.domElement);
 };
 

@@ -137,17 +137,25 @@ const Scene = (props) => {
 	};
 
 	const animate = (controllerUpdate = false, animationKey) => {
-		timeOutRef.current = setTimeout(() => {
-			if (animationKey) {
-				window[animationKey] = requestAnimationFrame(() =>
-					animate(controllerUpdate, animationKey),
-				);
-			}
-		}, 1000 / fps);
+		
+		if (renderer.xr.enabled) {
+			renderer.setAnimationLoop(() => {
+				renderer?.render(scene, cameraRef.current);
+				if (controllerUpdate) controllerUpdate();
+			});
+		} else {
+			timeOutRef.current = setTimeout(() => {
+				if (animationKey) {
+					window[animationKey] = requestAnimationFrame(() =>
+						animate(controllerUpdate, animationKey),
+					);
+				}
+			}, 1000 / fps);
 
-		renderer?.render(scene, cameraRef.current);
+			renderer?.render(scene, cameraRef.current);
 
-		if (controllerUpdate) controllerUpdate();
+			if (controllerUpdate) controllerUpdate();
+		}
 	};
 
 	const handleContextLoss = (e) => {
