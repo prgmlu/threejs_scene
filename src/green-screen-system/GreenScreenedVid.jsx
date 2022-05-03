@@ -98,12 +98,14 @@ export default function GreenScreenedVid(vid, pos,rot,keyColor, similarity=.4, s
     vidMesh.rotation.x = rot.x;
     vidMesh.rotation.y = rot.y;
     vidMesh.rotation.z = rot.z;
-    
 
+    
+    if(vid){
     const video = vid;
 
     var texture = new THREE.VideoTexture(video);
     vidMesh.material.uniforms.tex.value = texture;
+    }
 
     return vidMesh;
 }
