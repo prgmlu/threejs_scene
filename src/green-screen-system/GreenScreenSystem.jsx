@@ -147,10 +147,27 @@ class GreenScreenSystem extends Component {
     }
 
     componentWillUnmount(){
+
         this.meshes.forEach((mesh)=>{
-            if(!mesh) return;
-			this.scene.remove(mesh);
+            if(mesh){
+                this.scene.remove(mesh);
+                mesh.material.map=null;
+                mesh.material.dispose();
+                mesh.geometry.dispose();
+            }
         })
+
+
+        this.vids.forEach((domVid)=>{
+            if(domVid){
+                domVid.pause();
+                // domVid.empty();     
+                // domVid.load();     
+                // delete domVid;
+                domVid.remove()
+            }
+        })
+
     }
 
     render() {
