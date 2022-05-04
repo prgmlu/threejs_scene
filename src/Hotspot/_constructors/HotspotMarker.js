@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
+import { rotateSVGX } from '../../utils/svgHelpers';
 
 export default class HotspotMarker extends InteractionObject {
 	constructor({
@@ -36,28 +37,12 @@ export default class HotspotMarker extends InteractionObject {
 
 		this.fetchSVGIcon().then((svgString) => {
 			if (userData.props.sprite_rotation_degree) {
-				svgString = svgString.replace(
-					'rotate(',
-					'rotate(' + userData.props.sprite_rotation_degree,
+				svgString = rotateSVGX(
+					svgString,
+					userData.props.sprite_rotation_degree,
 				);
 			}
-			// if (userData.type === 'NavMarker'){
-			//     //change arrow color
-			//     svgString = svgString.replace("path fill='#FFFFFF","path fill='"+this.arrowColor)
-			//     svgString = svgString.replace(/\<path/g,"<path opacity='.5'")
-			//     svgString = svgString.replace(/\<circle/g,"<circle opacity='.5'")
-			//     // alert(svgString)
-			// }
-			//
-			// if (userData.type === 'HotspotMarker') {
-			// 	//change dot color
-			// 	svgString = svgString.replace('white', this.primaryColor);
-			// 	svgString = svgString.replace(/\<path/g, "<path opacity='1'");
-			// 	svgString = svgString.replace(
-			// 		/\<circle/g,
-			// 		"<circle opacity='1'",
-			// 	);
-			// }
+
 			this.svgSpriteComponent.setSVGString(svgString);
 		});
 	}
