@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import GreenScreenedVid from './GreenScreenedVid.jsx';
+import * as THREE from 'three';
 
 const getFacePos = (face)=>{
     switch (face){
         case 'front':
-            return {x:-5,y:0,z:0}
+            return {x:-10+.001,y:0,z:0}
         case 'right':
-            return {x:0,y:0,z:-5}
+            return {x:0,y:0,z:-10+.001}
         case 'back':
-            return {x:5,y:0,z:0}
+            return {x:10-.001,y:0,z:0}
         case 'top':
-            return {x:0,y:5,z:0}
+            return {x:0,y:10-.001,z:0}
 
         // need to test these vals
         case 'left':
-            return {x:0,y:0,z:5}
+            return {x:0,y:0,z:10-.001}
         case 'bottom':
-            return {x:0,y:-5,z:0}
+            return {x:0,y:-10+.001,z:0}
 
     }
 }
@@ -40,18 +41,6 @@ const getFaceRot = (face)=>{
 
     }
 }
-
-const createVidDom = function (src) {
-    var video = document.createElement('video');
-    video.src = src;
-    video.setAttribute('webkit-playsinline', '');
-    video.crossOrigin = 'anonymous';
-    video.setAttribute('playsinline', '');
-    video.setAttribute('loop', 'loop');
-    // video.setAttribute('autoplay', 'true');
-    video.muted = true;
-    return video;
-  }
   
 class GreenScreenSystem extends Component {
     constructor(props){
@@ -63,45 +52,38 @@ class GreenScreenSystem extends Component {
         this.smoothness = this.props.smoothness;
         this.spill = this.props.spill;
         this.keyColor = this.props.keyColor;
-    }
-
-    componentDidMount(){
+        
         this.positions = [
             //front
-            {x:-5,y:0,z:0},
+            {x:-10+.001,y:0,z:0},
             //right
-            {x:0,y:0,z:-5},
+            {x:0,y:0,z:-10+.001},
             //back
-            {x:5,y:0,z:0},
+            {x:10-.001,y:0,z:0},
             //top
-            {x:0,y:5,z:0},
-
+            {x:0,y:10-.001,z:0},
+    
             //need to test these vals
             //left
-            {x:0,y:0,z:5},
+            {x:0,y:0,z:10-.001},
             //bottom
-            {x:0,y:-5,z:0}
+            {x:0,y:-10+.001,z:0}
         ]
-
+    
         this.rotations = [
             {x:0,y:-Math.PI/2,z:0},
             {x:0,y:-Math.PI,z:0},
             {x:0,y:Math.PI/2,z:0},
             {x:-Math.PI/2,y:0,z:-Math.PI/2},
-
+    
             //need to test these vals
             {x:0,y:0,z:0},
             {x:Math.PI/2,y:0,z:Math.PI/2},
         ]
-        
-        this.vids = this.srcs.map((src)=>{
-            let face = Object.keys(src)[0];
-            let vidSrc = src[face];
-            if (vidSrc && (vidSrc!='') )
-                return createVidDom(vidSrc)
-            else return null;
-        });
 
+    }
+    componentDidMount(){
+        // once they are all true, the videos get placed in the scene
         this.loadedVidsFlags = [];
 
         this.loadedVidsFlags = this.srcs.map((src)=>{
@@ -112,39 +94,50 @@ class GreenScreenSystem extends Component {
             return true
         })
 
-        this.meshes = this.vids.map((vid,indx)=>{
-            if(vid){
-                let faceName = Object.keys(this.srcs[indx])[0];
+        this.meshes = this.srcs.map((src,indx)=>{
+            if(Object.keys(src)[0]){
+                let faceName = Object.keys(src)[0];
                 let pos = getFacePos(faceName);
                 let rot = getFaceRot(faceName);
-                return GreenScreenedVid(vid, pos, rot,this.keyColor, this.similarity, this.smoothness, this.spill);
+                return GreenScreenedVid(null, pos, rot,this.keyColor, this.similarity, this.smoothness, this.spill);
             }
             else{
                 return null;
             }
         })
-        
-        this.vids.forEach((vid,indx)=>{
-            if(vid){
-                vid.addEventListener('loadeddata',()=>{
-                    this.loadedVidsFlags[indx] = true;
-                    // alert('loaded');
-                    
-                    //if it doesn't include false, means all are loaded
-                    if(!this.loadedVidsFlags.includes(false)){
-                        this.vids.forEach((vid,indx)=>{
-                            if(vid){
-                                
-                                vid.play();
-                                this.scene.add(this.meshes[indx]);
-                            }
-                        })
-                    }
-                })
+
+        this.vids = [null, null, null, null, null, null]
+        for(var i=0; i<6; i++){
+            let src = this.srcs[i];
+            let face = Object.keys(src)[0];
+            let vidSrc = src[face];
+            if (vidSrc){
+                this.vids[i] = this.createVidDom(vidSrc, this.meshes[i])
+                this.vids[i].play();
             }
-        })
+        }
+        
 
     }
+
+    createVidDom = (src, vidMesh) => {
+        var video = document.createElement('video');
+
+        video.addEventListener('loadeddata', () => {
+            this.scene.add(vidMesh);
+          })
+
+        video.src = src;
+        video.setAttribute('webkit-playsinline', '');
+        video.crossOrigin = 'anonymous';
+        video.setAttribute('playsinline', '');
+        video.setAttribute('loop', 'loop');
+        // video.setAttribute('autoplay', 'true');
+        video.muted = true;
+        var texture = new THREE.VideoTexture(video);
+        vidMesh.material.uniforms.tex.value = texture;
+        return video;
+      }
 
     componentWillUnmount(){
 

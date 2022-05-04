@@ -84,7 +84,7 @@ const createGreenScreenMaterial = function (width, height, keyColor, similarity=
 } // ChromakeyMaterial
 
 export default function GreenScreenedVid(vid, pos,rot,keyColor, similarity=.4, smoothness=0.135, spill=0.9) {
-    var geometry = new THREE.PlaneGeometry(10, 10);
+    var geometry = new THREE.PlaneGeometry(20, 20);
     geometry.scale(- 1, 1, 1);
     
     let material = createGreenScreenMaterial(1280, 720, keyColor, similarity, smoothness, spill);
