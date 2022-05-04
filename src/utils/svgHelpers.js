@@ -9,6 +9,9 @@ const extractValuesFromRotateString = (rotateString) => {
 
 export const rotateSVGX = (svgString, rotateDegree) => {
 	const rotateString = getRotateString(svgString);
+	if (!rotateString) {
+		return svgString;
+	}
 	const rotateValues = extractValuesFromRotateString(rotateString);
 	rotateValues[0] = rotateDegree;
 	svgString = svgString.replace(
