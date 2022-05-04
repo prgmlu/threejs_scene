@@ -35,7 +35,6 @@ export const setupRenderer = (renderer, canvasContainer) => {
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 	renderer.setClearColor('black');
-
 	// Enable XR and other features per browser name
 	switch(browserName){
 		case "Oculus Browser":

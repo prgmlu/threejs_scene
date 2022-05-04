@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import OrbitControls from './OrbitControls';
-import { MathUtils } from 'three';
+import {XRControllerModelFactory} from 'three/examples/jsm/webxr/XRControllerModelFactory';
 
 class ThreeController {
 	setupControls(camera, renderer, orbitControlsConfig) {
@@ -91,6 +91,46 @@ class ThreeController {
 		// this.controls.mouseButtons.RIGHT = THREE.MOUSE.DOLLY;
 		return this.controls;
 	}
+    
+    setupVRControls(renderer, scene){
+
+        const controllerModelFactory = new XRControllerModelFactory();
+
+        const geometry = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0,0,0),
+            new THREE.Vector3(0,0,-1)
+        ]);
+
+        // This is a temporary helper line to let the user aim at the objects in scene
+        const line = new THREE.Line(geometry);
+        line.name = 'line';
+        line.scale.z = 0;
+
+        const controllers = []; // We return an arra for the 2 controllers
+        const gripControls = []
+
+        for(let i=0; i<=1; i++){
+
+            // Used for pointing in Z axis. Returns a THREEJS group
+            const controller = renderer.xr.getController(i);
+            controller.add(line.clone());
+            controller.userData.selectPressed = false;
+            scene.add(controller);
+            
+            controllers.push(controller);
+
+            // Used to manipulate objects in the 3D space with the controller. Returns a THREEJS group
+            const grip = renderer.xr.getControllerGrip(i);
+            grip.add(controllerModelFactory.createControllerModel(grip))
+            scene.add(grip);
+
+            gripControls.push(grip);
+        }
+
+		this.raycaster = new THREE.Raycaster();
+
+        return [controllers, gripControls, this.controls];
+    }
 }
 
 export default new ThreeController();

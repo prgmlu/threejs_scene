@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { isMobile } from 'react-device-detect';
 import ThreeController from '../three-controls/ThreeController';
 import {
-	initThreeJSScene,
-	setupRenderer,
-	setupCamera,
+    initThreeJSScene,
+    setupRenderer,
+    setupCamera,
 } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
+import { threeEditorVREvents } from './threeEditorVREvents';
 import { Background, ColliderSphere } from '../three-background';
+import { isMobile, browserName } from 'react-device-detect';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 
@@ -128,6 +129,11 @@ const Scene = (props) => {
 	const canvasRef = useRef();
 	const cameraRef = useRef();
 	const controlsRef = useRef();
+
+	// VR helpers
+	const vrControlsRef = useRef([]);
+	const vrGripControlsRef = useRef([]);
+	const isOculusDevice = browserName == "Oculus Browser" ? true : false;
 
 	sceneRef.current.setUI = setUI;
 
@@ -250,6 +256,16 @@ const Scene = (props) => {
 			type,
 		);
 
+		if(isOculusDevice){
+			const vrControllers = ThreeController.setupVRControls(
+				renderer,
+				scene
+			)[0];
+			vrControlsRef.current = vrControllers;
+			const light = new THREE.HemisphereLight( 0xffffff, 0x080820, 0.8 );
+			scene.add( light ); 
+		}
+
 		if (Object.keys(orbitControlsConfig).length > 0) {
 			controlsRef.current.setupRotateControls(orbitControlsConfig);
 		}
@@ -336,6 +352,31 @@ const Scene = (props) => {
 		allowEventsForMarkerTypeOnly,
 		allowHotspotsToMove,
 	]); // eslint-disable-line
+
+	// VR Events
+	useEffect(() => {
+
+		// Add VR event listeners
+		if(isOculusDevice){
+			const {
+				addThreeEditorVREventListeners,
+				removeThreeEditorVREventListeners
+			} = threeEditorVREvents(
+				sceneRef,
+				vrControlsRef,
+				vrGripControlsRef,
+				cameraRef,
+				props.onMouseUp,
+			);
+	
+			addThreeEditorVREventListeners();
+		}
+
+		return () => {
+			if(isOculusDevice) removeThreeEditorVREventListeners();
+		};
+	}, [sceneRef, vrControlsRef]);
+
 
 	useEffect(() => {
 		return () => {
