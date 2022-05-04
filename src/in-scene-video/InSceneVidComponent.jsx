@@ -77,7 +77,7 @@ const createVidDom = function (src) {
 };
 
 const InSceneVidComponent = (props) => {
-	let { src, scene, transform, keyColor, sceneRef } = props;
+	let { src, scene, transform, keyColor, sceneRef, onPlay, onPause, onEnd } = props;
 	scene = sceneRef?.current || scene;
 
 	let domVid = useRef(null);
@@ -117,7 +117,10 @@ const InSceneVidComponent = (props) => {
 			vidMesh.current.scale,
 		);
 
+		onPlay(domVid);
+
 		return () => {
+			onEnd();
 			domVid.current.removeEventListener('canplay', onVideoCanPlay);
 
 			scene.remove(vidMesh.current);
