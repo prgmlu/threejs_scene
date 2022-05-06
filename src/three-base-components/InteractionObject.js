@@ -138,7 +138,8 @@ export default class InteractionObject extends ThreeSceneObject {
 
 	/**
 	 * Set the transform of the visualObject attached to this InteractableObject.
-	 * @param {Array} transformArray - 4x4 matrix transform of the visualObject
+	 * @param colliderTransform
+	 * @param visualTransform
 	 */
 	setTransform(colliderTransform, visualTransform) {
 		const colliderMatrix = new THREE.Matrix4();

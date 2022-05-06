@@ -30,6 +30,10 @@ export default class SVGSprite extends THREE.Sprite {
 		this.material.needsUpdate = true;
 	}
 
+	setVisibility = (value) => {
+		this.material.visible = value;
+	};
+
 	dispose = () => {
 		if (this.material.map) this.material.map.dispose();
 	};
