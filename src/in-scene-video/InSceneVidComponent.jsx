@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	createGreenScreenMaterial,
 	createNormalVidMaterial,
@@ -131,14 +131,16 @@ const InSceneVidComponent = (props) => {
 			videoMeshRef.current.geometry.dispose();
 		}
 
+		videoControls.dispose();
 		videoRef.current.pause();
 		videoRef.current.load();
 		videoRef.current.remove();
 
 		videoRef.current.removeEventListener('canplay', onVideoCanPlay);
 		videoRef.current.removeEventListener('ended', onVideoEnd);
-		document.addEventListener('ended', triggerAutoPlay);
-		document.addEventListener('ended', triggerAutoPlay);
+
+		document.removeEventListener('touchend', triggerAutoPlay);
+		document.removeEventListener('click', triggerAutoPlay);
 	};
 
 	useEffect(() => {
@@ -150,7 +152,6 @@ const InSceneVidComponent = (props) => {
 
 		setupVideoMesh();
 		setTransform();
-
 		videoRef.current.addEventListener('canplay', onVideoCanPlay);
 		videoRef.current.addEventListener('ended', onVideoEnd);
 

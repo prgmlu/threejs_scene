@@ -86,5 +86,6 @@ export const createVidDom = function (
 		video.setAttribute('muted', '');
 		video.muted = muted;
 	}
+	video.currentTime = 0.01;
 	return video;
 };
