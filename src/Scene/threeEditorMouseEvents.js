@@ -194,6 +194,7 @@ export const threeEditorMouseEvents = (
 		const coord = setMousePosition(mouseStart, e, isMobileEvent);
 		mouseCoord.set(coord.x, coord.y);
 		raycaster.setFromCamera(mouseStart, cameraRef.current);
+
 		const intersects = raycaster.intersectObjects(
 			sceneRef.current.children,
 		);

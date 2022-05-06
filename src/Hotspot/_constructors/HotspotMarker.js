@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
-import { rotateSVGX } from '../../utils/svgHelpers';
 
 export default class HotspotMarker extends InteractionObject {
 	constructor({
@@ -21,7 +20,7 @@ export default class HotspotMarker extends InteractionObject {
 		this.userData = userData; //stores custom user data
 		this.UIConfig = UIConfig; //could be used for modals
 
-		this.imageURL = imageURL;
+		// this.imageURL = imageURL;
 		this.isFlatBackground = false;
 
 		this.animation = animation;
@@ -34,51 +33,12 @@ export default class HotspotMarker extends InteractionObject {
 
 		//SVG Icon
 		this.svgSpriteComponent = new SVGSpriteComponent(iconConfig);
-
-		this.fetchSVGIcon().then((svgString) => {
-			if (userData.props.sprite_rotation_degree) {
-				svgString = rotateSVGX(
-					svgString,
-					userData.props.sprite_rotation_degree,
-				);
-			}
-
-			this.svgSpriteComponent.setSVGString(svgString);
-		});
+		this.svgSpriteComponent.setSvgFromUrl(imageURL, userData);
 	}
 
 	onClick = () => {
 		if (this.onClickCallBack) {
 			this.onClickCallBack();
-		}
-	};
-
-	fetchSVGIcon = async () => {
-		const fileData = this.imageURL
-			? this.imageURL.split('/').pop().split('.')
-			: false;
-		if (fileData && fileData[1] !== 'svg')
-			console.error('Improper hotspot image format. Must be svg');
-
-		const fileName = fileData?.[0] || 'default';
-		const iconName = `hotspot-${fileName}-icon`;
-		const svgUrl =
-			this.imageURL ||
-			'https://cdn.obsess-vr.com/default_icons/black_dot_in_white_circle.svg';
-		let svgFile = sessionStorage.getItem(iconName);
-
-		if (svgFile) return svgFile;
-		else {
-			return fetch(svgUrl)
-				.then((response) => {
-					if (response.status === 200) return response.text();
-					throw new Error('svg load error!');
-				})
-				.then((res) => {
-					sessionStorage.setItem(iconName, res);
-					return res;
-				})
-				.catch((error) => Promise.reject(error));
 		}
 	};
 

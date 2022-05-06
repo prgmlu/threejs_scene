@@ -1,142 +1,165 @@
 import * as THREE from 'three';
 import React, { useEffect, useRef } from 'react';
+import {
+	createGreenScreenMaterial,
+	createNormalVidMaterial,
+	createVidDom,
+} from '../utils/videoHelpers.js';
+import VideoControls from './VideoControls';
+import { DEFAULT_PAUSE_ICON, DEFAULT_PLAY_ICON } from '../utils/constants';
 import { fShader, vShader } from './shaders';
 
-export const createNormalVidMaterial = function (video, geometry) {
-	const videoTexture = new THREE.VideoTexture(video);
-	videoTexture.minFilter = THREE.LinearFilter;
-	videoTexture.magFilter = THREE.LinearFilter;
-
-	const loader = new THREE.TextureLoader();
-	loader.crossOrigin = '';
-
-	let materialParams = {
-		transparent: true,
-		side: THREE.DoubleSide,
-		opacity: 1,
-		toneMapped: false,
-		map: videoTexture,
-	};
-
-	return new THREE.MeshBasicMaterial({ ...materialParams });
-};
-
-export const createGreenScreenMaterial = function (keyColor) {
-	let width = 1280;
-	let height = 720;
-
-	let vals = {
-		uniforms: {
-			tex: {
-				value: null,
-			},
-			keyColor: {
-				value: new THREE.Color(keyColor),
-			},
-			texWidth: {
-				value: width,
-			},
-			texHeight: {
-				value: height,
-			},
-			similarity: {
-				value: 0.4,
-			},
-			smoothness: {
-				value: 0.08,
-			},
-			spill: {
-				value: 0.1,
-			},
-		},
-		vertexShader: vShader,
-		fragmentShader: fShader,
-
-		transparent: true,
-		opacity: 0,
-	};
-	let sMat = new THREE.ShaderMaterial();
-	sMat.side = THREE.DoubleSide;
-	sMat.setValues(vals);
-
-	return sMat;
-};
-
-const createVidDom = function (src) {
-	let video = document.createElement('video');
-	video.src = src;
-	video.setAttribute('webkit-playsinline', '');
-	video.crossOrigin = 'anonymous';
-	video.setAttribute('playsinline', '');
-	video.setAttribute('loop', 'loop');
-	video.setAttribute('autoplay', 'autoplay');
-	video.autoplay = true;
-	// video.muted = true;
-	// video.play();
-	return video;
-};
-
 const InSceneVidComponent = (props) => {
-	let { src, scene, transform, keyColor, sceneRef, onPlay, onPause, onEnd } = props;
-	scene = sceneRef?.current || scene;
+	const {
+		src,
+		transform,
+		keyColor,
+		sceneRef,
+		onPlay,
+		onPause,
+		userData = {},
+	} = props;
 
-	let domVid = useRef(null);
-	let vidMesh = useRef(null);
+	const scene = sceneRef?.current;
+	const autoplay = userData?.props?.autoplay || false;
+	const muted = userData?.props?.muted || false;
+	const loop = userData?.props?.muted || false;
+	const enableControls = userData?.props?.controls?.enable || false;
+
+	let videoRef = useRef(null);
+	let videoMeshRef = useRef(null);
+
+	let videoControls;
+
+	const autoplayAfterFirstInteraction = () => {
+		document.addEventListener('click', triggerAutoPlay);
+		document.addEventListener('touchend', triggerAutoPlay);
+	};
+
+	const triggerAutoPlay = () => {
+		playVideo().catch(() => {
+			autoplayAfterFirstInteraction();
+		});
+	};
 
 	const onVideoCanPlay = () => {
-		scene.add(vidMesh.current);
+		scene.add(videoMeshRef.current);
+		if (autoplay) {
+			triggerAutoPlay();
+		}
+	};
+
+	const addToStackIfUnmute = () => {
+		if (!muted) {
+			onPlay(videoRef);
+		}
+	};
+
+	const playVideo = () => {
+		return videoRef.current.play().then(() => {
+			addToStackIfUnmute();
+		});
+	};
+
+	const onUserPlaysVideo = () => {
+		playVideo();
+	};
+
+	const onUserPausesVideo = () => {
+		if (!muted) {
+			onPause();
+		}
+	};
+
+	const onVideoEnd = () => {
+		if (!loop) {
+			onPause();
+		}
+	};
+
+	const setVideoControls = () => {
+		videoControls = new VideoControls(
+			scene,
+			transform,
+			onUserPlaysVideo,
+			onUserPausesVideo,
+			DEFAULT_PLAY_ICON,
+			DEFAULT_PAUSE_ICON,
+			userData,
+		);
+	};
+
+	const setTransform = () => {
+		const transformMatrix = new THREE.Matrix4();
+		transformMatrix.elements = transform;
+		transformMatrix.decompose(
+			videoMeshRef.current.position,
+			videoMeshRef.current.quaternion,
+			videoMeshRef.current.scale,
+		);
+	};
+
+	const setVideoDom = () => {
+		videoRef.current = createVidDom(src, autoplay, muted, loop);
+	};
+
+	const setupVideoMesh = () => {
+		const geometry = new THREE.PlaneGeometry(1, 1);
+		geometry.scale(-1, 1, 1);
+		if (keyColor) {
+			//green screen
+			const material = createGreenScreenMaterial(
+				keyColor,
+				fShader,
+				vShader,
+			);
+			videoMeshRef.current = new THREE.Mesh(geometry, material);
+			videoMeshRef.current.material.uniforms.tex.value =
+				new THREE.VideoTexture(videoRef.current);
+		} else {
+			const material = createNormalVidMaterial(videoRef.current);
+			videoMeshRef.current = new THREE.Mesh(geometry, material);
+		}
+	};
+
+	const onComponentUmount = () => {
+		scene.remove(videoMeshRef.current);
+
+		if (videoMeshRef.current.material) {
+			videoMeshRef.current.material.map = null;
+			videoMeshRef.current.material.dispose();
+			videoMeshRef.current.geometry.dispose();
+		}
+
+		videoRef.current.pause();
+		videoRef.current.load();
+		videoRef.current.remove();
+
+		videoRef.current.removeEventListener('canplay', onVideoCanPlay);
+		videoRef.current.removeEventListener('ended', onVideoEnd);
+		document.addEventListener('ended', triggerAutoPlay);
+		document.addEventListener('ended', triggerAutoPlay);
 	};
 
 	useEffect(() => {
-		let geometry = new THREE.PlaneGeometry(1, 1);
-		geometry.scale(-1, 1, 1);
+		setVideoDom();
 
-		if (keyColor) {
-			//green screen
-			let material = createGreenScreenMaterial(keyColor);
-			vidMesh.current = new THREE.Mesh(geometry, material);
-			domVid.current = createVidDom(src);
-			// domVid.current.loop = false;
-
-			vidMesh.current.material.uniforms.tex.value =
-				new THREE.VideoTexture(domVid.current);
-		} else {
-			domVid.current = createVidDom(src);
-			let material = createNormalVidMaterial(domVid.current, geometry);
-			vidMesh.current = new THREE.Mesh(geometry, material);
+		if (enableControls) {
+			setVideoControls();
 		}
 
-		domVid.current.addEventListener('canplay', onVideoCanPlay);
+		setupVideoMesh();
+		setTransform();
 
-		let transformMatrix = new THREE.Matrix4();
-		transformMatrix.elements = transform;
-
-		transformMatrix.decompose(
-			vidMesh.current.position,
-			vidMesh.current.quaternion,
-			vidMesh.current.scale,
-		);
-
-		onPlay(domVid);
+		videoRef.current.addEventListener('canplay', onVideoCanPlay);
+		videoRef.current.addEventListener('ended', onVideoEnd);
 
 		return () => {
-			onEnd();
-			domVid.current.removeEventListener('canplay', onVideoCanPlay);
-
-			scene.remove(vidMesh.current);
-			vidMesh.material.map=null;
-			vidMesh.material.dispose();
-			vidMesh.geometry.dispose();
-
-			domVid.current.pause();
-			domVid.current.empty()     
-			domVid.current.load()      
-			delete domVid.current;
-			domVid.current.remove()
+			onComponentUmount();
 		};
 	}, [scene]);
 
-	return <div></div>;
+	return null;
 };
 
 export default InSceneVidComponent;

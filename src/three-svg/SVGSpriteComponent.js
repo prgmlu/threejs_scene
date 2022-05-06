@@ -1,5 +1,6 @@
 import ThreeSceneObjectComponent from '../three-base-components/ThreeSceneObjectComponent';
 import SVGSprite from './SVGSprite';
+import { fetchSVGIcon, rotateSVGX } from '../utils/svgHelpers';
 
 // This component controls the interaction of the SVGSprite. We can further
 // break this down to smaller components but I don't think it's necessary at the moment
@@ -13,7 +14,6 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 		this.svgString = '';
 		this.primaryColor = dotColor || 'black';
 		this.showIcon = showIcon;
-
 		// this.secondaryColor = secondaryColor || 'gray';
 		// * IMPORTANT: This needs to be white on init,
 		// * because by default the svg value that have modifiable fill colors are white.
@@ -26,6 +26,25 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 		this.svgSprite = new SVGSprite();
 		this.dispose = this.dispose.bind(this);
 	}
+
+	setSvgFromUrl = (imageUrl, userData) => {
+		fetchSVGIcon(imageUrl).then((iconData) => {
+			if (userData?.props?.sprite_rotation_degree) {
+				this.setSVGString(
+					rotateSVGX(
+						iconData,
+						userData?.props?.sprite_rotation_degree,
+					),
+				);
+			} else {
+				this.setSVGString(iconData);
+			}
+		});
+	};
+
+	setVisibility = (value) => {
+		this.svgSprite.setVisibility(value);
+	};
 
 	setSVGString = (svgString) => {
 		this.svgString = svgString;
@@ -68,14 +87,10 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 
 	onHover = () => {
 		document.body.style.cursor = 'pointer';
-		// if (this.color === this.secondaryColor) return;
-		// this.setColor(this.secondaryColor);
 	};
 
 	onUnhover = () => {
 		document.body.style.cursor = 'default';
-		// if (this.color === this.primaryColor) return;
-		// this.setColor(this.primaryColor);
 	};
 
 	onClick() {} // eslint-disable-line
