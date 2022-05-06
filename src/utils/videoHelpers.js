@@ -77,10 +77,10 @@ export const createVidDom = function (
 		video.loop = loop;
 	}
 
-	if (autoplay) {
-		video.setAttribute('autoplay', 'autoplay');
-		video.autoplay = autoplay;
-	}
+	// if (autoplay) {
+	// 	video.setAttribute('autoplay', 'autoplay');
+	// 	video.autoplay = autoplay;
+	// }
 
 	if (muted) {
 		video.setAttribute('muted', '');

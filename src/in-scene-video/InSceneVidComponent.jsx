@@ -138,7 +138,6 @@ const InSceneVidComponent = (props) => {
 
 		videoRef.current.removeEventListener('canplay', onVideoCanPlay);
 		videoRef.current.removeEventListener('ended', onVideoEnd);
-
 		document.removeEventListener('touchend', triggerAutoPlay);
 		document.removeEventListener('click', triggerAutoPlay);
 	};
