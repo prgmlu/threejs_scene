@@ -33,6 +33,8 @@ export default class VideoControls extends InteractionObject {
 		this.userData = userData;
 		this.playIconUrl = playIconUrl;
 		this.pauseIconUrl = pauseIconUrl;
+
+		this.hideIcon();
 	}
 
 	_setScale = () => {
@@ -95,8 +97,6 @@ export default class VideoControls extends InteractionObject {
 
 	onUnhover = () => {
 		this.svgSpriteComponent.onUnhover();
-		if (this.playing) {
-			this.hideIcon();
-		}
+		this.hideIcon();
 	};
 }
