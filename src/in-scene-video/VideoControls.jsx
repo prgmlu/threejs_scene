@@ -97,7 +97,6 @@ export default class VideoControls extends InteractionObject {
 	};
 
 	onHover = () => {
-		console.log('=> VideoControls:onHover', this._playing);
 		this.svgSpriteComponent.onHover();
 		this.showIcon();
 	};
