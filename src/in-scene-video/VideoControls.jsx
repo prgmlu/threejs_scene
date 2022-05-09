@@ -4,14 +4,6 @@ import SVGSpriteComponent from '../three-svg/SVGSpriteComponent';
 export default class VideoControls extends InteractionObject {
 	_playing = false;
 
-	set playing(value) {
-		this._playing = value;
-	}
-
-	get playing() {
-		return this._playing;
-	}
-
 	constructor(
 		scene,
 		controlsTransform,
@@ -24,6 +16,7 @@ export default class VideoControls extends InteractionObject {
 		super();
 		this.sceneObject.name = 'marker';
 		this.svgSpriteComponent = new SVGSpriteComponent({ showIcon: true });
+		this.svgSpriteComponent.setVisibility(false);
 		this.svgSpriteComponent.setSvgFromUrl(playIconUrl);
 		this.addToScene(scene);
 		this.setTransform(controlsTransform);
@@ -33,8 +26,23 @@ export default class VideoControls extends InteractionObject {
 		this.userData = userData;
 		this.playIconUrl = playIconUrl;
 		this.pauseIconUrl = pauseIconUrl;
+	}
 
-		this.hideIcon();
+	setIconForPlayingState = (playing) => {
+		if (playing) {
+			this.svgSpriteComponent.setSvgFromUrl(this.pauseIconUrl);
+		} else {
+			this.svgSpriteComponent.setSvgFromUrl(this.playIconUrl);
+		}
+	};
+
+	set playing(value) {
+		this.setIconForPlayingState(value);
+		this._playing = value;
+	}
+
+	get playing() {
+		return this._playing;
 	}
 
 	_setScale = () => {
@@ -71,13 +79,11 @@ export default class VideoControls extends InteractionObject {
 
 	play = () => {
 		this.onPlay();
-		this.svgSpriteComponent.setSvgFromUrl(this.pauseIconUrl);
 		this.hideIcon();
 	};
 
 	pause = () => {
 		this.onPause();
-		this.svgSpriteComponent.setSvgFromUrl(this.playIconUrl);
 		this.showIcon();
 	};
 
@@ -91,6 +97,7 @@ export default class VideoControls extends InteractionObject {
 	};
 
 	onHover = () => {
+		console.log('=> VideoControls:onHover', this._playing);
 		this.svgSpriteComponent.onHover();
 		this.showIcon();
 	};

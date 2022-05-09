@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
 	createGreenScreenMaterial,
 	createNormalVidMaterial,
@@ -138,8 +138,19 @@ const InSceneVidComponent = (props) => {
 
 		videoRef.current.removeEventListener('canplay', onVideoCanPlay);
 		videoRef.current.removeEventListener('ended', onVideoEnd);
+		videoRef.current.removeEventListener('play', onPlaying);
+		videoRef.current.removeEventListener('paused', onPaused);
+
 		document.removeEventListener('touchend', triggerAutoPlay);
 		document.removeEventListener('click', triggerAutoPlay);
+	};
+
+	const onPlaying = () => {
+		videoControls.playing = true;
+	};
+
+	const onPaused = () => {
+		videoControls.playing = false;
 	};
 
 	useEffect(() => {
@@ -153,6 +164,8 @@ const InSceneVidComponent = (props) => {
 		setTransform();
 		videoRef.current.addEventListener('canplay', onVideoCanPlay);
 		videoRef.current.addEventListener('ended', onVideoEnd);
+		videoRef.current.addEventListener('play', onPlaying);
+		videoRef.current.addEventListener('paused', onPaused);
 
 		return () => {
 			onComponentUmount();
