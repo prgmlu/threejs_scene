@@ -56,7 +56,6 @@ build:production:
     CURRENT_ENV: production
   only:
     - /^feature\/.*$/
-  when: manual
 
 beta:
   <<: *deploy-template

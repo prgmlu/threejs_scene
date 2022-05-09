@@ -146,11 +146,15 @@ const InSceneVidComponent = (props) => {
 	};
 
 	const onPlaying = () => {
-		videoControls.playing = true;
+		if (videoControls) {
+			videoControls.playing = true;
+		}
 	};
 
 	const onPaused = () => {
-		videoControls.playing = false;
+		if (videoControls) {
+			videoControls.playing = false;
+		}
 	};
 
 	useEffect(() => {
