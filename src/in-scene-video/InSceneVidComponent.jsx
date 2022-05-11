@@ -28,8 +28,7 @@ const InSceneVidComponent = (props) => {
 
 	let videoRef = useRef(null);
 	let videoMeshRef = useRef(null);
-
-	let videoControls;
+	const videoControlsRef = useRef(null);
 
 	const autoplayAfterFirstInteraction = () => {
 		document.addEventListener('click', triggerAutoPlay);
@@ -78,7 +77,7 @@ const InSceneVidComponent = (props) => {
 	};
 
 	const setVideoControls = () => {
-		videoControls = new VideoControls(
+		videoControlsRef.current = new VideoControls(
 			scene,
 			transform,
 			onUserPlaysVideo,
@@ -131,7 +130,10 @@ const InSceneVidComponent = (props) => {
 			videoMeshRef.current.geometry.dispose();
 		}
 
-		videoControls.dispose();
+		if (videoControlsRef.current) {
+			videoControlsRef.current.dispose();
+		}
+
 		videoRef.current.pause();
 		videoRef.current.load();
 		videoRef.current.remove();
@@ -140,20 +142,19 @@ const InSceneVidComponent = (props) => {
 		videoRef.current.removeEventListener('ended', onVideoEnd);
 		videoRef.current.removeEventListener('play', onPlaying);
 		videoRef.current.removeEventListener('paused', onPaused);
-
-		document.removeEventListener('touchend', triggerAutoPlay);
-		document.removeEventListener('click', triggerAutoPlay);
 	};
 
 	const onPlaying = () => {
-		if (videoControls) {
-			videoControls.playing = true;
+		document.removeEventListener('touchend', triggerAutoPlay);
+		document.removeEventListener('click', triggerAutoPlay);
+		if (videoControlsRef.current) {
+			videoControlsRef.current.playing = true;
 		}
 	};
 
 	const onPaused = () => {
-		if (videoControls) {
-			videoControls.playing = false;
+		if (videoControlsRef.current) {
+			videoControlsRef.current.playing = false;
 		}
 	};
 
