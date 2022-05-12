@@ -15,9 +15,11 @@ const InSceneVidComponent = (props) => {
 		transform,
 		keyColor,
 		sceneRef,
-		onPlay,
-		onPause,
+		addToMediaStack,
+		popFromMediaStack,
 		userData = {},
+		onPlayClicked,
+		onPauseClicked,
 	} = props;
 
 	const scene = sceneRef?.current;
@@ -50,7 +52,7 @@ const InSceneVidComponent = (props) => {
 
 	const addToStackIfUnmute = () => {
 		if (!muted) {
-			onPlay(videoRef);
+			addToMediaStack(videoRef);
 		}
 	};
 
@@ -61,18 +63,20 @@ const InSceneVidComponent = (props) => {
 	};
 
 	const onUserPlaysVideo = () => {
+		onPlayClicked(src);
 		playVideo();
 	};
 
 	const onUserPausesVideo = () => {
+		onPauseClicked(src);
 		if (!muted) {
-			onPause();
+			popFromMediaStack();
 		}
 	};
 
 	const onVideoEnd = () => {
 		if (!loop) {
-			onPause();
+			popFromMediaStack();
 		}
 	};
 
