@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import OrbitControls from './OrbitControls';
-import {XRControllerModelFactory} from 'three/examples/jsm/webxr/XRControllerModelFactory';
+import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory';
+import { OculusHandModel } from 'three/examples/jsm/webxr/OculusHandModel';
+
 
 class ThreeController {
 	setupControls(camera, renderer, orbitControlsConfig) {
@@ -92,7 +94,7 @@ class ThreeController {
 		return this.controls;
 	}
     
-    setupVRControls(renderer, scene){
+    setupVRControls(renderer, scene, showOnlyHands){
 
         const controllerModelFactory = new XRControllerModelFactory();
 
@@ -106,30 +108,44 @@ class ThreeController {
         line.name = 'line';
         line.scale.z = 0;
 
-        const controllers = []; // We return an arra for the 2 controllers
-        const gripControls = []
+        const vrControllers = []; // We return an arra for the 2 controllers
+        const gripControls = [];
+		const vrHands = [];
+		const handsModels = [];
 
         for(let i=0; i<=1; i++){
 
             // Used for pointing in Z axis. Returns a THREEJS group
             const controller = renderer.xr.getController(i);
+			
             controller.add(line.clone());
             controller.userData.selectPressed = false;
             scene.add(controller);
             
-            controllers.push(controller);
+            vrControllers.push(controller);
 
-            // Used to manipulate objects in the 3D space with the controller. Returns a THREEJS group
-            const grip = renderer.xr.getControllerGrip(i);
-            grip.add(controllerModelFactory.createControllerModel(grip))
-            scene.add(grip);
+            if(!showOnlyHands){
+				// Used to manipulate objects in the 3D space with the controller. Returns a THREEJS group, these are the visual controllers
+				const grip = renderer.xr.getControllerGrip(i);
+				grip.add(controllerModelFactory.createControllerModel(grip))
+				scene.add(grip);
 
-            gripControls.push(grip);
+				gripControls.push(grip);
+			}
+
+			// Hands
+			const hand = renderer.xr.getHand(i);
+			const model = new OculusHandModel( hand );
+			hand.add(model);
+			handsModels.push(model);
+			scene.add(hand);
+
+			vrHands.push(hand);
         }
 
 		this.raycaster = new THREE.Raycaster();
 
-        return [controllers, gripControls, this.controls];
+        return {vrControllers, gripControls, vrHands, handsModels};
     }
 }
 

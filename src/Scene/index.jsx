@@ -133,7 +133,9 @@ const Scene = (props) => {
 	// VR helpers
 	const vrControlsRef = useRef([]);
 	const vrGripControlsRef = useRef([]);
+	const vrHandsRef = useRef([]);
 	const isOculusDevice = browserName == "Oculus Browser" ? true : false;
+	const showOnlyHands = true;
 
 	sceneRef.current.setUI = setUI;
 
@@ -257,13 +259,15 @@ const Scene = (props) => {
 		);
 
 		if(isOculusDevice){
-			const vrControllers = ThreeController.setupVRControls(
-				renderer,
-				scene
-			)[0];
-			vrControlsRef.current = vrControllers;
-			const light = new THREE.HemisphereLight( 0xffffff, 0x080820, 0.8 );
+			
+			const sceneLight = [...scene.children].filter(e=>e.type==='HemisphereLight')[0];
+			const light = sceneLight? sceneLight :  new THREE.HemisphereLight( 0xffffff, 0x080808, 1 );
 			scene.add( light ); 
+
+			const { vrControllers, gripControls, vrHands, handsModels } =  ThreeController.setupVRControls(renderer, scene, showOnlyHands);
+			
+			vrControlsRef.current = vrControllers;
+			vrHandsRef.current = vrHands;
 		}
 
 		if (Object.keys(orbitControlsConfig).length > 0) {
@@ -365,8 +369,10 @@ const Scene = (props) => {
 				sceneRef,
 				vrControlsRef,
 				vrGripControlsRef,
+				vrHandsRef,
 				cameraRef,
 				props.onMouseUp,
+				showOnlyHands,
 			);
 	
 			addThreeEditorVREventListeners();
