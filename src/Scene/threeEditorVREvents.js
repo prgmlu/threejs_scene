@@ -1,17 +1,23 @@
 import { Vector3, Matrix4 } from 'three';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
+const DEFAULT_HAND_PROFILE_PATH = 'https://cdn.jsdelivr.net/npm/@webxr-input-profiles/assets@1.0/dist/profiles/generic-hand/';
 
 export const threeEditorVREvents = (
 	sceneRef,
     vrControlsRef,
     vrGripControlsRef,
+    vrHandsRef,
 	cameraRef,
 	onMouseUpCallback,
+    showOnlyHands,
 ) => {
 	
 
     const raycaster = new THREE.Raycaster();
     const tempMatrix = new Matrix4();
+    const loader = new GLTFLoader().setPath(DEFAULT_HAND_PROFILE_PATH);
 
     const getIntersections=(controller, sceneRef)=>{
         
@@ -65,20 +71,72 @@ export const threeEditorVREvents = (
         }
     }
 
+    const addHandModel=(controller, handedness)=>{
+
+        const controllerChildren = [...controller.children];
+        
+        const hand = controllerChildren.find(child => child.name === 'VR3DHand' )
+
+        if(hand){
+            hand.visible = true;
+        }else{
+            loader.load(`${handedness}.glb` ,
+                (hand) =>{
+                    hand.scene.name = 'VR3DHand'
+                    hand.scene.rotation.x += THREE.MathUtils.degToRad(90)
+                    controller.add(hand.scene)
+                }, null,
+                (error)=>{
+                    console.log('An error ocurred loading the hands: ', error)
+                }			
+            )
+        }
+    }
+
+    const hideHand=(controller)=>{
+        const controllerChildren = [...controller.children];
+
+        const hand = controllerChildren.find(child => child.name === 'VR3DHand' )
+
+        if (hand) hand.visible = false;
+
+    }
 	
     // Add Event Listeners
     const addThreeEditorVREventListeners = () =>{
-        vrControlsRef.current.forEach(controller=>{
+        vrControlsRef.current.forEach((controller, index)=>{
             controller.addEventListener('selectstart', (event)=>{
                 onSelectStart(event, sceneRef.current, onMouseUpCallback, cameraRef);
             });
             controller.addEventListener('selectend', (event)=>{
                 onSelectEnd(event, sceneRef.current, onMouseUpCallback, cameraRef);
             });
+            if(showOnlyHands){
+                controller.addEventListener('connected', (event)=>{
+                    const xrHand = event.data.hand;
+                    const handedness = event.data.handedness;
+                    if(!xrHand){
+                        addHandModel(controller, handedness);
+                    }else{
+                        hideHand(controller);
+                    }
+                })  
+                controller.addEventListener('disconnected', (event)=>{ })  
+            }
         })
         vrGripControlsRef.current.forEach(gripControl=>{
             // To get info about keys, we can map specific functions to buttons
-            gripControl.addEventListener("connected", (e) => { })
+            gripControl.addEventListener("connected", (event) => { })
+        })
+        vrHandsRef.current.forEach(hand=>{
+            // To perform an action when the user pinches with the hands
+            hand.addEventListener("connected", (event) => { 
+                if(showOnlyHands){
+                    
+                }
+            })
+            hand.addEventListener('disconnected', (event)=>{ })
+            hand.addEventListener("pinchend", (event) => { })
         })
     }
 
@@ -91,10 +149,31 @@ export const threeEditorVREvents = (
             controller.removeEventListener('selectend', (event)=>{
                 onSelectEnd(event, sceneRef.current, onMouseUpCallback, cameraRef);
             });
+            if(showOnlyHands){
+                controller.removeEventListener('connected', (event)=>{
+                    const xrHand = event.data.hand;
+                    if(!xrHand){
+                        addHandModel(controller, index);
+                    }else{
+                        hideHand(controller);
+                    }
+                })  
+                controller.removeEventListener('disconnected', (event)=>{  })  
+            }
         })
         vrGripControlsRef.current.forEach(gripControl=>{
             // To get info about keys, we can map specific functions to buttons
-            gripControl.removeEventListener("connected", (e) => { })
+            gripControl.removeEventListener("connected", (event) => { })
+        })
+        vrHandsRef.current.forEach(hand=>{
+            // To perform an action when the user pinches with the hands
+            hand.removeEventListener("connected", (event) => { 
+                if(showOnlyHands){
+                    
+                }
+            })
+            hand.addEventListener('disconnected', (event)=>{ })
+            hand.removeEventListener("pinchend", (event) => { });
         })
     }
 	
