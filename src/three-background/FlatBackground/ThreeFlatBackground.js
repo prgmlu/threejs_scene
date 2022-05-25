@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import { isMobile } from 'react-device-detect';
 import ThreeSceneObject from '../../three-base-components/ThreeSceneObject';
 import ThreeController from '../../three-controls/ThreeController';
 
@@ -21,7 +21,7 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 			// wireframe:true
 		});
 
-		const width = this.type === 'zoom' ? 19.15 : 14.15; // Temp fix, we need to adjust this for different canvas sizes
+		const width = this.type === 'zoom' && isMobile ? 19.15 : 14.15; // Temp fix, we need to adjust this for different canvas sizes
 		this.geometry = new THREE.PlaneGeometry(width, 14.15);
 		this.sceneObject = new THREE.Mesh(this.geometry, material);
 		this.sceneObject.rotateY(THREE.Math.degToRad(90));
