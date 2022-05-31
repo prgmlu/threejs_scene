@@ -2,6 +2,7 @@ import { HotspotMarker } from '../Hotspot/_constructors';
 
 const createHotspotMarker = ({
 	imageURL,
+	imageHoverURL,
 	iconConfig,
 	userData = {},
 	UIConfig,
@@ -11,6 +12,7 @@ const createHotspotMarker = ({
 	return new HotspotMarker({
 		iconConfig,
 		imageURL,
+		imageHoverURL,
 		userData,
 		UIConfig,
 		onClick,
@@ -53,6 +55,8 @@ export const renderHotspotRecord = (object = {}, sceneRef) => {
 		imageURL: object.imageURL,
 		onClick: object.onClick,
 		animation: object.animation,
+		imageURL: object.imageURL,
+		imageHoverURL: object.imageHoverURL,
 	});
 
 	//2.Add

@@ -11,6 +11,8 @@ import {
 //TODO: object with hotspot_type =='image_marker' has prop sceneObject == null???
 const Hotspot = (props) => {
 	const {
+		imageURL,
+		imageHoverURL,
 		type,
 		transform,
 		collider_transform,
