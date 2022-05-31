@@ -2,6 +2,8 @@ import ThreeSceneObjectComponent from '../three-base-components/ThreeSceneObject
 import SVGSprite from './SVGSprite';
 import { fetchSVGIcon, rotateSVGX } from '../utils/svgHelpers';
 
+const SVG_STRING_CACHE = {};
+
 // This component controls the interaction of the SVGSprite. We can further
 // break this down to smaller components but I don't think it's necessary at the moment
 // because this is how all of the sprites behave and it only controls the color
@@ -27,18 +29,22 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 		this.dispose = this.dispose.bind(this);
 	}
 
-	setSvgFromUrl = (imageUrl, userData) => {
-		fetchSVGIcon(imageUrl).then((iconData) => {
-			if (userData?.props?.sprite_rotation_degree) {
-				this.setSVGString(
-					rotateSVGX(
-						iconData,
-						userData?.props?.sprite_rotation_degree,
-					),
-				);
-			} else {
-				this.setSVGString(iconData);
+	setSvgFromUrl = (svgUrl, userData) => {
+		if (svgUrl in SVG_STRING_CACHE) {
+			const icon = SVG_STRING_CACHE[svgUrl];
+			return this.svgSprite.setSVGString(icon, svgUrl);
+		}
+
+		fetchSVGIcon(svgUrl).then((iconData) => {
+			const rotation = userData?.props?.sprite_rotation_degree;
+			let icon = iconData;
+			if (rotation) {
+				icon = rotateSVGX(iconData, rotation);
 			}
+			this.setSVGString(icon, svgUrl);
+
+			const cacheKey = isNaN(rotation) ? `${svgUrl}` : `${svgUrl}${rotation}`;
+			SVG_STRING_CACHE[cacheKey] = icon;
 		});
 	};
 
@@ -85,11 +91,13 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 		this.rotationX = rotX;
 	}
 
-	onHover = () => {
+	onHover = (svgUrl, userData) => {
+		this.setSvgFromUrl(svgUrl, userData)
 		document.body.style.cursor = 'pointer';
 	};
 
-	onUnhover = () => {
+	onUnhover = (svgUrl, userData) => {
+		this.setSvgFromUrl(svgUrl, userData)
 		document.body.style.cursor = 'default';
 	};
 

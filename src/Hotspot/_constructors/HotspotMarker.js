@@ -4,7 +4,8 @@ import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
 
 export default class HotspotMarker extends InteractionObject {
 	constructor({
-		imageURL,
+		imageURL = '',
+		imageHoverURL = '',
 		iconConfig = {},
 		userData,
 		UIConfig,
@@ -32,6 +33,8 @@ export default class HotspotMarker extends InteractionObject {
 		this.secondaryColor = secondaryColor;
 
 		//SVG Icon
+		this.imageURL = imageURL;
+		this.imageHoverURL = imageHoverURL;
 		this.svgSpriteComponent = new SVGSpriteComponent(iconConfig);
 		this.svgSpriteComponent.setSvgFromUrl(imageURL, userData);
 	}
@@ -41,6 +44,14 @@ export default class HotspotMarker extends InteractionObject {
 			this.onClickCallBack();
 		}
 	};
+
+	onHover = () => {
+		this.svgSpriteComponent.onHover(this.imageHoverURL, this.userData);
+	}
+
+	onUnhover = () => {
+		this.svgSpriteComponent.onUnhover(this.imageURL, this.userData);
+	}
 
 	addToScene = (scene) => {
 		this.scene = scene;
