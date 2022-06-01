@@ -116,6 +116,7 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 		if (this.showIcon) {
 			this.owner.setVisualObject(this.svgSprite);
 			this.owner.visualObject.renderOrder = 1000;
+			this.owner.visualObject.material.depthTest = false;
 
 			if (this.owner.scene) {
 				this.owner.scene.add(this.owner.visualObject);

@@ -6,7 +6,6 @@ import {
 	createVidDom,
 } from '../utils/videoHelpers.js';
 import VideoControls from './VideoControls';
-import { DEFAULT_PAUSE_ICON, DEFAULT_PLAY_ICON } from '../utils/constants';
 import { fShader, vShader } from './shaders';
 
 const InSceneVidComponent = (props) => {
@@ -20,6 +19,8 @@ const InSceneVidComponent = (props) => {
 		userData = {},
 		onPlayClicked,
 		onPauseClicked,
+		playIconUrl,
+		pauseIconUrl,
 	} = props;
 
 	const scene = sceneRef?.current;
@@ -86,8 +87,8 @@ const InSceneVidComponent = (props) => {
 			transform,
 			onUserPlaysVideo,
 			onUserPausesVideo,
-			DEFAULT_PLAY_ICON,
-			DEFAULT_PAUSE_ICON,
+			playIconUrl,
+			pauseIconUrl,
 			userData,
 		);
 	};
