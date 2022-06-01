@@ -97,12 +97,12 @@ export default class VideoControls extends InteractionObject {
 	};
 
 	onHover = () => {
-		this.svgSpriteComponent.onHover();
 		this.showIcon();
+		document.body.style.cursor = 'pointer';
 	};
 
 	onUnhover = () => {
-		this.svgSpriteComponent.onUnhover();
 		this.hideIcon();
+		document.body.style.cursor = 'default';
 	};
 }
