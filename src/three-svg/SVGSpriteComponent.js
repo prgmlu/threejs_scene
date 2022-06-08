@@ -1,6 +1,7 @@
 import ThreeSceneObjectComponent from '../three-base-components/ThreeSceneObjectComponent';
 import SVGSprite from './SVGSprite';
 import { fetchSVGIcon, rotateSVGX } from '../utils/svgHelpers';
+import { browserName } from 'react-device-detect';
 
 const SVG_STRING_CACHE = {};
 
@@ -116,7 +117,8 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 		if (this.showIcon) {
 			this.owner.setVisualObject(this.svgSprite);
 			this.owner.visualObject.renderOrder = 1000;
-			this.owner.visualObject.material.depthTest = false;
+			// In Oculus Browser, we need to enable the depth test, so the hotspot visual element is in position with the hotspot.
+			this.owner.visualObject.material.depthTest = browserName === 'Oculus Browser';
 
 			if (this.owner.scene) {
 				this.owner.scene.add(this.owner.visualObject);
