@@ -261,7 +261,7 @@ const Scene = (props) => {
 		if(isOculusDevice){
 			
 			const sceneLight = [...scene.children].filter(e=>e.type==='HemisphereLight')[0];
-			const light = sceneLight? sceneLight :  new THREE.HemisphereLight( 0xffffff, 0x080808, 1 );
+			const light = sceneLight? sceneLight :  new THREE.HemisphereLight( 0xffffff, 0x080808, 4 );
 			scene.add( light ); 
 
 			const { vrControllers, gripControls, vrHands, handsModels } =  ThreeController.setupVRControls(renderer, scene, showOnlyHands);

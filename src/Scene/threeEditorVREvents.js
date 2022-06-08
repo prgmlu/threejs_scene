@@ -32,20 +32,21 @@ export const threeEditorVREvents = (
         return raycaster.intersectObjects( targets , false );
     }
 
-    const onSelectStart=(event, sceneRef, onMouseUpCallback, cameraRef)=>{
+    const onSelectStart=(event, sceneRef, onMouseUpCallback, cameraRef, controller)=>{
         
-        const controller = event.target;
-        controller.children[0].scale.z = 100;
-        controller.userData.selectPressed = true;
+        const control = event.target;
+        control.children[0].scale.z = 100;
+        control.userData.selectPressed = true;
+        handleHapticFeedback(event, controller);
 
-        const intersections = getIntersections( controller, sceneRef );
+        const intersections = getIntersections( control, sceneRef );
 
         if ( intersections.length > 0 ) {
             const intersection = intersections[ 0 ];
             const sceneRefObject = intersection.object.name === 'marker';
             const object = intersection.object;
             object.material.opacity = 1; // Make the object visible for now
-            controller.userData.selected = object;
+            control.userData.selected = object;
         }
     }
 
@@ -101,16 +102,29 @@ export const threeEditorVREvents = (
         if (hand) hand.visible = false;
 
     }
+
+    // Haptic Feedback is the control vibration when a button is clicked on.
+    const handleHapticFeedback = (event, controller)=>{
+        const gamepad = event.data.gamepad;
+        const supportHaptic = 'hapticActuators' in gamepad && gamepad.hapticActuators != null && gamepad.hapticActuators.length > 0;
+        
+        if(supportHaptic && event.data.handedness == controller.name ){
+            gamepad.hapticActuators[0].pulse(0.3, 100);
+        }
+    }
 	
     // Add Event Listeners
     const addThreeEditorVREventListeners = () =>{
         vrControlsRef.current.forEach((controller, index)=>{
             controller.addEventListener('selectstart', (event)=>{
-                onSelectStart(event, sceneRef.current, onMouseUpCallback, cameraRef);
+                onSelectStart(event, sceneRef.current, onMouseUpCallback, cameraRef, controller);
             });
             controller.addEventListener('selectend', (event)=>{
                 onSelectEnd(event, sceneRef.current, onMouseUpCallback, cameraRef);
             });
+            controller.addEventListener('connected', (event)=>{
+                controller.name = event.data.handedness;
+            })
             if(showOnlyHands){
                 controller.addEventListener('connected', (event)=>{
                     const xrHand = event.data.hand;
@@ -144,10 +158,13 @@ export const threeEditorVREvents = (
     const removeThreeEditorVREventListeners = () =>{
         vrControlsRef.current.forEach(controller=>{
             controller.removeEventListener('selectstart', (event)=>{
-                onSelectStart(event, sceneRef.current, onMouseUpCallback, cameraRef);
+                onSelectStart(event, sceneRef.current, onMouseUpCallback, cameraRef, controller);
             });
             controller.removeEventListener('selectend', (event)=>{
                 onSelectEnd(event, sceneRef.current, onMouseUpCallback, cameraRef);
+            });
+            controller.removeEventListener('connected', (event)=>{
+                controller.name = event.data.handedness;
             });
             if(showOnlyHands){
                 controller.removeEventListener('connected', (event)=>{
@@ -160,6 +177,7 @@ export const threeEditorVREvents = (
                 })  
                 controller.removeEventListener('disconnected', (event)=>{  })  
             }
+            
         })
         vrGripControlsRef.current.forEach(gripControl=>{
             // To get info about keys, we can map specific functions to buttons
