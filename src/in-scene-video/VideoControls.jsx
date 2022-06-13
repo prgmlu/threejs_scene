@@ -1,5 +1,6 @@
 import InteractionObject from '../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../three-svg/SVGSpriteComponent';
+import { isMobile } from 'react-device-detect';
 
 export default class VideoControls extends InteractionObject {
 	_playing = false;
@@ -26,6 +27,11 @@ export default class VideoControls extends InteractionObject {
 		this.userData = userData;
 		this.playIconUrl = playIconUrl;
 		this.pauseIconUrl = pauseIconUrl;
+
+		/*
+		 * Hovers do not work on mobiles, so this is where we set it to be visible by default for mobiles
+		 * */
+		this.svgSpriteComponent.setVisibility(isMobile);
 	}
 
 	setIconForPlayingState = (playing) => {
