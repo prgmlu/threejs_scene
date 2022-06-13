@@ -71,6 +71,7 @@ export const createVidDom = function (
 	video.setAttribute('webkit-playsinline', '');
 	video.crossOrigin = 'anonymous';
 	video.setAttribute('playsinline', '');
+	video.setAttribute('preload', 'metadata');
 
 	if (loop) {
 		video.setAttribute('loop', 'loop');
