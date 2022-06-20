@@ -5,6 +5,7 @@ import ThreeBackgroundCube from './ThreeBackgroundCube';
 const BackgroundCube = ({
 	scene,
 	backgroundUrl,
+	opacityMapUrl,
 	camera,
 	linkedScenes,
 	imageIntegrity,
@@ -26,14 +27,16 @@ const BackgroundCube = ({
 
 	useEffect(() => {
 		if (backgroundUrl) {
+			cube.current.removeAlphaMaps();
 			cube.current.loadCubeTextureFromPriorityArray(
 				backgroundUrl,
+				opacityMapUrl,
 				imageIntegrity,
 				useWebp,
 				skipLargest,
 			);
 		}
-	}, [backgroundUrl]);
+	}, [backgroundUrl,opacityMapUrl]);
 
 	// useEffect(() => {
 	//     cube.current.preLoadConnectedScenes(linkedScenes)

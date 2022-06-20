@@ -13,6 +13,7 @@ const Background = ({
 	controller,
 }) => {
 	const [backgroundUrl, setBackgroundUrl] = useState('');
+	const [opacityMapUrl, setOpacityMapUrl] = useState('');
 	const [isFlatScene, setFlatScene] = useState(false);
 	const [imageIntegrity, setImageIntegrity] = useState(null);
 	const [useWebp, setUseWebp] = useState(false);
@@ -24,6 +25,7 @@ const Background = ({
 		if (bgConf) {
 			setFlatScene(bgConf.isFlatScene);
 			setBackgroundUrl(bgConf.backgroundUrl);
+			setOpacityMapUrl(bgConf.opacityMapUrl);
 			setImageIntegrity(bgConf?.imageIntegrity);
 			setUseWebp(bgConf?.useWebp);
 			setSkipLargest(bgConf?.skipLargest);
@@ -42,6 +44,7 @@ const Background = ({
 	) : (
 		<BackgroundCube
 			backgroundUrl={backgroundUrl}
+			opacityMapUrl={opacityMapUrl}
 			camera={camera}
 			scene={scene}
 			linkedScenes={linkedScenes}
