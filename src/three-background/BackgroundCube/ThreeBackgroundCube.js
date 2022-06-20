@@ -74,6 +74,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 
 		//get initialized from loadCubeTextureFromPriorityArray
 		this.url = null;
+		this.loadOpacityMap = false;
 
 		this.faces = this.getDefaultFaces();
 
@@ -237,11 +238,18 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 
 	loadCubeTextureFromPriorityArray = async (
 		url,
+		opacityMapUrl,
 		imageIntegrity,
 		useWebp,
 		skipLargest,
 	) => {
 		this.url = url;
+		if(opacityMapUrl){
+			this.loadOpacityMap = true;
+		} 
+		else{
+			this.loadOpacityMap = false;
+		}
 		// this.dispose();
 		this.initPriorityArray();
 		window.addEventListener(
@@ -273,16 +281,32 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 				imageIntegrity,
 				useWebp,
 			);
-			const tiles = await this.loadFaceTexturesAsync(
-				faceLODUrls,
-				face,
-				level,
-			);
+
+			let tiles,opTiles;
+			if (this.loadOpacityMap) {
+				//await both the bg tiles and the opacity tiles
+				[tiles, opTiles] = await Promise.all([
+					this.loadFaceTexturesAsync(faceLODUrls),
+					this.loadFaceOpacitiesAsync(
+						faceLODUrls.map((i) => i.replace('cube_map', 'opacity_map'))
+						)
+				])
+			} else {
+				//else await only the bg images
+				tiles = await this.loadFaceTexturesAsync(faceLODUrls);
+
+			}
 			if (initiatorUrl !== this.url) {
 				return;
 			}
 			this.updateFace(face, level);
 			this.faces[face].mesh.material = tiles;
+			if(this.loadOpacityMap){
+				for(var i=0; i<this.faces[face].mesh.material.length; i++){
+					let u = this.faces[face].mesh.material[i];
+					u.alphaMap = opTiles[i];
+				}
+			}
 			this.faces[face].LOD += 1;
 
 			if (!this.didCameraReset) {
@@ -309,14 +333,30 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			this.loader.load(tileUrl, (texture) => {
 				texture.minFilter = THREE.LinearMipmapNearestFilter;
 				texture.magFilter = THREE.LinearFilter;
-				resolve(new THREE.MeshBasicMaterial({ map: texture }));
+				resolve(new THREE.MeshBasicMaterial({ 
+					map: texture,transparent:true}));
 			});
 		});
 	};
 
+	loadOpacityTextureAsync = (tileUrl) => {
+		return new Promise((resolve, reject) => {
+			this.loader.load(tileUrl, (texture) => {
+				texture.minFilter = THREE.LinearMipmapNearestFilter;
+				texture.magFilter = THREE.LinearFilter;
+				resolve(texture)
+			});
+		});
+	}
+
 	loadFaceTexturesAsync = (faceLODUrls) => {
 		// return a group of tiles
 		return Promise.all(faceLODUrls.map(this.loadTileMaterialAsync));
+	};
+
+	loadFaceOpacitiesAsync = (faceLODUrls) => {
+		// return a group of tiles
+		return Promise.all(faceLODUrls.map(this.loadOpacityTextureAsync));
 	};
 
 	updateFace = (face, newLevel) => {
@@ -409,6 +449,34 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			);
 		});
 	};
+
+	removeAlphaMaps = () => {
+		if(! Array.isArray(this.faces.back.mesh.material) ) return ;
+		this.faces.front.mesh.material.forEach((mat)=>{
+			mat.needsUpdate=true;
+			mat.alphaMap=null;
+		});
+		this.faces.back.mesh.material.forEach((mat)=>{
+			mat.needsUpdate=true;
+			mat.alphaMap=null;
+		});
+		this.faces.top.mesh.material.forEach((mat)=>{
+			mat.needsUpdate=true;
+			mat.alphaMap=null;
+		});
+		this.faces.bottom.mesh.material.forEach((mat)=>{
+			mat.needsUpdate=true;
+			mat.alphaMap=null;
+		});
+		this.faces.right.mesh.material.forEach((mat)=>{
+			mat.needsUpdate=true;
+			mat.alphaMap=null;
+		});
+		this.faces.left.mesh.material.forEach((mat)=>{
+			mat.needsUpdate=true;
+			mat.alphaMap=null;
+		});
+	}
 
 	dispose = () => {
 		Object.keys(this.faces).forEach((face) => {

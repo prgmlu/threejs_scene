@@ -118,11 +118,17 @@ const InSceneVidComponent = (props) => {
 				vShader,
 			);
 			videoMeshRef.current = new THREE.Mesh(geometry, material);
+			videoMeshRef.current.renderOrder=2;
+			videoMeshRef.current.material.depthTest=false;
+			videoMeshRef.current.material.depthWrite=false;
 			videoMeshRef.current.material.uniforms.tex.value =
 				new THREE.VideoTexture(videoRef.current);
 		} else {
 			const material = createNormalVidMaterial(videoRef.current);
 			videoMeshRef.current = new THREE.Mesh(geometry, material);
+			videoMeshRef.current.renderOrder=2;
+			videoMeshRef.current.material.depthTest=false;
+			videoMeshRef.current.material.depthWrite=false;
 		}
 	};
 
