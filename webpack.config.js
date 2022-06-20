@@ -43,6 +43,7 @@ module.exports = (env) => {
             "./Hotspot": "./src/Hotspot",
             "./InSceneVidComponent": "./src/in-scene-video/InSceneVidComponent",
             "./FireEffect": "./src/fire-effect/FireEffect",
+            "./WaterEffect": "./src/water-effect/WaterEffect",
             "./InSceneImageComponent": "./src/in-scene-image/InSceneImageComponent",
             "./GreenScreenSystem": "./src/green-screen-system/GreenScreenSystem",
             "./AnimatedGLB": "./src/AnimatedGLB"

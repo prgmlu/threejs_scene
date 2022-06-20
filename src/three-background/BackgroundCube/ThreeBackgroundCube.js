@@ -97,11 +97,11 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 	}
 
 	getDefaultFaces = () => {
-		return {
+		let faces = {
 			front: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000 }),
+					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
 				),
 				facePoints: generatePointsOnPlane('x', -STORE_SIZE / 2),
 				LOD: 0,
@@ -109,7 +109,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			right: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000 }),
+					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
 				),
 				facePoints: generatePointsOnPlane('z', -STORE_SIZE / 2),
 				LOD: 0,
@@ -117,7 +117,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			left: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000 }),
+					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
 				),
 				facePoints: generatePointsOnPlane('z', STORE_SIZE / 2),
 				LOD: 0,
@@ -125,7 +125,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			top: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000 }),
+					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
 				),
 				facePoints: generatePointsOnPlane('y', STORE_SIZE / 2),
 				LOD: 0,
@@ -133,7 +133,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			bottom: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000 }),
+					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
 				),
 				facePoints: generatePointsOnPlane('y', -STORE_SIZE / 2),
 				LOD: 0,
@@ -141,12 +141,21 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			back: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000 }),
+					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
 				),
 				facePoints: generatePointsOnPlane('x', STORE_SIZE / 2),
 				LOD: 0,
 			},
 		};
+
+		faces.front.mesh.renderOrder=1;
+		faces.back.mesh.renderOrder=1;
+		faces.top.mesh.renderOrder=1;
+		faces.bottom.mesh.renderOrder=1;
+		faces.right.mesh.renderOrder=1;
+		faces.left.mesh.renderOrder=1;
+
+		return faces ;
 	};
 
 	initPriorityArray = () => {
@@ -334,7 +343,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 				texture.minFilter = THREE.LinearMipmapNearestFilter;
 				texture.magFilter = THREE.LinearFilter;
 				resolve(new THREE.MeshBasicMaterial({ 
-					map: texture,transparent:true}));
+					map: texture,transparent:true,
+					depthTest:false,
+					depthWrite:false
+				}));
 			});
 		});
 	};
