@@ -109,7 +109,7 @@ const InSceneVidComponent = (props) => {
 
 	const setupVideoMesh = () => {
 		const geometry = new THREE.PlaneGeometry(1, 1);
-		geometry.scale(-1, 1, 1);
+		geometry.scale(1, 1, 1);
 		if (keyColor) {
 			//green screen
 			const material = createGreenScreenMaterial(
@@ -149,7 +149,7 @@ const InSceneVidComponent = (props) => {
 		videoRef.current.load();
 		videoRef.current.remove();
 
-		videoRef.current.removeEventListener('canplay', onVideoCanPlay);
+		videoRef.current.removeEventListener('loadedmetadata', onVideoCanPlay);
 		videoRef.current.removeEventListener('ended', onVideoEnd);
 		videoRef.current.removeEventListener('play', onPlaying);
 		videoRef.current.removeEventListener('paused', onPaused);
@@ -178,7 +178,7 @@ const InSceneVidComponent = (props) => {
 
 		setupVideoMesh();
 		setTransform();
-		videoRef.current.addEventListener('canplay', onVideoCanPlay);
+		videoRef.current.addEventListener('loadedmetadata', onVideoCanPlay);
 		videoRef.current.addEventListener('ended', onVideoEnd);
 		videoRef.current.addEventListener('play', onPlaying);
 		videoRef.current.addEventListener('paused', onPaused);
