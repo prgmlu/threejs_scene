@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
 import {
-    initThreeJSScene,
-    setupRenderer,
-    setupCamera,
+	initThreeJSScene,
+	setupRenderer,
+	setupCamera,
 } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
@@ -14,7 +14,7 @@ import { isMobile, browserName } from 'react-device-detect';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 
-const createRenderer = (sceneId = '', type) => {
+const getRendererKey = (type, sceneId) => {
 	let rendererKey;
 
 	switch (type) {
@@ -25,9 +25,12 @@ const createRenderer = (sceneId = '', type) => {
 			rendererKey = `${sceneId}_renderer`;
 			break;
 	}
+	return rendererKey;
+};
 
+const getRenderer = (sceneId = '', type) => {
+	const rendererKey = getRendererKey(type, sceneId);
 	const ret = window[rendererKey] || new THREE.WebGLRenderer();
-
 	window[rendererKey] = ret;
 	ret.info.autoReset = true;
 	return ret;
@@ -97,6 +100,7 @@ const createOrGetControls = (
 };
 
 const Scene = (props) => {
+	// console.log('=> Scene:props', props);
 	const {
 		sceneId,
 		allowEventsForMarkerTypeOnly,
@@ -120,7 +124,7 @@ const Scene = (props) => {
 	const scene = sceneRef.current;
 
 	//Renderer
-	const rendererRef = useRef(createRenderer(sceneId, type));
+	const rendererRef = useRef(getRenderer(sceneId, type));
 
 	let renderer = rendererRef.current;
 	const glContext = renderer?.getContext('webgl');
@@ -134,7 +138,7 @@ const Scene = (props) => {
 	const vrControlsRef = useRef([]);
 	const vrGripControlsRef = useRef([]);
 	const vrHandsRef = useRef([]);
-	const isOculusDevice = browserName == "Oculus Browser" ? true : false;
+	const isOculusDevice = browserName == 'Oculus Browser' ? true : false;
 	const showOnlyHands = true;
 
 	sceneRef.current.setUI = setUI;
@@ -145,7 +149,6 @@ const Scene = (props) => {
 	};
 
 	const animate = (controllerUpdate = false, animationKey) => {
-		
 		if (renderer.xr.enabled) {
 			renderer.setAnimationLoop(() => {
 				renderer?.render(scene, cameraRef.current);
@@ -182,7 +185,7 @@ const Scene = (props) => {
 			//restoreContext() will ONLY simulate restoring of the context
 			//run restore only if context lost, otherwise error will be thrown
 			// if(!glContext) loseExtension?.restoreContext();
-			glContext.getExtension('WEBGL_lose_context').restoreContext();
+			glContext?.getExtension('WEBGL_lose_context')?.restoreContext();
 			renderer.clear();
 		}, 50);
 	};
@@ -194,11 +197,12 @@ const Scene = (props) => {
 		);
 		setupRenderer(rendererRef.current, canvas);
 		scene.add(cameraRef.current);
-		window.containerInstance_renderer?.forceContextRestore();
+		renderer?.forceContextRestore();
 	};
 
 	//1. Mount camera & setup renderer only once!!!
 	useEffect(() => {
+		console.log('=> mount', sceneId);
 		console.log(
 			'%c >INIT:1 - initThreeJSScene',
 			'color:green',
@@ -218,7 +222,8 @@ const Scene = (props) => {
 		);
 
 		return () => {
-			console.log('%c >INIT:1 - unmounted', 'color:gray');
+			console.log('=> unmount : Scene');
+			// console.log('%c >INIT:1 - unmounted', 'color:gray');
 			renderer.domElement.removeEventListener(
 				'webglcontextlost',
 				handleContextLoss,
@@ -258,14 +263,18 @@ const Scene = (props) => {
 			type,
 		);
 
-		if(isOculusDevice){
-			
-			const sceneLight = [...scene.children].filter(e=>e.type==='HemisphereLight')[0];
-			const light = sceneLight? sceneLight :  new THREE.HemisphereLight( 0xffffff, 0x080808, 4 );
-			scene.add( light ); 
+		if (isOculusDevice) {
+			const sceneLight = [...scene.children].filter(
+				(e) => e.type === 'HemisphereLight',
+			)[0];
+			const light = sceneLight
+				? sceneLight
+				: new THREE.HemisphereLight(0xffffff, 0x080808, 4);
+			scene.add(light);
 
-			const { vrControllers, gripControls, vrHands, handsModels } =  ThreeController.setupVRControls(renderer, scene, showOnlyHands);
-			
+			const { vrControllers, gripControls, vrHands, handsModels } =
+				ThreeController.setupVRControls(renderer, scene, showOnlyHands);
+
 			vrControlsRef.current = vrControllers;
 			vrHandsRef.current = vrHands;
 		}
@@ -359,12 +368,11 @@ const Scene = (props) => {
 
 	// VR Events
 	useEffect(() => {
-
 		// Add VR event listeners
-		if(isOculusDevice){
+		if (isOculusDevice) {
 			const {
 				addThreeEditorVREventListeners,
-				removeThreeEditorVREventListeners
+				removeThreeEditorVREventListeners,
 			} = threeEditorVREvents(
 				sceneRef,
 				vrControlsRef,
@@ -374,15 +382,14 @@ const Scene = (props) => {
 				props.onMouseUp,
 				showOnlyHands,
 			);
-	
+
 			addThreeEditorVREventListeners();
 		}
 
 		return () => {
-			if(isOculusDevice) removeThreeEditorVREventListeners();
+			if (isOculusDevice) removeThreeEditorVREventListeners();
 		};
 	}, [sceneRef, vrControlsRef]);
-
 
 	useEffect(() => {
 		return () => {
@@ -419,7 +426,7 @@ const Scene = (props) => {
 
 	const clearRoom = () => {
 		// Renderer
-		const rendererKey = `${sceneId}_renderer`;
+		const rendererKey = getRendererKey(type, sceneId);
 		delete window[rendererKey];
 
 		if (renderer) {
@@ -433,8 +440,8 @@ const Scene = (props) => {
 			renderer.domElement.remove();
 			renderer.dispose();
 			renderer = null;
-			rendererRef.current = null;
 		}
+		rendererRef.current = null;
 		// Controls
 		controlsRef.current.dispose();
 	};
