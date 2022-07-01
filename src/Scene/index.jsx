@@ -280,7 +280,7 @@ const Scene = (props) => {
 		}
 
 		if (Object.keys(orbitControlsConfig).length > 0) {
-			controlsRef.current.setupRotateControls(orbitControlsConfig);
+			controlsRef.current.setupControlsFromConfig(orbitControlsConfig);
 		}
 
 		let animationKey;

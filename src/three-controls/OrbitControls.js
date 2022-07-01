@@ -46,24 +46,6 @@ class OrbitControls extends EventDispatcher {
 		// Set to false to disable this control
 		this.enabled = true;
 
-		// "target" sets the location of focus, where the object orbits around
-		// if (
-		// 	orbitControlsConfig.starting_cam_horizontal_angle &&
-		// 	orbitControlsConfig.starting_cam_vertical_angle
-		// ) {
-		// 	this.sphericalTarget = new Spherical(
-		// 		1,
-		// 		Math.PI / 2 - orbitControlsConfig.starting_cam_horizontal_angle,
-		// 		orbitControlsConfig.starting_cam_vertical_angle,
-		// 	);
-		// 	this.newTarget = new Vector3().setFromSpherical(
-		// 		this.sphericalTarget,
-		// 	);
-		// 	this.target = this.newTarget;
-		// } else {
-		// }
-
-		this.target = new Vector3();
 		// How far you can dolly in and out ( PerspectiveCamera only )
 		this.minDistance = 0;
 		this.maxDistance = Infinity;
@@ -72,7 +54,7 @@ class OrbitControls extends EventDispatcher {
 		this.minZoom = 0;
 		this.maxZoom = Infinity;
 
-		this.setupRotateControls(orbitControlsConfig);
+		this.setupControlsFromConfig(orbitControlsConfig);
 
 		// Set to true to enable damping (inertia)
 		// If damping is enabled, you must call controls.update() in your animation loop
@@ -1096,6 +1078,31 @@ class OrbitControls extends EventDispatcher {
 
 		this.update();
 	}
+
+	setupControlsFromConfig(orbitControlsConfig) {
+		this.setupRotateControls(orbitControlsConfig);
+		this.setupTarget(orbitControlsConfig);
+	}
+
+	setupTarget = (orbitControlsConfig) => {
+		// "target" sets the location of focus, where the object orbits around
+		if (
+			orbitControlsConfig?.starting_cam_horizontal_angle &&
+			orbitControlsConfig?.starting_cam_vertical_angle
+		) {
+			this.sphericalTarget = new Spherical(
+				1,
+				Math.PI / 2 - orbitControlsConfig.starting_cam_horizontal_angle,
+				orbitControlsConfig.starting_cam_vertical_angle,
+			);
+			this.newTarget = new Vector3().setFromSpherical(
+				this.sphericalTarget,
+			);
+			this.target = this.newTarget;
+		} else {
+			this.target = new Vector3();
+		}
+	};
 
 	setupRotateControls(orbitControlsConfig) {
 		this.minPolarAngle = MathUtils.degToRad(
