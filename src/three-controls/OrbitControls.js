@@ -47,14 +47,23 @@ class OrbitControls extends EventDispatcher {
 		this.enabled = true;
 
 		// "target" sets the location of focus, where the object orbits around
-		// if(orbitControlsConfig.starting_cam_horizontal_angle && orbitControlsConfig.starting_cam_vertical_angle){
-		// 	this.sphericalTarget = new Spherical(1, Math.PI / 2 - orbitControlsConfig.starting_cam_horizontal_angle, orbitControlsConfig.starting_cam_vertical_angle);
-		// 	this.newTarget = new Vector3().setFromSpherical(this.sphericalTarget);
+		// if (
+		// 	orbitControlsConfig.starting_cam_horizontal_angle &&
+		// 	orbitControlsConfig.starting_cam_vertical_angle
+		// ) {
+		// 	this.sphericalTarget = new Spherical(
+		// 		1,
+		// 		Math.PI / 2 - orbitControlsConfig.starting_cam_horizontal_angle,
+		// 		orbitControlsConfig.starting_cam_vertical_angle,
+		// 	);
+		// 	this.newTarget = new Vector3().setFromSpherical(
+		// 		this.sphericalTarget,
+		// 	);
 		// 	this.target = this.newTarget;
-		// }else{
-		// 	this.target = new Vector3();
+		// } else {
 		// }
 
+		this.target = new Vector3();
 		// How far you can dolly in and out ( PerspectiveCamera only )
 		this.minDistance = 0;
 		this.maxDistance = Infinity;

@@ -443,7 +443,7 @@ const Scene = (props) => {
 		}
 		rendererRef.current = null;
 		// Controls
-		controlsRef.current.dispose();
+		controlsRef.current?.dispose();
 	};
 
 	const onDropEvent = (e) => {
