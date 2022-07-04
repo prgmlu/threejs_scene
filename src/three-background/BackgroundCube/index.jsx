@@ -12,6 +12,7 @@ const BackgroundCube = ({
 	useWebp,
 	skipLargest,
 	controller,
+	onBackgroundReady = () => {},
 }) => {
 	const cube = useRef();
 
@@ -34,9 +35,10 @@ const BackgroundCube = ({
 				imageIntegrity,
 				useWebp,
 				skipLargest,
+				onBackgroundReady,
 			);
 		}
-	}, [backgroundUrl,opacityMapUrl]);
+	}, [backgroundUrl, opacityMapUrl]);
 
 	// useEffect(() => {
 	//     cube.current.preLoadConnectedScenes(linkedScenes)

@@ -43,8 +43,9 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 		// this.controls.maxPan = new THREE.Vector3(0, 0, 0);
 	}
 
-	loadTexture = (url) => {
+	loadTexture = (url, onBackgroundReady = () => {}) => {
 		this.loader.load(url, (texture) => {
+			onBackgroundReady(true);
 			texture.minFilter = THREE.LinearFilter;
 			texture.magFilter = THREE.LinearFilter;
 			texture.wrapS = THREE.ClampToEdgeWrapping;
@@ -65,7 +66,8 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 		this.width = image.width / image.height;
 
 		if (this.sceneObject) {
-			if(this.type !== 'zoom' || (this.type === 'zoom' && !isMobile)) this.sceneObject.scale.set(this.width, 1, 1);
+			if (this.type !== 'zoom' || (this.type === 'zoom' && !isMobile))
+				this.sceneObject.scale.set(this.width, 1, 1);
 			this.sceneObject.material.map = texture;
 			this.sceneObject.material.needsUpdate = true;
 		}

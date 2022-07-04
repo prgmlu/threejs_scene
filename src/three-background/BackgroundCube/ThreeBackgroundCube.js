@@ -101,7 +101,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			front: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
+					new THREE.MeshBasicMaterial({
+						color: 0x000000,
+						transparent: true,
+					}),
 				),
 				facePoints: generatePointsOnPlane('x', -STORE_SIZE / 2),
 				LOD: 0,
@@ -109,7 +112,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			right: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
+					new THREE.MeshBasicMaterial({
+						color: 0x000000,
+						transparent: true,
+					}),
 				),
 				facePoints: generatePointsOnPlane('z', -STORE_SIZE / 2),
 				LOD: 0,
@@ -117,7 +123,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			left: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
+					new THREE.MeshBasicMaterial({
+						color: 0x000000,
+						transparent: true,
+					}),
 				),
 				facePoints: generatePointsOnPlane('z', STORE_SIZE / 2),
 				LOD: 0,
@@ -125,7 +134,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			top: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
+					new THREE.MeshBasicMaterial({
+						color: 0x000000,
+						transparent: true,
+					}),
 				),
 				facePoints: generatePointsOnPlane('y', STORE_SIZE / 2),
 				LOD: 0,
@@ -133,7 +145,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			bottom: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
+					new THREE.MeshBasicMaterial({
+						color: 0x000000,
+						transparent: true,
+					}),
 				),
 				facePoints: generatePointsOnPlane('y', -STORE_SIZE / 2),
 				LOD: 0,
@@ -141,21 +156,24 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			back: {
 				mesh: new THREE.Mesh(
 					this.createFaceGeometry(1).toBufferGeometry(),
-					new THREE.MeshBasicMaterial({ color: 0x000000, transparent:true }),
+					new THREE.MeshBasicMaterial({
+						color: 0x000000,
+						transparent: true,
+					}),
 				),
 				facePoints: generatePointsOnPlane('x', STORE_SIZE / 2),
 				LOD: 0,
 			},
 		};
 
-		faces.front.mesh.renderOrder=1;
-		faces.back.mesh.renderOrder=1;
-		faces.top.mesh.renderOrder=1;
-		faces.bottom.mesh.renderOrder=1;
-		faces.right.mesh.renderOrder=1;
-		faces.left.mesh.renderOrder=1;
+		faces.front.mesh.renderOrder = 1;
+		faces.back.mesh.renderOrder = 1;
+		faces.top.mesh.renderOrder = 1;
+		faces.bottom.mesh.renderOrder = 1;
+		faces.right.mesh.renderOrder = 1;
+		faces.left.mesh.renderOrder = 1;
 
-		return faces ;
+		return faces;
 	};
 
 	initPriorityArray = () => {
@@ -251,16 +269,17 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 		imageIntegrity,
 		useWebp,
 		skipLargest,
+		onBackgroundReady,
 	) => {
 		this.url = url;
-		if(opacityMapUrl){
+		if (opacityMapUrl) {
 			this.loadOpacityMap = true;
-		} 
-		else{
+		} else {
 			this.loadOpacityMap = false;
 		}
 		// this.dispose();
 		this.initPriorityArray();
+
 		window.addEventListener(
 			'click',
 			this.updateViewableFacesAndSortPriorityArray,
@@ -279,9 +298,15 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			}
 			const priorityObject = this.priorityArrayMap[this.url].shift();
 			let { face, level } = priorityObject;
+
 			if (skipLargest && level === 3) {
 				continue;
 			}
+
+			if (level === 2) {
+				onBackgroundReady(true);
+			}
+
 			initiatorUrl = priorityObject.initiatorUrl;
 			const faceLODUrls = this.buildLODUrls(
 				url,
@@ -291,27 +316,32 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 				useWebp,
 			);
 
-			let tiles,opTiles;
+			let tiles, opTiles;
 			if (this.loadOpacityMap) {
 				//await both the bg tiles and the opacity tiles
 				[tiles, opTiles] = await Promise.all([
 					this.loadFaceTexturesAsync(faceLODUrls),
 					this.loadFaceOpacitiesAsync(
-						faceLODUrls.map((i) => i.replace('cube_map', 'opacity_map'))
-						)
-				])
+						faceLODUrls.map((i) =>
+							i.replace('cube_map', 'opacity_map'),
+						),
+					),
+				]);
 			} else {
 				//else await only the bg images
 				tiles = await this.loadFaceTexturesAsync(faceLODUrls);
-
 			}
 			if (initiatorUrl !== this.url) {
 				return;
 			}
 			this.updateFace(face, level);
 			this.faces[face].mesh.material = tiles;
-			if(this.loadOpacityMap){
-				for(var i=0; i<this.faces[face].mesh.material.length; i++){
+			if (this.loadOpacityMap) {
+				for (
+					var i = 0;
+					i < this.faces[face].mesh.material.length;
+					i++
+				) {
 					let u = this.faces[face].mesh.material[i];
 					u.alphaMap = opTiles[i];
 				}
@@ -342,11 +372,14 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			this.loader.load(tileUrl, (texture) => {
 				texture.minFilter = THREE.LinearMipmapNearestFilter;
 				texture.magFilter = THREE.LinearFilter;
-				resolve(new THREE.MeshBasicMaterial({ 
-					map: texture,transparent:true,
-					depthTest:false,
-					depthWrite:false
-				}));
+				resolve(
+					new THREE.MeshBasicMaterial({
+						map: texture,
+						transparent: true,
+						depthTest: false,
+						depthWrite: false,
+					}),
+				);
 			});
 		});
 	};
@@ -356,10 +389,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			this.loader.load(tileUrl, (texture) => {
 				texture.minFilter = THREE.LinearMipmapNearestFilter;
 				texture.magFilter = THREE.LinearFilter;
-				resolve(texture)
+				resolve(texture);
 			});
 		});
-	}
+	};
 
 	loadFaceTexturesAsync = (faceLODUrls) => {
 		// return a group of tiles
@@ -463,32 +496,32 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 	};
 
 	removeAlphaMaps = () => {
-		if(! Array.isArray(this.faces.back.mesh.material) ) return ;
-		this.faces.front.mesh.material.forEach((mat)=>{
-			mat.needsUpdate=true;
-			mat.alphaMap=null;
+		if (!Array.isArray(this.faces.back.mesh.material)) return;
+		this.faces.front.mesh.material.forEach((mat) => {
+			mat.needsUpdate = true;
+			mat.alphaMap = null;
 		});
-		this.faces.back.mesh.material.forEach((mat)=>{
-			mat.needsUpdate=true;
-			mat.alphaMap=null;
+		this.faces.back.mesh.material.forEach((mat) => {
+			mat.needsUpdate = true;
+			mat.alphaMap = null;
 		});
-		this.faces.top.mesh.material.forEach((mat)=>{
-			mat.needsUpdate=true;
-			mat.alphaMap=null;
+		this.faces.top.mesh.material.forEach((mat) => {
+			mat.needsUpdate = true;
+			mat.alphaMap = null;
 		});
-		this.faces.bottom.mesh.material.forEach((mat)=>{
-			mat.needsUpdate=true;
-			mat.alphaMap=null;
+		this.faces.bottom.mesh.material.forEach((mat) => {
+			mat.needsUpdate = true;
+			mat.alphaMap = null;
 		});
-		this.faces.right.mesh.material.forEach((mat)=>{
-			mat.needsUpdate=true;
-			mat.alphaMap=null;
+		this.faces.right.mesh.material.forEach((mat) => {
+			mat.needsUpdate = true;
+			mat.alphaMap = null;
 		});
-		this.faces.left.mesh.material.forEach((mat)=>{
-			mat.needsUpdate=true;
-			mat.alphaMap=null;
+		this.faces.left.mesh.material.forEach((mat) => {
+			mat.needsUpdate = true;
+			mat.alphaMap = null;
 		});
-	}
+	};
 
 	dispose = () => {
 		Object.keys(this.faces).forEach((face) => {

@@ -10,6 +10,7 @@ const FlatBackground = ({
 	imageIntegrity,
 	enablePan = false,
 	type,
+	onBackgroundReady = () => {},
 }) => {
 	const flatBackground = useRef();
 
@@ -44,6 +45,7 @@ const FlatBackground = ({
 						? imageIntegrity
 						: formatDate(new Date(), 'mmddyyyyhh')
 				}`,
+				(e) => onBackgroundReady(e),
 			);
 		}
 	}, [backgroundUrl]);

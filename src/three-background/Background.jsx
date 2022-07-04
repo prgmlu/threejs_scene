@@ -11,6 +11,7 @@ const Background = ({
 	enablePan = false,
 	type,
 	controller,
+	onBackgroundReady = () => {},
 }) => {
 	const [backgroundUrl, setBackgroundUrl] = useState('');
 	const [opacityMapUrl, setOpacityMapUrl] = useState('');
@@ -40,6 +41,7 @@ const Background = ({
 			imageIntegrity={imageIntegrity}
 			enablePan={enablePan}
 			type={type}
+			onBackgroundReady={onBackgroundReady}
 		/>
 	) : (
 		<BackgroundCube
@@ -52,6 +54,7 @@ const Background = ({
 			useWebp={useWebp}
 			skipLargest={skipLargest}
 			controller={controller}
+			onBackgroundReady={onBackgroundReady}
 		/>
 	);
 };

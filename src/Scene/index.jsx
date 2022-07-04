@@ -13,6 +13,7 @@ import { Background, ColliderSphere } from '../three-background';
 import { isMobile, browserName } from 'react-device-detect';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
+import LoadingIcon from '../loadingIcon';
 
 const getRendererKey = (type, sceneId) => {
 	let rendererKey;
@@ -113,8 +114,11 @@ const Scene = (props) => {
 		type,
 		enablePan = false,
 		orbitControlsConfig = {},
+		loadingIconSrc = null,
 	} = props;
 	const [threeReady, setThreeReady] = useState(false);
+	const [showLoadingIcon, setShowLoadingIcon] = useState(true);
+	const [renderObjects, setRenderObjects] = useState(false);
 	const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
 	const [animationId, setAnimationId] = useState();
 	const timeOutRef = useRef(null);
@@ -240,6 +244,14 @@ const Scene = (props) => {
 	}, []);
 
 	const initRoom = () => {
+		if (!showLoadingIcon) {
+			setShowLoadingIcon(true);
+		}
+
+		if (renderObjects) {
+			setRenderObjects(false);
+		}
+
 		let camType = 'cube';
 		if (bgConf?.isFlatScene) {
 			camType = 'flat';
@@ -458,6 +470,11 @@ const Scene = (props) => {
 		if (props.onDrop) props.onDrop(e, position, maxRenderOrder);
 	};
 
+	const onBackgroundReady = () => {
+		setShowLoadingIcon(false);
+		setRenderObjects(true);
+	};
+
 	return (
 		<>
 			{useDebugger && (
@@ -477,6 +494,7 @@ const Scene = (props) => {
 			>
 				{/*{threeReady && children}*/}
 				{threeReady &&
+					renderObjects &&
 					React.Children.map(children, (child) =>
 						React.cloneElement(child, {
 							sceneRef,
@@ -496,9 +514,12 @@ const Scene = (props) => {
 							enablePan={enablePan && isMobile}
 							type={type}
 							controller={controlsRef.current}
+							onBackgroundReady={onBackgroundReady}
 						/>
 					</>
 				)}
+
+				{showLoadingIcon && <LoadingIcon src={loadingIconSrc} />}
 
 				<div
 					id="canvasUI"
