@@ -64,6 +64,7 @@ class OrbitControls extends EventDispatcher {
 		// }
 
 		this.target = new Vector3();
+		window.t = this;
 		// How far you can dolly in and out ( PerspectiveCamera only )
 		this.minDistance = 0;
 		this.maxDistance = Infinity;
@@ -1098,6 +1099,26 @@ class OrbitControls extends EventDispatcher {
 	}
 
 	setupRotateControls(orbitControlsConfig) {
+		// alert('setting up ')
+		// // this.object.position.set(0,0,0);
+		// // this
+		// console.log('target', this.target);
+		// console.log('this.object.position', this.object.position);
+
+
+		const posX = 0.1;
+		const rotY = (90 * Math.PI) / 180;
+	
+		this.object.position.set(posX, 0, 0);
+		this.object.rotation.set(0, rotY, 0);
+		this.object.lookAt(0, 0, 0);
+		this.object.updateProjectionMatrix();
+		this.target.set(0,0,0)
+
+
+
+		if(window.characterControls)
+			window.characterControls.removeEvents();
 		this.minPolarAngle = MathUtils.degToRad(
 			'min_vertical_angle' in orbitControlsConfig
 				? orbitControlsConfig.min_vertical_angle

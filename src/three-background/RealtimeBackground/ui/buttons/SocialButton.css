@@ -1,0 +1,44 @@
+.social-button-container {
+    height: 50px;
+    background: black;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    opacity: 80%;
+}
+
+#bottomBarLeft .social-button-container{
+    background: transparent;
+}
+
+#bottomBarRight .social-button-container{
+    background: transparent;
+}
+
+.social-button-icon-container {
+    height: 25px;
+    margin: 0 0 0.25em;
+}
+
+.social-button-icon {
+    width: auto;
+    height: 25px;
+}
+
+.social-button-text {
+    font-size: 12px;
+    height: 12px;
+}
+
+.social-button-active {
+    background: white;
+    color: black;
+}
+
+.social-button-invert-color {
+    filter: invert(1);
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
+window.THREE = THREE;
 import ThreeController from '../three-controls/ThreeController';
 import {
 	initThreeJSScene,
@@ -69,6 +70,7 @@ const createOrGetControls = (
 	orbitControlsConfig,
 	sceneId,
 	type,
+	scene
 ) => {
 	let controllerKey;
 
@@ -89,6 +91,7 @@ const createOrGetControls = (
 		cameraRef.current,
 		renderer,
 		orbitControlsConfig,
+		scene
 	);
 
 	if (camType === 'flat') {
@@ -122,11 +125,13 @@ const Scene = (props) => {
 	//Scene
 	const sceneRef = useRef(new THREE.Scene());
 	const scene = sceneRef.current;
+	window.scene = scene;
 
 	//Renderer
 	const rendererRef = useRef(getRenderer(sceneId, type));
 
 	let renderer = rendererRef.current;
+	window.renderer = renderer;
 	const glContext = renderer?.getContext('webgl');
 
 	// useRef used to prevent Scene from losing variable references.
@@ -261,6 +266,7 @@ const Scene = (props) => {
 			orbitControlsConfig,
 			sceneId,
 			type,
+			scene
 		);
 
 		if (isOculusDevice) {
@@ -490,6 +496,7 @@ const Scene = (props) => {
 						<Background
 							bgConf={bgConf}
 							scene={scene}
+							renderer={rendererRef.current}
 							camera={cameraRef.current}
 							resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
 							linkedScenes={props.linkedScenes}

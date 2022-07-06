@@ -80,6 +80,19 @@ module.exports = (env) => {
 		module: {
 			rules: [
 				{
+					test: /\.(glb|jpg|gltf|png)$/,
+					use:
+					[
+						{
+							loader: 'file-loader',
+							options:
+							{
+								outputPath: 'assets/models/'
+							}
+						}
+					]
+				},
+				{
 					test: /\.(js|jsx)$/,
 					exclude: /node_modules/,
 					use: ['babel-loader'],

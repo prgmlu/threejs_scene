@@ -1,0 +1,99 @@
+#cartModal {
+    top: 85px;
+    right: 10px;
+    height: 75%;
+    position: absolute;
+}
+
+#closeButton {
+    position: absolute;
+    background: #340c0c;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 10px;
+    z-index: 2;
+    right: 0;
+    top: 0;
+}
+
+#cartContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 75%;
+    top: 4em;
+    border-radius: 30px;
+    overflow-y: auto;
+    position: absolute;
+}
+::-webkit-scrollbar {
+    width: 5px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.9);
+}
+::-webkit-scrollbar-thumb {
+    background: #777777;
+    border-radius: 10px;
+}
+
+.cartItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 95%;
+    left: 0;
+    height: 200px;
+    border-radius: 30px;
+}
+
+.productDetails {
+    position: relative;
+    left: -50px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: #000000;
+}
+
+.cartRemoveButton{
+    position: relative;
+    top: 25px;
+    width: 16px;
+    max-height: 20px;
+    cursor: pointer;
+}
+
+/* .fadeMask{
+    position: relative;
+    top: -645px;
+    background-color:  rgba(255, 255, 255, 0.5);
+    z-index: 10;
+    width: 100%;
+    height: 535px;
+    mask-image: linear-gradient(transparent, white);
+    mask-mode: alpha;
+    mask-repeat: no-repeat;
+    mask-size: auto 700px;
+    -webkit-mask-image: linear-gradient(transparent, white);
+    -webkit-mask-mode: alpha;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: auto 700px;
+} */
+
+.checkoutButton{
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 25px;
+    height: 60px;
+    width: 60%;
+    border-radius: 5px;
+    background-color: #000000;
+    color: #FFFFFF;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

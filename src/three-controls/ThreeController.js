@@ -2,31 +2,24 @@ import * as THREE from 'three';
 import OrbitControls from './OrbitControls';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory';
 import { OculusHandModel } from 'three/examples/jsm/webxr/OculusHandModel';
+import CharacterControls from './CharacterControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
 
 
 class ThreeController {
-	setupControls(camera, renderer, orbitControlsConfig) {
+	setupControls(camera, renderer, orbitControlsConfig, scene, model) {
 		this.startDistance = null;
 		this.camera = camera;
+		this.scene = scene;
+		this.renderer = renderer;
+		this.model = model;
+
 		this.controls = new OrbitControls(
 			this.camera,
 			renderer.domElement,
 			orbitControlsConfig,
 		);
-		// renderer.domElement.addEventListener('touchstart', (event)=>{
-		// if (event.touches.length != 1) {
-		//     event.preventDefault();
-		// }
-
-		// if (event.touches.length === 2) {
-		//     var base = Math.abs(event.touches[0].pageX - event.touches[1].pageX);
-		//     var height = Math.abs(event.touches[0].pageY - event.touches[1].pageY);
-		//     var dist = Math.sqrt((base ** 2) + (height ** 2));
-
-		//     this.startDistance = dist;
-		// }
-
-		// })
 
 		if (!window.counter) {
 			window.counter = 1;
@@ -93,6 +86,51 @@ class ThreeController {
 		// this.controls.mouseButtons.RIGHT = THREE.MOUSE.DOLLY;
 		return this.controls;
 	}
+
+
+	setupCharacterControls(model, mixer, animationsMap) {
+        this.controls.minDistance = 2;
+        this.controls.maxDistance = 5;
+        this.controls.enablePan = false;
+        this.controls.maxPolarAngle = Math.PI / 2 - 0.05;
+
+		this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, true );
+		// this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
+		window.characterControls = this.characterControls ;
+
+
+        // this.cube = createCube();
+        if(this.scene){
+        // this.loader = new GLTFLoader();
+		// this.loader.crossOrigin = true;
+        // this.loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/mixamoriggedopaque.glb", (data) => {
+        //     this.loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/animations.glb", (anims) => {
+        //         this.animations = anims.animations
+        //         const model = data.scene;
+		// 		// const model = createCube();
+
+		// 		window.model = model;
+
+        //         const charAnimations = this.animations;
+        //         const mixer = new THREE.AnimationMixer(model);
+        //         const animationsMap = new Map();
+        //         charAnimations.filter(a => a.name != 'T-Pose').forEach((a) => {
+        //             animationsMap.set(a.name, mixer.clipAction(a));
+        //         });
+		// 		let initModelPos = [0, 0.1,3 ];
+		// 		model.position.set(...initModelPos);
+		// 		model.scale.set(1.2, 1.2, 1.2);
+		// 		this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, true );
+		// 		window.characterControls = this.characterControls ;
+
+        //         this.scene.add(model);
+
+        //     });
+        // });
+        }
+
+        return this.characterControls;
+    }
     
     setupVRControls(renderer, scene, showOnlyHands){
 
