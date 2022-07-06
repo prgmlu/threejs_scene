@@ -1091,7 +1091,7 @@ class OrbitControls extends EventDispatcher {
 			orbitControlsConfig?.starting_cam_vertical_angle
 		) {
 			this.sphericalTarget = new Spherical(
-				1,
+				0.1,
 				Math.PI / 2 - orbitControlsConfig.starting_cam_horizontal_angle,
 				orbitControlsConfig.starting_cam_vertical_angle,
 			);
