@@ -24,41 +24,49 @@ const RealtimeBackground = ({ scene, renderer, backgroundUrl }) => {
         let loader = new GLTFLoader();
 		loader.crossOrigin = true;
 
-        async function loadMyModelAndConnectControls() {
-            let [model, mixer, animationsMap ] = await loadModelAndAnimations();
+        
+        function loadStore () {
+            return new Promise((resolve, reject) => {
+                loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(data) => {
+                    // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v026.glb",(data) => {
+                    
+                    data.scene.traverse((i)=>{
+                        i.material && (i.material.envMapIntensity = 1.5);
+                    });
+
+
+                    roomObj = data.scene;
+                    setRoom(data.scene);
+
+                    if(room & avatar) {
+                        charControls.setUpCollisionDetection();
+                    }
+                    scene.add(data.scene);
+                    data.scene.scale.set(140,140,140)
+
+                    window.store = data.scene;
+                    resolve();
+                })
+            })
+        }
+
+        async function loadStoreAndModel() {
+
+            let [_,modelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations()]);
+
+            let [model, mixer, animationsMap ] = modelMixerMap;
             let controls = ThreeController.setupCharacterControls(model, mixer, animationsMap);
             setCharControls(controls);
-            if(room & avatar) {
-                charControls.setUpCollisionDetection();
-            }
+            controls.setUpCollisionDetection();
             scene.add(model);
             setAvatar(model);
         }
-        loadMyModelAndConnectControls();
+
+        loadStoreAndModel();
         
-        loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(data) => {
-            // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v026.glb",(data) => {
-                
-                
-                data.scene.traverse((i)=>{
-                    i.material && (i.material.envMapIntensity = 1.5);
-                });
-                
-                
-                roomObj = data.scene;
-                setRoom(data.scene);
+        // loadStore();
+        
 
-                if(room & avatar) {
-                    charControls.setUpCollisionDetection();
-                }
-
-
-
-                scene.add(data.scene);
-                data.scene.scale.set(140,140,140)
-                window.store = data.scene;
-
-            })
             
         return () => {
             scene.remove(roomObj)
