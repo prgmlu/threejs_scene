@@ -232,9 +232,15 @@ class GLBObj extends Component {
 	loadModel(url, scene) {
 		const loader = new GLTFLoader();
 		const dracoLoader = new DRACOLoader();
-		dracoLoader.setDecoderPath(
-			'https://www.gstatic.com/draco/v1/decoders/',
-		);
+		// dracoLoader.setDecoderPath(
+		// 	'https://www.gstatic.com/draco/v1/decoders/',
+		// );
+
+		// dracoLoader.setDecoderPath('../../node_modules/three/examples/js/libs/draco/gltf/');
+		dracoLoader.setDecoderPath('https://cdn.obsess-vr.com/charlotte-tilbury/gltf/');
+
+
+		dracoLoader.setDecoderConfig({ type: 'js' });
 		loader.setDRACOLoader(dracoLoader);
 		loader.crossOrigin = true;
 		loader.load(url, (gltf) => {
