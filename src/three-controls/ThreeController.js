@@ -90,9 +90,10 @@ class ThreeController {
 
 	setupCharacterControls(model, mixer, animationsMap) {
         this.controls.minDistance = 2;
-        this.controls.maxDistance = 5;
+        this.controls.maxDistance = 10;
         this.controls.enablePan = false;
-        this.controls.maxPolarAngle = Math.PI / 2 - 0.05;
+        // this.controls.maxPolarAngle = Math.PI / 2 - 0.05;
+        this.controls.minPolarAngle = - Math.PI / 2 - 0.05;
 
 		this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle_anim',null, [], true, true );
 		// this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
