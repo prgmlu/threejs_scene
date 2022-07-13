@@ -13,7 +13,7 @@ import JoystickControls from '../../three-controls/JoystickControls';
 let adjustHotspots = ()=> {
 
 
-    window.scene.children.filter((i)=>i.type=='Sprite').forEach((i)=>{
+    window.scene.children.filter((i)=>i.type=='Sprite' || i.type=='mesh').forEach((i)=>{
         i.position.y=3+Math.random()*3;
         i.material.depthTest = true;
 
