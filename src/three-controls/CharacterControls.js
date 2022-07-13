@@ -36,7 +36,7 @@ export default class CharacterControls {
             })
 
 
-            this.playerCollider = new Capsule( new THREE.Vector3( 0, 0.35, 0 ), new THREE.Vector3( 0, 1, 0 ), 2 );
+            this.playerCollider = new Capsule( new THREE.Vector3( 0, 0.35 -7, 0 ), new THREE.Vector3( 0, 1-7, 0 ), 2 );
             window.playerCollider = this.playerCollider;
 
         }
@@ -44,8 +44,8 @@ export default class CharacterControls {
         // else{
             let start = model.position.clone();
             let end = model.position.clone();
-            start.y = .2;
-            end.y = 1;
+            start.y = .2-7;
+            end.y = 1-7;
             this.playerCollider = new Capsule(start,end,0.45);
 
             window.playerCollider = this.playerCollider;

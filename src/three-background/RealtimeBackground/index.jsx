@@ -80,6 +80,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
                     scene.add(data.scene);
                     data.scene.scale.set(140,140,140)
 
+                    data.scene.position.y-=7;
                     window.store = data.scene;
                     resolve();
                 })
