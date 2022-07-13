@@ -14,7 +14,7 @@ let adjustHotspots = ()=> {
 
 
     window.scene.children.filter((i)=>i.type=='Sprite' || i.type=='mesh').forEach((i)=>{
-        i.position.y=3;
+        // i.position.y=3;
         i.material.depthTest = true;
 
     });
