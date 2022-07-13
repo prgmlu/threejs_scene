@@ -3,6 +3,7 @@ import BackgroundCube from './BackgroundCube';
 import FlatBackground from './FlatBackground';
 import RealtimeBackgroundContainer from './RealtimeBackground';
 import { setUpEnvMap, setUpSceneBackground, adjustRenderer } from './threeHelpers';
+import JoystickControls from '../three-controls/JoystickControls';
 
 const Background = ({
 	scene,
@@ -42,7 +43,7 @@ const Background = ({
 				
 			}
 			else{
-				if(bgConf.backgroundUrl.includes("6298f357400ce6b3db706a68")) {
+				if(bgConf.backgroundUrl.includes("62222274f4e810f086e0bb25")) {
 
 					setUpEnvMap(scene, renderer);
 					setUpSceneBackground (scene);
@@ -98,6 +99,7 @@ const Background = ({
          {
 			isRealtimeScene && <RealtimeBackgroundContainer 
 			renderer={renderer}
+			camera={camera}
 			backgroundUrl={backgroundUrl} scene={scene}/>
 		 }
 		</>

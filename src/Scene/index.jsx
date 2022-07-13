@@ -52,11 +52,19 @@ const createOrGetCamera = (camType, canvasRef, sceneId = '', type) => {
 			break;
 	}
 
+	if(camType == 'realtime') {
+		return new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
+	}
+
 	if (window[cameraKey]) {
 		return window[cameraKey];
 	}
 
 	const camera = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
+	if(!window.cams){
+		window.cams = [];
+	}
+	window.cams.push(camera);
 
 	window[cameraKey] = camera;
 	setupCamera(camera);
@@ -83,6 +91,15 @@ const createOrGetControls = (
 			break;
 	}
 
+	if(camType == 'realtime') {
+		return ThreeController.setupControls(
+			cameraRef.current,
+			renderer,
+			orbitControlsConfig,
+			scene
+		);
+	}
+
 	if (window[controllerKey]) {
 		return window[controllerKey];
 	}
@@ -93,6 +110,9 @@ const createOrGetControls = (
 		orbitControlsConfig,
 		scene
 	);
+
+	if(!window.cs) window.cs = [];
+	window.cs.push(controls);
 
 	if (camType === 'flat') {
 		controls.enableRotate = false;
@@ -246,9 +266,18 @@ const Scene = (props) => {
 
 	const initRoom = () => {
 		let camType = 'cube';
+
 		if (bgConf?.isFlatScene) {
 			camType = 'flat';
-		} else if (Object.keys(orbitControlsConfig).length > 0) {
+		}
+		if(bgConf.backgroundUrl.includes("62222274f4e810f086e0bb25")){
+			camType = 'realtime';
+		}
+
+		// if (bgConf?.isFlatScene) {
+		// 	camType = 'flat';
+
+		if (Object.keys(orbitControlsConfig).length > 0) {
 			camType = 'custom';
 		}
 		// set new reference for cameraRef.current here

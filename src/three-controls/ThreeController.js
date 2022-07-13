@@ -94,7 +94,7 @@ class ThreeController {
         this.controls.enablePan = false;
         this.controls.maxPolarAngle = Math.PI / 2 - 0.05;
 
-		this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, true );
+		this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle_anim',null, [], true, true );
 		// this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
 		window.characterControls = this.characterControls ;
 

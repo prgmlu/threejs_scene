@@ -13,7 +13,7 @@ class AvatarCreatorContainer extends Component {
         this.avatarPos = this.props.avatarPos.clone();
 
         this.state = {
-            isAvatarCreatorActive : true,
+            isAvatarCreatorActive : false,
         }
     }
 
@@ -73,10 +73,10 @@ class AvatarCreatorContainer extends Component {
         return (
             <>
                     <AvatarButton showModal={this.showAvatarCreator}/>
-				{this.state.isAvatarCreatorActive && <AvatarCreator
+				{/* {this.state.isAvatarCreatorActive && <AvatarCreator
 												saveAvatar={this.saveAvatar}
 												closeModal={this.closeAvatarCreator}
-												currentAvatar={this.props.avatar}/>}
+												currentAvatar={this.props.avatar}/>} */}
             </>
         );
     }

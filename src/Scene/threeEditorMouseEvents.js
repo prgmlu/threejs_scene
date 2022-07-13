@@ -293,9 +293,9 @@ export const threeEditorMouseEvents = (
 		);
 		renderer.domElement.addEventListener('contextmenu', preventContextMenu);
 		renderer.domElement.addEventListener('mousemove', onMouseMove);
-		renderer.domElement.addEventListener('wheel', mouseWheelHandler, {
-			passive: true,
-		});
+		// renderer.domElement.addEventListener('wheel', mouseWheelHandler, {
+		// 	passive: true,
+		// });
 
 		//Mobile
 		renderer.domElement.addEventListener(

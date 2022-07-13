@@ -1,11 +1,35 @@
 import React, { useEffect, useState, useRef } from 'react';
-import * as THREE from 'three';
+// import * as THREE from 'three';
 import ThreeController from '../../three-controls/ThreeController';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {resetRenderer, setUpEnvMap, loadModelAndAnimations} from '../threeHelpers';
 import AvatarCreatorContainer from './AvatarCreatorContainer';
+import JoystickControls from '../../three-controls/JoystickControls';
 
-const RealtimeBackground = ({ scene, renderer, backgroundUrl }) => {
+
+// import { Octree } from 'three/examples/jsm/math/Octree';
+// import { Capsule } from 'three/examples/jsm/math/Capsule';
+
+let adjustHotspots = ()=> {
+    // alert('adjustHotspots');
+    window.scene.children.filter((i)=>i.type=='Sprite' || i.type=='mesh' ).forEach((i)=>{
+        i.material.depthTest=true;
+        // i.position.y+=3;
+        // i.position.x+=2;
+        // i.position.z+=2;
+    });
+    // window.store.position.y = -7;
+    // window.model.position.y = -7;
+
+    // window.store.position.x = -5;
+    // window.model.position.x = -5;
+
+}
+
+
+
+
+const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
 
 
     const [avatar, setAvatar] = useState(null);
@@ -27,7 +51,8 @@ const RealtimeBackground = ({ scene, renderer, backgroundUrl }) => {
         
         function loadStore () {
             return new Promise((resolve, reject) => {
-                loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(data) => {
+                loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v005.glb",(data) => {
+                // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(data) => {
                     // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v026.glb",(data) => {
                     
                     data.scene.traverse((i)=>{
@@ -64,6 +89,7 @@ const RealtimeBackground = ({ scene, renderer, backgroundUrl }) => {
 
         loadStoreAndModel();
         
+        
         // loadStore();
         
 
@@ -81,10 +107,11 @@ const RealtimeBackground = ({ scene, renderer, backgroundUrl }) => {
     }, [backgroundUrl]);
 
 
-
     return (
         <>
-        {avatar && <AvatarCreatorContainer avatar={avatar} scene={scene} avatarPos={avatar.position} />}
+        { 
+        avatar && <AvatarCreatorContainer avatar={avatar} scene={scene} avatarPos={avatar.position} /> && adjustHotspots()}
+		{avatar && charControls && <JoystickControls scene={scene} camera={camera} renderer={renderer} avatar={avatar} controls={charControls.orbitControl} />}
         </>
     );
 };
