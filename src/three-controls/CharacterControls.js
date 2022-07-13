@@ -100,6 +100,7 @@ export default class CharacterControls {
             })
         }
         this.orbitControl = orbitControl;
+
         this.camera = camera;
         this.items = items;
 
@@ -113,6 +114,8 @@ export default class CharacterControls {
         window.path = this.path;
 
         this.updateCameraTarget(this.model.position.x,this.model.position.z);
+        this.orbitControl.rotateLeft(-1.6);
+        this.orbitControl.rotateUp(.9)
         
 
         // state

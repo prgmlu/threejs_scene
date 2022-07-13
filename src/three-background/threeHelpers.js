@@ -146,7 +146,7 @@ export const loadModelAndAnimations = async () => {
 				charAnimations.filter(a => a.name != 'T-Pose').forEach((a) => {
 					animationsMap.set(a.name, mixer.clipAction(a));
 				});
-				let initModelPos = [0, -7.1,3 ];
+				let initModelPos = [0, -7.1,5 ];
 				model.position.set(...initModelPos);
 				model.scale.set(1.2, 1.2, 1.2);
 
