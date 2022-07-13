@@ -11,13 +11,22 @@ import JoystickControls from '../../three-controls/JoystickControls';
 // import { Capsule } from 'three/examples/jsm/math/Capsule';
 
 let adjustHotspots = ()=> {
+
+
+    window.scene.children.filter((i)=>i.type=='Sprite').forEach((i)=>{
+        i.position.y=3+Math.random()*3;
+        i.material.depthTest = true;
+
+    });
+
     // alert('adjustHotspots');
-    window.scene.children.filter((i)=>i.type=='Sprite' || i.type=='mesh' ).forEach((i)=>{
-        i.material.depthTest=true;
-        // i.position.y+=3;
+    // window.scene.children.filter((i)=>i.type=='Sprite' || i.type=='mesh' ).forEach((i)=>{
+    //     i.position.y = 2+Math.random()*3;
+    //     i.material.depthTest = true;
+    // i.position.y+=3;
         // i.position.x+=2;
         // i.position.z+=2;
-    });
+    // });
     // window.store.position.y = -7;
     // window.model.position.y = -7;
 
@@ -25,6 +34,8 @@ let adjustHotspots = ()=> {
     // window.model.position.x = -5;
 
 }
+
+window.adjustHotspots = adjustHotspots;
 
 
 
@@ -109,8 +120,9 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
 
     return (
         <>
+        {adjustHotspots()}
         { 
-        avatar && <AvatarCreatorContainer avatar={avatar} scene={scene} avatarPos={avatar.position} /> && adjustHotspots()}
+        avatar && <AvatarCreatorContainer avatar={avatar} scene={scene} avatarPos={avatar.position} />}
 		{avatar && charControls && <JoystickControls scene={scene} camera={camera} renderer={renderer} avatar={avatar} controls={charControls.orbitControl} />}
         </>
     );
