@@ -14,6 +14,7 @@ export default class HotspotMarker extends InteractionObject {
 		arrowColor = null,
 		onClick = () => {},
 		animation = {},
+		transform = [],
 	}) {
 		super();
 		this.sceneObject.name = 'marker';
@@ -32,6 +33,9 @@ export default class HotspotMarker extends InteractionObject {
 		this.animationScale = 1.2; // (120%) defined by product in issue 6192
 		this.sinOffset = (3 * Math.PI) / 2; // offset to start at lowest point
 		this.animationCycle = animation.hotspot_pulsing_frequency;
+		this.transform = new THREE.Matrix4();
+		this.transform.fromArray(transform);
+		this.baseScale = new THREE.Vector3();
 
 		this.onClickCallBack = onClick;
 
@@ -85,9 +89,17 @@ export default class HotspotMarker extends InteractionObject {
 		this.visualObject?.scale.copy(this.sceneObject.scale);
 	};
 
+	setAnimationScale = (baseScale, scale = 0.45) => {
+		this.sceneObject.scale.x = baseScale.x * scale;
+		this.sceneObject.scale.y = baseScale.y * scale;
+		this.sceneObject.scale.z = baseScale.z * scale;
+		this.visualObject?.scale.copy(this.sceneObject.scale);
+	};
+
 	setHotspotAnimation = () => {
 		switch (this.animation.type) {
 			case 'pulsing': {
+				this.baseScale.setFromMatrixScale(this.transform);
 				this.clock.start();
 				this.setPulsingHotspot();
 				break;
@@ -104,8 +116,9 @@ export default class HotspotMarker extends InteractionObject {
 			const elapsedTime = this.clock.getElapsedTime();
 			if (this.animationCycle > 0) {
 				// oscillate between base scale and the animation scale at a given frequency
-				this.setScale(
-					this.animation.baseScale * ((1 + this.animationScale) / 2) + // range to go between
+				this.setAnimationScale(
+					this.baseScale,
+					(1 + this.animationScale) / 2 + // range to go between
 						((this.animationScale - 1) / 2) *
 							// sin wave as a function of time
 							Math.sin(
