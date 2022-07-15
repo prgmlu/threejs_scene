@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import GreenScreenedVid from './GreenScreenedVid.jsx';
 import * as THREE from 'three';
+import {createDatGui} from './helpers.js';
+
+const DEBUG = false;
 
 const getFacePos = (face)=>{
     switch (face){
@@ -124,6 +127,11 @@ class GreenScreenSystem extends Component {
         var video = document.createElement('video');
 
         video.addEventListener('loadeddata', () => {
+            if(DEBUG){
+                createDatGui(vidMesh, Math.random())
+                window.vidMesh = vidMesh;
+            }
+            vidMesh.renderOrder = 2;
             this.scene.add(vidMesh);
           })
 
