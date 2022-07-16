@@ -89,35 +89,6 @@ export const threeEditorMouseEvents = (
 		const coord = setMousePosition(eventMouseStart, e, isMobileEvent);
 		mouseCoord.set(coord.x, coord.y); //mouseCoord should keep initial click position
 
-		// raycaster.setFromCamera(mouseStart, cameraRef.current);
-		// const intersects = raycaster.intersectObjects(
-		// 	sceneRef.current.children,
-		// );
-		// const sceneObject = getIntersectedMarkerObject(intersects);
-		//
-		// if (sceneObject) {
-		// 	isMarkerClicked = true;
-		// 	controlsRef.current.enabled = false; //eslint-disable-line
-		// 	focusedObject = sceneObject.object;
-		// 	const { point } = sceneObject;
-		// 	//TODO: describe what it does?
-		// 	if (!focusedObject?.parent) console.error('Prop Not Found');
-		// 	if (focusedObject?.parent)
-		// 		inverseMatrix
-		// 			.copy(focusedObject.parent.matrixWorld)
-		// 			.invert(inverseMatrix);
-		// 	offset
-		// 		.copy(point)
-		// 		.sub(
-		// 			worldPosition.setFromMatrixPosition(
-		// 				focusedObject.matrixWorld,
-		// 			),
-		// 		);
-		// } else {
-		// 	isMarkerClicked = false;
-		// 	focusedObject = false;
-		// }
-
 		//Public interface
 		if (onMouseDownCallback)
 			onMouseDownCallback(e, sceneObject, mouseCoord);
@@ -145,7 +116,6 @@ export const threeEditorMouseEvents = (
 		);
 
 		const sceneObject = getIntersectedMarkerObject(intersects);
-
 		// const sceneObject = markerIntersection?.object;
 		// const sceneObject =
 		// 	isMarkerClicked && focusedObject ? focusedObject : null;
@@ -154,27 +124,10 @@ export const threeEditorMouseEvents = (
 			sceneObject.object?.owner.onClick();
 		}
 		const marker = sceneObject?.object?.owner;
-		//Find underlying scene background object
-		// const bgObject = intersects.find((item) =>
-		// 	['cubeBackground', 'flatBackground', 'colliderSphere'].includes(
-		// 		item.object.name,
-		// 	),
-		// );
-		// const point = bgObject.point;
-		//
-		// //save clickData
-		// sceneRef.current.userData.clickData = { e, point };
-		//
-		// //Get transforms
-		// const marker = sceneObject?.owner;
-		// if (marker) marker.transforms = marker.getTransforms();
-		//
-		// //reset data
-		// if (dragDistance > DESKTOP_THRESHOLD) {
-		// 	if (isMarkerClicked) isMarkerClicked = false;
-		// } else {
-		// 	isMarkerClicked = false;
-		// }
+
+		if (!marker) {
+			sceneRef.current.toggleToolTips();
+		}
 
 		// public method/callback
 		if (onMouseUpCallback)

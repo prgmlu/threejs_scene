@@ -8,7 +8,7 @@ const createHotspotMarker = ({
 	UIConfig,
 	onClick,
 	animation,
-	transform
+	transform,
 }) => {
 	return new HotspotMarker({
 		iconConfig,
@@ -18,7 +18,7 @@ const createHotspotMarker = ({
 		UIConfig,
 		onClick,
 		animation,
-		transform
+		transform,
 	});
 };
 
@@ -57,9 +57,8 @@ export const renderHotspotRecord = (object = {}, sceneRef) => {
 		imageURL: object.imageURL,
 		onClick: object.onClick,
 		animation: object.animation,
-		imageURL: object.imageURL,
 		imageHoverURL: object.imageHoverURL,
-		transform: object.transform
+		transform: object.transform,
 	});
 
 	//2.Add

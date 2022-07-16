@@ -5,6 +5,7 @@ import {
 	initThreeJSScene,
 	setupRenderer,
 	setupCamera,
+	createCSS2DRenderer,
 } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
@@ -100,8 +101,26 @@ const createOrGetControls = (
 	return window[controllerKey];
 };
 
+class ThreeScene extends THREE.Scene {
+	labelsVisible = false;
+	labelsMap = {};
+
+	setToolTipsVisibility = (value) => {
+		this.children.forEach((child) => {
+			if (child.name === 'tooltip') {
+				child?.owner?.setVisibility(value);
+			}
+		});
+		this.labelsVisible = value;
+	};
+
+	setLabel = (labelId, label) => (this.labelsMap[labelId] = label);
+	toggleToolTips = () => this.setToolTipsVisibility(!this.labelsVisible);
+	showToolTips = () => this.setToolTipsVisibility(true);
+	hideToolTips = () => this.setToolTipsVisibility(false);
+}
+
 const Scene = (props) => {
-	// console.log('=> Scene:props', props);
 	const {
 		sceneId,
 		allowEventsForMarkerTypeOnly,
@@ -123,15 +142,18 @@ const Scene = (props) => {
 	const [animationId, setAnimationId] = useState();
 	const timeOutRef = useRef(null);
 	const [UI, setUI] = useState();
+
 	//Scene
-	const sceneRef = useRef(new THREE.Scene());
+	const sceneRef = useRef(new ThreeScene());
 	const scene = sceneRef.current;
 
 	//Renderer
 	const rendererRef = useRef(getRenderer(sceneId, type));
-
 	let renderer = rendererRef.current;
 	const glContext = renderer?.getContext('webgl');
+
+	const css2DRendererRef = useRef(createCSS2DRenderer());
+	let css2DRenderer = css2DRendererRef.current;
 
 	// useRef used to prevent Scene from losing variable references.
 	const canvasRef = useRef();
@@ -142,10 +164,41 @@ const Scene = (props) => {
 	const vrControlsRef = useRef([]);
 	const vrGripControlsRef = useRef([]);
 	const vrHandsRef = useRef([]);
-	const isOculusDevice = browserName == 'Oculus Browser' ? true : false;
+	const isOculusDevice = browserName === 'Oculus Browser';
 	const showOnlyHands = true;
 
 	sceneRef.current.setUI = setUI;
+
+	const [userInteracted, setUserInteracted] = useState(false);
+	const [interactTimeoutId, setInteractTimeoutId] = useState(null);
+
+	const onUserInteracted = () => {
+		setUserInteracted(true);
+		window.removeEventListener('click', onUserInteracted);
+		if (interactTimeoutId) {
+			clearTimeout(interactTimeoutId);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener('click', onUserInteracted);
+		return () => {
+			window.removeEventListener('click', onUserInteracted);
+		};
+	}, []);
+
+	useEffect(() => {
+		if (renderObjects) {
+			if (!userInteracted && !interactTimeoutId) {
+				const itid = setTimeout(() => {
+					if (!userInteracted) {
+						scene.showToolTips();
+					}
+				}, 4000);
+				setInteractTimeoutId(itid);
+			}
+		}
+	}, [renderObjects]);
 
 	const setMaxRenderOrder = (renderOrder) => {
 		if (renderOrder >= maxRenderOrder)
@@ -168,7 +221,7 @@ const Scene = (props) => {
 			}, 1000 / fps);
 
 			renderer?.render(scene, cameraRef.current);
-
+			css2DRenderer.render(scene, cameraRef.current);
 			if (controllerUpdate) controllerUpdate();
 		}
 	};
@@ -206,14 +259,16 @@ const Scene = (props) => {
 
 	//1. Mount camera & setup renderer only once!!!
 	useEffect(() => {
-		console.log('=> mount', sceneId);
-		console.log(
-			'%c >INIT:1 - initThreeJSScene',
-			'color:green',
-			JSON.parse(JSON.stringify({ rendererRef: rendererRef.current })),
-		);
+		console.log('%c >INIT:1 - initThreeJSScene', 'color:green');
 		let canvas = canvasRef.current;
-		initThreeJSScene(canvasRef, cameraRef, controlsRef, rendererRef, scene);
+		initThreeJSScene(
+			canvasRef,
+			cameraRef,
+			controlsRef,
+			rendererRef,
+			scene,
+			css2DRendererRef,
+		);
 		setThreeReady(true);
 
 		renderer.domElement.addEventListener(
@@ -226,7 +281,6 @@ const Scene = (props) => {
 		);
 
 		return () => {
-			console.log('=> unmount : Scene');
 			// console.log('%c >INIT:1 - unmounted', 'color:gray');
 			renderer.domElement.removeEventListener(
 				'webglcontextlost',
@@ -307,18 +361,22 @@ const Scene = (props) => {
 		}
 		window[animationKey] = '';
 		setAnimationId(animationKey);
+
+		const canvasContainer = canvasRef.current;
+		const width = canvasContainer.offsetWidth;
+		const height = canvasContainer.offsetHeight;
+
+		css2DRenderer.setSize(width, height);
+
 		animate(controlsRef.current.update, animationKey);
 	};
 
 	//New Scene INIT
 	useEffect(() => {
 		initRoom();
-
 		return () => {
-			//ThreeBackgroundCube textures disposal.
-			//TODO: investigate where and when the reference on the objects was lost.
-			// and place cleanup solution in appropriate place.
-			scene?.children?.map((child) => {
+			for (let i = scene.children.length - 1; i >= 0; i--) {
+				const child = scene.children[i];
 				if (child?.material?.length) {
 					child.material.forEach((mesh) => {
 						mesh?.map?.dispose();
@@ -328,8 +386,13 @@ const Scene = (props) => {
 				if (child?.type === 'PerspectiveCamera') {
 					scene.remove(child);
 				}
-			});
 
+				// css2DRenderer.innerHtml
+				const label_types = new Set(['navigation_label', 'tooltip']);
+				if (label_types.has(child?.name)) {
+					scene.remove(child);
+				}
+			}
 			setUI(false); //Hide UI Modal when scene changed
 		};
 	}, [sceneId]);
@@ -426,6 +489,7 @@ const Scene = (props) => {
 			cameraRef.current.aspect = width / height;
 			cameraRef.current.updateProjectionMatrix();
 			renderer.setSize(width, height);
+			css2DRenderer.setSize(width, height);
 
 			if (UI) setUI(false); //destroy UI
 		};

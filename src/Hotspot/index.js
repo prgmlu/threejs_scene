@@ -5,6 +5,7 @@ import {
 	renderHotspotRecord,
 	renderImageHotspotRecord,
 	createAndRenderImageHotspot,
+	createAndRenderLabel,
 } from '../utils';
 
 //TODO: refactor setMaxRenderOrder
@@ -40,7 +41,7 @@ const Hotspot = (props) => {
 		);
 		const { e, point } = sceneRef.current.userData?.clickData || {};
 
-		if (type === 'hotspot') {
+		if (type === 'HotspotMarker') {
 			//new markers has no transform values. Currently interpreted as a new record
 			if (isNewRecord) {
 				markerRef.current = createAndRenderHotspotMarkerOnEvent(
@@ -69,12 +70,14 @@ const Hotspot = (props) => {
 					setMaxRenderOrder,
 				);
 			}
+		} else if (type === 'Label') {
+			markerRef.current = createAndRenderLabel(sceneRef, props);
 		}
 
 		return () => {
-			markerRef.current.dispose();
-			markerRef.current.components?.map((item) => item.dispose());
-			markerRef.current.sceneObject?.dispose();
+			markerRef.current?.dispose();
+			markerRef.current?.components?.map((item) => item.dispose());
+			markerRef.current?.sceneObject?.dispose();
 		};
 	}, []);
 
@@ -88,7 +91,7 @@ const Hotspot = (props) => {
 	};
 
 	const highlightMarker = (marker) => {
-		if (!marker.svgSpriteComponent.svgString) return;
+		if (!marker?.svgSpriteComponent.svgString) return;
 		if (
 			navMarkerIndex === activeNavIndex &&
 			marker.userData.type === 'NavMarker'
@@ -105,7 +108,9 @@ const Hotspot = (props) => {
 	};
 
 	useEffect(() => {
-		highlightMarker(markerRef.current);
+		if (type === 'hotspot') {
+			highlightMarker(markerRef.current);
+		}
 		document.addEventListener('keyup', onEnterPressAccessibilityEvent);
 
 		return () => {

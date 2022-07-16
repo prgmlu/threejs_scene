@@ -78,6 +78,12 @@ export default class InteractionObject extends ThreeSceneObject {
 					removeFromScene: this.dispose,
 					setScale: this.setScale,
 					setRenderOrder: this.setRenderOrder,
+
+					// label functions
+					setArrowConfig: this.setArrowConfig,
+					setLabelStyling: this.setLabelStyling,
+					setContainerStyling: this.setContainerStyling
+
 				},
 			},
 		});
