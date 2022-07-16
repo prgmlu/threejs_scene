@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import ThreeController from '../three-controls/ThreeController';
 import { browserName } from 'react-device-detect';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton';
+import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 
 export const initThreeJSScene = (
 	canvasRef,
@@ -9,6 +9,7 @@ export const initThreeJSScene = (
 	controlsRef,
 	rendererRef,
 	scene,
+	css2DRendererRef,
 ) => {
 	// console.log('%c >initThreeJSScene ', 'color:green', JSON.parse(JSON.stringify({
 	// canvasRef:canvasRef.current,
@@ -27,6 +28,7 @@ export const initThreeJSScene = (
 	// setupCamera(aspectRatio, cameraRef.current);
 
 	setupRenderer(rendererRef.current, canvas);
+	setupCSS2DRenderer(css2DRendererRef.current, canvas);
 
 	scene.add(cameraRef.current);
 };
@@ -36,8 +38,8 @@ export const setupRenderer = (renderer, canvasContainer) => {
 	renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 	renderer.setClearColor('black');
 	// Enable XR and other features per browser name
-	switch(browserName){
-		case "Oculus Browser":
+	switch (browserName) {
+		case 'Oculus Browser':
 			document.body.appendChild(VRButton.createButton(renderer));
 			renderer.xr.enabled = true;
 			break;
@@ -55,4 +57,17 @@ export const setupCamera = (camera) => {
 	camera.rotation.set(0, rotY, 0);
 	camera.lookAt(0, 0, 0);
 	camera.updateProjectionMatrix();
+};
+
+export const setupCSS2DRenderer = (css2DRenderer, canvas) => {
+	css2DRenderer.domElement.style.position = 'absolute';
+	css2DRenderer.domElement.style.top = '0px';
+	css2DRenderer.domElement.style.pointerEvents = 'none';
+	canvas.appendChild(css2DRenderer.domElement);
+};
+
+export const createCSS2DRenderer = () => {
+	const ret = window.css2DRenderer || new CSS2DRenderer();
+	window.css2DRenderer = ret;
+	return ret;
 };

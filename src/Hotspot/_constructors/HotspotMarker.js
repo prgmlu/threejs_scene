@@ -55,12 +55,33 @@ export default class HotspotMarker extends InteractionObject {
 		}
 	};
 
+	getLabel = () => {
+		console.log(
+			'=> onHover getChildren',
+			this.userData.props.linked_label_object_id,
+			this.scene.children,
+		);
+		return this.scene.children.find(
+			(item) =>
+				item?.owner?.userData?.props?.hotspotId ===
+				this.userData.props.linked_label_object_id.$oid,
+		);
+	};
+
 	onHover = () => {
 		this.svgSpriteComponent.onHover(this.imageHoverURL, this.userData);
+		if (this.userData?.props?.linked_label_object_id) {
+			const label = this.getLabel();
+			label?.owner?.show();
+		}
 	};
 
 	onUnhover = () => {
 		this.svgSpriteComponent.onUnhover(this.imageURL, this.userData);
+		if (this.userData?.props?.linked_label_object_id) {
+			const label = this.getLabel();
+			label?.owner?.hide();
+		}
 	};
 
 	addToScene = (scene) => {

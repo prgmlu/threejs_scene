@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { ModuleFederationPlugin } = require('webpack').container;
 const deps = require('./package.json').dependencies;
-const TerserPlugin = require('terser-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
 const prodEnvs = ['production', 'client'];
 
 const getMode = (env) => {
@@ -35,36 +35,42 @@ module.exports = (env) => {
 		);
 	}
 
-    pluginsArr.push(new ModuleFederationPlugin({
-        name: "threejs_scene",
-        filename: "remoteEntry.js",
-        exposes:{
-            "./Scene": "./src/Scene",
-            "./Hotspot": "./src/Hotspot",
-            "./InSceneVidComponent": "./src/in-scene-video/InSceneVidComponent",
-            "./FireEffect": "./src/fire-effect/FireEffect",
-            "./WaterEffect": "./src/water-effect/WaterEffect",
-            "./InSceneImageComponent": "./src/in-scene-image/InSceneImageComponent",
-            "./GreenScreenSystem": "./src/green-screen-system/GreenScreenSystem",
-            "./AnimatedGLB": "./src/AnimatedGLB"
-        },
-        shared: {
-            ...deps,
-            react: {
-                shareScope: 'default',
-                singleton: true,
-            },
-            'react-dom': {
-                singleton: true,
-            },
-            three: {
-                import: "three",
-                singleton: true,
-                shareScope: "default",
-                requiredVersion: '0.137.0'
-            },
-        }
-    }));
+	pluginsArr.push(
+		new ModuleFederationPlugin({
+			name: 'threejs_scene',
+			filename: 'remoteEntry.js',
+			exposes: {
+				'./Scene': './src/Scene',
+				'./Hotspot': './src/Hotspot',
+				'./TextObject': './src/Hotspot/_constructors/TextObject',
+				'./InSceneVidComponent':
+					'./src/in-scene-video/InSceneVidComponent',
+				'./FireEffect': './src/fire-effect/FireEffect',
+				'./WaterEffect': './src/water-effect/WaterEffect',
+				'./InSceneImageComponent':
+					'./src/in-scene-image/InSceneImageComponent',
+				'./GreenScreenSystem':
+					'./src/green-screen-system/GreenScreenSystem',
+				'./AnimatedGLB': './src/AnimatedGLB',
+			},
+			shared: {
+				...deps,
+				react: {
+					shareScope: 'default',
+					singleton: true,
+				},
+				'react-dom': {
+					singleton: true,
+				},
+				three: {
+					import: 'three',
+					singleton: true,
+					shareScope: 'default',
+					requiredVersion: '0.137.0',
+				},
+			},
+		}),
+	);
 
 	const config = {
 		mode: getMode(buildEnv),
@@ -115,16 +121,18 @@ module.exports = (env) => {
 	}
 
 	if (prodEnvs.includes(buildEnv)) {
-		config.optimization = {minimizer : [
-			new TerserPlugin({
-				terserOptions: {
-					compress: {
-						drop_console: true
+		config.optimization = {
+			minimizer: [
+				new TerserPlugin({
+					terserOptions: {
+						compress: {
+							drop_console: true,
+						},
+						mangle: true,
 					},
-					mangle: true,
-				}
-			})
-		]}
+				}),
+			],
+		};
 	}
 	return config;
 };

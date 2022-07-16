@@ -1,4 +1,5 @@
 import { ImageMarker } from '../Hotspot/_constructors';
+import TextObject from '../Hotspot/_constructors/TextObject';
 
 export const renderImageHotspotRecord = (data, sceneRef, setMaxRenderOrder) => {
 	const marker = new ImageMarker(data);
@@ -37,6 +38,11 @@ export const createAndRenderImageHotspot = (props, sceneRef, point) => {
 	return marker;
 };
 
+export const createAndRenderLabel = (sceneRef, props) => {
+	const marker = new TextObject(props);
+	marker.addToScene(sceneRef.current);
+	return marker;
+};
 // export const addImageHotspotOnDrop = async (e, position, storeId, currentSceneId, cameraRef, folderId, products, maxRenderOrder, scene, setMaxRenderOrder, reduxDispatch) => {
 // e.preventDefault();
 // const imageId = e.dataTransfer.getData('id');
