@@ -604,7 +604,9 @@ class SceneModal extends Component {
 		const loader = new GLTFLoader();
 		const dracoLoader = new DRACOLoader();
 		dracoLoader.setDecoderPath(
-			'https://www.gstatic.com/draco/v1/decoders/',
+			// 'https://www.gstatic.com/draco/v1/decoders/',
+			'https://cdn.obsess-vr.com/charlotte-tilbury/gltf/'
+			// '../../node_modules/three/examples/js/libs/draco/gltf/',
 		);
 		loader.setDRACOLoader(dracoLoader);
 
