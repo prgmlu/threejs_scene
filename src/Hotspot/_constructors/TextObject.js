@@ -153,8 +153,10 @@ export default class TextObject extends InteractionObject {
 	};
 
 	setLabelStyling = (labelStyling) => {
+		console.log('=> labelStyling', labelStyling);
 		this.labelStyling = labelStyling;
-		this.textDiv.innerText = this.labelStyling?.text || 'hello world!';
+		this.textDiv.innerText = this.labelStyling?.text || '';
+		this.textDiv.style.fontFamily = this.labelStyling?.name || 'lato';
 		this.textDiv.style.fontSize = `${this.labelStyling?.size || 10}px`;
 		this.textDiv.style.color = this.labelStyling?.color || '#000000';
 	};
