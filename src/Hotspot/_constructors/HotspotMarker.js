@@ -53,6 +53,7 @@ export default class HotspotMarker extends InteractionObject {
 		if (this.onClickCallBack) {
 			this.onClickCallBack();
 		}
+		this.hideLabel();
 	};
 
 	getLabel = () => {
@@ -68,20 +69,28 @@ export default class HotspotMarker extends InteractionObject {
 		);
 	};
 
-	onHover = () => {
-		this.svgSpriteComponent.onHover(this.imageHoverURL, this.userData);
+	showLabel = () => {
 		if (this.userData?.props?.linked_label_object_id) {
 			const label = this.getLabel();
 			label?.owner?.show();
 		}
 	};
 
-	onUnhover = () => {
-		this.svgSpriteComponent.onUnhover(this.imageURL, this.userData);
+	hideLabel = () => {
 		if (this.userData?.props?.linked_label_object_id) {
 			const label = this.getLabel();
 			label?.owner?.hide();
 		}
+	};
+
+	onHover = () => {
+		this.svgSpriteComponent.onHover(this.imageHoverURL, this.userData);
+		this.showLabel();
+	};
+
+	onUnhover = () => {
+		this.svgSpriteComponent.onUnhover(this.imageURL, this.userData);
+		this.hideLabel();
 	};
 
 	addToScene = (scene) => {
