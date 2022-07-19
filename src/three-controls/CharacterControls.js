@@ -220,7 +220,6 @@ export default class CharacterControls {
 
             //UPDATE actually no need to set y to 0 since we only update the X and Y only anyway.
             this.camera.getWorldDirection(this.walkDirection)
-            debugger;
             // this.walkDirection.y = 0
             // this.walkDirection.normalize()
             this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)

@@ -109,7 +109,6 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
 
             let [_,modelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations()]);
 
-            debugger;
             let [model, charMixer, animationsMap ] = modelMixerMap;
             let controls = ThreeController.setupCharacterControls(model, charMixer, animationsMap, storeMixer);
             setCharControls(controls);

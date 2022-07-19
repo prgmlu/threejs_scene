@@ -89,7 +89,6 @@ class ThreeController {
 
 
 	setupCharacterControls(model, charMixer, animationsMap, storeMixer) {
-		debugger;
         this.controls.minDistance = 2;
         this.controls.maxDistance = 6;
         this.controls.enablePan = false;
