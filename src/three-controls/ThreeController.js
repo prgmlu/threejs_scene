@@ -88,15 +88,16 @@ class ThreeController {
 	}
 
 
-	setupCharacterControls(model, mixer, animationsMap) {
+	setupCharacterControls(model, charMixer, animationsMap, storeMixer) {
+		debugger;
         this.controls.minDistance = 2;
         this.controls.maxDistance = 6;
         this.controls.enablePan = false;
         this.controls.maxPolarAngle = Math.PI / 2 - 0.05;
         // this.controls.minPolarAngle = - Math.PI / 2 - 0.05;
 
-		this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle_anim',null, [], true, true );
-		// this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
+		this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle_anim',null, [], true, true ,false,storeMixer);
+		// this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
 		window.characterControls = this.characterControls ;
 
 
@@ -113,15 +114,15 @@ class ThreeController {
 		// 		window.model = model;
 
         //         const charAnimations = this.animations;
-        //         const mixer = new THREE.AnimationMixer(model);
+        //         const charMixer = new THREE.AnimationMixer(model);
         //         const animationsMap = new Map();
         //         charAnimations.filter(a => a.name != 'T-Pose').forEach((a) => {
-        //             animationsMap.set(a.name, mixer.clipAction(a));
+        //             animationsMap.set(a.name, charMixer.clipAction(a));
         //         });
 		// 		let initModelPos = [0, 0.1,3 ];
 		// 		model.position.set(...initModelPos);
 		// 		model.scale.set(1.2, 1.2, 1.2);
-		// 		this.characterControls = new CharacterControls(model, mixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, true );
+		// 		this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, true );
 		// 		window.characterControls = this.characterControls ;
 
         //         this.scene.add(model);

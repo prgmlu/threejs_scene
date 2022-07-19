@@ -1,14 +1,75 @@
 import * as THREE from 'three'
+window.THREE = THREE;
 import { Geometry } from 'three/examples/jsm/deprecated/Geometry'
 import CollisionDetection from './CollisionDetection';
 import { createBoundingObjs, offsetBoundingObjs , getStoreParts} from '../three-background/threeHelpers';
 
 import { Octree } from 'three/examples/jsm/math/Octree';
-// import { Octree } from "sparse-octree";
-
 import { Capsule } from 'three/examples/jsm/math/Capsule';
-// import { OctreeHelper } from "octree-helper";
 import { OctreeHelper } from "./OctreeHelper";
+
+
+
+let ApproxAtan = (z)=>
+{
+    const n1 = 0.97239411;
+    const n2 = -0.19194795;
+    return (n1 + n2 * z * z) * z;
+}
+
+
+let ApproxAtan2 = ( y,  x) =>
+{
+    if (x != 0.0)
+    {
+        if (Math.abs(x) > Math.abs(y))
+        {
+            const  z = y / x;
+            if (x > 0.0)
+            {
+                // atan2(y,x) = atan(y/x) if x > 0
+                return ApproxAtan(z);
+            }
+            else if (y >= 0.0)
+            {
+                // atan2(y,x) = atan(y/x) + PI if x < 0, y >= 0
+                return ApproxAtan(z) + Math.PI;
+            }
+            else
+            {
+                // atan2(y,x) = atan(y/x) - Math.PI if x < 0, y < 0
+                return ApproxAtan(z) - Math.PI;
+            }
+        }
+        else // Use property atan(y/x) = Math.PI/2 - atan(x/y) if |y/x| > 1.
+        {
+            const  z = x / y;
+            if (y > 0.0)
+            {
+                // atan2(y,x) = PI/2 - atan(x/y) if |y/x| > 1, y > 0
+                return -ApproxAtan(z) + Math.PI/2;
+            }
+            else
+            {
+                // atan2(y,x) = -PI/2 - atan(x/y) if |y/x| > 1, y < 0
+                return -ApproxAtan(z) - Math.PI/2;
+            }
+        }
+    }
+    else
+    {
+        if (y > 0.0) // x = 0, y > 0
+        {
+            return Math.PI/2;
+        }
+        else if (y < 0.0) // x = 0, y < 0
+        {
+            return -Math.PI/2;
+        }
+    }
+    return 0.0; // x,y = 0. Could return NaN instead.
+}
+
 
 
 
@@ -23,7 +84,7 @@ const OLD_COLLISION_METHOD = false;
 
 export default class CharacterControls {
 
-    constructor(model, mixer, animationsMap, orbitControl, camera, currentAction = 'Idle_anim' , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false){
+    constructor(model, charMixer, animationsMap, orbitControl, camera, currentAction = 'Idle_anim' , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer){
         this.model = model;
 
         if(OLD_COLLISION_METHOD){
@@ -51,7 +112,7 @@ export default class CharacterControls {
             window.playerCollider = this.playerCollider;
 
             this.worldOctree = new Octree();
-            this.worldOctree.fromGraphNode(window.store.children[1]);
+            this.worldOctree.fromGraphNode(window.store.getChildByName('SceneDesign'));
             // this.octreeHelper = new OctreeHelper(this.worldOctree);
             // window.scene.add(this.octreeHelper)
 
@@ -77,7 +138,8 @@ export default class CharacterControls {
         // }
 
 
-        this.mixer = mixer;
+        this.charMixer = charMixer;
+        this.storeMixer = storeMixer;
         this.animationsMap = animationsMap;
         this.currentAction = currentAction;
 
@@ -153,9 +215,14 @@ export default class CharacterControls {
             this.model.quaternion.rotateTowards(this.rotateQuarternion, .1)
 
             // calculate direction
+            //walk direction is the same as the camera direction
+            //but we need to set the y to 0 so it doesnt move up
+
+            //UPDATE actually no need to set y to 0 since we only update the X and Y only anyway.
             this.camera.getWorldDirection(this.walkDirection)
-            this.walkDirection.y = 0
-            this.walkDirection.normalize()
+            debugger;
+            // this.walkDirection.y = 0
+            // this.walkDirection.normalize()
             this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
 
             // move model & camera
@@ -263,7 +330,6 @@ export default class CharacterControls {
             // this.model.boundingObjs.forEach((i)=>{
                 //     i.position.copy(this.model.position);
                 // });
-                console.log(this.path.length)
         }
         else{
             console.log(this.path.length)
@@ -283,6 +349,7 @@ export default class CharacterControls {
 
 
         window.requestAnimationFrame(this.update);
+
         let updateDelta = this.clock.getDelta();
         const directionPressed = this.isUserClicking()
         
@@ -297,12 +364,13 @@ export default class CharacterControls {
                 
                 this.currentAction = newAction;
             }
-            this.mixer.update(updateDelta)
+            this.charMixer.update(updateDelta)
+            this.storeMixer.update(updateDelta)
         }
 
         if (this.currentAction == 'Walk_anim' || directionPressed) {
             // calculate towards camera direction
-            var angleYCameraDirection = Math.PI + Math.atan2(
+            var angleYCameraDirection = Math.PI + ApproxAtan2(
                     (this.camera.position.x - this.model.position.x), 
                     (this.camera.position.z - this.model.position.z))
             // diagonal movement angle offset
@@ -348,7 +416,6 @@ export default class CharacterControls {
                 }
                 // if(this.detectCollisions && collisionHappened){
                         if(result && (Math.abs(result.normal.x) >.7 || Math.abs(result.normal.z)>.7)){ 
-                            console.log(result.normal)
                             this.handleCollision(moveX, moveZ);
                     return;
             }
@@ -380,23 +447,36 @@ export default class CharacterControls {
     directionOffset(keysPressed){
         var directionOffset = 0 // w
 
-        if (keysPressed['w'] || keysPressed['arrowup'] || window.joystickBroadcast[0]) {
-            if (keysPressed['a'] || keysPressed['arrowleft'] || window.joystickBroadcast[3]) {
+        if(window.joystickBroadcast[0] //up
+        || window.joystickBroadcast[1] //down
+        || window.joystickBroadcast[2] //left
+        || window.joystickBroadcast[3]){ //right
+            let x = (window.joystickBroadcast[0] || window.joystickBroadcast[1]);
+            let y = (window.joystickBroadcast[2] || window.joystickBroadcast[3]);
+            return -Math.atan2(y, x);
+        }
+
+
+
+        
+
+        if (keysPressed['w'] || keysPressed['arrowup'] ) {
+            if (keysPressed['a'] || keysPressed['arrowleft'] ) {
                 directionOffset = Math.PI / 4 // w+a
-            } else if (keysPressed['d'] || keysPressed['arrowright'] || window.joystickBroadcast[2]) {
+            } else if (keysPressed['d'] || keysPressed['arrowright'] ) {
                 directionOffset = - Math.PI / 4 // w+d
             }
-        } else if (keysPressed['s'] || keysPressed['arrowdown'] || window.joystickBroadcast[1]) {
-            if (keysPressed['a'] || keysPressed['arrowleft'] || window.joystickBroadcast[3]) {
+        } else if (keysPressed['s'] || keysPressed['arrowdown'] ) {
+            if (keysPressed['a'] || keysPressed['arrowleft'] ) {
                 directionOffset = Math.PI / 4 + Math.PI / 2 // s+a
-            } else if (keysPressed['d'] || keysPressed['arrowright'] || window.joystickBroadcast[2]) {
+            } else if (keysPressed['d'] || keysPressed['arrowright'] ) {
                 directionOffset = -Math.PI / 4 - Math.PI / 2 // s+d
             } else {
                 directionOffset = Math.PI // s
             }
-        } else if (keysPressed['a'] || keysPressed['arrowleft'] || window.joystickBroadcast[3]) {
+        } else if (keysPressed['a'] || keysPressed['arrowleft'] ) {
             directionOffset = Math.PI / 2 // a
-        } else if (keysPressed['d'] || keysPressed['arrowright'] || window.joystickBroadcast[2]) {
+        } else if (keysPressed['d'] || keysPressed['arrowright'] ) {
             directionOffset = - Math.PI / 2 // d
         }
 

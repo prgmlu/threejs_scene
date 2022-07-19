@@ -25,6 +25,7 @@ export default class JoystickControls extends Component {
         this.joyManager;
 
         window.joystickBroadcast = this.directionValues;
+        window.joystick = this;
 
         this.scene = this.props.scene;
         this.camera = this.props.camera;
@@ -130,18 +131,18 @@ export default class JoystickControls extends Component {
                 const turn = data.vector.x
 
                 if (forward > 0) {
-                    this.directionValues[0] = Math.abs(forward)
+                    this.directionValues[0] = forward;
                     this.directionValues[1] = 0
                 } else if (forward < 0) {
                     this.directionValues[0] = 0
-                    this.directionValues[1] = Math.abs(forward)
+                    this.directionValues[1] = forward;
                 }
 
                 if (turn > 0) {
                     this.directionValues[3] = 0
-                    this.directionValues[2] = Math.abs(turn)
+                    this.directionValues[2] = turn;
                 } else if (turn < 0) {
-                    this.directionValues[3] = Math.abs(turn)
+                    this.directionValues[3] = turn;
                     this.directionValues[2] = 0
                 }
             })

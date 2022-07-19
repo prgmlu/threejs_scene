@@ -47,6 +47,17 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
     const [avatar, setAvatar] = useState(null);
     const [room, setRoom] = useState(null);
     const [charControls, setCharControls] = useState(null);
+    let storeMixer = null;
+
+    let handleAnimations = (data)=>{
+        storeMixer = new THREE.AnimationMixer(data.scene);
+        data.animations.forEach((anim)=>{
+            let action = storeMixer.clipAction(anim);
+            action.loop = THREE.LoopPingPong;
+            action.play();
+        })
+    }
+
 
     useEffect(() => {
         let roomObj = null;
@@ -63,7 +74,8 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
         
         function loadStore () {
             return new Promise((resolve, reject) => {
-                loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v005.glb",(data) => {
+                loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_sceneAnim_v030.glb",(data) => {
+                // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v005.glb",(data) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(data) => {
                     // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v026.glb",(data) => {
                     
@@ -78,6 +90,11 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
                     if(room & avatar) {
                         charControls.setUpCollisionDetection();
                     }
+
+                    if(data.animations && data.animations.length > 0){
+                        handleAnimations(data);
+                    }
+
                     scene.add(data.scene);
                     data.scene.scale.set(140,140,140)
 
@@ -92,8 +109,9 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
 
             let [_,modelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations()]);
 
-            let [model, mixer, animationsMap ] = modelMixerMap;
-            let controls = ThreeController.setupCharacterControls(model, mixer, animationsMap);
+            debugger;
+            let [model, charMixer, animationsMap ] = modelMixerMap;
+            let controls = ThreeController.setupCharacterControls(model, charMixer, animationsMap, storeMixer);
             setCharControls(controls);
             controls.setUpCollisionDetection();
             scene.add(model);
