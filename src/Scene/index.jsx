@@ -101,25 +101,6 @@ const createOrGetControls = (
 	return window[controllerKey];
 };
 
-class ThreeScene extends THREE.Scene {
-	labelsVisible = false;
-	labelsMap = {};
-
-	setToolTipsVisibility = (value) => {
-		this.children.forEach((child) => {
-			if (child.name === 'tooltip') {
-				child?.owner?.setVisibility(value);
-			}
-		});
-		this.labelsVisible = value;
-	};
-
-	setLabel = (labelId, label) => (this.labelsMap[labelId] = label);
-	toggleToolTips = () => this.setToolTipsVisibility(!this.labelsVisible);
-	showToolTips = () => this.setToolTipsVisibility(true);
-	hideToolTips = () => this.setToolTipsVisibility(false);
-}
-
 const Scene = (props) => {
 	const {
 		sceneId,
@@ -135,6 +116,7 @@ const Scene = (props) => {
 		orbitControlsConfig = {},
 		loadingIconSrc = null,
 	} = props;
+
 	const [threeReady, setThreeReady] = useState(false);
 	const [showLoadingIcon, setShowLoadingIcon] = useState(true);
 	const [renderObjects, setRenderObjects] = useState(false);
@@ -144,7 +126,7 @@ const Scene = (props) => {
 	const [UI, setUI] = useState();
 
 	//Scene
-	const sceneRef = useRef(new ThreeScene());
+	const sceneRef = useRef(new THREE.Scene());
 	const scene = sceneRef.current;
 
 	//Renderer
@@ -192,7 +174,7 @@ const Scene = (props) => {
 			if (!userInteracted && !interactTimeoutId) {
 				const itid = setTimeout(() => {
 					if (!userInteracted) {
-						scene.showToolTips();
+						setTooltipsVisibility(true);
 					}
 				}, 4000);
 				setInteractTimeoutId(itid);
@@ -396,6 +378,14 @@ const Scene = (props) => {
 			setUI(false); //Hide UI Modal when scene changed
 		};
 	}, [sceneId]);
+
+	const setTooltipsVisibility = (visible) => {
+		sceneRef.current.children.forEach((child) => {
+			if (child.name === 'tooltip') {
+				child?.owner?.setVisibility(visible);
+			}
+		});
+	};
 
 	//Events
 	useEffect(() => {

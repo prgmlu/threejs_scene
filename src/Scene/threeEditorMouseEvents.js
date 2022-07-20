@@ -125,10 +125,6 @@ export const threeEditorMouseEvents = (
 		}
 		const marker = sceneObject?.object?.owner;
 
-		if (!marker) {
-			sceneRef.current.toggleToolTips();
-		}
-
 		// public method/callback
 		if (onMouseUpCallback)
 			return onMouseUpCallback(e, sceneObject, marker, isDragEvent);
