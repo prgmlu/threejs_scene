@@ -62,6 +62,7 @@ export const setupCamera = (camera) => {
 export const setupCSS2DRenderer = (css2DRenderer, canvas) => {
 	css2DRenderer.domElement.style.position = 'absolute';
 	css2DRenderer.domElement.style.top = '0px';
+	css2DRenderer.domElement.style.zIndex = 0;
 	css2DRenderer.domElement.style.pointerEvents = 'none';
 	canvas.appendChild(css2DRenderer.domElement);
 };
