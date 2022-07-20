@@ -5,7 +5,7 @@ export default class SVGSprite extends THREE.Sprite {
 	constructor() {
 		const material = new THREE.SpriteMaterial();
 		super(material);
-
+		this.material.visible = false;
 		this.setSVGString = this.setSVGString.bind(this);
 	}
 
@@ -28,6 +28,7 @@ export default class SVGSprite extends THREE.Sprite {
 		this.material.map = new THREE.Texture(drawCanvas);
 		this.material.map.needsUpdate = true;
 		this.material.needsUpdate = true;
+		this.material.visible = true;
 	}
 
 	setVisibility = (value) => {
