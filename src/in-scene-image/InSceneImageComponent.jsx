@@ -41,6 +41,7 @@ const InSceneImageComponent = (props) => {
 			side: THREE.DoubleSide
 		} );
 		imageMeshRef.current = new THREE.Mesh(geometry, material);
+		imageMeshRef.current.renderOrder=2;
 	};
 
 	const onComponentUmount = () => {
