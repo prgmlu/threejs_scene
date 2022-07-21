@@ -443,8 +443,10 @@ const Scene = (props) => {
 	useEffect(() => {
 		const windowResizeHandler = () => {
 			const canvasContainer = canvasRef.current;
-			const width = canvasContainer.offsetWidth;
-			const height = canvasContainer.offsetHeight;
+			const width = window.innerWidth;
+			const height = window.innerHeight;
+			// const width = canvasContainer.offsetWidth;
+			// const height = canvasContainer.offsetHeight;
 
 			cameraRef.current.aspect = width / height;
 			cameraRef.current.updateProjectionMatrix();

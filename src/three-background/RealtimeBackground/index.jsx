@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {resetRenderer, setUpEnvMap, loadModelAndAnimations} from '../threeHelpers';
 import AvatarCreatorContainer from './AvatarCreatorContainer';
 import JoystickControls from '../../three-controls/JoystickControls';
+// import './style.css';
 
 
 // import { Octree } from 'three/examples/jsm/math/Octree';
@@ -114,6 +115,12 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
             setCharControls(controls);
             controls.setUpCollisionDetection();
             scene.add(model);
+            try{
+                document.querySelectorAll('.bottombar-container')[0].remove()
+            }
+            catch{
+                null;
+            }
             setAvatar(model);
         }
 
