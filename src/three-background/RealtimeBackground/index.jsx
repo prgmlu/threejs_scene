@@ -62,7 +62,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
     useEffect(() => {
         const script = document.createElement('script');
       
-        script.src = "./pleaserotate.js";
+        script.src = "https://cdn.obsess-vr.com/realtime3d/pleaserotate.js";
         script.async = true;
       
         document.body.appendChild(script);
