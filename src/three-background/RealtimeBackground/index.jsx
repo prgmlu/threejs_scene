@@ -59,6 +59,19 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
         })
     }
 
+    useEffect(() => {
+        const script = document.createElement('script');
+      
+        script.src = "./pleaserotate.js";
+        script.async = true;
+      
+        document.body.appendChild(script);
+      
+        return () => {
+          document.body.removeChild(script);
+        }
+      }, []);
+
 
     useEffect(() => {
         let roomObj = null;
