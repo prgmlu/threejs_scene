@@ -445,8 +445,10 @@ const Scene = (props) => {
 			const canvasContainer = canvasRef.current;
 			const width = canvasContainer.offsetWidth;
 			const height = canvasContainer.offsetHeight;
+			// console.log('width, height', width,' ', height);
 
 			cameraRef.current.aspect = width / height;
+			// console.log('cameraRef.current.aspect ', cameraRef.current.aspect)
 			cameraRef.current.updateProjectionMatrix();
 			renderer.setSize(width, height);
 

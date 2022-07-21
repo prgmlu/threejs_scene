@@ -160,8 +160,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
     return (
         <>
         {adjustHotspots()}
-        { 
-        avatar && <AvatarCreatorContainer avatar={avatar} scene={scene} avatarPos={avatar.position} />}
+        {/* { avatar && <AvatarCreatorContainer avatar={avatar} scene={scene} avatarPos={avatar.position} />} */}
 		{avatar && charControls && <JoystickControls scene={scene} camera={camera} renderer={renderer} avatar={avatar} controls={charControls.orbitControl} />}
         </>
     );
