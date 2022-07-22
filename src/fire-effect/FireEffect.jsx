@@ -259,10 +259,13 @@ export default class FireEffect extends Component {
             fire.position.set(this.position.x, this.position.y, this.position.z);
             fire.scale.set(this.scale.x, this.scale.y, this.scale.z);
             fire.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
+            fire.renderOrder = 2;
 
             this.fire = fire;
-            if(DEBUG==true)
+            if(DEBUG==true){
                 createDatGui(this.fire)
+                window.fire = fire;
+            }
             this.scene.add(this.fire);
 
         
