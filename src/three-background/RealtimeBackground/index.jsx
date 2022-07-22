@@ -128,13 +128,15 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
             setCharControls(controls);
             controls.setUpCollisionDetection();
             scene.add(model);
-            try{
-                document.querySelectorAll('.bottombar-container')[0].remove()
-            }
-            catch{
-                null;
-            }
             setAvatar(model);
+            window.setInterval(()=>{
+                try{
+                    document.querySelectorAll('.bottombar-container')[0].remove()
+                }
+                catch{
+                    null;
+                }
+            },1000);
         }
 
         loadStoreAndModel();
