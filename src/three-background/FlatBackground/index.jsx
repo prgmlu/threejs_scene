@@ -40,7 +40,7 @@ const FlatBackground = ({
 
 		if (backgroundUrl) {
 			flatBackground.current.loadTexture(
-				`${backgroundUrl}?v=${
+				`${backgroundUrl}?key=${
 					imageIntegrity
 						? imageIntegrity
 						: formatDate(new Date(), 'mmddyyyyhh')
