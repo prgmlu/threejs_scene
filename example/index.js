@@ -19,7 +19,6 @@ const Page=()=>{
 
 
     const onMouseUp=(e, sceneObject, marker, isDragEvent)=>{
-        // console.log('-onMouseUp',{e, sceneObject, marker, isDragEvent});
         //Open marker UI
         if (marker && marker?.sceneObject) marker.onClick(e);
         else{
@@ -38,7 +37,6 @@ const Page=()=>{
         }
     }
 
-    console.log('-----Scene-----',{sceneId, scenes, scenesArr, sceneData});
     return(<div>
         <h2>ThreeJS Scene</h2>
 
@@ -53,7 +51,6 @@ const Page=()=>{
             sceneId={sceneId}
             bgConf={sceneData.bg}
             onMouseUp={onMouseUp}
-            useDebugger={true}
         >
             {sceneData?.hotspots?.map((item, i)=>{
                 return <Hotspot

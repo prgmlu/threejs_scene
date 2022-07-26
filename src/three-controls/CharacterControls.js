@@ -7,74 +7,15 @@ import { createBoundingObjs, offsetBoundingObjs , getStoreParts} from '../three-
 import { Octree } from 'three/examples/jsm/math/Octree';
 import { Capsule } from 'three/examples/jsm/math/Capsule';
 import { OctreeHelper } from "./OctreeHelper";
+import {ApproxAtan2} from './helpers';
 
-
-
-let ApproxAtan = (z)=>
-{
-    const n1 = 0.97239411;
-    const n2 = -0.19194795;
-    return (n1 + n2 * z * z) * z;
-}
-
-
-let ApproxAtan2 = ( y,  x) =>
-{
-    if (x != 0.0)
-    {
-        if (Math.abs(x) > Math.abs(y))
-        {
-            const  z = y / x;
-            if (x > 0.0)
-            {
-                // atan2(y,x) = atan(y/x) if x > 0
-                return ApproxAtan(z);
-            }
-            else if (y >= 0.0)
-            {
-                // atan2(y,x) = atan(y/x) + PI if x < 0, y >= 0
-                return ApproxAtan(z) + Math.PI;
-            }
-            else
-            {
-                // atan2(y,x) = atan(y/x) - Math.PI if x < 0, y < 0
-                return ApproxAtan(z) - Math.PI;
-            }
-        }
-        else // Use property atan(y/x) = Math.PI/2 - atan(x/y) if |y/x| > 1.
-        {
-            const  z = x / y;
-            if (y > 0.0)
-            {
-                // atan2(y,x) = PI/2 - atan(x/y) if |y/x| > 1, y > 0
-                return -ApproxAtan(z) + Math.PI/2;
-            }
-            else
-            {
-                // atan2(y,x) = -PI/2 - atan(x/y) if |y/x| > 1, y < 0
-                return -ApproxAtan(z) - Math.PI/2;
-            }
-        }
-    }
-    else
-    {
-        if (y > 0.0) // x = 0, y > 0
-        {
-            return Math.PI/2;
-        }
-        else if (y < 0.0) // x = 0, y < 0
-        {
-            return -Math.PI/2;
-        }
-    }
-    return 0.0; // x,y = 0. Could return NaN instead.
-}
+import CentralMultipleCharControl from './CentralMultipleCharControl';
 
 
 
 
 // CONSTANTS
-const FADE_DURATION = 0.2;
+const FADE_DURATION = .4;
 const WALK_VELOCITY = 3;
 const DIRECTIONS = ['w', 'a', 's', 'd', 'arrowup', 'arrowleft', 'arrowdown', 'arrowright'];
 
@@ -97,7 +38,7 @@ export default class CharacterControls {
             })
 
 
-            this.playerCollider = new Capsule( new THREE.Vector3( 0, 0.35 -7, 0 ), new THREE.Vector3( 0, 1-7, 0 ), 2 );
+            this.playerCollider = new Capsule( new THREE.Vector3( 0, 0.35 , 0 ), new THREE.Vector3( 0, 1, 0 ), 2 );
             window.playerCollider = this.playerCollider;
 
         }
@@ -105,14 +46,14 @@ export default class CharacterControls {
         // else{
             let start = model.position.clone();
             let end = model.position.clone();
-            start.y = .2-7;
-            end.y = 1-7;
+            start.y = .2;
+            end.y = 1;
             this.playerCollider = new Capsule(start,end,0.45);
 
             window.playerCollider = this.playerCollider;
 
             this.worldOctree = new Octree();
-            this.worldOctree.fromGraphNode(window.store.getChildByName('SceneDesign'));
+            this.worldOctree.fromGraphNode(window.store.getObjectByName('SceneDesign'));
             // this.octreeHelper = new OctreeHelper(this.worldOctree);
             // window.scene.add(this.octreeHelper)
 
@@ -147,7 +88,7 @@ export default class CharacterControls {
 
         this.animated = animated;
         this.detectCollisions = detectCollisions;
-        this.clock = new THREE.Clock();
+        // this.clock = new THREE.Clock();
 
         this.handleIndicators = handleIndicators;
         
@@ -191,7 +132,11 @@ export default class CharacterControls {
 		document.addEventListener('keyup', this.handleKeyup, false);
 
 
-        this.update();
+        this.CentralMultipleCharControl = new CentralMultipleCharControl(this,[]);
+
+
+
+        // this.update();
 
     }
 
@@ -201,7 +146,6 @@ export default class CharacterControls {
         if(window.joystickBroadcast){
             var joyStickClicks = window.joystickBroadcast.some(key => key!=0);
         }
-        // console.log(window.joystickBroadcast);
         return keyBoardClicks || joyStickClicks;
 
 
@@ -321,7 +265,6 @@ export default class CharacterControls {
         let jumpLength = 10;
         // if(this.path.length<jumpLength){
         if(true){
-            // alert('You are at the start of the path')
 
             this.model.position.copy(this.lastSafePlace.clone());
             offsetBoundingObjs(this.model.position, this.model.boundingObjs);
@@ -331,29 +274,21 @@ export default class CharacterControls {
                 // });
         }
         else{
-            console.log(this.path.length)
-            console.log('this.model.position', this.model.position)
-            console.log('this.path[this.path.length-jumpLength]', this.path[this.path.length-jumpLength])
+
             this.model.position.copy(this.path[this.path.length-jumpLength].clone());
             offsetBoundingObjs(this.path[this.path.length-jumpLength].clone(), this.model.boundingObjs);
         }
     }
 
-    update = () => {
+    update = (updateDelta) => {
+        // window.requestAnimationFrame(this.update);
 
-        // if(!window.doneTest){
-            // window.scene.children.filter((i)=>i.type=='Sprite').forEach((i)=>i.material.depthTest=true)
-            // window.doneTest = true;
-        // }
-
-
-        window.requestAnimationFrame(this.update);
-
-        let updateDelta = this.clock.getDelta();
-        const directionPressed = this.isUserClicking()
+        // let updateDelta = this.clock.getDelta();
+        const isWalking = this.isUserClicking()
+        this.isWalking = isWalking;
         
         if(this.animated){
-            let newAction = directionPressed? 'Walk_anim' : 'Idle_anim';
+            let newAction = isWalking? 'Walk_anim' : 'Idle_anim';
             if (this.currentAction != newAction) {
                 const toPlay = this.animationsMap.get(newAction);
                 const current = this.animationsMap.get(this.currentAction);
@@ -367,14 +302,13 @@ export default class CharacterControls {
             this.storeMixer.update(updateDelta)
         }
 
-        if (this.currentAction == 'Walk_anim' || directionPressed) {
+        if (this.currentAction == 'Walk_anim' || isWalking) {
             // calculate towards camera direction
             var angleYCameraDirection = Math.PI + ApproxAtan2(
                     (this.camera.position.x - this.model.position.x), 
                     (this.camera.position.z - this.model.position.z))
             // diagonal movement angle offset
             var directionOffset = this.directionOffset(this.keysPressed)
-            // alert(directionOffset)
 
             let [moveX, moveZ] = this.getMovesFromDirectionClick(directionOffset, angleYCameraDirection, updateDelta);
 
@@ -403,10 +337,6 @@ export default class CharacterControls {
             // }
 
             // let result = results[0]; 
-
-            
-
-            
             
             let collisionHappened = false;
             if(this.detectCollisions){

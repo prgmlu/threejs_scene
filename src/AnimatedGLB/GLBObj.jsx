@@ -112,8 +112,6 @@ class GLBObj extends Component {
 	};
 
 	handleMouseMove = (e) => {
-		// console.log(this.val);
-		// alert('hi')
 		var hit = this.getRaycastIntersects(e);
 		if (hit && hit.length > 0) {
 			this.renderer.domElement.style.cursor = 'pointer';
@@ -145,7 +143,6 @@ class GLBObj extends Component {
 
 	handleClickingLogic(e) {
 		var hit = this.getRaycastIntersects(e);
-		// alert(hit);
 		if (
 			hit &&
 			hit.length &&
@@ -290,7 +287,6 @@ class GLBObj extends Component {
 			},
 			this.camera,
 		);
-		// console.log(window.rayCastingCheckingObjs+ window.scene.children.filter((i)=>i.type=='Sprite'));
 		if (window?.rayCastingCheckingObjs) {
 			return this.raycaster.intersectObjects(
 				window.rayCastingCheckingObjs.concat(
@@ -304,13 +300,11 @@ class GLBObj extends Component {
 	animate() {
 		this.props.canTween && requestAnimationFrame(this.animate);
 		TWEEN.update();
-		// console.log('anim')
 		// this.obj.rotation.y+=.01;
 	}
 
 	componentDidMount() {
 		this._mounted = true;
-		// alert('should be adding')
 
 		this.scene = this.props.scene || this.props.sceneRef.current;
 		this.camera = this.props?.camera || window.c.object;
@@ -324,7 +318,6 @@ class GLBObj extends Component {
 			this.obj = createCube(3 * Math.random(), 3 * Math.random());
 			this.scene.add(this.obj);
 			this.obj.position.set(...this.props.pos);
-			// alert(this.props.outerObjScale);
 			this.obj.scale.set(...this.props.outerObjScale);
 			this.obj.material.transparent = true;
 
@@ -358,7 +351,6 @@ class GLBObj extends Component {
 
 	componentWillUnmount() {
 		this._mounted = false;
-		// alert('Glb unmount');
 		window.rayCastingCheckingObjs = [];
 		this.scene.remove(this.obj);
 		document.removeEventListener('mousemove', this.handleMouseMove);
@@ -370,7 +362,6 @@ class GLBObj extends Component {
 	}
 
 	componentWillUpdate() {
-		// alert('update')
 	}
 
 	render() {

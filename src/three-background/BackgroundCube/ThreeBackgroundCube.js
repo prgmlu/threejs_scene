@@ -494,9 +494,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 		Object.keys(this.faces).forEach((face) => {
 			let currentFace = this.faces[face];
 			currentFace?.mesh?.geometry?.dispose();
-			// debugger;
 			// if (currentFace.mesh.geometry) {
-			//     console.log("dispose geometry ", face)
 			// }
 
 			if (currentFace.mesh.material) {
@@ -507,7 +505,6 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 						}
 						currentFace.mesh.material[i].dispose();
 						currentFace.mesh.material[i].needsUpdate = true;
-						// console.log("dispose material ", face)
 					}
 				} else {
 					if (currentFace.mesh.material.map) {
@@ -515,7 +512,6 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 					}
 					currentFace.mesh.material.dispose();
 					currentFace.mesh.material.needsUpdate = true;
-					// console.log("dispose material ", face)
 				}
 			}
 		});

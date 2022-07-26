@@ -21,7 +21,6 @@ let adjustHotspots = ()=> {
 
     });
 
-    // alert('adjustHotspots');
     // window.scene.children.filter((i)=>i.type=='Sprite' || i.type=='mesh' ).forEach((i)=>{
     //     i.position.y = 2+Math.random()*3;
     //     i.material.depthTest = true;
@@ -29,11 +28,7 @@ let adjustHotspots = ()=> {
         // i.position.x+=2;
         // i.position.z+=2;
     // });
-    // window.store.position.y = -7;
-    // window.model.position.y = -7;
 
-    // window.store.position.x = -5;
-    // window.model.position.x = -5;
 
 }
 
@@ -112,7 +107,6 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl }) => {
                     scene.add(data.scene);
                     data.scene.scale.set(140,140,140)
 
-                    data.scene.position.y-=7;
                     window.store = data.scene;
                     resolve();
                 })

@@ -43,7 +43,6 @@ class Water extends Mesh {
 		const fog = options.fog !== undefined ? options.fog : false;
 
 		// const alphaMap = options.alphaMap !== undefined ? options.alphaMap : false;
-        // alert(alphaMap)
 
 		//
 

@@ -68,7 +68,6 @@ export const setFaceTransforms = (face,planeMesh, units=9.99) => {
 
 
 export const provideReadyPlanes  =  (imagesAndOpacitiesObj) => {
-    // debugger;
     let planes = {
         front: null,
         right: null,

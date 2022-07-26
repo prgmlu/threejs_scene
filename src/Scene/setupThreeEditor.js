@@ -10,9 +10,6 @@ export const initThreeJSScene = (
 	rendererRef,
 	scene,
 ) => {
-	// console.log('%c >initThreeJSScene ', 'color:green', JSON.parse(JSON.stringify({
-	// canvasRef:canvasRef.current,
-	// })));
 
 	const canvas = canvasRef.current;
 	const clock = new THREE.Clock();

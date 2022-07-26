@@ -164,7 +164,7 @@ export default class JoystickControls extends Component {
 
     render() {
         return (
-            <div id="mobileInterface" class="noSelect">
+            <div id="mobileInterface" className="noSelect">
                 <div id="joystickWrapper1"
                     ref={this.myRef}
                 ></div>

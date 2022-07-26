@@ -60,7 +60,6 @@ function handleOpacitiesByAnimation(
 ) {
 	// if (!innerPart_0 || !innerPart_1 || !outerPart_0 || !outerPart_1) return;
 	that.setTextOpacity(progressRatio);
-	// console.log(progressRatio);
 	//finite state machine
 	if (type == 'cream') {
 		if (animationNumber == 1) {
@@ -330,7 +329,6 @@ class SceneModal extends Component {
 		this.first = true;
 
 		if (e.touches.length == 2) {
-			// console.log('2');
 			var dx = e.touches[0].pageX - e.touches[1].pageX;
 			var dy = e.touches[0].pageY - e.touches[1].pageY;
 			this._touchZoomDistanceEnd = this._touchZoomDistanceStart =
@@ -396,7 +394,6 @@ class SceneModal extends Component {
 	}
 
 	playNextAction() {
-		// console.log(this.currentAnimationCounter);
 		if (this.animationPlaying) {
 			// var action = this.mixer.clipAction(this.animationClips[this.currentAnimationCounter]);
 			// this.currentAction.paused = true;
@@ -421,7 +418,6 @@ class SceneModal extends Component {
 	}
 
 	animate() {
-		// console.log(this.scene.uuid);
 		if (
 			(window.aa && this.props.id == 0) ||
 			(window.bb && this.props.id == 1) ||
@@ -526,7 +522,6 @@ class SceneModal extends Component {
 	}
 
 	getRaycastIntersects(e) {
-		// debugger;
 		var x =
 			e.touches && e.touches.length > 0
 				? e.touches[0].clientX
@@ -562,7 +557,6 @@ class SceneModal extends Component {
 	}
 
 	setText(counter) {
-		// console.log(counter,this.animationClips.length )
 		if (counter > this.animationClips.length) return false;
 		var text = document.getElementById('text');
 		if (window.aa) {
@@ -610,7 +604,6 @@ class SceneModal extends Component {
 
 		loader.crossOrigin = true;
 		// loader.load(this.props.url, (gltf) => {
-		// debugger;
 		let gltf = this.props.gltf;
 		if (window.objs) {
 			window.objs.push(gltf.scene);
@@ -684,7 +677,6 @@ class SceneModal extends Component {
 				}
 			}
 			if (this.props.type == 'matte') {
-				// debugger;
 				if (o.name == 'Box_GEO') {
 					this.box = o;
 					this.box.material = this.box.material.clone();
@@ -880,7 +872,6 @@ class SceneModal extends Component {
 
 	componentWillUnmount() {
 		this._mounted = false;
-		// alert('modal unmounts')
 		// this.scene.remove(this.obj);
 		// this.obj.traverse((o) => {
 		// 	if (o.dispose) o.dispose();
@@ -927,11 +918,8 @@ class SceneModal extends Component {
 		// window.objs[0].position;
 
 		// var alpha = 1 - ((this.camera.fov-MIN_FOV) / 65 );
-		// console.log('alpha', alpha);
 
 		// var lerpdPos = startVec.lerp(endVec,    alpha);
-		// console.log('lerped',lerpdPos);
-		// debugger;
 		// this.camera.lookAt(lerpdPos.x,lerpdPos.y,lerpdPos.z);
 
 		this.camera.updateProjectionMatrix();

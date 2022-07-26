@@ -82,7 +82,6 @@ class AnimatedGLBs extends Component {
 		this.lashes = null;
 		this.matte = null;
 
-		// alert(props.roomId)
 
 		// this.setEnvMap(props.sceneRef.current);
 
@@ -166,7 +165,6 @@ class AnimatedGLBs extends Component {
 		loader.crossOrigin = true;
 
 		loader.load(creamUrl, (gltf) => {
-			// alert('cream loaded');
 
 			this.cream = gltf;
 			this._mounted &&
@@ -183,12 +181,10 @@ class AnimatedGLBs extends Component {
 					this.setState({
 						modelsLoaded: true,
 					});
-				// alert('loads');
 			}
 		});
 
 		loader.load(lashesUrl, (gltf) => {
-			// alert('lashes loaded');
 
 			this.lashes = gltf;
 			this._mounted &&
@@ -205,12 +201,10 @@ class AnimatedGLBs extends Component {
 					this.setState({
 						modelsLoaded: true,
 					});
-				// alert('loads');
 			}
 		});
 
 		loader.load(matteUrl, (gltf) => {
-			// alert('matte loaded');
 
 			this.matte = gltf;
 			this._mounted &&
@@ -227,7 +221,6 @@ class AnimatedGLBs extends Component {
 					this.setState({
 						modelsLoaded: true,
 					});
-				// alert('loads');
 			}
 		});
 	}
@@ -235,7 +228,6 @@ class AnimatedGLBs extends Component {
 	componentWillUnmount() {
 		this._mounted = false;
 		// if (window.constructionCount >1) return;
-		// alert('unmountin')
 
 		window.animatedGlbsConstructed = false;
 	}

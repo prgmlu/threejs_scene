@@ -1099,11 +1099,8 @@ class OrbitControls extends EventDispatcher {
 	}
 
 	setupRotateControls(orbitControlsConfig) {
-		// alert('setting up ')
 		// // this.object.position.set(0,0,0);
 		// // this
-		// console.log('target', this.target);
-		// console.log('this.object.position', this.object.position);
 
 
 		const posX = 0.1;

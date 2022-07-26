@@ -123,12 +123,10 @@ const createOrGetControls = (
 };
 
 const Scene = (props) => {
-	// console.log('=> Scene:props', props);
 	const {
 		sceneId,
 		allowEventsForMarkerTypeOnly,
 		bgConf,
-		useDebugger = false,
 		allowHotspotsToMove,
 		resetBGBeforeImageLoaded = false,
 		children,
@@ -195,17 +193,9 @@ const Scene = (props) => {
 	};
 
 	const handleContextLoss = (e) => {
-		console.log(
-			'%c Context lost. restoring context...',
-			'color:red;text-decoration:underline',
-		);
 
 		e.preventDefault();
 		setTimeout((e) => {
-			console.log(
-				'%c Context lost. restoring context 2...',
-				'color:red;text-decoration:underline',
-			);
 
 			//restoreContext() will ONLY simulate restoring of the context
 			//run restore only if context lost, otherwise error will be thrown
@@ -216,10 +206,6 @@ const Scene = (props) => {
 	};
 
 	const handleContextRestored = () => {
-		console.log(
-			'%c Context restored',
-			'color:green;text-decoration:underline',
-		);
 		setupRenderer(rendererRef.current, canvas);
 		scene.add(cameraRef.current);
 		renderer?.forceContextRestore();
@@ -227,12 +213,6 @@ const Scene = (props) => {
 
 	//1. Mount camera & setup renderer only once!!!
 	useEffect(() => {
-		console.log('=> mount', sceneId);
-		console.log(
-			'%c >INIT:1 - initThreeJSScene',
-			'color:green',
-			JSON.parse(JSON.stringify({ rendererRef: rendererRef.current })),
-		);
 		let canvas = canvasRef.current;
 		initThreeJSScene(canvasRef, cameraRef, controlsRef, rendererRef, scene);
 		setThreeReady(true);
@@ -247,8 +227,6 @@ const Scene = (props) => {
 		);
 
 		return () => {
-			console.log('=> unmount : Scene');
-			// console.log('%c >INIT:1 - unmounted', 'color:gray');
 			renderer.domElement.removeEventListener(
 				'webglcontextlost',
 				handleContextLoss,
@@ -445,10 +423,8 @@ const Scene = (props) => {
 			const canvasContainer = canvasRef.current;
 			const width = canvasContainer.offsetWidth;
 			const height = canvasContainer.offsetHeight;
-			// console.log('width, height', width,' ', height);
 
 			cameraRef.current.aspect = width / height;
-			// console.log('cameraRef.current.aspect ', cameraRef.current.aspect)
 			cameraRef.current.updateProjectionMatrix();
 			renderer.setSize(width, height);
 
@@ -497,13 +473,7 @@ const Scene = (props) => {
 
 	return (
 		<>
-			{useDebugger && (
-				<DebugUI
-					renderer={rendererRef.current}
-					scene={sceneRef.current}
-					glContext={glContext}
-				/>
-			)}
+
 
 			<div
 				id={props.id ? props.id : 'canvas-wrapper'}

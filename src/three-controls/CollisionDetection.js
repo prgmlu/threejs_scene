@@ -30,7 +30,6 @@ export default class CollisionDetection {
                     //     // || collisionResults[i].object.name.includes('InteriorGeo')
                     //     continue;
                     // }
-                    // console.log(collisionResults[i].object.name);
                     // else{
                         // collision = true;
                     // }

@@ -88,7 +88,6 @@ export const threeEditorVREvents = (
                     controller.add(hand.scene)
                 }, null,
                 (error)=>{
-                    console.log('An error ocurred loading the hands: ', error)
                 }			
             )
         }

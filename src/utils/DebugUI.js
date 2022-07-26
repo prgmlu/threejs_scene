@@ -42,7 +42,6 @@ export default function DebugUI({ renderer, glContext, scene }) {
 		</tr>
 	);
 
-	console.log('%c >DebugUI', 'color:blue', { renderer, info, scene });
 	console.table(info.memory);
 
 	return (

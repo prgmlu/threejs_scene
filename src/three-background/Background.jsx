@@ -28,7 +28,6 @@ const Background = ({
 	const [useWebp, setUseWebp] = useState(false);
 	const [skipLargest, setSkipLargest] = useState(false);
 
-	console.log('%c >INIT: - Background', 'color:green', bgConf);
 
 	useEffect(() => {
 		if (bgConf) {

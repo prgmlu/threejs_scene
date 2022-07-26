@@ -201,13 +201,11 @@ export const threeEditorMouseEvents = (
 		const sceneObject = getIntersectedMarkerObject(intersects);
 		const marker = sceneObject?.object?.owner;
 
-		// console.log(marker);
 
 		//three cases,
 		// 1- new hover, 2- already hovered, 3- no hovers
 
 		//new hover, append to array and change svg string
-		// console.log(hoveredObjectsOriginalSvgStrings);
 		if (marker && !hoveredMarkers.has(marker)) {
 			// resetHovers(hovererdMarkers)
 
@@ -216,19 +214,14 @@ export const threeEditorMouseEvents = (
 			// hoveredObjectsOriginalSvgStrings.set(marker, marker.svgSpriteComponent.svgString);
 			hoveredMarkers.add(marker);
 			// marker.userData.onHover(marker);
-			// console.log(marker.svgSpriteComponent.svgString.replace(/$\<path/g,"<path opacity='.9'"))
-			// debugger;
 			marker.onHover();
 			// marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace(/opacity='\.5'/g,"opacity='.9'"))
-			// console.log('EDITED')
-			// console.log(marker.svgSpriteComponent.svgString)
 		}
 		//second case, already hovered, do nothing
 		//no hovers, reset array
 		if (!marker && hoveredMarkers.size !== 0) {
 			resetHovers(hoveredMarkers);
 		}
-		// console.log(sceneObject)
 
 		//call public callback
 		if (onMouseMoveCallback)
@@ -243,7 +236,6 @@ export const threeEditorMouseEvents = (
 	};
 
 	const moveFocusedObject = (e, isMobileEvent) => {
-		// console.log('-moveFocusedObject', {e, isMobileEvent, focusedObject});
 
 		if (focusedObject) {
 			raycaster.setFromCamera(mouseCoord, cameraRef.current);

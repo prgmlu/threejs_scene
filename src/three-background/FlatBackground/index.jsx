@@ -14,11 +14,6 @@ const FlatBackground = ({
 	const flatBackground = useRef();
 
 	useEffect(() => {
-		console.log(
-			'%c >INIT:1 - FlatBackground',
-			'color:green',
-			backgroundUrl,
-		);
 		flatBackground.current = new ThreeFlatBackground(enablePan, type);
 		if (scene) flatBackground.current.addToScene(scene);
 		window.addEventListener('resize', flatBackground.current.setPanArea);

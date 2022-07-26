@@ -45,7 +45,6 @@ const getFaceRot = (face)=>{
 class GreenScreenSystem extends Component {
     constructor(props){
         super(props);
-        // alert(props.roomId);
         this.scene = this.props.scene || this.props.sceneRef.current;
         this.srcs = this.props.srcs;
         this.similarity = this.props.similarity;
