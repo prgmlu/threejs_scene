@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+const imageLoader = new THREE.ImageLoader();
 
 export const LOD_TO_GRID_SEGMENTS_MAP = Object.freeze({
 	0: 1,
@@ -39,70 +40,54 @@ export const buildLODUrls = (
 };
 
 export const preLoadConnectedScenes = (linkedScenes) => {
-	const imageLoader = new THREE.ImageLoader();
-	linkedScenes.forEach((item) => {
-		buildLODUrls(
-			item?.cube_map_dir,
-			'front',
-			1,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
-		buildLODUrls(
-			item?.cube_map_dir,
-			'front',
-			2,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
-		buildLODUrls(
-			item?.cube_map_dir,
-			'left',
-			1,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
-		buildLODUrls(
-			item?.cube_map_dir,
-			'left',
-			2,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
-		buildLODUrls(
-			item?.cube_map_dir,
-			'right',
-			1,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
-		buildLODUrls(
-			item?.cube_map_dir,
-			'right',
-			2,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
-		buildLODUrls(
-			item?.cube_map_dir,
-			'top',
-			1,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
-		buildLODUrls(
-			item?.cube_map_dir,
-			'bottom',
-			2,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
-		buildLODUrls(
-			item?.cube_map_dir,
-			'back',
-			1,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
+	const levelsToPreLoad = [1];
+	levelsToPreLoad.forEach((level) => {
+		linkedScenes.forEach((item) => {
+			buildLODUrls(
+				item?.cube_map_dir,
+				'front',
+				level,
+				item?.imageIntegrity,
+				item?.useWebp,
+			).map((item) => imageLoader.load(item));
+			buildLODUrls(
+				item?.cube_map_dir,
+				'left',
+				level,
+				item?.imageIntegrity,
+				item?.useWebp,
+			).map((item) => imageLoader.load(item));
+			buildLODUrls(
+				item?.cube_map_dir,
+				'right',
+				level,
+				item?.imageIntegrity,
+				item?.useWebp,
+			).map((item) => imageLoader.load(item));
+
+			buildLODUrls(
+				item?.cube_map_dir,
+				'top',
+				level,
+				item?.imageIntegrity,
+				item?.useWebp,
+			).map((item) => imageLoader.load(item));
+
+			buildLODUrls(
+				item?.cube_map_dir,
+				'bottom',
+				level,
+				item?.imageIntegrity,
+				item?.useWebp,
+			).map((item) => imageLoader.load(item));
+
+			buildLODUrls(
+				item?.cube_map_dir,
+				'back',
+				level,
+				item?.imageIntegrity,
+				item?.useWebp,
+			).map((item) => imageLoader.load(item));
+		});
 	});
 };

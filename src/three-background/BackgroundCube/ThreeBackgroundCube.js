@@ -7,7 +7,7 @@ import { buildLODUrls, LOD_TO_GRID_SEGMENTS_MAP } from '../../Scene/sceneUtils';
 //units length of the store
 const STORE_SIZE = 20;
 //how many points to sample on the plane.  Used to check if the face is visible or not
-const PTS_COUNT = 16;
+const PTS_COUNT = 8;
 // how many requests to prioritize, currently prioritizing level 2 and 3
 // so 6 * 2 = 12
 const PRIORITIZED_COUNT = 12;
