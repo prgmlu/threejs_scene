@@ -39,55 +39,22 @@ export const buildLODUrls = (
 	return loadOrder;
 };
 
-export const preLoadConnectedScenes = (linkedScenes) => {
+export const preLoadConnectedScenes = (linkedScenes, abortControl) => {
 	const levelsToPreLoad = [1];
+	const facesToPreLoad = ['front', 'left', 'right', 'top', 'bottom', 'back'];
 	levelsToPreLoad.forEach((level) => {
 		linkedScenes.forEach((item) => {
-			buildLODUrls(
-				item?.cube_map_dir,
-				'front',
-				level,
-				item?.imageIntegrity,
-				item?.useWebp,
-			).map((item) => imageLoader.load(item));
-			buildLODUrls(
-				item?.cube_map_dir,
-				'left',
-				level,
-				item?.imageIntegrity,
-				item?.useWebp,
-			).map((item) => imageLoader.load(item));
-			buildLODUrls(
-				item?.cube_map_dir,
-				'right',
-				level,
-				item?.imageIntegrity,
-				item?.useWebp,
-			).map((item) => imageLoader.load(item));
-
-			buildLODUrls(
-				item?.cube_map_dir,
-				'top',
-				level,
-				item?.imageIntegrity,
-				item?.useWebp,
-			).map((item) => imageLoader.load(item));
-
-			buildLODUrls(
-				item?.cube_map_dir,
-				'bottom',
-				level,
-				item?.imageIntegrity,
-				item?.useWebp,
-			).map((item) => imageLoader.load(item));
-
-			buildLODUrls(
-				item?.cube_map_dir,
-				'back',
-				level,
-				item?.imageIntegrity,
-				item?.useWebp,
-			).map((item) => imageLoader.load(item));
+			facesToPreLoad.forEach((face) => {
+				buildLODUrls(
+					item?.cube_map_dir,
+					face,
+					level,
+					item?.imageIntegrity,
+					item?.useWebp,
+				).map((item) =>
+					imageLoader.load(item, null, null, abortControl.signal),
+				);
+			});
 		});
 	});
 };
