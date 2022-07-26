@@ -15,6 +15,7 @@ import { isMobile, browserName } from 'react-device-detect';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 import LoadingIcon from '../loadingIcon';
+import { preLoadConnectedScenes } from './sceneUtils';
 
 const getRendererKey = (type, sceneId) => {
 	let rendererKey;
@@ -115,6 +116,7 @@ const Scene = (props) => {
 		enablePan = false,
 		orbitControlsConfig = {},
 		loadingIconSrc = null,
+		linkedScenes = [],
 	} = props;
 
 	const [threeReady, setThreeReady] = useState(false);
@@ -529,6 +531,10 @@ const Scene = (props) => {
 		setRenderObjects(true);
 	};
 
+	const onBackgroundLoaded = () => {
+		preLoadConnectedScenes(linkedScenes);
+	};
+
 	return (
 		<>
 			{useDebugger && (
@@ -564,11 +570,11 @@ const Scene = (props) => {
 							scene={scene}
 							camera={cameraRef.current}
 							resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
-							linkedScenes={props.linkedScenes}
 							enablePan={enablePan && isMobile}
 							type={type}
 							controller={controlsRef.current}
 							onBackgroundReady={onBackgroundReady}
+							onBackgroundLoaded={onBackgroundLoaded}
 						/>
 					</>
 				)}

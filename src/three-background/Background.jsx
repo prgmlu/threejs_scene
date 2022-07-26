@@ -12,6 +12,7 @@ const Background = ({
 	type,
 	controller,
 	onBackgroundReady = () => {},
+	onBackgroundLoaded = () => {},
 }) => {
 	const [backgroundUrl, setBackgroundUrl] = useState('');
 	const [opacityMapUrl, setOpacityMapUrl] = useState('');
@@ -42,6 +43,7 @@ const Background = ({
 			enablePan={enablePan}
 			type={type}
 			onBackgroundReady={onBackgroundReady}
+			onBackgroundLoaded={onBackgroundLoaded}
 		/>
 	) : (
 		<BackgroundCube
@@ -55,6 +57,7 @@ const Background = ({
 			skipLargest={skipLargest}
 			controller={controller}
 			onBackgroundReady={onBackgroundReady}
+			onBackgroundLoaded={onBackgroundLoaded}
 		/>
 	);
 };

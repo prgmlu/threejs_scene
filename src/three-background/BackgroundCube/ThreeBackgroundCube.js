@@ -2,20 +2,7 @@ import * as THREE from 'three';
 import ThreeSceneObject from '../../three-base-components/ThreeSceneObject';
 import { setupCamera } from '../../Scene/setupThreeEditor';
 import { Geometry } from 'three/examples/jsm/deprecated/Geometry';
-
-const LOD_TO_GRID_SEGMENTS_MAP = Object.freeze({
-	0: 1,
-	1: 2,
-	2: 4,
-	3: 8,
-});
-
-const LOD_TO_RESOLUTION = Object.freeze({
-	0: '512',
-	1: '1k',
-	2: '2k',
-	3: '4k',
-});
+import { buildLODUrls, LOD_TO_GRID_SEGMENTS_MAP } from '../../Scene/sceneUtils';
 
 //units length of the store
 const STORE_SIZE = 20;
@@ -270,6 +257,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 		useWebp,
 		skipLargest,
 		onBackgroundReady,
+		onBackgroundLoaded,
 	) => {
 		this.url = url;
 		if (opacityMapUrl) {
@@ -308,7 +296,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			}
 
 			initiatorUrl = priorityObject.initiatorUrl;
-			const faceLODUrls = this.buildLODUrls(
+			const faceLODUrls = buildLODUrls(
 				url,
 				face,
 				level,
@@ -364,6 +352,7 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 			'touchstart',
 			this.updateViewableFacesAndSortPriorityArray,
 		);
+		onBackgroundLoaded();
 	};
 
 	loadTileMaterialAsync = (tileUrl) => {
@@ -411,23 +400,6 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 	};
 
 	// Build load order of cubemaps
-	buildLODUrls = (baseUrl, face, LOD, imageIntegrity, useWebp = false) => {
-		if (!baseUrl) return null;
-
-		const loadOrder = [];
-		const iterations = LOD_TO_GRID_SEGMENTS_MAP[LOD];
-		const resolution = LOD_TO_RESOLUTION[LOD];
-
-		for (let i = iterations - 1; i >= 0; i -= 1) {
-			for (let j = 0; j < iterations; j += 1) {
-				const imageName = `${baseUrl}${resolution}_${face}_${i}_${j}.${
-					useWebp ? 'webp' : 'jpg'
-				}?v=${imageIntegrity}`;
-				loadOrder.push(imageName);
-			}
-		}
-		return loadOrder;
-	};
 
 	resolveFaceMaterialIndexes = (faceGeometry, face) => {
 		// eslint-disable-line
@@ -459,39 +431,6 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 				faceUV[2].x = 1;
 				faceUV[2].y = 1;
 			}
-		});
-	};
-
-	preLoadConnectedScenes = (linkedScenes) => {
-		const imageLoader = new THREE.ImageLoader();
-		linkedScenes.forEach((item) => {
-			this.buildLODUrls(item, 'front', 0).map((item) =>
-				imageLoader.load(item),
-			);
-			this.buildLODUrls(item, 'front', 1).map((item) =>
-				imageLoader.load(item),
-			);
-			this.buildLODUrls(item, 'left', 0).map((item) =>
-				imageLoader.load(item),
-			);
-			this.buildLODUrls(item, 'left', 1).map((item) =>
-				imageLoader.load(item),
-			);
-			this.buildLODUrls(item, 'right', 0).map((item) =>
-				imageLoader.load(item),
-			);
-			this.buildLODUrls(item, 'right', 1).map((item) =>
-				imageLoader.load(item),
-			);
-			this.buildLODUrls(item, 'top', 0).map((item) =>
-				imageLoader.load(item),
-			);
-			this.buildLODUrls(item, 'bottom', 0).map((item) =>
-				imageLoader.load(item),
-			);
-			this.buildLODUrls(item, 'back', 0).map((item) =>
-				imageLoader.load(item),
-			);
 		});
 	};
 

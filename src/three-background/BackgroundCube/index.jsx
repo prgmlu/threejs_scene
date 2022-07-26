@@ -13,6 +13,7 @@ const BackgroundCube = ({
 	skipLargest,
 	controller,
 	onBackgroundReady = () => {},
+	onBackgroundLoaded = () => {},
 }) => {
 	const cube = useRef();
 
@@ -36,13 +37,10 @@ const BackgroundCube = ({
 				useWebp,
 				skipLargest,
 				onBackgroundReady,
+				onBackgroundLoaded,
 			);
 		}
 	}, [backgroundUrl, opacityMapUrl]);
-
-	// useEffect(() => {
-	//     cube.current.preLoadConnectedScenes(linkedScenes)
-	// }, [linkedScenes])
 
 	useEffect(() => {
 		cube.current.camera = camera;
