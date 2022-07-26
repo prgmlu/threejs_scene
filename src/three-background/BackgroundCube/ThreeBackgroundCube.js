@@ -29,12 +29,12 @@ const generatePointsOnPlane = (constantAxis, constantAxisValue) => {
 };
 
 const defaultPriorityArray = [
-	{ face: 'front', level: 0 },
-	{ face: 'right', level: 0 },
-	{ face: 'left', level: 0 },
-	{ face: 'top', level: 0 },
-	{ face: 'bottom', level: 0 },
-	{ face: 'back', level: 0 },
+	// { face: 'front', level: 0 },
+	// { face: 'right', level: 0 },
+	// { face: 'left', level: 0 },
+	// { face: 'top', level: 0 },
+	// { face: 'bottom', level: 0 },
+	// { face: 'back', level: 0 },
 	{ face: 'front', level: 1 },
 	{ face: 'right', level: 1 },
 	{ face: 'left', level: 1 },

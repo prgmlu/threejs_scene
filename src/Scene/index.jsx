@@ -117,6 +117,7 @@ const Scene = (props) => {
 		orbitControlsConfig = {},
 		loadingIconSrc = null,
 		linkedScenes = [],
+		onBackgroundLoaded = () => {},
 	} = props;
 
 	const [threeReady, setThreeReady] = useState(false);
@@ -531,9 +532,9 @@ const Scene = (props) => {
 		setRenderObjects(true);
 	};
 
-	const onBackgroundLoaded = () => {
-		preLoadConnectedScenes(linkedScenes);
-	};
+	// const onBackgroundLoaded = () => {
+	// 	preLoadConnectedScenes(linkedScenes);
+	// };
 
 	return (
 		<>

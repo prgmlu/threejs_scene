@@ -39,27 +39,19 @@ export const buildLODUrls = (
 };
 
 export const preLoadConnectedScenes = (linkedScenes) => {
-	console.log('=> after:preLoad', linkedScenes);
 	const imageLoader = new THREE.ImageLoader();
 	linkedScenes.forEach((item) => {
 		buildLODUrls(
 			item?.cube_map_dir,
 			'front',
-			0,
+			1,
 			item?.imageIntegrity,
 			item?.useWebp,
 		).map((item) => imageLoader.load(item));
 		buildLODUrls(
 			item?.cube_map_dir,
 			'front',
-			1,
-			item?.imageIntegrity,
-			item?.useWebp,
-		).map((item) => imageLoader.load(item));
-		buildLODUrls(
-			item?.cube_map_dir,
-			'left',
-			0,
+			2,
 			item?.imageIntegrity,
 			item?.useWebp,
 		).map((item) => imageLoader.load(item));
@@ -72,8 +64,8 @@ export const preLoadConnectedScenes = (linkedScenes) => {
 		).map((item) => imageLoader.load(item));
 		buildLODUrls(
 			item?.cube_map_dir,
-			'right',
-			0,
+			'left',
+			2,
 			item?.imageIntegrity,
 			item?.useWebp,
 		).map((item) => imageLoader.load(item));
@@ -81,27 +73,34 @@ export const preLoadConnectedScenes = (linkedScenes) => {
 			item?.cube_map_dir,
 			'right',
 			1,
+			item?.imageIntegrity,
+			item?.useWebp,
+		).map((item) => imageLoader.load(item));
+		buildLODUrls(
+			item?.cube_map_dir,
+			'right',
+			2,
 			item?.imageIntegrity,
 			item?.useWebp,
 		).map((item) => imageLoader.load(item));
 		buildLODUrls(
 			item?.cube_map_dir,
 			'top',
-			0,
+			1,
 			item?.imageIntegrity,
 			item?.useWebp,
 		).map((item) => imageLoader.load(item));
 		buildLODUrls(
 			item?.cube_map_dir,
 			'bottom',
-			0,
+			2,
 			item?.imageIntegrity,
 			item?.useWebp,
 		).map((item) => imageLoader.load(item));
 		buildLODUrls(
 			item?.cube_map_dir,
 			'back',
-			0,
+			1,
 			item?.imageIntegrity,
 			item?.useWebp,
 		).map((item) => imageLoader.load(item));
