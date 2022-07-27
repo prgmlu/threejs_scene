@@ -28,6 +28,8 @@
     "octree-helper": "^1.1.6",
     "prop-types": "^15.7.2",
     "react-device-detect": "^2.2.2",
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.1",
     "sparse-octree": "^7.1.5",
     "three": "0.137.0",
     "uuid": "^8.3.2"

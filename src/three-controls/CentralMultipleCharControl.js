@@ -1,8 +1,17 @@
 import * as THREE from 'three';
 import RemoteChar from './RemoteChar';
 
-// const SOCKET_SERVER_URL = 'ws://192.168.1.122:8000/';
-const SOCKET_SERVER_URL = 'ws://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/';
+const USE_SOCKET_IO = true;
+// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000' : 'ws://192.168.1.122:8000/';
+
+const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
+
+// var io = require('socket.io-client');
+// var socket = io.connect('');
+// socket2.emit('test');
+
+
+// const SOCKET_SERVER_URL = 'ws://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/';
 
 //for now, only broadcasting the positions and rotations
 
@@ -11,21 +20,30 @@ export default class CentralMultipleCharControls{
         this.mainCharControlsObj = mainCharControlsObj;
         this.model = mainCharControlsObj.model;
         this.otherChars = otherChars;
-
+        
         window.otherChars = otherChars;
         this.prev_addresses = [];
-
+        
         //an important field that serves as an id among the other characters
         //get assigned by the server upon connection open
         // if the address is null no messages are sent
         this.address = null;
-
-
+        
+        
         this.clock = new THREE.Clock();
 
+
+        
         this.createSocketAndConnect();
-        this.socket.onmessage = this.handleMessage.bind(this);
-        this.socket.onclose = (e)=>{};
+        if(USE_SOCKET_IO){
+            this.socket.on('message', this.handleMessage.bind(this));
+            this.socket.on('address', this.isNewAddress.bind(this));
+            this.socket.on('disconnected', this.handleDisconnect.bind(this));
+
+        }
+        else{
+            this.socket.onmessage = this.handleMessage.bind(this);
+        }
 
 
         this.update();
@@ -43,7 +61,15 @@ export default class CentralMultipleCharControls{
         return null;
     }
 
-    checkIfNewAddress(data){
+    isNewAddress(data){
+        if(USE_SOCKET_IO){
+            if(!this.address){
+                this.address = data;
+                return true;
+            }
+            return false
+        }
+        //if websockets instead
         if(data.address){
             this.address = data.address;
             return true;
@@ -66,15 +92,36 @@ export default class CentralMultipleCharControls{
             }
         }
     }
+
+    handleDisconnect(address){;
+        let char = this.getCharByAddress(address);
+        if(char){
+            this.otherChars.splice(this.otherChars.indexOf(char), 1);
+            char.removeFromScene();
+        }
+    }
     
     
-    handleMessage(event){
-        let data = JSON.parse(event.data);
-        //data.address is sent only once when the connection is established, a number like  49673, we'll use it as an id
-        if (this.checkIfNewAddress(data)) return;
+    handleMessage(event){;
+        let data;
+        if(USE_SOCKET_IO){
+            data = JSON.parse(event);
+        }
+        else{
+            data = JSON.parse(event.data);
+        }
+
+        if(!USE_SOCKET_IO){
+            //data.address is sent only once when the connection is established, a number like  49673, we'll use it as an id
+            if (this.isNewAddress(data)) return;
+        }
         
         //check if someone disconnected
-        this.checkAndHandleIfSomeoneDisconnected(data);
+
+        if(!USE_SOCKET_IO){
+            //no need to check if someone disconnected if we're using socket.io as there's an event that fires when someone disconnects
+            this.checkAndHandleIfSomeoneDisconnected(data);
+        }
         
         for(let address in data){
             //ignore your address
@@ -96,7 +143,6 @@ export default class CentralMultipleCharControls{
                 // char.model.position.copy(data[address].position);
                 char.model.rotation.copy(data[address].rotation);
 
-                debugger;
                 data[address].isWalking? char.playWalkingAnimation():char.playIdleAnimation();
             }
         }
@@ -108,12 +154,17 @@ export default class CentralMultipleCharControls{
 
 
     createSocketAndConnect(){
-        this.socket = new WebSocket(SOCKET_SERVER_URL);
+        if(USE_SOCKET_IO){
+            var io = require('socket.io-client');
+            this.socket = io.connect(SOCKET_SERVER_URL,{rejectUnauthorized: false });
+        }
+        else{
+            this.socket = new WebSocket(SOCKET_SERVER_URL);
+        }
     }
 
     sendData(){
         let address = this.address;
-
         if( !address)
             return;
             
@@ -127,8 +178,16 @@ export default class CentralMultipleCharControls{
         this.prevRotation = this.mainCharControlsObj.model.rotation.clone();
         this.prevIsWalking = this.mainCharControlsObj.isWalking;
         
-        if(this.socket.readyState === 1){
-            this.socket.send(JSON.stringify(data));
+        if(USE_SOCKET_IO){
+            if(this.socket.connected){
+                this.socket.emit('data',JSON.stringify(data));
+            }
+        }
+        else{
+
+            if(this.socket.readyState === 1){
+                this.socket.send(JSON.stringify(data));
+            }
         }
     }
 
