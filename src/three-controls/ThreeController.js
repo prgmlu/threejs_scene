@@ -3,7 +3,6 @@ import OrbitControls from './OrbitControls';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory';
 import { OculusHandModel } from 'three/examples/jsm/webxr/OculusHandModel';
 
-
 class ThreeController {
 	setupControls(camera, renderer, orbitControlsConfig) {
 		this.startDistance = null;
@@ -28,46 +27,49 @@ class ThreeController {
 
 		// })
 
+		// this.controls.addEventListener('change', (e) => {
+		// 	console.log('=> change');
+		// });
+
 		if (!window.counter) {
 			window.counter = 1;
 		} else {
 			window.counter += 1;
 		}
 
-		if (window.count > 1) {
-			renderer.domElement.addEventListener('touchend', (event) => {
-				this.startDistance = null;
-			});
-			renderer.domElement.addEventListener('touchmove', (event) => {
-				if (event.touches.length != 1) {
-					event.preventDefault();
+		// if (window.count > 1) {
+		renderer.domElement.addEventListener('touchend', (event) => {
+			this.startDistance = null;
+		});
+		renderer.domElement.addEventListener('touchmove', (event) => {
+			if (event.touches.length !== 1) {
+				event.preventDefault();
+			}
+
+			if (event.touches.length === 2) {
+				var base = Math.abs(
+					event.touches[1].pageX - event.touches[0].pageX,
+				);
+				var height = Math.abs(
+					event.touches[1].pageY - event.touches[0].pageY,
+				);
+				var dist = Math.sqrt(base ** 2 + height ** 2);
+				var deltaDist = this.startDistance - dist;
+				var temp = this.camera.fov + deltaDist * 0.2;
+				// this.camera.position.x+=1;
+
+				if (temp > 20 && temp < 70) {
+					this.camera.fov += deltaDist * 0.2;
+					this.camera.updateProjectionMatrix();
 				}
 
-				if (event.touches.length === 2) {
-					var base = Math.abs(
-						event.touches[1].pageX - event.touches[0].pageX,
-					);
-					var height = Math.abs(
-						event.touches[1].pageY - event.touches[0].pageY,
-					);
-					var dist = Math.sqrt(base ** 2 + height ** 2);
-					var deltaDist = this.startDistance - dist;
-					var temp = this.camera.fov + deltaDist * 0.2;
-					// this.camera.position.x+=1;
-
-					if (temp > 20 && temp < 70) {
-						this.camera.fov += deltaDist * 0.2;
-						this.camera.updateProjectionMatrix();
-					}
-
-					this.startDistance = dist;
-				}
-
-				// if (!this.deviceOrientationEventFired) {
-				//     this.deviceOrientationHandler(event);
-				// }
-			});
-		}
+				this.startDistance = dist;
+			}
+			if (!this.deviceOrientationEventFired) {
+				this.deviceOrientationHandler(event);
+			}
+		});
+		// }
 
 		window.c = this.controls;
 		// this.controls.enableDamping = true;
@@ -75,6 +77,7 @@ class ThreeController {
 		// this.controls.enableKeys = false;
 		// this.controls.enableZoom = true;
 		// window.c = this.controls;
+		this.controls.enableZoom = true;
 		this.controls.maxDistance = 0.1;
 		this.controls.minDistance = 0;
 
@@ -93,41 +96,39 @@ class ThreeController {
 		// this.controls.mouseButtons.RIGHT = THREE.MOUSE.DOLLY;
 		return this.controls;
 	}
-    
-    setupVRControls(renderer, scene, showOnlyHands){
 
-        const controllerModelFactory = new XRControllerModelFactory();
+	setupVRControls(renderer, scene, showOnlyHands) {
+		const controllerModelFactory = new XRControllerModelFactory();
 
-        const geometry = new THREE.BufferGeometry().setFromPoints([
-            new THREE.Vector3(0,0,0),
-            new THREE.Vector3(0,0,-1)
-        ]);
+		const geometry = new THREE.BufferGeometry().setFromPoints([
+			new THREE.Vector3(0, 0, 0),
+			new THREE.Vector3(0, 0, -1),
+		]);
 
-        // This is a temporary helper line to let the user aim at the objects in scene
-        const line = new THREE.Line(geometry);
-        line.name = 'line';
-        line.scale.z = 0;
+		// This is a temporary helper line to let the user aim at the objects in scene
+		const line = new THREE.Line(geometry);
+		line.name = 'line';
+		line.scale.z = 0;
 
-        const vrControllers = []; // We return an arra for the 2 controllers
-        const gripControls = [];
+		const vrControllers = []; // We return an arra for the 2 controllers
+		const gripControls = [];
 		const vrHands = [];
 		const handsModels = [];
 
-        for(let i=0; i<=1; i++){
+		for (let i = 0; i <= 1; i++) {
+			// Used for pointing in Z axis. Returns a THREEJS group
+			const controller = renderer.xr.getController(i);
 
-            // Used for pointing in Z axis. Returns a THREEJS group
-            const controller = renderer.xr.getController(i);
-			
-            controller.add(line.clone());
-            controller.userData.selectPressed = false;
-            scene.add(controller);
-            
-            vrControllers.push(controller);
+			controller.add(line.clone());
+			controller.userData.selectPressed = false;
+			scene.add(controller);
 
-            if(!showOnlyHands){
+			vrControllers.push(controller);
+
+			if (!showOnlyHands) {
 				// Used to manipulate objects in the 3D space with the controller. Returns a THREEJS group, these are the visual controllers
 				const grip = renderer.xr.getControllerGrip(i);
-				grip.add(controllerModelFactory.createControllerModel(grip))
+				grip.add(controllerModelFactory.createControllerModel(grip));
 				scene.add(grip);
 
 				gripControls.push(grip);
@@ -135,18 +136,18 @@ class ThreeController {
 
 			// Hands
 			const hand = renderer.xr.getHand(i);
-			const model = new OculusHandModel( hand );
+			const model = new OculusHandModel(hand);
 			hand.add(model);
 			handsModels.push(model);
 			scene.add(hand);
 
 			vrHands.push(hand);
-        }
+		}
 
 		this.raycaster = new THREE.Raycaster();
 
-        return {vrControllers, gripControls, vrHands, handsModels};
-    }
+		return { vrControllers, gripControls, vrHands, handsModels };
+	}
 }
 
 export default new ThreeController();
