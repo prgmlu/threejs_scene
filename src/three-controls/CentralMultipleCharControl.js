@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import RemoteChar from './RemoteChar';
 
 const USE_SOCKET_IO = true;
-const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
+// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
 
-// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
+const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
 
 // var io = require('socket.io-client');
 // var socket = io.connect('');
