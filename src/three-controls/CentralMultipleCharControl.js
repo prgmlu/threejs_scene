@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import RemoteChar from './RemoteChar';
 
 const USE_SOCKET_IO = true;
-// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000' : 'ws://192.168.1.122:8000/';
+const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
 
-const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
+// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
 
 // var io = require('socket.io-client');
 // var socket = io.connect('');
@@ -54,11 +54,7 @@ export default class CentralMultipleCharControls{
     }
 
     getCharByAddress(address){
-        for(let char of this.otherChars){
-            if(char.address  == address)
-                return char;
-        }
-        return null;
+        return this.otherChars.filter((x)=>x.address == address)[0];
     }
 
     isNewAddress(data){
@@ -84,11 +80,7 @@ export default class CentralMultipleCharControls{
         //have to handle the rare case of 2 people disconnecting at the same server respone
         if(diff.length > 0){
             for(let address of diff){
-                let char = this.getCharByAddress(address);
-                if(char){
-                    this.otherChars.splice(this.otherChars.indexOf(char), 1);
-                    char.removeFromScene();
-                }
+                this.handleDisconnect(address);
             }
         }
     }
@@ -207,8 +199,8 @@ export default class CentralMultipleCharControls{
             this.sendData();
             return;
         }
-        if(this.mainCharControlsObj.model.position.distanceTo(this.prevPosition) > 0.1 || this.mainCharControlsObj.isWalking != this.prevIsWalking){
+        // if(this.mainCharControlsObj.model.position.distanceTo(this.prevPosition) > 0.01 || this.mainCharControlsObj.isWalking != this.prevIsWalking){
             this.sendData();
-        }
+        // }
     }
 }
