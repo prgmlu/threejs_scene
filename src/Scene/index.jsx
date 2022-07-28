@@ -158,7 +158,7 @@ const Scene = (props) => {
 
 			renderer?.render(scene, cameraRef.current);
 			css2DRenderer.render(scene, cameraRef.current);
-			if (controllerUpdate) controllerUpdate();
+			// if (controllerUpdate) controllerUpdate();
 		}
 	};
 
@@ -265,9 +265,11 @@ const Scene = (props) => {
 			orbitControlsConfig,
 			type,
 		);
+
 		if (Object.keys(orbitControlsConfig).length > 0) {
 			controlsRef.current.setupControlsFromConfig(orbitControlsConfig);
 		}
+
 		// Disable Rotate for flat scene
 		const enableRotate = !bgConf?.isFlatScene;
 

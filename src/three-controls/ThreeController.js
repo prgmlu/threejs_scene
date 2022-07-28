@@ -60,7 +60,7 @@ class ThreeController {
 		return this.controls;
 	}
 
-	setupPanControls(enablePan = false, enableRotate = true) {
+	setupPanControls = (enablePan = false, enableRotate = true) => {
 		this.controls.enablePan = enablePan;
 		this.controls.enableRotate = enableRotate;
 
@@ -70,8 +70,8 @@ class ThreeController {
 			this.controls.touches.ONE = THREE.TOUCH.PAN;
 		}
 
-		return this.controls;
-	}
+		// return this.controls;
+	};
 
 	setupVRControls(renderer, scene, showOnlyHands) {
 		const controllerModelFactory = new XRControllerModelFactory();

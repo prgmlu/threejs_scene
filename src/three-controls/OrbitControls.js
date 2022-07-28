@@ -54,7 +54,7 @@ class OrbitControls extends EventDispatcher {
 		this.minZoom = 0;
 		this.maxZoom = Infinity;
 
-		this.setupControlsFromConfig(orbitControlsConfig);
+		this.target = new Vector3();
 
 		// Set to true to enable damping (inertia)
 		// If damping is enabled, you must call controls.update() in your animation loop
@@ -1095,10 +1095,7 @@ class OrbitControls extends EventDispatcher {
 				Math.PI / 2 - orbitControlsConfig.starting_cam_horizontal_angle,
 				orbitControlsConfig.starting_cam_vertical_angle,
 			);
-			this.newTarget = new Vector3().setFromSpherical(
-				this.sphericalTarget,
-			);
-			this.target = this.newTarget;
+			this.target = new Vector3().setFromSpherical(this.sphericalTarget);
 		} else {
 			this.target = new Vector3();
 		}
