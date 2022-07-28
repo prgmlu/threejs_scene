@@ -1,88 +1,47 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import ThreeController from '../three-controls/ThreeController';
 import {
-	initThreeJSScene,
-	setupRenderer,
-	setupCamera,
 	createCSS2DRenderer,
+	initThreeJSScene,
+	setupCamera,
+	setupRenderer,
 } from './setupThreeEditor';
 import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
 import { threeEditorVREvents } from './threeEditorVREvents';
 import { Background, ColliderSphere } from '../three-background';
-import { isMobile, browserName } from 'react-device-detect';
+import { browserName, isMobile } from 'react-device-detect';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 import LoadingIcon from '../loadingIcon';
-import { preLoadConnectedScenes } from './sceneUtils';
 
-const getRendererKey = (type, sceneId) => {
-	let rendererKey;
-
-	switch (type) {
-		case 'containerInstance':
-			rendererKey = `${type}_renderer`;
-			break;
-		case 'zoom':
-			rendererKey = `${sceneId}_renderer`;
-			break;
-	}
-	return rendererKey;
-};
-
-const getRenderer = (sceneId = '', type) => {
-	const rendererKey = getRendererKey(type, sceneId);
+const getRenderer = (type) => {
+	const rendererKey = `${type}_renderer`;
 	const ret = window[rendererKey] || new THREE.WebGLRenderer();
 	window[rendererKey] = ret;
 	ret.info.autoReset = true;
 	return ret;
 };
 
-const createOrGetCamera = (camType, canvasRef, sceneId = '', type) => {
+const createOrGetCamera = (canvasRef, type) => {
 	const aspectRatio =
 		canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
-
-	let cameraKey;
-
-	switch (type) {
-		case 'containerInstance':
-			cameraKey = `${type}_${camType}_camera`;
-			break;
-		case 'zoom':
-			cameraKey = `${sceneId}_${camType}_camera`;
-			break;
-	}
-
-	if (window[cameraKey]) {
-		return window[cameraKey];
-	}
-
-	const camera = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
-
-	window[cameraKey] = camera;
-	setupCamera(camera);
+	const cameraKey = `${type}_camera`;
+	window[cameraKey] =
+		window[cameraKey] ||
+		new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
 	return window[cameraKey];
 };
 
 const createOrGetControls = (
-	camType,
 	cameraRef,
 	renderer,
 	orbitControlsConfig,
-	sceneId,
 	type,
+	enableRotate,
 ) => {
-	let controllerKey;
-
-	switch (type) {
-		case 'containerInstance':
-			controllerKey = `${type}_${camType}_controller`;
-			break;
-		case 'zoom':
-			controllerKey = `${sceneId}_${camType}_controller`;
-			break;
-	}
+	const controllerKey = `${type}_controller`;
 
 	if (window[controllerKey]) {
 		return window[controllerKey];
@@ -93,11 +52,7 @@ const createOrGetControls = (
 		renderer,
 		orbitControlsConfig,
 	);
-
-	if (camType === 'flat') {
-		controls.enableRotate = false;
-	}
-
+	controls.enableRotate = enableRotate;
 	window[controllerKey] = controls;
 	return window[controllerKey];
 };
@@ -116,7 +71,6 @@ const Scene = (props) => {
 		enablePan = false,
 		orbitControlsConfig = {},
 		loadingIconSrc = null,
-		linkedScenes = [],
 		onBackgroundLoaded = () => {},
 	} = props;
 
@@ -133,7 +87,7 @@ const Scene = (props) => {
 	const scene = sceneRef.current;
 
 	//Renderer
-	const rendererRef = useRef(getRenderer(sceneId, type));
+	const rendererRef = useRef(getRenderer(type));
 	let renderer = rendererRef.current;
 	const glContext = renderer?.getContext('webgl');
 
@@ -282,104 +236,106 @@ const Scene = (props) => {
 		};
 	}, []);
 
-	const initRoom = () => {
-		if (!showLoadingIcon) {
-			setShowLoadingIcon(true);
-		}
+	const initRoomForVR = () => {
+		const sceneLight = [...scene.children].filter(
+			(e) => e.type === 'HemisphereLight',
+		)[0];
+		const light = sceneLight
+			? sceneLight
+			: new THREE.HemisphereLight(0xffffff, 0x080808, 4);
+		scene.add(light);
 
-		if (renderObjects) {
-			setRenderObjects(false);
-		}
-
-		let camType = 'cube';
-		if (bgConf?.isFlatScene) {
-			camType = 'flat';
-		} else if (Object.keys(orbitControlsConfig).length > 0) {
-			camType = 'custom';
-		}
-		// set new reference for cameraRef.current here
-		cameraRef.current = createOrGetCamera(
-			camType,
-			canvasRef,
-			sceneId,
-			type,
+		const { vrControllers, vrHands } = ThreeController.setupVRControls(
+			renderer,
+			scene,
+			showOnlyHands,
 		);
 
+		vrControlsRef.current = vrControllers;
+		vrHandsRef.current = vrHands;
+	};
+
+	const initRoomCamera = () => {
+		// Setup camera for scene
+		cameraRef.current = createOrGetCamera(canvasRef, type);
+		setupCamera(cameraRef.current);
+	};
+
+	const initRoomControls = () => {
+		// Setup controls for scene
+		const enableRotate = !bgConf?.isFlatScene;
 		controlsRef.current = createOrGetControls(
-			camType,
 			cameraRef,
 			renderer,
 			orbitControlsConfig,
-			sceneId,
 			type,
+			enableRotate,
 		);
-
-		if (isOculusDevice) {
-			const sceneLight = [...scene.children].filter(
-				(e) => e.type === 'HemisphereLight',
-			)[0];
-			const light = sceneLight
-				? sceneLight
-				: new THREE.HemisphereLight(0xffffff, 0x080808, 4);
-			scene.add(light);
-
-			const { vrControllers, gripControls, vrHands, handsModels } =
-				ThreeController.setupVRControls(renderer, scene, showOnlyHands);
-
-			vrControlsRef.current = vrControllers;
-			vrHandsRef.current = vrHands;
-		}
-
 		if (Object.keys(orbitControlsConfig).length > 0) {
 			controlsRef.current.setupControlsFromConfig(orbitControlsConfig);
 		}
+	};
 
-		let animationKey;
-
-		switch (type) {
-			case 'containerInstance':
-				animationKey = `${type}_animationId`;
-				break;
-			case 'zoom':
-				animationKey = `${sceneId}_animationId`;
-				break;
-		}
-		window[animationKey] = '';
-		setAnimationId(animationKey);
-
+	const initRoomCss2DRenderer = () => {
 		const canvasContainer = canvasRef.current;
 		const width = canvasContainer.offsetWidth;
 		const height = canvasContainer.offsetHeight;
-
 		css2DRenderer.setSize(width, height);
+	};
 
+	const initRoomAnimationLoop = () => {
+		const animationKey = `${type}_animationId`;
+		window[animationKey] = '';
+		setAnimationId(animationKey);
 		animate(controlsRef.current.update, animationKey);
+	};
+
+	const initRoom = () => {
+		setShowLoadingIcon(true);
+		setRenderObjects(false);
+
+		initRoomCamera();
+		initRoomControls();
+		initRoomCss2DRenderer();
+
+		if (isOculusDevice) {
+			initRoomForVR();
+		}
+
+		initRoomAnimationLoop();
+	};
+
+	const disposeHotspots = () => {
+		for (let i = scene.children.length - 1; i >= 0; i--) {
+			const child = scene.children[i];
+			if (child?.material?.length) {
+				child.material.forEach((mesh) => {
+					mesh?.map?.dispose();
+					mesh?.dispose();
+				});
+			}
+			if (child?.type === 'PerspectiveCamera') {
+				scene.remove(child);
+			}
+
+			// css2DRenderer.innerHtml
+			const label_types = new Set(['navigation_label', 'tooltip']);
+			if (label_types.has(child?.name)) {
+				scene.remove(child);
+			}
+		}
+	};
+
+	const teardownRoom = () => {
+		disposeHotspots();
+		setUI(false); //Hide UI Modal when scene changed
+		clearAnimation();
 	};
 
 	//New Scene INIT
 	useEffect(() => {
 		initRoom();
-		return () => {
-			for (let i = scene.children.length - 1; i >= 0; i--) {
-				const child = scene.children[i];
-				if (child?.material?.length) {
-					child.material.forEach((mesh) => {
-						mesh?.map?.dispose();
-						mesh?.dispose();
-					});
-				}
-				if (child?.type === 'PerspectiveCamera') {
-					scene.remove(child);
-				}
-
-				// css2DRenderer.innerHtml
-				const label_types = new Set(['navigation_label', 'tooltip']);
-				if (label_types.has(child?.name)) {
-					scene.remove(child);
-				}
-			}
-			setUI(false); //Hide UI Modal when scene changed
-		};
+		return teardownRoom;
 	}, [sceneId]);
 
 	const setTooltipsVisibility = (visible) => {
@@ -459,16 +415,13 @@ const Scene = (props) => {
 		};
 	}, [sceneRef, vrControlsRef]);
 
-	useEffect(() => {
-		return () => {
-			// Clear Animation loop
-			if (animationId) {
-				window.cancelAnimationFrame(window[animationId]);
-				clearTimeout(timeOutRef.current);
-				delete window[animationId];
-			}
-		};
-	}, [animationId]);
+	const clearAnimation = () => {
+		if (animationId) {
+			window.cancelAnimationFrame(window[animationId]);
+			clearTimeout(timeOutRef.current);
+			delete window[animationId];
+		}
+	};
 
 	//windowResizer placed separately because it requires to track and call UI & setUI
 	//while at same time we DO NOT WANT to remount all events each time when UI changed
@@ -495,8 +448,6 @@ const Scene = (props) => {
 
 	const clearRoom = () => {
 		// Renderer
-		const rendererKey = getRendererKey(type, sceneId);
-		delete window[rendererKey];
 
 		if (renderer) {
 			renderer.info.autoReset = false;
@@ -510,9 +461,14 @@ const Scene = (props) => {
 			renderer.dispose();
 			renderer = null;
 		}
+		delete window[`${type}_renderer`];
 		rendererRef.current = null;
+
 		// Controls
 		controlsRef.current?.dispose();
+		delete window[`${type}_controller`];
+
+		delete window[`${type}_camera`];
 	};
 
 	const onDropEvent = (e) => {
@@ -531,10 +487,6 @@ const Scene = (props) => {
 		setShowLoadingIcon(false);
 		setRenderObjects(true);
 	};
-
-	// const onBackgroundLoaded = () => {
-	// 	preLoadConnectedScenes(linkedScenes);
-	// };
 
 	return (
 		<>

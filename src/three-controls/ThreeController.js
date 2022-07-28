@@ -12,30 +12,6 @@ class ThreeController {
 			renderer.domElement,
 			orbitControlsConfig,
 		);
-		// renderer.domElement.addEventListener('touchstart', (event)=>{
-		// if (event.touches.length != 1) {
-		//     event.preventDefault();
-		// }
-
-		// if (event.touches.length === 2) {
-		//     var base = Math.abs(event.touches[0].pageX - event.touches[1].pageX);
-		//     var height = Math.abs(event.touches[0].pageY - event.touches[1].pageY);
-		//     var dist = Math.sqrt((base ** 2) + (height ** 2));
-
-		//     this.startDistance = dist;
-		// }
-
-		// })
-
-		// this.controls.addEventListener('change', (e) => {
-		// 	console.log('=> change');
-		// });
-
-		if (!window.counter) {
-			window.counter = 1;
-		} else {
-			window.counter += 1;
-		}
 
 		// if (window.count > 1) {
 		renderer.domElement.addEventListener('touchend', (event) => {

@@ -53,6 +53,7 @@ export const setupCamera = (camera) => {
 	const posX = 0.1;
 	const rotY = (90 * Math.PI) / 180;
 
+	camera.fov = 70;
 	camera.position.set(posX, 0, 0);
 	camera.rotation.set(0, rotY, 0);
 	camera.lookAt(0, 0, 0);
