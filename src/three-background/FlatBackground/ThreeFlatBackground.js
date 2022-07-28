@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { isMobile } from 'react-device-detect';
 import ThreeSceneObject from '../../three-base-components/ThreeSceneObject';
-import ThreeController from '../../three-controls/ThreeController';
 
 export default class ThreeFlatBackground extends ThreeSceneObject {
 	constructor(enablePan, type) {
@@ -9,7 +8,6 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 		this.type = type;
 		this.geometry = null;
 		this.loader = this.setupTextureLoader();
-		this.controls = ThreeController.setupPanControls(enablePan);
 		this.setInitialObject();
 		this.setPanArea = this.setPanArea.bind(this);
 	}

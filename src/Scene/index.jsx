@@ -39,7 +39,6 @@ const createOrGetControls = (
 	renderer,
 	orbitControlsConfig,
 	type,
-	enableRotate,
 ) => {
 	const controllerKey = `${type}_controller`;
 
@@ -47,13 +46,11 @@ const createOrGetControls = (
 		return window[controllerKey];
 	}
 
-	const controls = ThreeController.setupControls(
+	window[controllerKey] = ThreeController.setupControls(
 		cameraRef.current,
 		renderer,
 		orbitControlsConfig,
 	);
-	controls.enableRotate = enableRotate;
-	window[controllerKey] = controls;
 	return window[controllerKey];
 };
 
@@ -262,18 +259,19 @@ const Scene = (props) => {
 	};
 
 	const initRoomControls = () => {
-		// Setup controls for scene
-		const enableRotate = !bgConf?.isFlatScene;
 		controlsRef.current = createOrGetControls(
 			cameraRef,
 			renderer,
 			orbitControlsConfig,
 			type,
-			enableRotate,
 		);
 		if (Object.keys(orbitControlsConfig).length > 0) {
 			controlsRef.current.setupControlsFromConfig(orbitControlsConfig);
 		}
+		// Disable Rotate for flat scene
+		const enableRotate = !bgConf?.isFlatScene;
+
+		ThreeController.setupPanControls(enablePan, enableRotate);
 	};
 
 	const initRoomCss2DRenderer = () => {

@@ -60,16 +60,16 @@ class ThreeController {
 		return this.controls;
 	}
 
-	setupPanControls(enablePan = false) {
+	setupPanControls(enablePan = false, enableRotate = true) {
+		this.controls.enablePan = enablePan;
+		this.controls.enableRotate = enableRotate;
+
 		if (enablePan) {
-			this.controls.enablePan = true;
-			this.controls.enableRotate = false;
 			this.controls.panSpeed = 75.0;
 			this.controls.screenSpacePanning = true;
 			this.controls.touches.ONE = THREE.TOUCH.PAN;
 		}
-		// this.controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
-		// this.controls.mouseButtons.RIGHT = THREE.MOUSE.DOLLY;
+
 		return this.controls;
 	}
 
