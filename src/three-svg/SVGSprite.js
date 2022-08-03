@@ -6,6 +6,7 @@ export default class SVGSprite extends THREE.Sprite {
 		const material = new THREE.SpriteMaterial();
 		super(material);
 		this.material.visible = false;
+		this.material.toneMapped = false;
 		this.setSVGString = this.setSVGString.bind(this);
 	}
 

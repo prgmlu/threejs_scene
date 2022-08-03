@@ -52,6 +52,7 @@ module.exports = (env) => {
 				'./GreenScreenSystem':
 					'./src/green-screen-system/GreenScreenSystem',
 				'./AnimatedGLB': './src/AnimatedGLB',
+				"./InteractiveGLB": "./src/interactive-glb/InteractiveGLBComponent",
 				'./sceneUtils': './src/Scene/sceneUtils.js',
 			},
 			shared: {
