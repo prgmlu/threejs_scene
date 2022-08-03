@@ -57,11 +57,6 @@ export default class HotspotMarker extends InteractionObject {
 	};
 
 	getLabel = () => {
-		console.log(
-			'=> onHover getChildren',
-			this.userData.props.linked_label_object_id,
-			this.scene.children,
-		);
 		return this.scene.children.find(
 			(item) =>
 				item?.owner?.userData?.props?.hotspotId ===

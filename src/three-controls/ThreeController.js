@@ -41,9 +41,9 @@ class ThreeController {
 
 				this.startDistance = dist;
 			}
-			if (!this.deviceOrientationEventFired) {
-				this.deviceOrientationHandler(event);
-			}
+			// if (!this.deviceOrientationEventFired) {
+			// 	this.deviceOrientationHandler(event);
+			// }
 		});
 		// }
 
