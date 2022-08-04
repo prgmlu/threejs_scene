@@ -53,7 +53,9 @@ const createOrGetCamera = (camType, canvasRef, sceneId = '', type) => {
 	}
 
 	if(camType == 'realtime') {
-		return new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
+		let cam =  new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 1000);
+		window.cam = cam;
+		return cam;
 	}
 
 	if (window[cameraKey]) {
@@ -427,6 +429,7 @@ const Scene = (props) => {
 			cameraRef.current.aspect = width / height;
 			cameraRef.current.updateProjectionMatrix();
 			renderer.setSize(width, height);
+			window.labelRenderer && window.labelRenderer.setSize(width, height);
 
 			if (UI) setUI(false); //destroy UI
 		};

@@ -1,10 +1,13 @@
 import * as THREE from 'three';
 import RemoteChar from './RemoteChar';
+import { initCSSRenderer, addToolTipToModel } from './toolTipHelpers';
 
 const USE_SOCKET_IO = true;
-// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
+const ACTIVE = true;
 
-const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
+const SOCKET_SERVER_URL = USE_SOCKET_IO? 'https://avbe.beta.obsess-vr.com/live' : 'ws://192.168.1.122:8000/';
+
+// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
 
 // var io = require('socket.io-client');
 // var socket = io.connect('');
@@ -15,11 +18,27 @@ const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.com
 
 //for now, only broadcasting the positions and rotations
 
+function createRandomName(){
+    let name = "Guest ";
+    let randomNumber = Math.floor(Math.random() * 100);
+    name += randomNumber;
+    return name;
+}
+
+
+
 export default class CentralMultipleCharControls{
     constructor(mainCharControlsObj, otherChars){
         this.mainCharControlsObj = mainCharControlsObj;
+
+        this.myName = createRandomName();
+
         this.model = mainCharControlsObj.model;
+        initCSSRenderer();
+        addToolTipToModel(this.model,this.myName);
+
         this.otherChars = otherChars;
+
         
         window.otherChars = otherChars;
         this.prev_addresses = [];
@@ -32,25 +51,26 @@ export default class CentralMultipleCharControls{
         
         this.clock = new THREE.Clock();
 
-
-        
-        this.createSocketAndConnect();
-        if(USE_SOCKET_IO){
-            this.socket.on('message', this.handleMessage.bind(this));
-            this.socket.on('address', this.isNewAddress.bind(this));
-            this.socket.on('disconnected', this.handleDisconnect.bind(this));
-
-        }
-        else{
-            this.socket.onmessage = this.handleMessage.bind(this);
+        if(ACTIVE){
+            this.createSocketAndConnect();
+            if(USE_SOCKET_IO){
+                this.socket.on('message', this.handleMessage.bind(this));
+                this.socket.on('address', this.isNewAddress.bind(this));
+                this.socket.on('disconnected', this.handleDisconnect.bind(this));
+    
+            }
+            else{
+                this.socket.onmessage = this.handleMessage.bind(this);
+            }
         }
 
 
         this.update();
     }
 
-    createRemoteCharacter(position,rotation, address){
-        return new RemoteChar('Female_Type_A', position, rotation, address);
+    createRemoteCharacter(position,rotation, address, name){
+        let newChar = new RemoteChar('Female_Type_A', position, rotation, address,name);
+        return newChar
     }
 
     getCharByAddress(address){
@@ -123,13 +143,15 @@ export default class CentralMultipleCharControls{
             let char = this.getCharByAddress(address);
             
             if(!char){
+                debugger;
                 //new character entered
-                char = this.createRemoteCharacter(data[address].position,data[address].rotation, address);
+                char = this.createRemoteCharacter(data[address].position,data[address].rotation, address, data[address].name);
                 this.otherChars.push(char);
                 
             }
             if(char.model){
 
+                
                 char.interpolateToPosition(data[address].position);
 
                 // char.model.position.copy(data[address].position);
@@ -165,6 +187,8 @@ export default class CentralMultipleCharControls{
         data[address].position = this.mainCharControlsObj.model.position;
         data[address].rotation = this.mainCharControlsObj.model.rotation;
         data[address].isWalking = this.mainCharControlsObj.isWalking;
+        data[address].name = this.myName;
+        console.log(this.myName);
         
         this.prevPosition = this.mainCharControlsObj.model.position.clone();
         this.prevRotation = this.mainCharControlsObj.model.rotation.clone();
@@ -188,6 +212,7 @@ export default class CentralMultipleCharControls{
 
     update = () => {
         window.requestAnimationFrame(this.update);
+        labelRenderer.render( window.scene, window.cam );
 
         let updateDelta = this.clock.getDelta()
         this.mainCharControlsObj.update(updateDelta);
@@ -195,12 +220,15 @@ export default class CentralMultipleCharControls{
             char.mixer && char.mixer.update(updateDelta);
         });
 
-        if(!this.prevPosition){
-            this.sendData();
-            return;
-        }
-        // if(this.mainCharControlsObj.model.position.distanceTo(this.prevPosition) > 0.01 || this.mainCharControlsObj.isWalking != this.prevIsWalking){
-            this.sendData();
+        if(ACTIVE){
+
+            if(!this.prevPosition){
+                this.sendData();
+                return;
+            }
+            // if(this.mainCharControlsObj.model.position.distanceTo(this.prevPosition) > 0.01 || this.mainCharControlsObj.isWalking != this.prevIsWalking){
+                this.sendData();
+            }
         // }
     }
 }

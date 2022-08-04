@@ -1,5 +1,7 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from '../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
+import { initCSSRenderer, addToolTipToModel } from './toolTipHelpers';
+
 
 const FADE_DURATION = .4;
 
@@ -7,14 +9,14 @@ let charTypeMap = {
     "Female_Type_A":{
         url:"https://cdn.obsess-vr.com/realtime3d/static/glb_files/defaultChar_female_v002.glb",
 
-        scale: 1.2,
+        scale: 1,
     }
 }
 
 export default class RemoteChar{
     //will have a Position and Rotation, animations and a mixer.
     // the central control will be always be interpolating between the last position and last rotation and the new position and rotation.
-    constructor(charType , position, rotation, address, applyAdjustements=null){
+    constructor(charType , position, rotation, address, charName, applyAdjustements=null){
 
         this.animations = null;
         this.mixer = null;
@@ -22,6 +24,9 @@ export default class RemoteChar{
         this.position = position;
         this.rotation = rotation;
         this.currentAction = null;
+
+        this.charName = charName;
+        alert(this.charName)
 
         this.applyAdjustements = applyAdjustements;
         this.address = address;
@@ -76,6 +81,8 @@ export default class RemoteChar{
             window.x = this.model;
             this.setPosition(this.position)
             this.setRotation(this.rotation)
+
+            addToolTipToModel(this.model, this.charName);
 
             this.setModelScale();
 
