@@ -5,7 +5,7 @@ import { initCSSRenderer, addToolTipToModel } from './toolTipHelpers';
 const USE_SOCKET_IO = true;
 const ACTIVE = true;
 
-const SOCKET_SERVER_URL = USE_SOCKET_IO? 'https://avbe.beta.obsess-vr.com:5000/' : 'ws://192.168.1.122:8000/';
+const SOCKET_SERVER_URL = USE_SOCKET_IO? 'https://avbe.beta.obsess-vr.com/' : 'ws://192.168.1.122:8000/';
 // const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
 
 // const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
