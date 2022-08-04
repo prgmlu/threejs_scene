@@ -147,8 +147,10 @@ export const loadModelAndAnimations = async () => {
 		// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/mixamoriggedopaque.glb", (data) => {
 		// loader.load("https://cdn.obsess-vr.com/realtime3d/Default_Female.glb", (data) => {
 		// loader.load("https://cdn.obsess-vr.com/realtime3d/Newhair_female_v002.glb", (data) => {
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/defaultChar_female_v002.glb", (data) => {
-			loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v003.glb", (data) => {
+			loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/defaultChar_female_v002.glb", (data) => {
+
+			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v003.glb", (data) => {
+
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/c098fb1c-db90-467a-9fbe-db2d62eac5df.glb", (data) => {
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/female.glb", (data) => {
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/rigged.glb", (data) => {

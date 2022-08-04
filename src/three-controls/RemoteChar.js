@@ -16,7 +16,7 @@ let charTypeMap = {
 export default class RemoteChar{
     //will have a Position and Rotation, animations and a mixer.
     // the central control will be always be interpolating between the last position and last rotation and the new position and rotation.
-    constructor(charType , position, rotation, address, charName, applyAdjustements=null){
+    constructor(charType , position, rotation, address, charName, ADD_TOOLTIP, applyAdjustements=null){
 
         this.animations = null;
         this.mixer = null;
@@ -26,7 +26,7 @@ export default class RemoteChar{
         this.currentAction = null;
 
         this.charName = charName;
-        alert(this.charName)
+        this.ADD_TOOLTIP = ADD_TOOLTIP;
 
         this.applyAdjustements = applyAdjustements;
         this.address = address;
@@ -82,7 +82,9 @@ export default class RemoteChar{
             this.setPosition(this.position)
             this.setRotation(this.rotation)
 
-            addToolTipToModel(this.model, this.charName);
+            if(this.ADD_TOOLTIP){
+                addToolTipToModel(this.model, this.charName);
+            }
 
             this.setModelScale();
 

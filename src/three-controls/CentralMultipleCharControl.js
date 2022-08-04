@@ -4,6 +4,7 @@ import { initCSSRenderer, addToolTipToModel } from './toolTipHelpers';
 
 const USE_SOCKET_IO = true;
 const ACTIVE = true;
+const ADD_TOOLTIP = false;
 
 const SOCKET_SERVER_URL = USE_SOCKET_IO? 'https://avbe.beta.obsess-vr.com/' : 'ws://192.168.1.122:8000/';
 // const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
@@ -35,8 +36,10 @@ export default class CentralMultipleCharControls{
         this.myName = createRandomName();
 
         this.model = mainCharControlsObj.model;
-        initCSSRenderer();
-        addToolTipToModel(this.model,this.myName);
+        if(ADD_TOOLTIP){
+            initCSSRenderer();
+            addToolTipToModel(this.model,this.myName);
+        }
 
         this.otherChars = otherChars;
 
@@ -70,7 +73,7 @@ export default class CentralMultipleCharControls{
     }
 
     createRemoteCharacter(position,rotation, address, name){
-        let newChar = new RemoteChar('Female_Type_A', position, rotation, address,name);
+        let newChar = new RemoteChar('Female_Type_A', position, rotation, address, name, ADD_TOOLTIP);
         return newChar
     }
 
@@ -213,7 +216,9 @@ export default class CentralMultipleCharControls{
 
     update = () => {
         window.requestAnimationFrame(this.update);
-        labelRenderer.render( window.scene, window.cam );
+        if(ADD_TOOLTIP){
+            labelRenderer.render( window.scene, window.cam );
+        }
 
         let updateDelta = this.clock.getDelta()
         this.mainCharControlsObj.update(updateDelta);
