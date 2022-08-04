@@ -111,7 +111,6 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 	};
 
 	const onTouchEnd = (event) => {
-		event.preventDefault();
 		if (!event.clientX) event['clientX'] = event.changedTouches[0].clientX;
 		if (!event.clientY) event['clientY'] = event.changedTouches[0].clientY;
 		onMouseClick(event);
