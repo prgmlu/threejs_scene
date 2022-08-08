@@ -364,8 +364,8 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 				resolve(
 					new THREE.MeshBasicMaterial({
 						map: texture,
-						transparent: false,
-						depthTest: true,
+						transparent: true,
+						depthTest: false,
 						depthWrite: true,
 						toneMapped: false,
 					}),

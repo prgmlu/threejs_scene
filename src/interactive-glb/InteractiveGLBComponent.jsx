@@ -202,21 +202,21 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 		});
 	};
 
-	// const revertSceneMaterialToNormal = () => {
-	// 	scene.children.forEach((child) => {
-	// 		if (child.name === 'cubeBackground') {
-	// 			child.children.forEach((child2) => {
-	// 				child2.material.forEach((material) => {
-	// 					material.transparent = true;
-	// 					material.depthTest = false;
-	// 					material.depthWrite = false;
-	// 					material.toneMapped = true;
-	// 					material.needsUpdate = true;
-	// 				});
-	// 			});
-	// 		}
-	// 	});
-	// };
+	const revertSceneMaterialToNormal = () => {
+		scene.children.forEach((child) => {
+			if (child.name === 'cubeBackground') {
+				child.children.forEach((child2) => {
+					child2.material.forEach((material) => {
+						material.transparent = true;
+						material.depthTest = false;
+						material.depthWrite = false;
+						material.toneMapped = true;
+						material.needsUpdate = true;
+					});
+				});
+			}
+		});
+	};
 
 	const resetRendererToNormal = () => {
 		//TODO: use threejs values, example, THREE.sRGBEncoding instead of below numbers
@@ -270,25 +270,24 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 			loader.loadAsync(hotspotData.props.data.glbObjectUrl), //glb
 		])
 			.then((results) => {
-				prepareRendererForGLTF();
-				// const cubeBackground = scene.children.find(
-				// 	(child) => child.name === 'cubeBackground',
-				// );
-				// prepareSceneForGLTFObject(cubeBackground);
-				// if (cubeBackground) {
-				// 	while (cubeBackground.children.length !== 6) {}
-				// 	cubeBackgroundInterval = setInterval(() => {
-				// 		const materialCount = cubeBackground.children
-				// 			.map((child) => child.material.length)
-				// 			.reduce((partial, a) => partial + a, 0);
-				//
-				// 		if (materialCount === CB_MATERIAL_COUNT) {
-				// 			console.log('=> materials loaded');
-				//
-				// 			clearInterval(cubeBackgroundInterval);
-				// 		}
-				// 	}, 100);
-				// }
+				const cubeBackground = scene.children.find(
+					(child) => child.name === 'cubeBackground',
+				);
+
+				if (cubeBackground) {
+					while (cubeBackground.children.length !== 6) {}
+					cubeBackgroundInterval = setInterval(() => {
+						const materialCount = cubeBackground.children
+							.map((child) => child.material.length)
+							.reduce((partial, a) => partial + a, 0);
+
+						if (materialCount === CB_MATERIAL_COUNT) {
+							prepareSceneForGLTFObject(cubeBackground);
+							prepareRendererForGLTF();
+							clearInterval(cubeBackgroundInterval);
+						}
+					}, 100);
+				}
 
 				const [environmentMap, gltf] = results;
 				environmentMap.encoding = THREE.sRGBEncoding;
