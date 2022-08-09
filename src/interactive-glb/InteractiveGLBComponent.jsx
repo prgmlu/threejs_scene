@@ -19,6 +19,11 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 	let controller = window.containerInstance_controller;
 	let renderer = window.containerInstance_renderer;
 
+	let mixer = null;
+	let isObjectReset = false;
+	let yQuaternionDifference = 0.0;
+	let zQuaternionDifference = 0.0;
+
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 	const scene = sceneRef?.current;
@@ -39,12 +44,6 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 
 	const raycaster = new THREE.Raycaster();
 	const mouse = new THREE.Vector2();
-
-	const loader = new GLTFLoader();
-	const dracoLoader = new DRACOLoader();
-	dracoLoader.setDecoderPath(DRACO_LOADER_PATH);
-	dracoLoader.preload();
-	loader.setDRACOLoader(dracoLoader);
 
 	const updateAllMaterials = () => {
 		model.traverse((child) => {
@@ -117,6 +116,7 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 	};
 
 	const onTouchEnd = (event) => {
+		event.preventDefault();
 		if (!event.clientX) event['clientX'] = event.changedTouches[0].clientX;
 		if (!event.clientY) event['clientY'] = event.changedTouches[0].clientY;
 		onMouseClick(event);
@@ -143,13 +143,48 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 		object.quaternion.slerpQuaternions(q1, q2, clock.getDelta());
 	};
 
+	const checkObjectRotation = () => {
+		//check if object is facing the camera
+		yQuaternionDifference = Math.abs(q1.y - q2.y);
+		zQuaternionDifference = Math.abs(q1.z - q2.z);
+		if (
+			yQuaternionDifference < 0.01 &&
+			zQuaternionDifference < 0.01 &&
+			controller.enabled === true &&
+			model.rotation.y > 1.4 &&
+			model.rotation.y < 1.6
+		) {
+			isObjectReset = true;
+			return;
+		}
+		isObjectReset = false;
+	};
+
+	const animateGLTF = () => {
+		if (
+			mixer != null &&
+			hotspotData.props.data.isAnimated === true &&
+			controller.enabled
+		)
+			mixer.update(clock.getDelta());
+	};
+
 	const animate = () => {
 		requestAnimationFrame(animate);
+
+		checkObjectRotation();
+
 		if (controller.enabled === false && hotspotMouseOver === false) {
 			rotateObject(model);
 			return;
 		}
-		resetObject(model);
+
+		if (isObjectReset === false) {
+			resetObject(model);
+			return;
+		}
+
+		animateGLTF();
 	};
 
 	const addHotspots = () => {
@@ -219,8 +254,9 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 	};
 
 	const resetRendererToNormal = () => {
-		//TODO: use threejs values, example, THREE.sRGBEncoding instead of below numbers
-		renderer.toneMapping = 0;
+		renderer.shadowMap.enabled = false;
+		renderer.toneMapping = THREE.NoToneMapping;
+		renderer.shadowMap.enabled = false;
 	};
 
 	const removeEventListeners = () => {
@@ -252,10 +288,26 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 	};
 
 	const prepareRendererForGLTF = () => {
+		renderer.antialias = true;
 		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 	};
 
+	const prepareMixerForGLTF = (gltf) => {
+		if (hotspotData.props.data.isAnimated === true) {
+			model = gltf.scene; //glb
+			mixer = new THREE.AnimationMixer(gltf.scene);
+			const hover = mixer.clipAction(gltf.animations[0]);
+			hover.loop = THREE.LoopRepeat;
+			hover.play();
+		}
+	};
+
 	useEffect(() => {
+		const loader = new GLTFLoader();
+		const dracoLoader = new DRACOLoader();
+		dracoLoader.setDecoderPath(DRACO_LOADER_PATH);
+		dracoLoader.preload();
+		loader.setDRACOLoader(dracoLoader);
 		const cubeTextureLoader = new THREE.CubeTextureLoader();
 
 		Promise.all([
@@ -293,8 +345,7 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 				environmentMap.encoding = THREE.sRGBEncoding;
 				scene.environment = environmentMap;
 
-				model = gltf.scene; //glb
-
+				prepareMixerForGLTF(gltf);
 				addHotspots();
 
 				model.position.set(
