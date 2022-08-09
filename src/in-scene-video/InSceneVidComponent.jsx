@@ -26,12 +26,29 @@ const InSceneVidComponent = (props) => {
 	const scene = sceneRef?.current;
 	const autoplay = userData?.props?.autoplay || false;
 	const muted = userData?.props?.muted || false;
-	const loop = userData?.props?.muted || false;
+	const loop = userData?.props?.loop || false;
 	const enableControls = userData?.props?.controls?.enable || false;
 
 	let videoRef = useRef(null);
 	let videoMeshRef = useRef(null);
 	const videoControlsRef = useRef(null);
+	useEffect(() => {
+		document.addEventListener('playOnHotspotClick', (e) =>
+			linkedHotspotClicked(e),
+		);
+		return () => {
+			document.removeEventListener('playOnHotspotClick', (e) =>
+				linkedHotspotClicked(e),
+			);
+		};
+	}, []);
+
+	const linkedHotspotClicked = (eventInfo) => {
+		const { detail } = eventInfo;
+		if (detail?.inSceneId === userData?.recordId) {
+			triggerAutoPlay();
+		}
+	};
 
 	const autoplayAfterFirstInteraction = () => {
 		document.addEventListener('click', triggerAutoPlay);
@@ -118,17 +135,17 @@ const InSceneVidComponent = (props) => {
 				vShader,
 			);
 			videoMeshRef.current = new THREE.Mesh(geometry, material);
-			videoMeshRef.current.renderOrder=2;
-			videoMeshRef.current.material.depthTest=false;
-			videoMeshRef.current.material.depthWrite=false;
+			videoMeshRef.current.renderOrder = 2;
+			videoMeshRef.current.material.depthTest = false;
+			videoMeshRef.current.material.depthWrite = false;
 			videoMeshRef.current.material.uniforms.tex.value =
 				new THREE.VideoTexture(videoRef.current);
 		} else {
 			const material = createNormalVidMaterial(videoRef.current);
 			videoMeshRef.current = new THREE.Mesh(geometry, material);
-			videoMeshRef.current.renderOrder=2;
-			videoMeshRef.current.material.depthTest=false;
-			videoMeshRef.current.material.depthWrite=false;
+			videoMeshRef.current.renderOrder = 2;
+			videoMeshRef.current.material.depthTest = false;
+			videoMeshRef.current.material.depthWrite = false;
 		}
 	};
 
