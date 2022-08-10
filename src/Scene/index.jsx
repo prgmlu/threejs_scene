@@ -174,19 +174,23 @@ const Scene = (props) => {
 	};
 
 	const animate = (controllerUpdate = false, animationKey) => {
+		if(window.mainAnimationLoopHooks){
+			window.mainAnimationLoopHooks.forEach(hook => {
+				hook();
+			} );
+		}
 		if (renderer.xr.enabled) {
 			renderer.setAnimationLoop(() => {
 				renderer?.render(scene, cameraRef.current);
 				if (controllerUpdate) controllerUpdate();
 			});
 		} else {
-			timeOutRef.current = setTimeout(() => {
 				if (animationKey) {
 					window[animationKey] = requestAnimationFrame(() =>
 						animate(controllerUpdate, animationKey),
 					);
 				}
-			}, 1000 / fps);
+				 	
 
 			renderer?.render(scene, cameraRef.current);
 
@@ -411,7 +415,7 @@ const Scene = (props) => {
 			// Clear Animation loop
 			if (animationId) {
 				window.cancelAnimationFrame(window[animationId]);
-				clearTimeout(timeOutRef.current);
+				// clearTimeout(timeOutRef.current);
 				delete window[animationId];
 			}
 		};

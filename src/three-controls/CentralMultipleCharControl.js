@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 import RemoteChar from './RemoteChar';
 import { initCSSRenderer, addToolTipToModel } from './toolTipHelpers';
+import * as out from './OutfitTranslator';
 
 const USE_SOCKET_IO = true;
 const ACTIVE = true;
-const ADD_TOOLTIP = false;
+const USE_TOOLTIP = true;
 
-const SOCKET_SERVER_URL = USE_SOCKET_IO? 'https://avbe.beta.obsess-vr.com/' : 'ws://192.168.1.122:8000/';
-// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
+// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'https://avbe.beta.obsess-vr.com/' : 'ws://192.168.1.122:8000/';
+const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
 
 // const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
 
@@ -36,9 +37,11 @@ export default class CentralMultipleCharControls{
         this.myName = createRandomName();
 
         this.model = mainCharControlsObj.model;
-        if(ADD_TOOLTIP){
+        if(USE_TOOLTIP){
             initCSSRenderer();
-            addToolTipToModel(this.model,this.myName);
+            let {div,tooltipMesh } = addToolTipToModel(this.model,this.myName);
+            this.tooltipMesh = tooltipMesh;
+            this.tooltipDiv = div;
         }
 
         this.otherChars = otherChars;
@@ -69,11 +72,14 @@ export default class CentralMultipleCharControls{
         }
 
 
-        this.update();
+        // this.update();
+
+        if(!window.mainAnimationLoopHooks) window.mainAnimationLoopHooks = [];
+        window.mainAnimationLoopHooks.push(this.update.bind(this));
     }
 
     createRemoteCharacter(position,rotation, address, name){
-        let newChar = new RemoteChar('Female_Type_A', position, rotation, address, name, ADD_TOOLTIP);
+        let newChar = new RemoteChar('Female_Type_A', position, rotation, address, name, USE_TOOLTIP);
         return newChar
     }
 
@@ -118,7 +124,7 @@ export default class CentralMultipleCharControls{
     }
     
     
-    handleMessage(event){;
+    handleMessage(event){
         let data;
         if(USE_SOCKET_IO){
             data = JSON.parse(event);
@@ -147,21 +153,27 @@ export default class CentralMultipleCharControls{
             let char = this.getCharByAddress(address);
             
             if(!char){
-                debugger;
                 //new character entered
                 char = this.createRemoteCharacter(data[address].position,data[address].rotation, address, data[address].name);
                 this.otherChars.push(char);
                 
             }
             if(char.model){
-
-                
+                if(char.charName != data[address].name){
+                    char.updateName(data[address].name);
+                }
                 char.interpolateToPosition(data[address].position);
 
                 // char.model.position.copy(data[address].position);
                 char.model.rotation.copy(data[address].rotation);
 
                 data[address].isWalking? char.playWalkingAnimation():char.playIdleAnimation();
+
+                if( (!char.outfitString) || (char.outfitString != data[address].outfitString)){
+                    char.outfitString = data[address].outfitString;
+                    window.dressUpFromString(char.model,data[address].outfitString);
+                }
+
             }
         }
 
@@ -182,6 +194,7 @@ export default class CentralMultipleCharControls{
     }
 
     sendData(){
+        if(!window.scene.children.includes(window.model)) return;
         let address = this.address;
         if( !address)
             return;
@@ -191,8 +204,22 @@ export default class CentralMultipleCharControls{
         data[address].position = this.mainCharControlsObj.model.position;
         data[address].rotation = this.mainCharControlsObj.model.rotation;
         data[address].isWalking = this.mainCharControlsObj.isWalking;
-        data[address].name = this.myName;
-        console.log(this.myName);
+
+        if( (!this.myOutfitString) || window.outfitStringNeesUpdate ) {
+            this.myOutfitString = window.getOutfitStringFromModel(this.mainCharControlsObj.model,window.hairColor, window.pantsColor, window.shirtColor);
+        }
+        data[address].outfitString = this.myOutfitString;
+
+        if(window.avatarName){
+            data[address].name = window.avatarName;
+            if(this.myName != window.avatarName){
+                this.myName = window.avatarName;
+                this.tooltipDiv.textContent = window.avatarName;
+            }
+        }
+        else{
+            data[address].name = this.myName;
+        }
         
         this.prevPosition = this.mainCharControlsObj.model.position.clone();
         this.prevRotation = this.mainCharControlsObj.model.rotation.clone();
@@ -215,8 +242,8 @@ export default class CentralMultipleCharControls{
 
 
     update = () => {
-        window.requestAnimationFrame(this.update);
-        if(ADD_TOOLTIP){
+        // window.requestAnimationFrame(this.update);
+        if(USE_TOOLTIP){
             labelRenderer.render( window.scene, window.cam );
         }
 
@@ -232,9 +259,9 @@ export default class CentralMultipleCharControls{
                 this.sendData();
                 return;
             }
-            // if(this.mainCharControlsObj.model.position.distanceTo(this.prevPosition) > 0.01 || this.mainCharControlsObj.isWalking != this.prevIsWalking){
+            if(this.mainCharControlsObj.model.position.distanceTo(this.prevPosition) > 0.01 || this.mainCharControlsObj.isWalking != this.prevIsWalking){
                 this.sendData();
             }
-        // }
+        }
     }
 }

@@ -1,0 +1,1 @@
+node_modules/*, AnimatedGLB/*, fire-effect, water-effect, Scene, threeHelpers.js,ThreeBackgroundCube.js,FlatBackground,pleaserotate.js,DebugUI.js,toolTipHelpers.js, CollisionDetection.js, ThreeCanvas.jsx, PoweredByObsess.jsx,RealtimeBackground/index.jsx

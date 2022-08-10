@@ -1114,8 +1114,8 @@ class OrbitControls extends EventDispatcher {
 
 
 
-		if(window.characterControls)
-			window.characterControls.removeEvents();
+		// if(window.characterControls)
+		// 	window.characterControls.removeEvents();
 		this.minPolarAngle = MathUtils.degToRad(
 			'min_vertical_angle' in orbitControlsConfig
 				? orbitControlsConfig.min_vertical_angle

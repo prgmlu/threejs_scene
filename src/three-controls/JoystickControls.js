@@ -15,26 +15,28 @@ export default class JoystickControls extends Component {
         // this.directionValues[3] = 0;
 
         //fwd, bk, rgt, lft
-        this.directionValues = [
-            0,0,0,0
-        ]
+        // this.directionValues = [
+        //     0,0,0,0
+        // ]
+
+        this.directionValues = props.directionValues;
+
+        debugger;
 
 
         this.tempVector = new THREE.Vector3();
         this.upVector = new THREE.Vector3(0, 1, 0);
         this.joyManager;
 
-        window.joystickBroadcast = this.directionValues;
-        window.joystick = this;
-
         this.scene = this.props.scene;
         this.camera = this.props.camera;
         this.renderer = this.props.renderer;
-        this.controls = this.props.controls;
+        this.orbitControls = this.props.orbitControls;
         this.avatar = this.props.avatar;
 
 		this.myRef = React.createRef();
     }
+
 
     componentDidMount() {
         this.addJoyStick();
@@ -45,7 +47,7 @@ export default class JoystickControls extends Component {
     animate = () => {
 
         // this.updatePlayer();
-        // this.controls.update();
+        // this.orbitControls.update();
       
         // requestAnimationFrame( this.animate );
       }
@@ -53,7 +55,7 @@ export default class JoystickControls extends Component {
     updatePlayer = () => {
 
         // move the player
-        const angle = this.controls.getAzimuthalAngle()
+        const angle = this.orbitControls.getAzimuthalAngle()
 
         if (this.directionValues[0] > 0) {
             this.tempVector
@@ -97,10 +99,10 @@ export default class JoystickControls extends Component {
 
         this.avatar.updateMatrixWorld()
 
-        //this.controls.target.set( this.avatar.position.x, this.avatar.position.y, this.avatar.position.z );
+        //this.orbitControls.target.set( this.avatar.position.x, this.avatar.position.y, this.avatar.position.z );
         // reposition camera
-        // this.camera.position.sub(this.controls.target)
-        // this.controls.target.copy(this.avatar.position)
+        // this.camera.position.sub(this.orbitControls.target)
+        // this.orbitControls.target.copy(this.avatar.position)
         // this.camera.position.add(this.avatar.position)
 
 

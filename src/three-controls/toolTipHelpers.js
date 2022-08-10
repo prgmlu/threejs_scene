@@ -1,11 +1,12 @@
 import {
-    CSS2DRenderer,
-    CSS2DObject
-  } from 'three/examples/jsm/renderers/CSS2DRenderer';
+  CSS2DObject
+} from 'three/examples/jsm/renderers/CSS2DRenderer';
+import {CSS2DRenderer} from './CSS2DRenderer';
 
 export const initCSSRenderer = ()=> {
     let labelRenderer = new CSS2DRenderer();
     labelRenderer.domElement.style.pointerEvents = 'none';
+    // labelRenderer.domElement.style.zIndex = "1";
 
 
     window.labelRenderer = labelRenderer;
@@ -15,30 +16,38 @@ export const initCSSRenderer = ()=> {
     document.body.appendChild(labelRenderer.domElement);
 }
 
+const styleTooltip = (tooltip)=>{
+    tooltip.style.color = "white";
+    tooltip.style.fontSize = "20px";
+    tooltip.style.fontFamily = "sans-serif";
+    tooltip.style.fontWeight = "bold";
+    tooltip.style.position = "absolute";
+    tooltip.style.borderRadius = "5px";
+    // tooltip.style.opacity = "0.7";
+    tooltip.style.pointerEvents = "none";
+    tooltip.style.zIndex = "1";
+    tooltip.style.width = "100px";
+    tooltip.style.textAlign = "center";
+}
+
 export const addToolTipToModel = (obj, text) => {
-    var cubeDiv = document.createElement('div');
-    cubeDiv.className = 'label';
-  
-    cubeDiv.textContent = text;
-    cubeDiv.style.color = "white";
-    cubeDiv.style.fontSize = "20px";
-    cubeDiv.style.fontFamily = "sans-serif";
-    cubeDiv.style.fontWeight = "bold";
-    cubeDiv.style.position = "absolute";
-    cubeDiv.style.borderRadius = "5px";
-    // cubeDiv.style.opacity = "0.7";
-    cubeDiv.style.pointerEvents = "none";
-    cubeDiv.style.zIndex = "1";
-    cubeDiv.style.width = "100px";
-    cubeDiv.style.textAlign = "center";
+    var tooltipDiv = document.createElement('div');
+    tooltipDiv.className = 'label';
+    tooltipDiv.textContent = text;
+    window . tooltipDiv = tooltipDiv;
+
+    styleTooltip(tooltipDiv);
     
-    
-    var cubeLabel = new CSS2DObject(cubeDiv);
-    cubeLabel.position.set(0, 1.9, 0);
-    window.cubeLabel = cubeLabel;
-    debugger;
+    var tooltipTextMesh = new CSS2DObject(tooltipDiv);
+    tooltipTextMesh.position.set(0, 1.9, 0);
+    window.tooltipTextMesh = tooltipTextMesh;
   
-    obj.add(cubeLabel);
+    obj.add(tooltipTextMesh);
+
+    return {div: tooltipDiv, tooltipMesh: tooltipTextMesh};
 
   }
   
+  export const updateToolTip = (obj, text) => {
+
+  }

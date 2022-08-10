@@ -3,7 +3,6 @@ import BackgroundCube from './BackgroundCube';
 import FlatBackground from './FlatBackground';
 import RealtimeBackgroundContainer from './RealtimeBackground';
 import { setUpEnvMap, setUpSceneBackground, adjustRenderer } from './threeHelpers';
-import JoystickControls from '../three-controls/JoystickControls';
 
 const Background = ({
 	scene,
@@ -22,8 +21,6 @@ const Background = ({
 	const [isCubeScene, setCubeScene] = useState(false);
 
     const [isRealtimeScene, setRealtimeScene] = useState(false);
-	window.isRealtimeScene = isRealtimeScene;
-	window.setRealtimeScene = setRealtimeScene;
 	const [imageIntegrity, setImageIntegrity] = useState(null);
 	const [useWebp, setUseWebp] = useState(false);
 	const [skipLargest, setSkipLargest] = useState(false);
@@ -96,9 +93,15 @@ const Background = ({
 			/>
 		}
          {
-			isRealtimeScene && <RealtimeBackgroundContainer 
+			renderer
+			&&camera
+			&&controller
+			&&backgroundUrl
+			&&scene
+			&&isRealtimeScene && <RealtimeBackgroundContainer 
 			renderer={renderer}
 			camera={camera}
+			controller={controller}
 			backgroundUrl={backgroundUrl} scene={scene}/>
 		 }
 		</>

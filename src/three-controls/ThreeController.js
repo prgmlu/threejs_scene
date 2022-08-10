@@ -88,14 +88,15 @@ class ThreeController {
 	}
 
 
-	setupCharacterControls(model, charMixer, animationsMap, storeMixer) {
+	setupCharacterControls(model, charMixer, animationsMap, storeMixer, directionValues) {
         this.controls.minDistance = 2;
         this.controls.maxDistance = 6;
         this.controls.enablePan = false;
         this.controls.maxPolarAngle = Math.PI / 2 - 0.05;
+
         // this.controls.minPolarAngle = - Math.PI / 2 - 0.05;
 
-		this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle_anim',null, [], true, true ,false,storeMixer);
+		this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle_anim_Armature',null, [], true, true ,false,storeMixer,directionValues);
 		// this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
 		window.characterControls = this.characterControls ;
 

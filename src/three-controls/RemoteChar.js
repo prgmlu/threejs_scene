@@ -7,7 +7,8 @@ const FADE_DURATION = .4;
 
 let charTypeMap = {
     "Female_Type_A":{
-        url:"https://cdn.obsess-vr.com/realtime3d/static/glb_files/defaultChar_female_v002.glb",
+        // url:"https://cdn.obsess-vr.com/realtime3d/static/glb_files/defaultChar_female_v002.glb",
+        url:"https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v004.glb",
 
         scale: 1,
     }
@@ -27,6 +28,8 @@ export default class RemoteChar{
 
         this.charName = charName;
         this.ADD_TOOLTIP = ADD_TOOLTIP;
+
+        this.tooltipDiv = null;
 
         this.applyAdjustements = applyAdjustements;
         this.address = address;
@@ -78,12 +81,13 @@ export default class RemoteChar{
         this.loader.load(url, (gltf) => {
             this.animations = gltf.animations;
             this.model = gltf.scene;
-            window.x = this.model;
             this.setPosition(this.position)
             this.setRotation(this.rotation)
 
             if(this.ADD_TOOLTIP){
-                addToolTipToModel(this.model, this.charName);
+                let {div,tooltipMesh } = addToolTipToModel(this.model, this.charName);
+                this.tooltipDiv = div;
+                this.tooltipMesh = tooltipMesh;
             }
 
             this.setModelScale();
@@ -136,8 +140,15 @@ export default class RemoteChar{
         scene.add(this.model);
     }
 
+    updateName(name){
+        this.charName = name;
+        this.tooltipDiv.textContent = name;
+    }
+
     removeFromScene(scene){
         window.scene.remove(this.model);
+        this.tooltipMesh.parent.remove(this.tooltipMesh);
+        
     }
 
     setupLoader = () => {

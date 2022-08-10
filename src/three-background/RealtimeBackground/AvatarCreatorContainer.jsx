@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AvatarButton from './ui/AvatarButton';
 import AvatarCreator from './avatar-creator/AvatarCreator';
 
+const CUSTOMIZE_AVATAR = true;
 class AvatarCreatorContainer extends Component {
     constructor(props) {
         super(props);
@@ -10,11 +11,24 @@ class AvatarCreatorContainer extends Component {
         this.scene = this.props.scene;
         this.avatar = this.props.avatar;
 
+		this.charControls = this.props.charControls;
+
         this.avatarPos = this.props.avatarPos.clone();
 
-        this.state = {
-            isAvatarCreatorActive : false,
-        }
+		if(CUSTOMIZE_AVATAR){
+			this.state = {
+				//!!! WARNING, change from CUSTOMIZE_AVATAR instead
+				isAvatarCreatorActive : true,
+			}
+			this.charControls.setEnabled(false);
+		}
+		else{
+			this.state = {
+				isAvatarCreatorActive : false,
+			}
+		}
+		
+
     }
 
 
@@ -42,6 +56,12 @@ class AvatarCreatorContainer extends Component {
 	
 	setIsAvatarCreatorActive = (val) => {
 		this.setState({isAvatarCreatorActive:val});
+		if(val){
+			this.charControls.setEnabled(false);
+		}
+		else{
+			this.charControls.setEnabled(true);
+		}
 	}
 
 	showAvatarCreator = () => {
@@ -74,6 +94,7 @@ class AvatarCreatorContainer extends Component {
             <>
                     <AvatarButton showModal={this.showAvatarCreator}/>
 				{this.state.isAvatarCreatorActive && <AvatarCreator
+												active={this.state.isAvatarCreatorActive}
 												saveAvatar={this.saveAvatar}
 												closeModal={this.closeAvatarCreator}
 												currentAvatar={this.props.avatar}/>}

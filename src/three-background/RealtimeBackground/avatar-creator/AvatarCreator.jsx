@@ -3,12 +3,12 @@ import * as THREE from 'three'
 import { setUpEnvMap, createRenderer,createScene } from '../../threeHelpers';
 import AvatarCreatorEditor from './AvatarCreatorEditor';
 import './AvatarCreator.css'
+import TextInput from './TextInput';
 
 class AvatarCreator extends Component {
     constructor(props) {
         super(props);
         this.scene = createScene();
-        window.s =this.scene; 
         this.renderer = createRenderer();
         this.renderer.setSize((window.innerWidth*.3528), (window.innerHeight*.6205));
 		this.camera = new THREE.PerspectiveCamera(50, (window.innerWidth*.3528)/(window.innerHeight*.6205), 0.1, 1000);
@@ -18,16 +18,29 @@ class AvatarCreator extends Component {
         this.currentAvatar = props?.currentAvatar;
         this.saveAvatar = props?.saveAvatar;
         this.closeModal = props?.closeModal;
+        this.avatarName = null;
+
+        this.active = props.active;
     }
 
+    _onAvatarNameChange = e => {
+        this.setAvatarName(e.target.value);
+        window.avatarName = e.target.value;
+      }
+    
+
+      setAvatarName = (avatarName) => {
+        
+        this.setState({avatarName});
+      }
+
     loadAvatar = () => {
-        this.currentAvatar.position.set(0, -1, -2.7);
+        this.currentAvatar.position.set(0, -.9, -2.7);
         this.currentAvatar.rotation.set(0,0,0,'XYZ');
 
         this.scene.add(this.props.currentAvatar);
         this.scene.add(this.props.currentAvatar.boundingObj);
         
-        window.avatar = this.props.currentAvatar;
 	}
 
     rotateAvatar = (e) => {
@@ -75,7 +88,7 @@ class AvatarCreator extends Component {
 
 	setZoom = (fov) => {
 		this.camera.fov = fov;
-		if (this.camera.fov < 1) this.camera.fov = 1;
+		if (this.camera.fov < 30) this.camera.fov = 30;
 		if (this.camera.fov > 50) this.camera.fov = 50;
 		this.camera.updateProjectionMatrix();
 	}
@@ -119,6 +132,7 @@ class AvatarCreator extends Component {
     }
 
     animate = () => {
+        if(!this.active) return;
         requestAnimationFrame(this.animate);
         this.renderer.render(this.scene, this.camera)
     }
@@ -128,12 +142,14 @@ class AvatarCreator extends Component {
             <div className='avatarCreator'>
                 <div 
                     onClick={(e) => {
+                        debugger;
+                        this.active=false;
                         this.closeModal();
                     }}
                     style={{
                         position: 'absolute',
                         cursor: 'pointer',
-                        zIndex: 2,
+                        zIndex: 100,
                         right: '-15px',
                         top: '-15px',
                     }}
@@ -154,12 +170,14 @@ class AvatarCreator extends Component {
                     <AvatarCreatorEditor
                         currentAvatar={this.props.currentAvatar}
                      currentScene={this.scene}/>
-                    <div className='avatarCreatorScene' ref={this.myRef}></div>
+                    <div className='avatarCreatorScene' ref={this.myRef}>
+                    <TextInput onChange={this._onAvatarNameChange} avatarName={this.avatarName}  />
+                    </div>
                 </div>
 
                 <div className="editorButtons">
-                    <button type='button' className='cancelButton' onClick={this.closeModal}> Cancel </button>
-                    <button type='button' className='saveButton' onClick={this.saveAvatar}> Save </button>
+                    <button type='button' className='cancelButton' onClick={()=>{this.closeModal(); this.active=false;}}> Cancel </button>
+                    <button type='button' className='saveButton' onClick={()=>{this.saveAvatar(); this.active=false}}> Save </button>
                 </div>                     
             </div>
         );

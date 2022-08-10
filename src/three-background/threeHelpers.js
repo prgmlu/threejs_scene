@@ -9,6 +9,9 @@ import {
 	FBXLoader
 } from 'three/examples/jsm/loaders/FBXLoader';
 
+import avatar from './av.glb'
+
+
 let useArmani = false;
 // const MODEL_SCALE = [1.2,1.2,1.2];
 const MODEL_SCALE = [1, 1, 1];
@@ -27,20 +30,29 @@ const createCube = function () {
 
 // let useCt = true;
 
-const envMapArr = useArmani ? [
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/px.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/nx.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/py.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/ny.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/pz.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/nz.jpg",
-] : [
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/px.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/nx.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/py.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/ny.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/pz.jpg",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/nz.jpg",
+// const envMapArr = useArmani ? [
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/px.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/nx.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/py.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/ny.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/pz.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/armani/nz.jpg",
+// ] : [
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/px.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/nx.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/py.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/ny.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/pz.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_envmap/nz.jpg",
+// ]
+
+const envMapArr = [
+	"https://cdn.obsess-vr.com/realtime3d/envmap-footprint/px.jpg",
+	"https://cdn.obsess-vr.com/realtime3d/envmap-footprint/nx.jpg",
+	"https://cdn.obsess-vr.com/realtime3d/envmap-footprint/py.jpg",
+	"https://cdn.obsess-vr.com/realtime3d/envmap-footprint/ny.jpg",
+	"https://cdn.obsess-vr.com/realtime3d/envmap-footprint/pz.jpg",
+	"https://cdn.obsess-vr.com/realtime3d/envmap-footprint/nz.jpg",
 ]
 
 const bgArray = useArmani ? [
@@ -147,9 +159,14 @@ export const loadModelAndAnimations = async () => {
 		// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/mixamoriggedopaque.glb", (data) => {
 		// loader.load("https://cdn.obsess-vr.com/realtime3d/Default_Female.glb", (data) => {
 		// loader.load("https://cdn.obsess-vr.com/realtime3d/Newhair_female_v002.glb", (data) => {
-			loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/defaultChar_female_v002.glb", (data) => {
-
+			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/defaultChar_female_v002.glb", (data) => {
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v003.glb", (data) => {
+
+
+			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v004.glb", (data) => {
+			loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb", (data) => {
+			// loader.load("https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_001.glb", (data) => {
+			// loader.load(avatar, (data) => {
 
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/c098fb1c-db90-467a-9fbe-db2d62eac5df.glb", (data) => {
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/female.glb", (data) => {
@@ -165,15 +182,36 @@ export const loadModelAndAnimations = async () => {
 			window.model = model;
 
 			let hairs = []
+			let pants = []
+			let shirts = []
 			data.scene.traverse((i)=>{
 				if(i.name.includes('Hair')){
 					hairs.push(i);
 					i.visible=false;
 					hairs.push(i);
 				}
+
+				if(i.name.includes('Pants')){
+					pants.push(i);
+					i.visible=false;
+					pants.push(i);
+				}
+
+				if(i.name.includes('Shirt')){
+					shirts.push(i);
+					i.visible=false;
+					shirts.push(i);
+				}
+
 			})
 
 			hairs[0].visible=true;
+			// pants[0].visible=true;
+			// shirts[0].visible=true;
+
+			data.scene.getChildByName('Shirt2').visible=true;
+			data.scene.getChildByName('Pants2').visible=true;
+			
 
 			// window.model = createCube();
 			// scene.add(window.model);

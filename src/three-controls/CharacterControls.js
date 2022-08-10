@@ -25,8 +25,11 @@ const OLD_COLLISION_METHOD = false;
 
 export default class CharacterControls {
 
-    constructor(model, charMixer, animationsMap, orbitControl, camera, currentAction = 'Idle_anim' , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer){
+    constructor(model, charMixer, animationsMap, orbitControl, camera, currentAction = 'Idle_anim_Armature' , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues){
         this.model = model;
+
+        this.enabled = true;
+        this.joystickBroadcast = directionValues;
 
         if(OLD_COLLISION_METHOD){
             //array of bounding objs
@@ -140,11 +143,10 @@ export default class CharacterControls {
 
     }
 
-
     isUserClicking(){
         let keyBoardClicks = DIRECTIONS.some(key => this.keysPressed[key] == true);
-        if(window.joystickBroadcast){
-            var joyStickClicks = window.joystickBroadcast.some(key => key!=0);
+        if(this.joystickBroadcast){
+            var joyStickClicks = this.joystickBroadcast.some(key => key!=0);
         }
         return keyBoardClicks || joyStickClicks;
 
@@ -231,14 +233,33 @@ export default class CharacterControls {
         this.collisionDetection.setCollisionObjects(getStoreParts());
     }
 
+    setEnabled(val){
+        this.enabled = val;
+    }
+
     handleKeydown = (e) => {
-        (this.keysPressed)[e.key.toLowerCase()] = true;
+        this.enabled && ((this.keysPressed)[e.key.toLowerCase()] = true);
+
+        if(e.key == " "){
+            this.playWaveAnimation();
+        }
+
+    }
+    playWaveAnimation(){
+        debugger;
+        let c = this.animationsMap.get("Waving_anim_Armature")
+        c.reset()
+        c.setLoop(THREE.LoopPingPong,1);
+        c.play();
+        // c.fadeOut(.5);
+
     }
     handleKeyup = (e) => {
-            (this.keysPressed)[e.key.toLowerCase()] = false;
+            this.enabled && ((this.keysPressed)[e.key.toLowerCase()] = false);
         }
 
     removeEvents = () => {
+        alert('hi')
         document.removeEventListener('keydown',this.handleKeydown)
         document.removeEventListener('keyup',this.handleKeyup)
 
@@ -288,7 +309,7 @@ export default class CharacterControls {
         this.isWalking = isWalking;
         
         if(this.animated){
-            let newAction = isWalking? 'Walk_anim' : 'Idle_anim';
+            let newAction = isWalking? 'Walk_anim_Armature' : 'Idle_anim_Armature';
             if (this.currentAction != newAction) {
                 const toPlay = this.animationsMap.get(newAction);
                 const current = this.animationsMap.get(this.currentAction);
@@ -302,7 +323,7 @@ export default class CharacterControls {
             this.storeMixer.update(updateDelta)
         }
 
-        if (this.currentAction == 'Walk_anim' || isWalking) {
+        if (this.currentAction == 'Walk_anim_Armature' || isWalking) {
             // calculate towards camera direction
             var angleYCameraDirection = Math.PI + ApproxAtan2(
                     (this.camera.position.x - this.model.position.x), 
@@ -376,12 +397,12 @@ export default class CharacterControls {
     directionOffset(keysPressed){
         var directionOffset = 0 // w
 
-        if(window.joystickBroadcast[0] //up
-        || window.joystickBroadcast[1] //down
-        || window.joystickBroadcast[2] //left
-        || window.joystickBroadcast[3]){ //right
-            let x = (window.joystickBroadcast[0] || window.joystickBroadcast[1]);
-            let y = (window.joystickBroadcast[2] || window.joystickBroadcast[3]);
+        if(this.joystickBroadcast && (this.joystickBroadcast[0] //up
+        || this.joystickBroadcast[1] //down
+        || this.joystickBroadcast[2] //left
+        || this.joystickBroadcast[3])){ //right
+            let x = (this.joystickBroadcast[0] || this.joystickBroadcast[1]);
+            let y = (this.joystickBroadcast[2] || this.joystickBroadcast[3]);
             return -Math.atan2(y, x);
         }
 
