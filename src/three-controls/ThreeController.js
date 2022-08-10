@@ -4,6 +4,7 @@ import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerM
 import { OculusHandModel } from 'three/examples/jsm/webxr/OculusHandModel';
 import CharacterControls from './CharacterControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { ANIMATION_NAMES } from './Constants';
 
 
 
@@ -96,7 +97,7 @@ class ThreeController {
 
         // this.controls.minPolarAngle = - Math.PI / 2 - 0.05;
 
-		this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle_anim_Armature',null, [], true, true ,false,storeMixer,directionValues);
+		this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, ANIMATION_NAMES['idle'],null, [], true, true ,false,storeMixer,directionValues);
 		// this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
 		window.characterControls = this.characterControls ;
 

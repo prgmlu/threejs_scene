@@ -163,8 +163,9 @@ export const loadModelAndAnimations = async () => {
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v003.glb", (data) => {
 
 
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v004.glb", (data) => {
-			loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb", (data) => {
+			loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v004.glb", (data) => {
+				debugger;
+			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb", (data) => {
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_001.glb", (data) => {
 			// loader.load(avatar, (data) => {
 

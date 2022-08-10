@@ -11,6 +11,7 @@ import {ApproxAtan2} from './helpers';
 
 import CentralMultipleCharControl from './CentralMultipleCharControl';
 
+import { ANIMATION_NAMES } from './Constants';
 
 
 
@@ -25,7 +26,7 @@ const OLD_COLLISION_METHOD = false;
 
 export default class CharacterControls {
 
-    constructor(model, charMixer, animationsMap, orbitControl, camera, currentAction = 'Idle_anim_Armature' , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues){
+    constructor(model, charMixer, animationsMap, orbitControl, camera, currentAction = ANIMATION_NAMES['idle'] , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues){
         this.model = model;
 
         this.enabled = true;
@@ -247,7 +248,7 @@ export default class CharacterControls {
     }
     playWaveAnimation(){
         debugger;
-        let c = this.animationsMap.get("Waving_anim_Armature")
+        let c = this.animationsMap.get(ANIMATION_NAMES.WAVE);
         c.reset()
         c.setLoop(THREE.LoopPingPong,1);
         c.play();
@@ -309,7 +310,7 @@ export default class CharacterControls {
         this.isWalking = isWalking;
         
         if(this.animated){
-            let newAction = isWalking? 'Walk_anim_Armature' : 'Idle_anim_Armature';
+            let newAction = isWalking? ANIMATION_NAMES['walk'] : ANIMATION_NAMES['idle'];
             if (this.currentAction != newAction) {
                 const toPlay = this.animationsMap.get(newAction);
                 const current = this.animationsMap.get(this.currentAction);
@@ -323,7 +324,7 @@ export default class CharacterControls {
             this.storeMixer.update(updateDelta)
         }
 
-        if (this.currentAction == 'Walk_anim_Armature' || isWalking) {
+        if (this.currentAction == ANIMATION_NAMES['walk'] || isWalking) {
             // calculate towards camera direction
             var angleYCameraDirection = Math.PI + ApproxAtan2(
                     (this.camera.position.x - this.model.position.x), 
