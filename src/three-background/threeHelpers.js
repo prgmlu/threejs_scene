@@ -12,6 +12,33 @@ import {
 import avatar from './av.glb'
 
 
+export const hideAllExceptFirstClothItem = (model) => {
+	let hairs = []
+	let pants = []
+	let shirts = []
+	model.traverse((i)=>{
+		if(i.name.includes('Hair')){
+			hairs.push(i);
+			i.visible=false;
+		}
+
+		if(i.name.includes('Pants')){
+			pants.push(i);
+			i.visible=false;
+		}
+
+		if(i.name.includes('Shirt')){
+			shirts.push(i);
+			i.visible=false;
+		}
+
+	});
+	hairs[0].visible=true;
+	pants[0].visible=true;
+	shirts[0].visible=true;
+}
+
+
 let useArmani = false;
 // const MODEL_SCALE = [1.2,1.2,1.2];
 const MODEL_SCALE = [1, 1, 1];
@@ -181,36 +208,13 @@ export const loadModelAndAnimations = async () => {
 
 			window.model = model;
 
-			let hairs = []
-			let pants = []
-			let shirts = []
-			data.scene.traverse((i)=>{
-				if(i.name.includes('Hair')){
-					hairs.push(i);
-					i.visible=false;
-					hairs.push(i);
-				}
 
-				if(i.name.includes('Pants')){
-					pants.push(i);
-					i.visible=false;
-					pants.push(i);
-				}
+			hideAllExceptFirstClothItem(data.scene)
 
-				if(i.name.includes('Shirt')){
-					shirts.push(i);
-					i.visible=false;
-					shirts.push(i);
-				}
 
-			})
 
-			hairs[0].visible=true;
-			// pants[0].visible=true;
-			// shirts[0].visible=true;
-
-			data.scene.getChildByName('Shirt2').visible=true;
-			data.scene.getChildByName('Pants2').visible=true;
+			// data.scene.getChildByName('Shirt2').visible=true;
+			// data.scene.getChildByName('Pants2').visible=true;
 			
 
 			// window.model = createCube();

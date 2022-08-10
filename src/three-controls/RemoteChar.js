@@ -1,6 +1,7 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from '../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
 import { initCSSRenderer, addToolTipToModel } from './toolTipHelpers';
+import { hideAllExceptFirstClothItem } from '../three-background/threeHelpers';
 
 
 const FADE_DURATION = .4;
@@ -92,11 +93,11 @@ export default class RemoteChar{
             }
 
             this.setModelScale();
-
-            if(this.applyAdjustements){
+            // if(this.applyAdjustements){
                 //like the envMap
-                this.applyAdjustements(this.model);
-            }
+                alert('hding')
+                hideAllExceptFirstClothItem(this.model);
+            // }
 
             this.setupMixer();
             this.setupAnimations();   
