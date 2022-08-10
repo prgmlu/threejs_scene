@@ -95,7 +95,6 @@ export default class RemoteChar{
             this.setModelScale();
             // if(this.applyAdjustements){
                 //like the envMap
-                alert('hding')
                 hideAllExceptFirstClothItem(this.model);
             // }
 

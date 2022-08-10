@@ -314,7 +314,6 @@ export const setUpNormalLights = (scene) => {
 		spotLight_002.decay = 2
 		spotLight_002.distance = 100
 
-		console.log(scene.children)
 }
 
 export const setUpEnvMap = (scene, renderer) => {

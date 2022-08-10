@@ -260,7 +260,6 @@ export default class CharacterControls {
         }
 
     removeEvents = () => {
-        alert('hi')
         document.removeEventListener('keydown',this.handleKeydown)
         document.removeEventListener('keyup',this.handleKeyup)
 
