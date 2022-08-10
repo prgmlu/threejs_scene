@@ -7,8 +7,12 @@ const USE_SOCKET_IO = true;
 const ACTIVE = true;
 const USE_TOOLTIP = true;
 
-const SOCKET_SERVER_URL = USE_SOCKET_IO? 'https://avbe.beta.obsess-vr.com/' : 'ws://192.168.1.122:8000/';
-// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
+let SOCKET_SERVER_URL = "https://avbe.beta.obsess-vr.com/";
+
+if(document.location.href.includes("127.0.0")){
+    SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
+}
+
 
 // const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
 

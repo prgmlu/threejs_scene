@@ -21,7 +21,7 @@ export const setMeshTexture  = (mesh, url) =>{
     });
 }
 
-export const getOutfitParts = (model, hide = false) => {
+export const getOutfitParts = (model, hide = false, hideHair=true) => {
     let hairs = [];
     let pants = [];
     let shirts = [];
@@ -30,7 +30,7 @@ export const getOutfitParts = (model, hide = false) => {
         if (child.isMesh) {
             if (child.name.includes("Hair")) {
                 hairs.push(child);
-                if (hide) {
+                if (hide && hideHair) {
                     child.visible = false;
                 }
             }
@@ -98,45 +98,64 @@ export const dressUpFromString = (model, outfitString) => {
         hairs,
         pants,
         shirts
-    } = getOutfitParts(model, true);
+    } = getOutfitParts(model, true, outfit.hairMesh? true : false);
 
+    if(outfit.hairMesh){
     let hairMesh = hairs.find(mesh => mesh.name === outfit.hairMesh);
     hairMesh.visible = true;
 
     if (outfit.hairColor == 'red') {
+        window.hairColor = 'red';
         setMeshTexture(hairMesh, RED_HAIR_TEXTURE);
     }
     if (outfit.hairColor == 'brown') {
+        window.hairColor = 'brown';
         setMeshTexture(hairMesh, BROWN_HAIR_TEXTURE);
     }
     if (outfit.hairColor == 'blonde') {
+        window.hairColor = 'blonde';
         setMeshTexture(hairMesh, BLONDE_HAIR_TEXTURE);
     }
+}
 
     let pantsMesh = pants.find(mesh => mesh.name === outfit.pantsMesh);
     pantsMesh.visible = true;
 
     if (outfit.pantsColor == 'blue') {
+        window.pantsColor = 'blue';
         setMeshTexture(pantsMesh, BLUE_PANTS_TEXTURE);
     }
-    if (outfit.pantsColor == 'grey') {
+    else if (outfit.pantsColor == 'grey') {
+        window.pantsColor = 'grey';
         setMeshTexture(pantsMesh, GREY_PANTS_TEXTURE);
     }
-    if (outfit.pantsColor == 'black') {
+    else if (outfit.pantsColor == 'black') {
+        window.pantsColor = 'black';
         setMeshTexture(pantsMesh, BLACK_PANTS_TEXTURE);
+    }
+    else{
+        window.pantsColor = null;
     }
 
     let shirtMesh = shirts.find(mesh => mesh.name === outfit.shirtMesh);
     shirtMesh.visible = true;
 
+    debugger;
+
     if (outfit.shirtColor == 'pink') {
+        window.shirtColor = 'pink';
         setMeshTexture(shirtMesh, PINK_SHIRT_TEXTURE);
     }
-    if (outfit.shirtColor == 'white') {
+    else if (outfit.shirtColor == 'white') {
+        window.shirtColor = 'white';
         setMeshTexture(shirtMesh, WHITE_SHIRT_TEXTURE);
     }
-    if (outfit.shirtColor == 'black') {
+    else if (outfit.shirtColor == 'black') {
+        window.shirtColor = 'black';
         setMeshTexture(shirtMesh, BLACK_SHIRT_TEXTURE);
+    }
+    else{
+        window.shirtColor = null;
     }
 }
 

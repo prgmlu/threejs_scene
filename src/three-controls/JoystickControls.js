@@ -21,9 +21,6 @@ export default class JoystickControls extends Component {
 
         this.directionValues = props.directionValues;
 
-        debugger;
-
-
         this.tempVector = new THREE.Vector3();
         this.upVector = new THREE.Vector3(0, 1, 0);
         this.joyManager;

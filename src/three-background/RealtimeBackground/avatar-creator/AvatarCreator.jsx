@@ -142,7 +142,6 @@ class AvatarCreator extends Component {
             <div className='avatarCreator'>
                 <div 
                     onClick={(e) => {
-                        debugger;
                         this.active=false;
                         this.closeModal();
                     }}
