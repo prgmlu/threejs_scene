@@ -40,19 +40,19 @@ export const maleOutfits = [
 export const femaleOutfits = [
     {
         "name": "0",
-        "displayImage":"https://cdn.obsess-vr.com/realtime3d/12.png"
+        "displayImage":"https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png"
     },
     {
         "name": "1",
-        "displayImage":"https://cdn.obsess-vr.com/realtime3d/13.png"
+        "displayImage":"https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png"
     },
     {
         "name": "2",
-        "displayImage":"https://cdn.obsess-vr.com/realtime3d/14.png"
+        "displayImage":"https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png"
     },
     {
         "name": "3",
-        "displayImage":"https://cdn.obsess-vr.com/realtime3d/9.png"
+        "displayImage":"https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png"
     },
 ]
 

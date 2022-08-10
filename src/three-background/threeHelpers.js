@@ -289,13 +289,28 @@ let coverGlbWithBoxes = (glb, scene) => {
 
 
 export const setUpNormalLights = (scene) => {
+		const pntLight_001 = new THREE.PointLight(0xffffff, 1.1)
+		scene.add(pntLight_001)
+		pntLight_001.position.set(-1, 1, 1)
+		const spotLight_001 = new THREE.SpotLight(0xffffff, 0.35)
+		scene.add(spotLight_001)
+		spotLight_001.position.set(1, 1, -1)
+		spotLight_001.target.position.x = -0.5
+		spotLight_001.target.position.y = 0
+		spotLight_001.target.position.z = 0.5
+		spotLight_001.penumbra = 1
+		const spotLight_002 = new THREE.SpotLight(0xffffff, 2)
+		scene.add(spotLight_002)
+		spotLight_002.position.set(0, 0.165, -0.53)
+		spotLight_002.target.position.x = 0
+		spotLight_002.target.position.y = 0
+		spotLight_002.target.position.z = -0.53
+		scene.add(spotLight_002.target)
+		spotLight_002.penumbra = 0.1
+		spotLight_002.decay = 2
+		spotLight_002.distance = 100
 
-
-	const light = new THREE.SpotLight(0xffffff, 0.8);
-	light.angle = Math.PI / 3;
-	light.position.set(0, 10, 0);
-	scene.add(light);
-	scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+		console.log(scene.children)
 }
 
 export const setUpEnvMap = (scene, renderer) => {

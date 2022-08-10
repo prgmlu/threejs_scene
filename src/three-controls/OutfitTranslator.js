@@ -94,6 +94,7 @@ export const dressUpFromString = (model, outfitString) => {
     //   shirtMesh: "Shirt2",
     // }
 
+    debugger;
     let {
         hairs,
         pants,
@@ -104,16 +105,16 @@ export const dressUpFromString = (model, outfitString) => {
     let hairMesh = hairs.find(mesh => mesh.name === outfit.hairMesh);
     hairMesh.visible = true;
 
-    if (outfit.hairColor == 'red') {
-        window.hairColor = 'red';
+    if (outfit.hairColor == 'Red') {
+        window.hairColor = 'Red';
         setMeshTexture(hairMesh, RED_HAIR_TEXTURE);
     }
-    if (outfit.hairColor == 'brown') {
-        window.hairColor = 'brown';
+    if (outfit.hairColor == 'Brown') {
+        window.hairColor = 'Brown';
         setMeshTexture(hairMesh, BROWN_HAIR_TEXTURE);
     }
-    if (outfit.hairColor == 'blonde') {
-        window.hairColor = 'blonde';
+    if (outfit.hairColor == 'Blonde') {
+        window.hairColor = 'Blonde';
         setMeshTexture(hairMesh, BLONDE_HAIR_TEXTURE);
     }
 }
@@ -140,7 +141,6 @@ export const dressUpFromString = (model, outfitString) => {
     let shirtMesh = shirts.find(mesh => mesh.name === outfit.shirtMesh);
     shirtMesh.visible = true;
 
-    debugger;
 
     if (outfit.shirtColor == 'pink') {
         window.shirtColor = 'pink';

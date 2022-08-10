@@ -80,8 +80,8 @@ class AvatarCreatorEditor extends Component {
         let selectedItem = femaleHair.filter((hair) => {return hair.name == e.target.id})[0];
         
         if(selectedItem.name.includes('Red')) window.hairColor = 'Red';
-        if(selectedItem.name.includes('Blonde')) window.hairColor = 'blonde';
-        if(selectedItem.name.includes('Brown')) window.hairColor = 'brown';
+        if(selectedItem.name.includes('Blonde')) window.hairColor = 'Blonde';
+        if(selectedItem.name.includes('Brown')) window.hairColor = 'Brown';
         
         let textureLoader = new THREE.ImageBitmapLoader();
         textureLoader.load ( selectedItem.textureImage, (imageBitmap) => {

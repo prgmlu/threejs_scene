@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import {resetRenderer, setUpEnvMap, loadModelAndAnimations} from '../threeHelpers';
+import {resetRenderer, setUpEnvMap, loadModelAndAnimations, setUpNormalLights} from '../threeHelpers';
 import AvatarCreatorContainer from './AvatarCreatorContainer';
 import RealtimeControls from './RealtimeControls';
 // let adjustHotspots = ()=> {window.scene.children.filter((i)=>i.type=='Sprite' || i.type=='mesh').forEach((i)=>{i.visible = false;i.material.depthTest = true;});};
@@ -174,7 +174,8 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         
         function loadStore () {
             return new Promise((resolve, reject) => {
-                loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_sceneAnim_v030.glb",(storeGlb) => {
+                loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v032.glb",(storeGlb) => {
+                // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_sceneAnim_v030.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v005.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v026.glb",(storeGlb) => {
@@ -182,6 +183,8 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
                     storeGlb.scene.traverse((i)=>{
                         i.material && (i.material.envMapIntensity = ENV_MAP_INTENSITY );
                     });
+
+                    setUpNormalLights(scene);
 
                     roomObj = storeGlb.scene;
                     setRoom(storeGlb.scene);
