@@ -17,8 +17,7 @@ const InSceneVidComponent = (props) => {
 		addToMediaStack,
 		popFromMediaStack,
 		userData = {},
-		onPlayClicked,
-		onPauseClicked,
+		onClick,
 		playIconUrl,
 		pauseIconUrl,
 	} = props;
@@ -81,12 +80,12 @@ const InSceneVidComponent = (props) => {
 	};
 
 	const onUserPlaysVideo = () => {
-		onPlayClicked(src);
+		onClick();
 		playVideo();
 	};
 
 	const onUserPausesVideo = () => {
-		onPauseClicked(src);
+		onClick();
 		if (!muted) {
 			popFromMediaStack();
 		}

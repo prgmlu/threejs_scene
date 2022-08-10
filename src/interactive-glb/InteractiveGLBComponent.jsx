@@ -8,7 +8,7 @@ import { isMobile } from 'react-device-detect';
 const DRACO_LOADER_PATH = 'https://cdn.obsess-vr.com/draco-loader/gltf/';
 const CB_MATERIAL_COUNT = isMobile ? 96 : 384;
 
-const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
+const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) => {
 	if (!hotspotData.props.data.envMaps) {
 		//return if no config found
 		return null;
@@ -88,7 +88,10 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp }) => {
 
 		raycaster.setFromCamera(mouse, camera);
 		const intersects = raycaster.intersectObjects([model]);
-		if (intersects.length > 0) controller.enabled = false;
+		if (intersects.length > 0) {
+			controller.enabled = false;
+			onClick();
+		};
 	};
 
 	const onTouchStart = (event) => {
