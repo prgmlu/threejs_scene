@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AvatarButton from './ui/AvatarButton';
 import AvatarCreator from './avatar-creator/AvatarCreator';
 
-const CUSTOMIZE_AVATAR = true;
+const CUSTOMIZE_AVATAR = false;
 class AvatarCreatorContainer extends Component {
     constructor(props) {
         super(props);

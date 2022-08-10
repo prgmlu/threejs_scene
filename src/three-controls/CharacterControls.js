@@ -248,7 +248,7 @@ export default class CharacterControls {
     }
     playWaveAnimation(){
         debugger;
-        let c = this.animationsMap.get(ANIMATION_NAMES.WAVE);
+        let c = this.animationsMap.get(ANIMATION_NAMES.wave);
         c.reset()
         c.setLoop(THREE.LoopPingPong,1);
         c.play();

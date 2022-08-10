@@ -1,4 +1,5 @@
 export const ANIMATION_NAMES = {
-    'walk': 'Walk_anim',
-    'idle': 'Idle_anim',
+    'walk': 'Walk_anim_Armature',
+    'idle': 'Idle_anim_Armature',
+    'wave': 'Wave_anim_Armature',
 }
