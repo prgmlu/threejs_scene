@@ -12,11 +12,13 @@ const PINK_SHIRT_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Shirt2Pink_D.pn
 const WHITE_SHIRT_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Shirt2White_D.png";
 const BLACK_SHIRT_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Shirt2Black_D.png";
 
-export const setMeshTexture  = (mesh, url) =>{
+export const setMeshTextureImage  = (mesh, url) =>{
     let textureLoader = new THREE.ImageBitmapLoader();
     textureLoader.load(url, (imageBitmap) => {
         const texture = new THREE.CanvasTexture(imageBitmap);
-        mesh.material.map = texture;
+        // mesh.material.map = texture;
+        mesh.material.map.image = texture.image;
+        mesh.material.map.needsUpdate = true
         mesh.material.needsUpdate = true
     });
 }
@@ -107,15 +109,15 @@ export const dressUpFromString = (model, outfitString) => {
 
     if (outfit.hairColor == 'Red') {
         window.hairColor = 'Red';
-        setMeshTexture(hairMesh, RED_HAIR_TEXTURE);
+        setMeshTextureImage(hairMesh, RED_HAIR_TEXTURE);
     }
     if (outfit.hairColor == 'Brown') {
         window.hairColor = 'Brown';
-        setMeshTexture(hairMesh, BROWN_HAIR_TEXTURE);
+        setMeshTextureImage(hairMesh, BROWN_HAIR_TEXTURE);
     }
     if (outfit.hairColor == 'Blonde') {
         window.hairColor = 'Blonde';
-        setMeshTexture(hairMesh, BLONDE_HAIR_TEXTURE);
+        setMeshTextureImage(hairMesh, BLONDE_HAIR_TEXTURE);
     }
 }
 
@@ -124,15 +126,15 @@ export const dressUpFromString = (model, outfitString) => {
 
     if (outfit.pantsColor == 'blue') {
         window.pantsColor = 'blue';
-        setMeshTexture(pantsMesh, BLUE_PANTS_TEXTURE);
+        setMeshTextureImage(pantsMesh, BLUE_PANTS_TEXTURE);
     }
     else if (outfit.pantsColor == 'grey') {
         window.pantsColor = 'grey';
-        setMeshTexture(pantsMesh, GREY_PANTS_TEXTURE);
+        setMeshTextureImage(pantsMesh, GREY_PANTS_TEXTURE);
     }
     else if (outfit.pantsColor == 'black') {
         window.pantsColor = 'black';
-        setMeshTexture(pantsMesh, BLACK_PANTS_TEXTURE);
+        setMeshTextureImage(pantsMesh, BLACK_PANTS_TEXTURE);
     }
     else{
         window.pantsColor = null;
@@ -144,15 +146,15 @@ export const dressUpFromString = (model, outfitString) => {
 
     if (outfit.shirtColor == 'pink') {
         window.shirtColor = 'pink';
-        setMeshTexture(shirtMesh, PINK_SHIRT_TEXTURE);
+        setMeshTextureImage(shirtMesh, PINK_SHIRT_TEXTURE);
     }
     else if (outfit.shirtColor == 'white') {
         window.shirtColor = 'white';
-        setMeshTexture(shirtMesh, WHITE_SHIRT_TEXTURE);
+        setMeshTextureImage(shirtMesh, WHITE_SHIRT_TEXTURE);
     }
     else if (outfit.shirtColor == 'black') {
         window.shirtColor = 'black';
-        setMeshTexture(shirtMesh, BLACK_SHIRT_TEXTURE);
+        setMeshTextureImage(shirtMesh, BLACK_SHIRT_TEXTURE);
     }
     else{
         window.shirtColor = null;
@@ -161,7 +163,7 @@ export const dressUpFromString = (model, outfitString) => {
 
 
 
-window.setMeshTexture = setMeshTexture;
+window.setMeshTextureImage = setMeshTextureImage;
 window.getOutfitParts = getOutfitParts;
 window.getOutfitStringFromModel = getOutfitStringFromModel;
 window.dressUpFromString = dressUpFromString;

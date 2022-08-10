@@ -13,19 +13,22 @@ import {
 
 import { GUI } from 'dat.gui';
 
+const DEBUG_LIGHTS = false;
 
-var guiDiv = document.createElement('div');
-guiDiv.style.zIndex = 99;
-guiDiv.style.position = 'fixed';
-guiDiv.style.top = '0px';
-var bod = document.getElementsByTagName('body')[0];
-bod.appendChild(guiDiv);
-
-const gui = new GUI({autoPlace:false});
-// gui.close();
-// var cont = document.getElementById('datgui');
-guiDiv.appendChild(gui.domElement);
-const folder = gui.addFolder('folder');
+if(DEBUG_LIGHTS){
+	var guiDiv = document.createElement('div');
+	guiDiv.style.zIndex = 99;
+	guiDiv.style.position = 'fixed';
+	guiDiv.style.top = '0px';
+	var bod = document.getElementsByTagName('body')[0];
+	bod.appendChild(guiDiv);
+	
+	const gui = new GUI({autoPlace:false});
+	// gui.close();
+	// var cont = document.getElementById('datgui');
+	guiDiv.appendChild(gui.domElement);
+	const folder = gui.addFolder('folder');
+}
 
 
 export const hideAllExceptFirstClothItem = (model) => {
@@ -308,13 +311,16 @@ let coverGlbWithBoxes = (glb, scene) => {
 
 
 
-export const setUpNormalLights = (scene) => {const pntLight_001 = new THREE.PointLight(0xffffff, 0.1)
+export const setUpNormalLights = (scene) => {
+	const pntLight_001 = new THREE.PointLight(0xffffff, 10)
 	scene.add(pntLight_001)
 	pntLight_001.position.set(-14,14,14);
-	const pntLight_001_helper = new THREE.PointLightHelper(pntLight_001, 0.25)
-	scene.add(pntLight_001_helper)
-	gui.add(pntLight_001, 'intensity').min(0).max(10).step(0.01).name('pnt_001-light-intensity')
-	const spotLight_001 = new THREE.SpotLight(0xffffff, 0.35)
+	if(DEBUG_LIGHTS){
+		const pntLight_001_helper = new THREE.PointLightHelper(pntLight_001, 10)
+		scene.add(pntLight_001_helper)
+		gui.add(pntLight_001, 'intensity').min(0).max(10).step(0.01).name('pnt_001-light-intensity')
+	}
+	const spotLight_001 = new THREE.SpotLight(0xffffff, 10)
 	scene.add(spotLight_001)
 	spotLight_001.position.set(14,14,-14);
 
@@ -323,10 +329,12 @@ export const setUpNormalLights = (scene) => {const pntLight_001 = new THREE.Poin
 	spotLight_001.target.position.z = 0.5
 	scene.add(spotLight_001.target)
 	spotLight_001.penumbra = 1
-	const spotLight_001_helper = new THREE.SpotLightHelper(spotLight_001)
-	scene.add(spotLight_001_helper)
-	gui.add(spotLight_001, 'intensity').min(0).max(10).step(0.01).name('spot_001-light-intensity')
-	const spotLight_002 = new THREE.SpotLight(0xffffff, 2)
+	if(DEBUG_LIGHTS){
+		const spotLight_001_helper = new THREE.SpotLightHelper(spotLight_001)
+		scene.add(spotLight_001_helper)
+		gui.add(spotLight_001, 'intensity').min(0).max(10).step(0.01).name('spot_001-light-intensity')
+	}
+	const spotLight_002 = new THREE.SpotLight(0xffffff, 10)
 	scene.add(spotLight_002)
 	spotLight_002.position.set(0,2.31,-7.42);
 	spotLight_002.target.position.x = 0;
@@ -336,9 +344,11 @@ export const setUpNormalLights = (scene) => {const pntLight_001 = new THREE.Poin
 	spotLight_002.penumbra = 0.1
 	spotLight_002.decay = 2
 	spotLight_002.distance = 100
-	const spotLight_002_helper = new THREE.SpotLightHelper(spotLight_002)
-	scene.add(spotLight_002_helper)
-	gui.add(spotLight_002, 'intensity').min(0).max(10).step(0.01).name('spot_002-light-intensity')
+	if(DEBUG_LIGHTS){
+		const spotLight_002_helper = new THREE.SpotLightHelper(spotLight_002)
+		scene.add(spotLight_002_helper)
+		gui.add(spotLight_002, 'intensity').min(0).max(10).step(0.01).name('spot_002-light-intensity')
+	}
 	}
 
 export const setUpEnvMap = (scene, renderer) => {
