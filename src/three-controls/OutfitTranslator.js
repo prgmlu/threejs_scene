@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
-import {BLONDE_HAIR_TEXTURES, BROWN_HAIR_TEXTURES, RED_HAIR_TEXTURES} from '../three-background/realtimeBackground/avatar-creator/avatarsData';
+// import {BLONDE_HAIR_TEXTURES, BROWN_HAIR_TEXTURES, RED_HAIR_TEXTURES} from '../three-background/realtimeBackground/avatar-creator/avatarsData';
+import {BLONDE_HAIR_TEXTURES, BROWN_HAIR_TEXTURES, RED_HAIR_TEXTURES} from './avData';
 import { USE_OLD_CHARACTER_MODEL } from '../three-background/RealtimeBackground/avatar-creator/CustomizationConstants';
 
 const BLUE_PANTS_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Pants2Blue_D.png";
