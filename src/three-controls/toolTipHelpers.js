@@ -9,11 +9,12 @@ export const initCSSRenderer = ()=> {
     // labelRenderer.domElement.style.zIndex = "1";
 
 
-    window.labelRenderer = labelRenderer;
     labelRenderer.setSize(window.innerWidth, window.innerHeight);
     labelRenderer.domElement.style.position = 'absolute';
     labelRenderer.domElement.style.top = '0px';
     document.body.appendChild(labelRenderer.domElement);
+
+    return labelRenderer;
 }
 
 const styleTooltip = (tooltip)=>{
@@ -34,13 +35,11 @@ export const addToolTipToModel = (obj, text) => {
     var tooltipDiv = document.createElement('div');
     tooltipDiv.className = 'label';
     tooltipDiv.textContent = text;
-    window . tooltipDiv = tooltipDiv;
 
     styleTooltip(tooltipDiv);
     
     var tooltipTextMesh = new CSS2DObject(tooltipDiv);
     tooltipTextMesh.position.set(0, 1.9, 0);
-    window.tooltipTextMesh = tooltipTextMesh;
   
     obj.add(tooltipTextMesh);
 

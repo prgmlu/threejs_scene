@@ -8,6 +8,7 @@ class AvatarCreatorContainer extends Component {
         super(props);
 		this.currentClothing = [];
 		
+		
         this.scene = this.props.scene;
         this.avatar = this.props.avatar;
 
@@ -92,8 +93,10 @@ class AvatarCreatorContainer extends Component {
     render() {
         return (
             <>
-                    <AvatarButton showModal={this.showAvatarCreator}/>
+				<AvatarButton showModal={this.showAvatarCreator}/>
 				{this.state.isAvatarCreatorActive && <AvatarCreator
+												localAvatarNameRef={this.props.localAvatarNameRef}
+												localAvatarOutfitStringRef={this.props.localAvatarOutfitStringRef}
 												active={this.state.isAvatarCreatorActive}
 												saveAvatar={this.saveAvatar}
 												closeModal={this.closeAvatarCreator}

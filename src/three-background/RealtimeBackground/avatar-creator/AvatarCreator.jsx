@@ -18,21 +18,16 @@ class AvatarCreator extends Component {
         this.currentAvatar = props?.currentAvatar;
         this.saveAvatar = props?.saveAvatar;
         this.closeModal = props?.closeModal;
-        this.avatarName = null;
+        this.localAvatarNameRef = this.props.localAvatarNameRef;
 
         this.active = props.active;
     }
 
     _onAvatarNameChange = e => {
-        this.setAvatarName(e.target.value);
-        window.avatarName = e.target.value;
+        this.localAvatarNameRef.current = e.target.value;
       }
     
 
-      setAvatarName = (avatarName) => {
-        
-        this.setState({avatarName});
-      }
 
     loadAvatar = () => {
         this.currentAvatar.position.set(0, -.9, -2.7);
@@ -167,6 +162,7 @@ class AvatarCreator extends Component {
 
                 <div className="editorBody">
                     <AvatarCreatorEditor
+                        localAvatarOutfitStringRef={this.props.localAvatarOutfitStringRef}
                         currentAvatar={this.props.currentAvatar}
                      currentScene={this.scene}/>
                     <div className='avatarCreatorScene' ref={this.myRef}>

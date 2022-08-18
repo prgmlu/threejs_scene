@@ -8,28 +8,23 @@ import {
     femalePants,
     femaleOutfits
 } from './avatarsData';
-import {predeterminedOutfits} from './predeterminedOutfits';
+import {predeterminedOutfitsNoHair} from './predeterminedOutfits';
+import {setMeshTextureImage,dressUpFromString, getOutfitStringFromModel} from '../../../three-controls/OutfitTranslator';
+
+import { USE_OLD_CHARACTER_MODEL } from './CustomizationConstants';
 
 const maleModelImg = 'https://cdn.obsess-vr.com/maleModel%20.png';
 const femaleModelImg = 'https://cdn.obsess-vr.com/femaleModel%20.png';
 
 let HAIR_MESHES_COUNT = 3;
+
+
+
+let HAIR_MESHES_NAMES = USE_OLD_CHARACTER_MODEL? ['Hair1', 'Hair2', 'Hair3'] : ['Hair2', 'Hair3', 'hair4']
+
 let SHIRT_MESH_COUNT = 2;
 let PANTS_MESH_COUNT = 2;
 
-// window.model.getChildByName('Hair1').visible=false;window.model.getChildByName('Hair2').visible=false;
-
-let setHairTextureFromImage = (hair, imageUrl) => {
-    hair.mat
-    let textureLoader = new THREE.ImageBitmapLoader();
-    textureLoader.load ( imageUrl, (imageBitmap) => {
-        const texture = new THREE.CanvasTexture( imageBitmap );
-        hair.material.map = texture;
-        hair.material.needsUpdate = true
-     } );
-}
-
-window.setHairTextureFromImage = setHairTextureFromImage;
 
 class AvatarCreatorEditor extends Component {
     constructor(props) {
@@ -39,6 +34,8 @@ class AvatarCreatorEditor extends Component {
         this.femaleOutfits = femaleOutfits;
         this.currentScene = this.props.currentScene;
         this.currentAvatar = {};
+
+        this.localAvatarOutfitStringRef = props.localAvatarOutfitStringRef;
 
         this.props.currentAvatar && this.props.currentAvatar.traverse((i)=>{
             i.frustumCulled=false;
@@ -60,55 +57,45 @@ class AvatarCreatorEditor extends Component {
 
     setOutfit = (e) => {
 
-        window.dressUpFromString(this.props.currentAvatar, predeterminedOutfits[e.target.id]);
-        window.outfitStringNeesUpdate = true
-        // debugger;
-        // alert(e.target.id);
-        // let selectedItem = this.maleOutfits.filter((outfit) => {return outfit.name == e.target.id})[0];
-        // this.textureLoader = new THREE.ImageBitmapLoader();
-        // this.textureLoader.load ( selectedItem.textureImage, (imageBitmap) => {
-        //     const texture = new THREE.CanvasTexture( imageBitmap );
-        //     this.props.currentAvatar.children[0].getObjectByName( e.target.className ).material.map = texture;
-        //     this.props.currentAvatar.children[0].getObjectByName( e.target.className ).material.needsUpdate = true
-        //  } );
+        let string = predeterminedOutfitsNoHair[e.target.id];
+        dressUpFromString(this.props.currentAvatar, string);
+        
+        this.localAvatarOutfitStringRef.current = string;
     }
 
 
     setHair = (e) => {
         
+
         
         let selectedItem = femaleHair.filter((hair) => {return hair.name == e.target.id})[0];
         
-        if(selectedItem.name.includes('Red')) window.hairColor = 'Red';
-        if(selectedItem.name.includes('Blonde')) window.hairColor = 'Blonde';
-        if(selectedItem.name.includes('Brown')) window.hairColor = 'Brown';
-        
-        let textureLoader = new THREE.ImageBitmapLoader();
-        textureLoader.load ( selectedItem.textureImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture( imageBitmap );
             
-            for (let i = 1; i <= HAIR_MESHES_COUNT; i++) {
-                this.props.currentAvatar.getChildByName( `Hair${i}` ).visible = false;
+            for (let i = 0; i < HAIR_MESHES_COUNT; i++) {
+                this.props.currentAvatar.getChildByName( HAIR_MESHES_NAMES[i] ).visible = false;
             }
             
             let hairNumber = selectedItem.name[selectedItem.name.length-1];
-            let hair = this.props.currentAvatar.getChildByName( `Hair${hairNumber}` )
+
+            let hair = this.props.currentAvatar.getChildByName( HAIR_MESHES_NAMES[hairNumber-1] )
+
             hair.visible = true;
             
-            hair.material.map = texture;
-            hair.material.needsUpdate = true;
+            setMeshTextureImage(hair, selectedItem.textureImage);
+            let hairColor = 'Brown';
+            if(selectedItem.textureImage.includes('Red')) hairColor = 'Red';
+            if(selectedItem.textureImage.includes('Blonde')) hairColor = 'Blonde';
+
+            let string = getOutfitStringFromModel(this.props.currentAvatar,hairColor);
+            this.localAvatarOutfitStringRef.current = string;
             
-        } );
-        window.outfitStringNeesUpdate = true;
     }
     setShirt = (e) => {
 
         let selectedItem = femaleShirts.filter((shirt) => {return shirt.name == e.target.id})[0];
 
 
-        let textureLoader = new THREE.ImageBitmapLoader();
-        textureLoader.load ( selectedItem.textureImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture( imageBitmap );
+
 
             for (let i = 1; i <= SHIRT_MESH_COUNT; i++) {
                 if(i==1) this.props.currentAvatar.getChildByName( `Shirt` ).visible = false;
@@ -120,20 +107,13 @@ class AvatarCreatorEditor extends Component {
             let shirt = this.props.currentAvatar.getChildByName( `Shirt${shirtNumber}` )
             shirt.visible = true;
 
-            shirt.material.map = texture;
-            shirt.material.needsUpdate = true;
-
-         } );
-
-        window.outfitStringNeesUpdate = true;
+            setMeshTextureImage(shirt, selectedItem.textureImage);
 
     }
     setPants = (e) => {
         let selectedItem = femalePants.filter((pants) => {return pants.name == e.target.id})[0];
 
-        let textureLoader = new THREE.ImageBitmapLoader();
-        textureLoader.load ( selectedItem.textureImage, (imageBitmap) => {
-            const texture = new THREE.CanvasTexture( imageBitmap );
+
 
             for (let i = 1; i <= PANTS_MESH_COUNT; i++) {
                 if(i==1) this.props.currentAvatar.getChildByName( `Pants` ).visible = false;
@@ -145,11 +125,8 @@ class AvatarCreatorEditor extends Component {
             let pants = this.props.currentAvatar.getChildByName( `Pants${pantsNumber}` )
             pants.visible = true;
 
-            pants.material.map = texture;
-            pants.material.needsUpdate = true;
+            setMeshTextureImage(pants, selectedItem.textureImage);
 
-         } );
-        window.outfitStringNeesUpdate = true;
 
     }
 

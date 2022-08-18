@@ -1,48 +1,41 @@
 import * as THREE from 'three';
 import RemoteChar from './RemoteChar';
 import { initCSSRenderer, addToolTipToModel } from './toolTipHelpers';
-import * as out from './OutfitTranslator';
+import {
+    dressUpFromString
+} from './OutfitTranslator';
 
-const USE_SOCKET_IO = true;
 const ACTIVE = true;
 const USE_TOOLTIP = true;
 
-let SOCKET_SERVER_URL = "https://avbe.beta.obsess-vr.com/";
 
-if(document.location.href.includes("127.0.0")){
-    SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://192.168.1.122:8000/' : 'ws://192.168.1.122:8000/';
-}
-
-
-// const SOCKET_SERVER_URL = USE_SOCKET_IO? 'http://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/' : 'ws://192.168.1.122:8000/';
-
-// var io = require('socket.io-client');
-// var socket = io.connect('');
-// socket2.emit('test');
-
-
-// const SOCKET_SERVER_URL = 'ws://ec2-18-218-128-47.us-east-2.compute.amazonaws.com:8000/';
-
-//for now, only broadcasting the positions and rotations
-
-function createRandomName(){
-    let name = "Guest ";
-    let randomNumber = Math.floor(Math.random() * 100);
-    name += randomNumber;
-    return name;
-}
-
-
+let SOCKET_SERVER_URL = (document.location.href.includes("127.0.0") || document.location.href.includes("localhost") ) ? 'http://192.168.1.122:8000/':"https://avbe.beta.obsess-vr.com/";
 
 export default class CentralMultipleCharControls{
-    constructor(mainCharControlsObj, otherChars){
+    constructor(mainCharControlsObj, otherChars,localAvatarNameRef, localAvatarOutfitStringRef, scene, camera){
         this.mainCharControlsObj = mainCharControlsObj;
+        
+        this.localAvatarNameRef = localAvatarNameRef;
+        this.localAvatarOutfitStringRef = localAvatarOutfitStringRef;
 
-        this.myName = createRandomName();
+        this.prevLocalAvatarOutfitString = localAvatarOutfitStringRef.current;
+        this.prevLocalAvatarName = localAvatarNameRef.current;
 
+        window.localAvatarOutfitStringRef = localAvatarOutfitStringRef;
+
+        this.scene = scene;
+        this.camera = camera;
+
+
+        this.myName = localAvatarNameRef.current;
+        
         this.model = mainCharControlsObj.model;
         if(USE_TOOLTIP){
-            initCSSRenderer();
+            window.addEventListener('resize',()=>{
+                //warning, dangerous if the scene is embedded in a div 
+                this.labelRenderer && this.labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            })
+            this.labelRenderer = initCSSRenderer();
             let {div,tooltipMesh } = addToolTipToModel(this.model,this.myName);
             this.tooltipMesh = tooltipMesh;
             this.tooltipDiv = div;
@@ -52,27 +45,23 @@ export default class CentralMultipleCharControls{
 
         
         window.otherChars = otherChars;
-        this.prev_addresses = [];
+        this.prevAddresses = [];
         
         //an important field that serves as an id among the other characters
         //get assigned by the server upon connection open
         // if the address is null no messages are sent
         this.address = null;
         
-        
         this.clock = new THREE.Clock();
 
         if(ACTIVE){
             this.createSocketAndConnect();
-            if(USE_SOCKET_IO){
+            this.socket.on("connect", () => {
+                this.sendData(); // x8WIv7-mJelg7on_ALbx
+              });
                 this.socket.on('message', this.handleMessage.bind(this));
                 this.socket.on('address', this.isNewAddress.bind(this));
                 this.socket.on('disconnected', this.handleDisconnect.bind(this));
-    
-            }
-            else{
-                this.socket.onmessage = this.handleMessage.bind(this);
-            }
         }
 
 
@@ -82,8 +71,8 @@ export default class CentralMultipleCharControls{
         window.mainAnimationLoopHooks.push(this.update.bind(this));
     }
 
-    createRemoteCharacter(position,rotation, address, name){
-        let newChar = new RemoteChar('Female_Type_A', position, rotation, address, name, USE_TOOLTIP);
+    createRemoteCharacter(position,rotation, address, name, outfitString){
+        let newChar = new RemoteChar('Female_Type_A', position, rotation, address, name, USE_TOOLTIP,false,outfitString);
         return newChar
     }
 
@@ -92,23 +81,16 @@ export default class CentralMultipleCharControls{
     }
 
     isNewAddress(data){
-        if(USE_SOCKET_IO){
             if(!this.address){
                 this.address = data;
+                this.sendData();
                 return true;
             }
             return false
-        }
-        //if websockets instead
-        if(data.address){
-            this.address = data.address;
-            return true;
-        }
-        return false
     }
 
     checkAndHandleIfSomeoneDisconnected(data){
-        let addresses = this.prev_addresses.slice();
+        let addresses = this.prevAddresses.slice();
         let data_addresses = Array.from(Object.keys(data));
         let diff = addresses.filter((x)=>!data_addresses.includes(x));
         //have to handle the rare case of 2 people disconnecting at the same server respone
@@ -130,24 +112,9 @@ export default class CentralMultipleCharControls{
     
     handleMessage(event){
         let data;
-        if(USE_SOCKET_IO){
             data = JSON.parse(event);
-        }
-        else{
-            data = JSON.parse(event.data);
-        }
 
-        if(!USE_SOCKET_IO){
-            //data.address is sent only once when the connection is established, a number like  49673, we'll use it as an id
-            if (this.isNewAddress(data)) return;
-        }
-        
         //check if someone disconnected
-
-        if(!USE_SOCKET_IO){
-            //no need to check if someone disconnected if we're using socket.io as there's an event that fires when someone disconnects
-            this.checkAndHandleIfSomeoneDisconnected(data);
-        }
         
         for(let address in data){
             //ignore your address
@@ -158,9 +125,9 @@ export default class CentralMultipleCharControls{
             
             if(!char){
                 //new character entered
-                char = this.createRemoteCharacter(data[address].position,data[address].rotation, address, data[address].name);
+                char = this.createRemoteCharacter(data[address].position,data[address].rotation, address, data[address].name, data[address].outfitString);
                 this.otherChars.push(char);
-                
+                this.sendData();
             }
             if(char.model){
                 if(char.charName != data[address].name){
@@ -172,33 +139,27 @@ export default class CentralMultipleCharControls{
                 char.model.rotation.copy(data[address].rotation);
 
                 data[address].isWalking? char.playWalkingAnimation():char.playIdleAnimation();
+                data[address].isWaving? char.playWavingAnimation(): null;
 
                 if( (!char.outfitString) || (char.outfitString != data[address].outfitString)){
                     char.outfitString = data[address].outfitString;
-                    window.dressUpFromString(char.model,data[address].outfitString);
+                    dressUpFromString(char.model,data[address].outfitString);
                 }
-
             }
         }
 
-        this.prev_addresses = Array.from(Object.keys(data));
-
+        this.prevAddresses = Array.from(Object.keys(data));
         return false;
     }
 
 
     createSocketAndConnect(){
-        if(USE_SOCKET_IO){
             var io = require('socket.io-client');
             this.socket = io.connect(SOCKET_SERVER_URL,{rejectUnauthorized: false });
-        }
-        else{
-            this.socket = new WebSocket(SOCKET_SERVER_URL);
-        }
     }
 
     sendData(){
-        if(!window.scene.children.includes(window.model)) return;
+        if(!this.scene.children.includes(window.model)) return;
         let address = this.address;
         if( !address)
             return;
@@ -208,17 +169,15 @@ export default class CentralMultipleCharControls{
         data[address].position = this.mainCharControlsObj.model.position;
         data[address].rotation = this.mainCharControlsObj.model.rotation;
         data[address].isWalking = this.mainCharControlsObj.isWalking;
+        data[address].isWaving = this.mainCharControlsObj.isWaving;
 
-        if( (!this.myOutfitString) || window.outfitStringNeesUpdate ) {
-            this.myOutfitString = window.getOutfitStringFromModel(this.mainCharControlsObj.model,window.hairColor, window.pantsColor, window.shirtColor);
-        }
-        data[address].outfitString = this.myOutfitString;
+        data[address].outfitString = this.localAvatarOutfitStringRef.current;
 
-        if(window.avatarName){
-            data[address].name = window.avatarName;
-            if(this.myName != window.avatarName){
-                this.myName = window.avatarName;
-                this.tooltipDiv.textContent = window.avatarName;
+        if(this.localAvatarNameRef.current){
+            data[address].name = this.localAvatarNameRef.current;
+            if(this.myName != this.localAvatarNameRef.current){
+                this.myName = this.localAvatarNameRef.current;
+                this.tooltipDiv.textContent = this.localAvatarNameRef.current;
             }
         }
         else{
@@ -228,18 +187,13 @@ export default class CentralMultipleCharControls{
         this.prevPosition = this.mainCharControlsObj.model.position.clone();
         this.prevRotation = this.mainCharControlsObj.model.rotation.clone();
         this.prevIsWalking = this.mainCharControlsObj.isWalking;
+        this.prevIsWaving = this.mainCharControlsObj.isWaving;
+        this.prevOutfitString = this.localAvatarOutfitStringRef.current;
+        this.prevLocalAvatarName = this.localAvatarNameRef.current;
         
-        if(USE_SOCKET_IO){
             if(this.socket.connected){
                 this.socket.emit('data',JSON.stringify(data));
             }
-        }
-        else{
-
-            if(this.socket.readyState === 1){
-                this.socket.send(JSON.stringify(data));
-            }
-        }
     }
 
 
@@ -248,7 +202,7 @@ export default class CentralMultipleCharControls{
     update = () => {
         // window.requestAnimationFrame(this.update);
         if(USE_TOOLTIP){
-            labelRenderer.render( window.scene, window.cam );
+            this.labelRenderer.render( this.scene, this.camera );
         }
 
         let updateDelta = this.clock.getDelta()
@@ -263,7 +217,13 @@ export default class CentralMultipleCharControls{
                 this.sendData();
                 return;
             }
-            if(this.mainCharControlsObj.model.position.distanceTo(this.prevPosition) > 0.01 || this.mainCharControlsObj.isWalking != this.prevIsWalking){
+            if(this.mainCharControlsObj.model.position.distanceTo(this.prevPosition) > 0.01
+             || this.mainCharControlsObj.isWalking != this.prevIsWalking
+             || this.mainCharControlsObj.isWaving != this.prevIsWaving
+             || this.localAvatarOutfitStringRef.current != this.prevLocalAvatarOutfitString
+             || this.localAvatarNameRef.current != this.prevLocalAvatarName)
+             {
+
                 this.sendData();
             }
         }

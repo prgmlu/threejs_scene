@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-window.THREE = THREE;
 import { Geometry } from 'three/examples/jsm/deprecated/Geometry'
 import CollisionDetection from './CollisionDetection';
 import { createBoundingObjs, offsetBoundingObjs , getStoreParts} from '../three-background/threeHelpers';
@@ -12,6 +11,8 @@ import {ApproxAtan2} from './helpers';
 import CentralMultipleCharControl from './CentralMultipleCharControl';
 
 import { ANIMATION_NAMES } from './Constants';
+
+import { RELEVANT_STORE_PARTS_NAMES } from '../three-background/RealtimeBackground/avatar-creator/CustomizationConstants';
 
 
 
@@ -26,11 +27,18 @@ const OLD_COLLISION_METHOD = false;
 
 export default class CharacterControls {
 
-    constructor(model, charMixer, animationsMap, orbitControl, camera, currentAction = ANIMATION_NAMES['idle'] , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues){
+    constructor(model, charMixer, animationsMap, orbitControl, camera, currentAction = ANIMATION_NAMES['idle'] , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues,localAvatarNameRef,localAvatarOutfitStringRef, scene){
         this.model = model;
 
         this.enabled = true;
         this.joystickBroadcast = directionValues;
+
+        this.scene = scene;
+        this.camera = camera;
+
+        this.isWaving = false;
+
+        
 
         if(OLD_COLLISION_METHOD){
             //array of bounding objs
@@ -40,11 +48,6 @@ export default class CharacterControls {
             this.model.boundingObjs.forEach((i)=>{
                 scene.add(i);
             })
-
-
-            this.playerCollider = new Capsule( new THREE.Vector3( 0, 0.35 , 0 ), new THREE.Vector3( 0, 1, 0 ), 2 );
-            window.playerCollider = this.playerCollider;
-
         }
         
         // else{
@@ -54,12 +57,10 @@ export default class CharacterControls {
             end.y = 1;
             this.playerCollider = new Capsule(start,end,0.45);
 
-            window.playerCollider = this.playerCollider;
-
             this.worldOctree = new Octree();
-            this.worldOctree.fromGraphNode(window.store.getObjectByName('SceneDesign'));
+            this.worldOctree.fromGraphNode(window.store.getObjectByName(RELEVANT_STORE_PARTS_NAMES[0]));
             // this.octreeHelper = new OctreeHelper(this.worldOctree);
-            // window.scene.add(this.octreeHelper)
+            // this.scene.add(this.octreeHelper)
 
 
             // this.worldOctrees = [];
@@ -74,16 +75,25 @@ export default class CharacterControls {
             // for (let i = 0; i < this.worldOctrees.length; i++) {
             //     let octreeHelper = new OctreeHelper(this.worldOctrees[i]);
             //     this.octreeHelpers.push(octreeHelper);
-            //     window.scene.add(this.octreeHelpers[i]);
+            //     this.scene.add(this.octreeHelpers[i]);
             // }
-
-
-
-            window.worldOctree = this.worldOctree;
         // }
 
 
         this.charMixer = charMixer;
+
+        this.charMixer.addEventListener(
+            'finished',
+            (e) => {
+                if(e.action == this.animationsMap.get(ANIMATION_NAMES['wave'])
+                ){
+                    this.isWaving = false;
+                }
+            }
+        )
+
+
+
         this.storeMixer = storeMixer;
         this.animationsMap = animationsMap;
         this.currentAction = currentAction;
@@ -97,7 +107,6 @@ export default class CharacterControls {
         this.handleIndicators = handleIndicators;
         
 
-        window.u = this.update;
         
         if(animated){
             this.animationsMap.forEach((value, key) => {
@@ -118,7 +127,6 @@ export default class CharacterControls {
 
         this.lastSafePlace = model.position.clone();
         this.path = [model.position.clone()];
-        window.path = this.path;
 
         this.updateCameraTarget(this.model.position.x,this.model.position.z);
         this.orbitControl.rotateLeft(-1.6);
@@ -136,7 +144,7 @@ export default class CharacterControls {
 		document.addEventListener('keyup', this.handleKeyup, false);
 
 
-        this.CentralMultipleCharControl = new CentralMultipleCharControl(this,[]);
+        this.CentralMultipleCharControl = new CentralMultipleCharControl(this,[],localAvatarNameRef, localAvatarOutfitStringRef, this.scene, this.camera);
 
 
 
@@ -243,16 +251,14 @@ export default class CharacterControls {
 
         if(e.key == " "){
             this.playWaveAnimation();
+            this.isWaving = true;
         }
 
     }
     playWaveAnimation(){
-        debugger;
         let c = this.animationsMap.get(ANIMATION_NAMES.wave);
-        c.reset()
-        c.setLoop(THREE.LoopPingPong,1);
-        c.play();
-        // c.fadeOut(.5);
+        c.setLoop(THREE.LoopOnce);
+        c.reset().play();
 
     }
     handleKeyup = (e) => {
@@ -302,7 +308,7 @@ export default class CharacterControls {
     }
 
     update = (updateDelta) => {
-        // window.requestAnimationFrame(this.update);
+        // requestAnimationFrame(this.update);
 
         // let updateDelta = this.clock.getDelta();
         const isWalking = this.isUserClicking()
@@ -350,7 +356,7 @@ export default class CharacterControls {
                 this.playerCollider .end.z = this.model.position.z;
             // }
 
-            const result = this.worldOctree.capsuleIntersect( playerCollider );
+            const result = this.worldOctree.capsuleIntersect( this.playerCollider );
 
             // const results = [];
             // for(let i=0; i<this.worldOctrees.length; i++){

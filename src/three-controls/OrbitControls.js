@@ -64,7 +64,6 @@ class OrbitControls extends EventDispatcher {
 		// }
 
 		this.target = new Vector3();
-		window.t = this;
 		// How far you can dolly in and out ( PerspectiveCamera only )
 		this.minDistance = 0;
 		this.maxDistance = Infinity;
@@ -1114,8 +1113,6 @@ class OrbitControls extends EventDispatcher {
 
 
 
-		// if(window.characterControls)
-		// 	window.characterControls.removeEvents();
 		this.minPolarAngle = MathUtils.degToRad(
 			'min_vertical_angle' in orbitControlsConfig
 				? orbitControlsConfig.min_vertical_angle

@@ -2,6 +2,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from '../../node_modules/three/examples/jsm/loaders/DRACOLoader.js';
 import { initCSSRenderer, addToolTipToModel } from './toolTipHelpers';
 import { hideAllExceptFirstClothItem } from '../three-background/threeHelpers';
+import { dressUpFromString } from './OutfitTranslator.js';
 
 
 const FADE_DURATION = .4;
@@ -10,7 +11,9 @@ let charTypeMap = {
     "Female_Type_A":{
         // url:"https://cdn.obsess-vr.com/realtime3d/static/glb_files/defaultChar_female_v002.glb",
         // url:"https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v004.glb",
-        url:"https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb",
+
+        // url:"https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb",
+        url:"https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_003.glb",
 
         scale: 1,
     }
@@ -19,7 +22,7 @@ let charTypeMap = {
 export default class RemoteChar{
     //will have a Position and Rotation, animations and a mixer.
     // the central control will be always be interpolating between the last position and last rotation and the new position and rotation.
-    constructor(charType , position, rotation, address, charName, ADD_TOOLTIP, applyAdjustements=null){
+    constructor(charType , position, rotation, address, charName, ADD_TOOLTIP, applyAdjustements=null, outfitString){
 
         this.animations = null;
         this.mixer = null;
@@ -27,6 +30,7 @@ export default class RemoteChar{
         this.position = position;
         this.rotation = rotation;
         this.currentAction = null;
+        this.outfitString = outfitString;
 
         this.charName = charName;
         this.ADD_TOOLTIP = ADD_TOOLTIP;
@@ -86,6 +90,13 @@ export default class RemoteChar{
             this.setPosition(this.position)
             this.setRotation(this.rotation)
 
+            this.model.traverse( function ( child ) {
+                if ( child.isMesh ) {
+                    child.castShadow = true;
+                    // child.receiveShadow = true;
+                }
+            } );
+
             if(this.ADD_TOOLTIP){
                 let {div,tooltipMesh } = addToolTipToModel(this.model, this.charName);
                 this.tooltipDiv = div;
@@ -95,7 +106,9 @@ export default class RemoteChar{
             this.setModelScale();
             // if(this.applyAdjustements){
                 //like the envMap
-                hideAllExceptFirstClothItem(this.model);
+                // hideAllExceptFirstClothItem(this.model);
+                dressUpFromString(this.model, this.outfitString);
+
             // }
 
             this.setupMixer();
@@ -114,6 +127,12 @@ export default class RemoteChar{
         this.currentAction = this.walkingAction;
     }
 
+    playWavingAnimation(){
+        this.wavingAction.setLoop(THREE.LoopOnce);
+        this.wavingAction.reset().play();
+
+    }
+
     playIdleAnimation(){
         if(this.currentAction === this.idleAction) return;
 
@@ -124,8 +143,11 @@ export default class RemoteChar{
     }
 
     setupAnimations(){
+
+
         this.idleAction = this.mixer.clipAction( this.animations[0] );
         this.walkingAction = this.mixer.clipAction( this.animations[1] );
+        this.wavingAction = this.mixer.clipAction( this.animations[2] );
         this.currentAction = this.idleAction;
         this.idleAction.play();
     }

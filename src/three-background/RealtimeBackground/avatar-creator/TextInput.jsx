@@ -12,8 +12,8 @@ const TextInput = props => {
     className="input-edit-note"
     name="avatar"
     onChange={props.onChange}
-    value={props.avatarName}             // title will always be state title
-    placeholder="choose your name" // props.title will always remain the same
+    value={props.avatarName}
+    placeholder="choose your name" 
   />
   );
 };

@@ -22,53 +22,12 @@ class ThreeController {
 			orbitControlsConfig,
 		);
 
-		if (!window.counter) {
-			window.counter = 1;
-		} else {
-			window.counter += 1;
-		}
-
-		if (window.count > 1) {
-			renderer.domElement.addEventListener('touchend', (event) => {
-				this.startDistance = null;
-			});
-			renderer.domElement.addEventListener('touchmove', (event) => {
-				if (event.touches.length != 1) {
-					event.preventDefault();
-				}
-
-				if (event.touches.length === 2) {
-					var base = Math.abs(
-						event.touches[1].pageX - event.touches[0].pageX,
-					);
-					var height = Math.abs(
-						event.touches[1].pageY - event.touches[0].pageY,
-					);
-					var dist = Math.sqrt(base ** 2 + height ** 2);
-					var deltaDist = this.startDistance - dist;
-					var temp = this.camera.fov + deltaDist * 0.2;
-					// this.camera.position.x+=1;
-
-					if (temp > 20 && temp < 70) {
-						this.camera.fov += deltaDist * 0.2;
-						this.camera.updateProjectionMatrix();
-					}
-
-					this.startDistance = dist;
-				}
-
-				// if (!this.deviceOrientationEventFired) {
-				//     this.deviceOrientationHandler(event);
-				// }
-			});
-		}
 
 		window.c = this.controls;
 		// this.controls.enableDamping = true;
 		// this.controls.dampingFactor = 0.05;
 		// this.controls.enableKeys = false;
 		// this.controls.enableZoom = true;
-		// window.c = this.controls;
 		this.controls.maxDistance = 0.1;
 		this.controls.minDistance = 0;
 
@@ -89,7 +48,7 @@ class ThreeController {
 	}
 
 
-	setupCharacterControls(model, charMixer, animationsMap, storeMixer, directionValues) {
+	setupCharacterControls(model, charMixer, animationsMap, storeMixer, directionValues,localAvatarNameRef,localAvatarOutfitStringRef, scene, camera) {
         this.controls.minDistance = 2;
         this.controls.maxDistance = 6;
         this.controls.enablePan = false;
@@ -97,40 +56,8 @@ class ThreeController {
 
         // this.controls.minPolarAngle = - Math.PI / 2 - 0.05;
 
-		this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, ANIMATION_NAMES['idle'],null, [], true, true ,false,storeMixer,directionValues);
+		this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, ANIMATION_NAMES['idle'],null, [], true, true ,false,storeMixer,directionValues,localAvatarNameRef,localAvatarOutfitStringRef, scene);
 		// this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
-		window.characterControls = this.characterControls ;
-
-
-        // this.cube = createCube();
-        if(this.scene){
-        // this.loader = new GLTFLoader();
-		// this.loader.crossOrigin = true;
-        // this.loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/mixamoriggedopaque.glb", (data) => {
-        //     this.loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/animations.glb", (anims) => {
-        //         this.animations = anims.animations
-        //         const model = data.scene;
-		// 		// const model = createCube();
-
-		// 		window.model = model;
-
-        //         const charAnimations = this.animations;
-        //         const charMixer = new THREE.AnimationMixer(model);
-        //         const animationsMap = new Map();
-        //         charAnimations.filter(a => a.name != 'T-Pose').forEach((a) => {
-        //             animationsMap.set(a.name, charMixer.clipAction(a));
-        //         });
-		// 		let initModelPos = [0, 0.1,3 ];
-		// 		model.position.set(...initModelPos);
-		// 		model.scale.set(1.2, 1.2, 1.2);
-		// 		this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, true );
-		// 		window.characterControls = this.characterControls ;
-
-        //         this.scene.add(model);
-
-        //     });
-        // });
-        }
 
         return this.characterControls;
     }

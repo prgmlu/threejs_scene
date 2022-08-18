@@ -9,12 +9,19 @@ import {
 	FBXLoader
 } from 'three/examples/jsm/loaders/FBXLoader';
 
+import { dressUpFromString } from '../three-controls/OutfitTranslator';
+
 // import avatar from './av.glb'
 
 import { GUI } from 'dat.gui';
+import {USE_OLD_CHARACTER_MODEL, SHADOW_MAP_TYPE, SHADOW_ENABLED} from '../three-background/RealtimeBackground/avatar-creator/CustomizationConstants.js';
+
+
+let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_003.glb" ;
 
 const DEBUG_LIGHTS = false;
 
+let gui;
 if(DEBUG_LIGHTS){
 	var guiDiv = document.createElement('div');
 	guiDiv.style.zIndex = 99;
@@ -23,7 +30,7 @@ if(DEBUG_LIGHTS){
 	var bod = document.getElementsByTagName('body')[0];
 	bod.appendChild(guiDiv);
 	
-	const gui = new GUI({autoPlace:false});
+	gui = new GUI({autoPlace:false});
 	// gui.close();
 	// var cont = document.getElementById('datgui');
 	guiDiv.appendChild(gui.domElement);
@@ -62,17 +69,6 @@ let useArmani = false;
 // const MODEL_SCALE = [1.2,1.2,1.2];
 const MODEL_SCALE = [1, 1, 1];
 
-const createCube = function () {
-	const geometry = new THREE.BoxGeometry(1, 1, 1);
-	const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-	const cube = new THREE.Mesh(geometry, material);
-	window.cube = cube;
-	cube.scale.set(1,1,1);
-	// cube.position.x=-5.2;
-	// cube.position.y=-5.2;
-	cube.position.set(0,0,0)
-	return cube
-}
 
 // let useCt = true;
 
@@ -149,13 +145,12 @@ export const createRenderer = (canvas = null) => {
 
 
 
-	renderer.shadowMap.enabled = false
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap
+	renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = SHADOW_MAP_TYPE;
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 	renderer.outputEncoding = THREE.sRGBEncoding
 	renderer.toneMapping = THREE.ACESFilmicToneMapping
 	renderer.toneMappingExposure = 1
-	renderer.shadowMap.enabled = THREE.PCFSoftShadowMap
 
 
 
@@ -169,14 +164,13 @@ export const adjustRenderer = (renderer) => {
 	renderer.physicallyCorrectLights = true;
 	renderer.outputEncoding = THREE.sRGBEncoding;
 
-	renderer.shadowMap.enabled = false
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap
+	renderer.shadowMap.enabled = SHADOW_ENABLED;
+	renderer.shadowMap.type = SHADOW_MAP_TYPE;
 
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 	renderer.toneMapping = THREE.ACESFilmicToneMapping
 	renderer.toneMappingExposure = 1
-	renderer.shadowMap.enabled = THREE.PCFSoftShadowMap
 
 	return renderer
 };
@@ -187,16 +181,15 @@ export const resetRenderer = (renderer) => {
 	renderer.outputEncoding = 3000;
 
 	renderer.shadowMap.enabled = false
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap
+	renderer.shadowMap.type = SHADOW_MAP_TYPE;
 
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 	renderer.toneMapping = 0;
-	renderer.shadowMap.enabled = THREE.PCFSoftShadowMap
 }
 
 
-export const loadModelAndAnimations = async () => {
+export const loadModelAndAnimations = async (outfitString) => {
 	return new Promise((resolve, reject) => {
 		let loader = new GLTFLoader();
 		// let fbxLoader = new FBXLoader();
@@ -210,7 +203,12 @@ export const loadModelAndAnimations = async () => {
 
 
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v004.glb", (data) => {
-			loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb", (data) => {
+
+
+			loader.load(MODEL_URL, (data) => {
+
+			// loader.load("https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_003.glb", (data) => {
+
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_001.glb", (data) => {
 			// loader.load(avatar, (data) => {
 
@@ -221,27 +219,21 @@ export const loadModelAndAnimations = async () => {
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/animations.glb", (anims) => {
 			let animations = data.animations;
 
-			window.animations = animations;
 			const model = data.scene;
+
+			model.traverse((i) => {
+				i.castShadow = true;
+				// i.receiveShadow = true;
+			})
+
 			// const model = createCube();
 
 			window.model = model;
 
 
-			hideAllExceptFirstClothItem(data.scene)
+			// hideAllExceptFirstClothItem(data.scene)
+			dressUpFromString(data.scene,outfitString)
 
-
-
-			// data.scene.getChildByName('Shirt2').visible=true;
-			// data.scene.getChildByName('Pants2').visible=true;
-			
-
-			// window.model = createCube();
-			// scene.add(window.model);
-
-			// coverGlbWithBoxes(window.model, scene);
-
-			// window.mesh = mesh;
 
 
 
@@ -272,9 +264,6 @@ let createBoundingBoxFromBoundingBoxes = (boxesArray) =>{
 	return box;
 
 }
-
-window.meshes = [];
-window.boxes = [];
 
 let coverGlbWithBoxes = (glb, scene) => {
 	let bigBox = new THREE.Box3();
@@ -312,9 +301,20 @@ let coverGlbWithBoxes = (glb, scene) => {
 
 
 export const setUpNormalLights = (scene) => {
+	let lights = [];
+
+	// const pntLight_001 = new THREE.PointLight(0xffffff, 10)
 	const pntLight_001 = new THREE.PointLight(0xffffff, 10)
 	scene.add(pntLight_001)
-	pntLight_001.position.set(-14,14,14);
+
+	if(DEBUG_LIGHTS){
+		gui.add(pntLight_001.position, 'x').min(-30).max(30).step(0.1).name('x');
+		gui.add(pntLight_001.position, 'y').min(-30).max(30).step(0.1).name('y');
+		gui.add(pntLight_001.position, 'z').min(-30).max(30).step(0.1).name('z');
+	}
+
+
+	pntLight_001.position.set(-14,11.5,14);
 	if(DEBUG_LIGHTS){
 		const pntLight_001_helper = new THREE.PointLightHelper(pntLight_001, 10)
 		scene.add(pntLight_001_helper)
@@ -331,7 +331,7 @@ export const setUpNormalLights = (scene) => {
 	spotLight_001.penumbra = 1
 	if(DEBUG_LIGHTS){
 		const spotLight_001_helper = new THREE.SpotLightHelper(spotLight_001)
-		scene.add(spotLight_001_helper)
+		// scene.add(spotLight_001_helper)
 		gui.add(spotLight_001, 'intensity').min(0).max(10).step(0.01).name('spot_001-light-intensity')
 	}
 	const spotLight_002 = new THREE.SpotLight(0xffffff, 10)
@@ -346,10 +346,21 @@ export const setUpNormalLights = (scene) => {
 	spotLight_002.distance = 100
 	if(DEBUG_LIGHTS){
 		const spotLight_002_helper = new THREE.SpotLightHelper(spotLight_002)
-		scene.add(spotLight_002_helper)
+		// scene.add(spotLight_002_helper)
 		gui.add(spotLight_002, 'intensity').min(0).max(10).step(0.01).name('spot_002-light-intensity')
 	}
-	}
+	lights.push(pntLight_001, spotLight_001, spotLight_002);
+	window.lights = lights;
+	lights.forEach((l,i) => {
+		if(i!=0) return;
+		l.castShadow = true;
+		l.shadow.mapSize.width = 1024;
+		l.shadow.mapSize.height = 1024;
+		l.shadow.camera.near = .5;
+		l.shadow.camera.far = 100;
+
+	});
+}
 
 export const setUpEnvMap = (scene, renderer) => {
 	const cubeTextureLoader = new THREE.CubeTextureLoader()

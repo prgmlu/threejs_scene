@@ -3,13 +3,14 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {resetRenderer, setUpEnvMap, loadModelAndAnimations, setUpNormalLights} from '../threeHelpers';
 import AvatarCreatorContainer from './AvatarCreatorContainer';
 import RealtimeControls from './RealtimeControls';
-// let adjustHotspots = ()=> {window.scene.children.filter((i)=>i.type=='Sprite' || i.type=='mesh').forEach((i)=>{i.visible = false;i.material.depthTest = true;});};
+import { predeterminedOutfitsWithHair } from './avatar-creator/predeterminedOutfits';
+import { RELEVANT_STORE_PARTS_NAMES } from './avatar-creator/CustomizationConstants';
 
 const STORE_Y_OFFSET = 7;
 
-let adjustHotspots = () => {
+let adjustHotspots = (scene) => {
 
-    window.scene.children.forEach((i) => { if (i.material)
+    scene.children.forEach((i) => { if (i.material)
         {
             try{
                 // i.material.color.set('red'); i.material.transparent=true; i.material.opacity=.5
@@ -22,27 +23,27 @@ let adjustHotspots = () => {
 })
 
     
-    window.keep = [];
+    let keep = [];
 
-    let hotspots = window.scene.children.filter((i) => {return i.name=='visualObject'});
-    window.keep = hotspots.slice(0, 5);
+    let hotspots = scene.children.filter((i) => {return i.name=='visualObject'});
+    keep = hotspots.slice(0, 5);
 
-    window.imgHotspotCollider = scene.children.filter((i)=>(i.position.x>2.1 && i.position.x<2.2) && (i.position.y>-1.34 ) && (i.position.y<-1.33))[0];
-    window.keep.push(imgHotspotCollider);
+    let imgHotspotCollider = scene.children.filter((i)=>(i.position.x>2.1 && i.position.x<2.2) && (i.position.y>-1.34 ) && (i.position.y<-1.33))[0];
+    keep.push(imgHotspotCollider);
 
 
-    window.scene.children.filter((i)=>{return i.name=='marker' || i.name=='visualObject'}).filter((i)=>{return i.position.y<0}).forEach((i,counter)=>{
+    scene.children.filter((i)=>{return i.name=='marker' || i.name=='visualObject'}).filter((i)=>{return i.position.y<0}).forEach((i,counter)=>{
 
         // i.visible=false;
-        if(!window.keep.includes(i)){
-            window.scene.remove(i);
+        if(!keep.includes(i)){
+            scene.remove(i);
         }
     }
     )
-    window.scene.children.filter((i)=>{return i.name=='marker' || i.name=='visualObject'}).filter((i)=>{return i.position.y>.4 && i.position.y<.46 }).forEach((i)=>
+    scene.children.filter((i)=>{return i.name=='marker' || i.name=='visualObject'}).filter((i)=>{return i.position.y>.4 && i.position.y<.46 }).forEach((i)=>
     {i.visible=false
-        if(!window.keep.includes(i)){
-            window.scene.remove(i);
+        if(!keep.includes(i)){
+            scene.remove(i);
         }
         scene.remove(i);
     }
@@ -79,19 +80,18 @@ let adjustHotspots = () => {
         };
 
         let textureLoader = new THREE.ImageBitmapLoader();
-        window.texture = null;
+        let texture = null;
         textureLoader.load ( "https://cdn.obsess-vr.com/play-hotspot.png", (imageBitmap) => {
-            window.texture = new THREE.CanvasTexture( imageBitmap );
+            texture = new THREE.CanvasTexture( imageBitmap );
             // hair.material.map = texture;
             // hair.material.needsUpdate = true
          } );
 
 
-        window.setInterval(()=>{
+        setInterval(()=>{
             try{
-                let objs = window.scene.children.filter((i)=>{return (!window.keep.includes(i)) && (i.name=='marker' || i.name=='visualObject')});
-                objs[4] = window.imgHotspotCollider;
-                window.objs = objs;
+                let objs = scene.children.filter((i)=>{return (!keep.includes(i)) && (i.name=='marker' || i.name=='visualObject')});
+                objs[4] = imgHotspotCollider;
                 
                 objs [0].position.set(p1.x, p1.y + STORE_Y_OFFSET, p1.z);
                 objs [1].position.set(p2.x, p2.y + STORE_Y_OFFSET, p2.z);
@@ -99,27 +99,26 @@ let adjustHotspots = () => {
                 objs [3].position.set(p4.x, p4.y + STORE_Y_OFFSET, p4.z);
                 objs [4].position.set(p5.x, p5.y + STORE_Y_OFFSET, p5.z);
                 
-                window.keep [0].position.set(p1.x, p1.y + STORE_Y_OFFSET, p1.z);
+                keep [0].position.set(p1.x, p1.y + STORE_Y_OFFSET, p1.z);
 
-                if(window.texture){
-                    // alert(window.texture)
-                    window.keep[0].material.map = window.texture;
-                    window.keep[0].material.needsUpdate = true;
+                if(texture){
+                    keep[0].material.map = texture;
+                    keep[0].material.needsUpdate = true;
 
-                    window.keep[1].material.map = window.texture;
-                    window.keep[1].material.needsUpdate = true;
+                    keep[1].material.map = texture;
+                    keep[1].material.needsUpdate = true;
 
-                    window.keep[2].material.map = window.texture;
-                    window.keep[2].material.needsUpdate = true;
+                    keep[2].material.map = texture;
+                    keep[2].material.needsUpdate = true;
                     
-                    window.keep[3].material.map = window.texture;
-                    window.keep[3].material.needsUpdate = true;
+                    keep[3].material.map = texture;
+                    keep[3].material.needsUpdate = true;
                 }
 
-                window.keep [1].position.set(p2.x, p2.y + STORE_Y_OFFSET, p2.z);
-                window.keep [2].position.set(p3.x, p3.y + STORE_Y_OFFSET, p3.z);
-                window.keep [3].position.set(p4.x, p4.y + STORE_Y_OFFSET, p4.z);
-                window.keep [4].position.set(p5.x, p5.y + STORE_Y_OFFSET, p5.z);
+                keep [1].position.set(p2.x, p2.y + STORE_Y_OFFSET, p2.z);
+                keep [2].position.set(p3.x, p3.y + STORE_Y_OFFSET, p3.z);
+                keep [3].position.set(p4.x, p4.y + STORE_Y_OFFSET, p4.z);
+                keep [4].position.set(p5.x, p5.y + STORE_Y_OFFSET, p5.z);
             }
             catch(e) {
                 null;
@@ -127,11 +126,23 @@ let adjustHotspots = () => {
         }, 1000)
 
 }
+let removeBottomBar = ()=>{setInterval(()=>{try{document.querySelectorAll('.bottombar-container')[0].remove()}catch{null;}},1000);};
 
-let removeBottomBar = ()=>{window.setInterval(()=>{try{document.querySelectorAll('.bottombar-container')[0].remove()}catch{null;}},1000);};
-
-let ENV_MAP_INTENSITY = 1.5;
+let ENV_MAP_INTENSITY = 2;
 let STORE_SCALE = [140,140,140];
+
+function createRandomName(){
+    let name = "Guest ";
+    let randomNumber = Math.floor(Math.random() * 100);
+    name += randomNumber;
+    return name;
+}
+
+function getInitialAvatarOutfitString(){
+    let randomNumber = Math.floor(Math.random() * Object.keys(predeterminedOutfitsWithHair).length);
+    return predeterminedOutfitsWithHair[randomNumber];
+}
+
 
 const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller }) => {
     const [avatar, setAvatar] = useState(null);
@@ -140,6 +151,11 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
     const [room, setRoom] = useState(null);
     const [animationsMap, setAnimationsMap] = useState(null);
     const [charControls, setCharControls] = useState(null);
+
+    const localAvatarNameRef = useRef(createRandomName());
+    const localAvatarOutfitStringRef = useRef(getInitialAvatarOutfitString());
+    window.localAvatarOutfitStringRef = localAvatarOutfitStringRef;
+
 
     let handleAnimations = (data)=>{
         let newStoreMixer =  new THREE.AnimationMixer(data.scene);
@@ -176,14 +192,18 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
             return new Promise((resolve, reject) => {
                 loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v032.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_sceneAnim_v030.glb",(storeGlb) => {
-                // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v005.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v026.glb",(storeGlb) => {
                     
                     storeGlb.scene.traverse((i)=>{
                         i.material && (i.material.envMapIntensity = ENV_MAP_INTENSITY );
+                        // i.castShadow = true;
                     });
 
+                    // i.receiveShadow = true;
+                    
+                    storeGlb.scene.getObjectByName(RELEVANT_STORE_PARTS_NAMES[0]).receiveShadow = true;
+                    
                     setUpNormalLights(scene);
 
                     roomObj = storeGlb.scene;
@@ -204,7 +224,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
         async function loadStoreAndModel() {
 
-            let [_,modelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations()]);
+            let [_,modelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations(localAvatarOutfitStringRef.current)]);
 
             let [model, charMixer, animationsMap ] = modelMixerMap;
             setCharMixer(charMixer);
@@ -229,11 +249,14 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
     return (
         <>
-        {adjustHotspots()}
-        { avatar && charControls &&  <AvatarCreatorContainer charControls={charControls} avatar={avatar} scene={scene} avatarPos={avatar.position} />}
+        {adjustHotspots(scene)}
+        { avatar && charControls &&  <AvatarCreatorContainer charControls={charControls} avatar={avatar} scene={scene} avatarPos={avatar.position} localAvatarNameRef={localAvatarNameRef}
+        localAvatarOutfitStringRef={localAvatarOutfitStringRef}/>}
 
 		{avatar &&  <RealtimeControls scene={scene} camera={camera} renderer={renderer} avatar={avatar} setCharControls={setCharControls} orbitControls={controller}
             charMixer={charMixer} animationsMap={animationsMap} storeMixer={storeMixer} charControls={charControls} 
+            localAvatarNameRef={localAvatarNameRef}
+            localAvatarOutfitStringRef={localAvatarOutfitStringRef}
          />}
         </>
     );

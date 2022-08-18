@@ -174,6 +174,7 @@ const Scene = (props) => {
 	};
 
 	const animate = (controllerUpdate = false, animationKey) => {
+		window['animationStarted'] = true;
 		if(window.mainAnimationLoopHooks){
 			window.mainAnimationLoopHooks.forEach(hook => {
 				hook();
@@ -314,7 +315,8 @@ const Scene = (props) => {
 		}
 		window[animationKey] = '';
 		setAnimationId(animationKey);
-		animate(controlsRef.current.update, animationKey);
+		if(!window['animationStarted'])
+			animate(controlsRef.current.update, animationKey);
 	};
 
 	//New Scene INIT
@@ -433,7 +435,6 @@ const Scene = (props) => {
 			cameraRef.current.aspect = width / height;
 			cameraRef.current.updateProjectionMatrix();
 			renderer.setSize(width, height);
-			window.labelRenderer && window.labelRenderer.setSize(width, height);
 
 			if (UI) setUI(false); //destroy UI
 		};
