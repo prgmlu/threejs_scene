@@ -223,6 +223,7 @@ export const loadModelAndAnimations = async (outfitString) => {
 
 			model.traverse((i) => {
 				i.castShadow = true;
+				i.frustumCulled = false;
 				// i.receiveShadow = true;
 			})
 

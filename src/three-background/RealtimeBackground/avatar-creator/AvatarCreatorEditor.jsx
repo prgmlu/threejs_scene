@@ -1,213 +1,145 @@
 import React, { Component } from 'react';
-import * as THREE from 'three'
-import './AvatarCreatorEditor.css'
-import {
-    maleOutfits,
-    femaleHair,
-    femaleShirts,
-    femalePants,
-    femaleOutfits
-} from './avatarsData';
-import {predeterminedOutfitsNoHair} from './predeterminedOutfits';
-import {setMeshTextureImage,dressUpFromString, getOutfitStringFromModel} from '../../../three-controls/OutfitTranslator';
+import * as THREE from 'three';
+import cloth from '../static/avatar/menus/clothes.png';
+import body from '../static/avatar/menus/body.png';
+import skin from '../static/avatar/menus/skin.png';
+import Outfit from './customize/Outfit';
+import SkinTone from './customize/SkinTone';
+import BodyShape from './customize/BodyShape';
 
-import { USE_OLD_CHARACTER_MODEL } from './CustomizationConstants';
-
-const maleModelImg = 'https://cdn.obsess-vr.com/maleModel%20.png';
-const femaleModelImg = 'https://cdn.obsess-vr.com/femaleModel%20.png';
-
-let HAIR_MESHES_COUNT = 3;
-
-
-
-let HAIR_MESHES_NAMES = USE_OLD_CHARACTER_MODEL? ['Hair1', 'Hair2', 'Hair3'] : ['Hair2', 'Hair3', 'hair4']
-
-let SHIRT_MESH_COUNT = 2;
-let PANTS_MESH_COUNT = 2;
-
-
-class AvatarCreatorEditor extends Component {
-    constructor(props) {
-        super(props);
-        
-        this.maleOutfits = maleOutfits;
-        this.femaleOutfits = femaleOutfits;
-        this.currentScene = this.props.currentScene;
-        this.currentAvatar = {};
-
-        this.localAvatarOutfitStringRef = props.localAvatarOutfitStringRef;
-
-        this.props.currentAvatar && this.props.currentAvatar.traverse((i)=>{
-            i.frustumCulled=false;
-        })
-    }
-    state = {
-        activeTab : 3,
-        bodyType : 'male',
-    }
-
-    onTabClick = (e) => {
-        this.setState({activeTab: e.target.id});
-    }
-
-    setBodyType = (e) => {
-        this.setState({bodyType: e.target.id});
-    }
-    
-
-    setOutfit = (e) => {
-
-        let string = predeterminedOutfitsNoHair[e.target.id];
-        dressUpFromString(this.props.currentAvatar, string);
-        
-        this.localAvatarOutfitStringRef.current = string;
-    }
-
-
-    setHair = (e) => {
-        
-
-        
-        let selectedItem = femaleHair.filter((hair) => {return hair.name == e.target.id})[0];
-        
-            
-            for (let i = 0; i < HAIR_MESHES_COUNT; i++) {
-                this.props.currentAvatar.getChildByName( HAIR_MESHES_NAMES[i] ).visible = false;
-            }
-            
-            let hairNumber = selectedItem.name[selectedItem.name.length-1];
-
-            let hair = this.props.currentAvatar.getChildByName( HAIR_MESHES_NAMES[hairNumber-1] )
-
-            hair.visible = true;
-            
-            setMeshTextureImage(hair, selectedItem.textureImage);
-            let hairColor = 'Brown';
-            if(selectedItem.textureImage.includes('Red')) hairColor = 'Red';
-            if(selectedItem.textureImage.includes('Blonde')) hairColor = 'Blonde';
-
-            let string = getOutfitStringFromModel(this.props.currentAvatar,hairColor);
-            this.localAvatarOutfitStringRef.current = string;
-            
-    }
-    setShirt = (e) => {
-
-        let selectedItem = femaleShirts.filter((shirt) => {return shirt.name == e.target.id})[0];
-
-
-
-
-            for (let i = 1; i <= SHIRT_MESH_COUNT; i++) {
-                if(i==1) this.props.currentAvatar.getChildByName( `Shirt` ).visible = false;
-                else
-                    this.props.currentAvatar.getChildByName( `Shirt${i}` ).visible = false;
-            }
-            
-            let shirtNumber = selectedItem.name[selectedItem.name.length-1];
-            let shirt = this.props.currentAvatar.getChildByName( `Shirt${shirtNumber}` )
-            shirt.visible = true;
-
-            setMeshTextureImage(shirt, selectedItem.textureImage);
-
-    }
-    setPants = (e) => {
-        let selectedItem = femalePants.filter((pants) => {return pants.name == e.target.id})[0];
-
-
-
-            for (let i = 1; i <= PANTS_MESH_COUNT; i++) {
-                if(i==1) this.props.currentAvatar.getChildByName( `Pants` ).visible = false;
-                else
-                    this.props.currentAvatar.getChildByName( `Pants${i}` ).visible = false;
-            }
-            
-            let pantsNumber = selectedItem.name[selectedItem.name.length-1];
-            let pants = this.props.currentAvatar.getChildByName( `Pants${pantsNumber}` )
-            pants.visible = true;
-
-            setMeshTextureImage(pants, selectedItem.textureImage);
-
-
-    }
-
-    render() {
-        return (
-            <div className='avatarCreatorEditor'>
-
-                <div className="settings">
-                    {/* <div id='1' className={this.state.activeTab==1? 'activeTab' : 'inactiveTab'} onClick={this.onTabClick}>
-                        <p id='1'>Body type</p>
-                    </div> */}
-                    {/* <div id='2' className={this.state.activeTab==2? 'activeTab' : 'inactiveTab'} onClick={this.onTabClick}>
-                        <p id='2'>Skin tone</p>
-                    </div> */}
-                    <div id='3' className={this.state.activeTab==3? 'activeTab' : 'inactiveTab'} onClick={this.onTabClick}>
-                        <p id='3'>Outfit</p>
-                    </div>
-                    <div id='4' className={this.state.activeTab==4? 'activeTab' : 'inactiveTab'} onClick={this.onTabClick}>
-                        <p id='4'>Hair</p>
-                    </div>
-
-                    {/* <div id='5' className={this.state.activeTab==5? 'activeTab' : 'inactiveTab'} onClick={this.onTabClick}>
-                        <p id='5'>Shirts</p>
-                    </div>
-                    
-                    <div id='6' className={this.state.activeTab==6? 'activeTab' : 'inactiveTab'} onClick={this.onTabClick}>
-                        <p id='6'>Pants</p>
-                    </div> */}
-
-                </div>
-
-                <div className="content">
-                    {this.state.activeTab==1&&<div className='bodyTypeEditor'>
-                        <img
-                            src={maleModelImg}
-                            id='male'
-                            className={this.state.bodyType=='male' ? 'selectedImg' : 'notSelectedImg'}
-                            onClick={this.setBodyType}
-                        />
-                        <img
-                            src={femaleModelImg}
-                            id='female'
-                            className={this.state.bodyType=='female' ? 'selectedImg' : 'notSelectedImg'}
-                            onClick={this.setBodyType}
-                        />
-                    </div>}
-
-                    {this.state.activeTab==2&&<div className='skinToneEditor'>
-                    skinToneEditor
-                    </div>}
-
-                    {this.state.activeTab==3&&<div className='outfitEditor'>
-                        {this.femaleOutfits.map((outfit, index) => {
-                            return <img key={index} id={outfit.name} src={outfit.displayImage} className={outfit.type} onClick={this.setOutfit}/>
-                        })}
-                    </div>}
-
-                    {this.state.activeTab==4&&<div className='hairEditor'>
-
-                        {femaleHair.map((outfit, index) => {
-                            return <img key={index} id={outfit.name} src={outfit.displayImage} className={outfit.type} onClick={this.setHair}/>
-                        })}
-                    </div>}
-                    {this.state.activeTab==5&&<div className='outfitEditor'>
-
-                        {femaleShirts.map((outfit, index) => {
-                            return <img key={index} id={outfit.name} src={outfit.displayImage} className={outfit.type} onClick={this.setShirt}/>
-                        })}
-                    </div>}
-                    {this.state.activeTab==6&&<div className='outfitEditor'>
-
-                        {femalePants.map((outfit, index) => {
-                            return <img key={index} id={outfit.name} src={outfit.displayImage} className={outfit.type} onClick={this.setPants}/>
-                        })}
-                    </div>}
-                </div>
-                                 
-            </div>
-        );
-    }
+function importImgsFolder(r) {
+	let images = [];
+	r.keys().map((item) => {
+		images.push({
+			type: item.split('./')[1].split('_')[0],
+			name: item.split('./')[1].split('.')[0],
+			src: r(item).default,
+		});
+	});
+	return images;
 }
 
+class AvatarCreatorEditor extends Component {
+	constructor(props) {
+		super(props);
+		this.textureLoader = new THREE.TextureLoader();
+		this.maleOutfits = {
+			textures: importImgsFolder(
+				require.context(
+					'../static/avatar/outfit/male/textures',
+					false,
+					/\.(png)$/,
+				),
+			),
+			display: [
+				"https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png",
+				"https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png",
+				"https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png",
+				"https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png",
+				"https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png",
+				"https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png",
+				"https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png",
+				"https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png",
+			],
+		};
+		this.currentScene = props?.currentScene;
+		this.currentAvatar = {};
+	}
+	state = {
+		activeTab: 1,
+		bodyType: 'male',
+		selectedOutfit: -1,
+	};
+
+	onTabClick = (e) => {
+		this.setState({ activeTab: e.target.id });
+	};
+
+	setBodyType = (e) => {
+		this.setState({ bodyType: e.target.id });
+	};
+
+	setOutfit = (e, index) => {
+		this.setState({ selectedOutfit: index }, () => {});
+
+		let selectedItem = this.maleOutfits.textures.filter((texture) => {
+			return texture.name == e.target.id;
+		})[0];
+		let selectedTexture = this.textureLoader.load(selectedItem.src);
+		this.currentScene.children[0].children[0].getObjectByName(
+			e.target.className,
+		).material.map = selectedTexture;
+		this.currentScene.children[0].children[0].getObjectByName(
+			e.target.className,
+		).material.needsUpdate = true;
+	};
+
+	handlePicker = (value) => {
+		this.setState({
+			color: value,
+		});
+	};
+
+	handleClose = () => this.setState({ isPickerVisible: false });
+
+	// componentDidMount() {
+
+	// }
+
+	render() {
+		const { selectedOutfit } = this.state;
+		return (
+			<div className="w-full sm:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-between relative">
+				<div className="w-full sm:w-[70%] h-[10%] sm:h-[12%] flex items-start justify-center gap-3">
+					<img
+						src={body}
+						alt="Body type"
+						id="1"
+						className={`${
+							this.state.activeTab == 1
+								? 'pt-2 pb-4 rounded-t-md'
+								: 'py-2 rounded-md'
+						} px-4 rounded-t-md flex justify-center cursor-pointer object-contain bg-[#D9D9D9]`}
+						onClick={this.onTabClick}
+					/>
+
+					<img
+						src={skin}
+						alt="Skin tone"
+						id="2"
+						className={`${
+							this.state.activeTab == 2
+								? 'pt-2 pb-5 rounded-t-md'
+								: 'py-2.5 rounded-md'
+						} px-4 rounded-t-md flex justify-center cursor-pointer object-contain bg-[#D9D9D9]`}
+						onClick={this.onTabClick}
+					/>
+					<img
+						src={cloth}
+						alt="Outfit"
+						id="3"
+						className={`${
+							this.state.activeTab == 3
+								? 'pt-2 pb-4 rounded-t-md'
+								: 'py-2 rounded-md'
+						} px-4 rounded-t-md flex justify-center cursor-pointer object-contain bg-[#D9D9D9]`}
+						onClick={this.onTabClick}
+					/>
+				</div>
+				<div className="w-[96%] sm:w-[70%] h-[87%] sm:h-[86%] bg-[#D9D9D9] rounded-md gap-x-2 pt-3 px-3">
+					{this.state.activeTab == 1 && <BodyShape />}
+					{this.state.activeTab == 2 && <SkinTone />}
+					{this.state.activeTab == 3 && (
+						<Outfit
+							selectedOutfit={selectedOutfit}
+							maleOutfits={this.maleOutfits}
+							setOutfit={this.setOutfit}
+						/>
+					)}
+				</div>
+			</div>
+		);
+	}
+}
 
 export default AvatarCreatorEditor;

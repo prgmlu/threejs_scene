@@ -93,6 +93,7 @@ export default class RemoteChar{
             this.model.traverse( function ( child ) {
                 if ( child.isMesh ) {
                     child.castShadow = true;
+                    child.frustumCulled = false;
                     // child.receiveShadow = true;
                 }
             } );

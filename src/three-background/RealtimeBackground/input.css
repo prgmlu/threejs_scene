@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+	font-family: 'Source Sans Pro Light';
+	/* src: url('./assets/fonts/SourceSansPro-Light.ttf'); */
+}
+
+@font-face {
+	font-family: 'Source Sans Pro Regular';
+	/* src: url('./assets/fonts/SourceSansPro-Regular.ttf'); */
+}
+
+@font-face {
+	font-family: 'Source Sans Pro Semibold';
+	/* src: url('./assets/fonts/SourceSansPro-Semibold.ttf'); */
+}
+
+@font-face {
+	font-family: 'Source Sans Pro Bold';
+	/* src: url('./assets/fonts/SourceSansPro-Bold.ttf'); */
+}

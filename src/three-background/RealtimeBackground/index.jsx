@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {resetRenderer, setUpEnvMap, loadModelAndAnimations, setUpNormalLights} from '../threeHelpers';
 import AvatarCreatorContainer from './AvatarCreatorContainer';
 import RealtimeControls from './RealtimeControls';
+import './output.css';
 import { predeterminedOutfitsWithHair } from './avatar-creator/predeterminedOutfits';
 import { RELEVANT_STORE_PARTS_NAMES } from './avatar-creator/CustomizationConstants';
 
