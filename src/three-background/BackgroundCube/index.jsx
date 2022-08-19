@@ -14,6 +14,7 @@ const BackgroundCube = ({
 	controller,
 	onBackgroundReady = () => {},
 	onBackgroundLoaded = () => {},
+	materialProperties = null,
 }) => {
 	const cube = useRef();
 
@@ -38,6 +39,7 @@ const BackgroundCube = ({
 				skipLargest,
 				onBackgroundReady,
 				onBackgroundLoaded,
+				materialProperties,
 			);
 		}
 	}, [backgroundUrl, opacityMapUrl]);

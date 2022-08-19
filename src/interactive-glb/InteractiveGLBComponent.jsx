@@ -1,14 +1,14 @@
 import * as THREE from 'three';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
-import { isMobile } from 'react-device-detect';
 
-const DRACO_LOADER_PATH = 'https://cdn.obsess-vr.com/draco-loader/gltf/';
-const CB_MATERIAL_COUNT = isMobile ? 96 : 384;
-
-const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) => {
+const InteractiveGLBComponent = ({
+	sceneRef,
+	hotspotData,
+	onMouseUp,
+	onClick,
+}) => {
 	if (!hotspotData.props.data.envMaps) {
 		//return if no config found
 		return null;
@@ -45,6 +45,10 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 	const raycaster = new THREE.Raycaster();
 	const mouse = new THREE.Vector2();
 
+	const svgLoader = new SVGLoader();
+	const loader = new GLTFLoader();
+	const cubeTextureLoader = new THREE.CubeTextureLoader();
+	THREE.Cache.enabled = true;
 	const updateAllMaterials = () => {
 		model.traverse((child) => {
 			if (
@@ -53,8 +57,6 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 			) {
 				child.material.envMapIntensity =
 					hotspotData.props.data?.envMapIntensity;
-
-				child.material.needsUpdate = true;
 			}
 		});
 	};
@@ -91,7 +93,7 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 		if (intersects.length > 0) {
 			controller.enabled = false;
 			onClick();
-		};
+		}
 	};
 
 	const onTouchStart = (event) => {
@@ -119,7 +121,6 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 	};
 
 	const onTouchEnd = (event) => {
-		event.preventDefault();
 		if (!event.clientX) event['clientX'] = event.changedTouches[0].clientX;
 		if (!event.clientY) event['clientY'] = event.changedTouches[0].clientY;
 		onMouseClick(event);
@@ -192,7 +193,6 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 
 	const addHotspots = () => {
 		hotspotData.props.data.hotspots.forEach((hotspot) => {
-			const svgLoader = new SVGLoader();
 			svgLoader.load(hotspot.props.icon.path, (data) => {
 				const paths = data.paths;
 				const group = new THREE.Group();
@@ -240,22 +240,6 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 		});
 	};
 
-	const revertSceneMaterialToNormal = () => {
-		scene.children.forEach((child) => {
-			if (child.name === 'cubeBackground') {
-				child.children.forEach((child2) => {
-					child2.material.forEach((material) => {
-						material.transparent = true;
-						material.depthTest = false;
-						material.depthWrite = false;
-						material.toneMapped = true;
-						material.needsUpdate = true;
-					});
-				});
-			}
-		});
-	};
-
 	const resetRendererToNormal = () => {
 		renderer.shadowMap.enabled = false;
 		renderer.toneMapping = THREE.NoToneMapping;
@@ -273,21 +257,8 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 
 	const onComponentUmount = () => {
 		scene.remove(model);
-		revertSceneMaterialToNormal();
 		resetRendererToNormal();
 		removeEventListeners();
-	};
-
-	const prepareSceneForGLTFObject = (cubeBackground) => {
-		cubeBackground.children.forEach((child) => {
-			child.material.forEach((material) => {
-				material.transparent = false;
-				material.depthTest = true;
-				material.depthWrite = true;
-				material.toneMapped = false;
-				material.needsUpdate = true;
-			});
-		});
 	};
 
 	const prepareRendererForGLTF = () => {
@@ -297,7 +268,6 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 
 	const prepareMixerForGLTF = (gltf) => {
 		if (hotspotData.props.data.isAnimated === true) {
-			model = gltf.scene; //glb
 			mixer = new THREE.AnimationMixer(gltf.scene);
 			const hover = mixer.clipAction(gltf.animations[0]);
 			hover.loop = THREE.LoopRepeat;
@@ -306,12 +276,7 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 	};
 
 	useEffect(() => {
-		const loader = new GLTFLoader();
-		const dracoLoader = new DRACOLoader();
-		dracoLoader.setDecoderPath(DRACO_LOADER_PATH);
-		dracoLoader.preload();
-		loader.setDRACOLoader(dracoLoader);
-		const cubeTextureLoader = new THREE.CubeTextureLoader();
+		prepareRendererForGLTF();
 
 		Promise.all([
 			cubeTextureLoader.loadAsync([
@@ -325,28 +290,10 @@ const InteractiveGLBComponent = ({ sceneRef, hotspotData, onMouseUp, onClick }) 
 			loader.loadAsync(hotspotData.props.data.glbObjectUrl), //glb
 		])
 			.then((results) => {
-				const cubeBackground = scene.children.find(
-					(child) => child.name === 'cubeBackground',
-				);
-
-				if (cubeBackground) {
-					while (cubeBackground.children.length !== 6) {}
-					cubeBackgroundInterval = setInterval(() => {
-						const materialCount = cubeBackground.children
-							.map((child) => child.material.length)
-							.reduce((partial, a) => partial + a, 0);
-
-						if (materialCount === CB_MATERIAL_COUNT) {
-							prepareSceneForGLTFObject(cubeBackground);
-							prepareRendererForGLTF();
-							clearInterval(cubeBackgroundInterval);
-						}
-					}, 100);
-				}
-
 				const [environmentMap, gltf] = results;
 				environmentMap.encoding = THREE.sRGBEncoding;
 				scene.environment = environmentMap;
+				model = gltf.scene; //glb
 
 				prepareMixerForGLTF(gltf);
 				addHotspots();

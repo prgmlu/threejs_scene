@@ -24,6 +24,7 @@ const Background = ({
 	console.log('%c >INIT: - Background', 'color:green', bgConf);
 
 	useEffect(() => {
+		console.log('%c >INIT: - Background', 'color:green');
 		if (bgConf) {
 			setFlatScene(bgConf.isFlatScene);
 			setBackgroundUrl(bgConf.backgroundUrl);
@@ -58,6 +59,7 @@ const Background = ({
 			controller={controller}
 			onBackgroundReady={onBackgroundReady}
 			onBackgroundLoaded={onBackgroundLoaded}
+			materialProperties={bgConf?.materialProperties}
 		/>
 	);
 };
