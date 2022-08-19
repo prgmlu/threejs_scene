@@ -58,7 +58,6 @@ const defaultPriorityArray = [
 export default class ThreeBackgroundCube extends ThreeSceneObject {
 	constructor(camera, controller) {
 		super();
-
 		//get initialized from loadCubeTextureFromPriorityArray
 		this.url = null;
 		this.loadOpacityMap = false;
@@ -258,8 +257,10 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 		skipLargest,
 		onBackgroundReady,
 		onBackgroundLoaded,
+		materialProperties,
 	) => {
 		this.url = url;
+		this.materialProperties = materialProperties;
 		if (opacityMapUrl) {
 			this.loadOpacityMap = true;
 		} else {
@@ -357,19 +358,17 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 
 	loadTileMaterialAsync = (tileUrl) => {
 		//return a single tile
-		return new Promise((resolve, reject) => {
-			this.loader.load(tileUrl, (texture) => {
-				texture.minFilter = THREE.LinearMipmapNearestFilter;
-				texture.magFilter = THREE.LinearFilter;
-				resolve(
-					new THREE.MeshBasicMaterial({
-						map: texture,
-						transparent: true,
-						depthTest: false,
-						depthWrite: true,
-						toneMapped: false,
-					}),
-				);
+		const transparent = this?.materialProperties?.transparent || false;
+		const depthTest = this?.materialProperties?.depth_test || true;
+		return this.loader.loadAsync(tileUrl).then((texture) => {
+			texture.minFilter = THREE.LinearMipmapNearestFilter;
+			texture.magFilter = THREE.LinearFilter;
+			return new THREE.MeshBasicMaterial({
+				map: texture,
+				transparent: transparent,
+				depthTest: depthTest,
+				depthWrite: true,
+				toneMapped: false,
 			});
 		});
 	};
@@ -401,7 +400,6 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 	};
 
 	// Build load order of cubemaps
-
 	resolveFaceMaterialIndexes = (faceGeometry, face) => {
 		// eslint-disable-line
 		let currentMaterialIndex = 0;
