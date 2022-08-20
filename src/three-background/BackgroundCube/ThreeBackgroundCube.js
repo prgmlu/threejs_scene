@@ -358,8 +358,9 @@ export default class ThreeBackgroundCube extends ThreeSceneObject {
 
 	loadTileMaterialAsync = (tileUrl) => {
 		//return a single tile
-		const transparent = this?.materialProperties?.transparent || false;
-		const depthTest = this?.materialProperties?.depth_test || true;
+		const transparent = this?.materialProperties?.transparent !== false;
+		const depthTest = this?.materialProperties?.depth_test || false;
+
 		return this.loader.loadAsync(tileUrl).then((texture) => {
 			texture.minFilter = THREE.LinearMipmapNearestFilter;
 			texture.magFilter = THREE.LinearFilter;
