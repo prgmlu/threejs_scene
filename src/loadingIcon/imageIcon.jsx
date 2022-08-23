@@ -4,7 +4,12 @@ import './imageIcon.scss';
 const LoadingIcon = ({ src }) => {
 	return (
 		<div className={'loading-icon-container'}>
-			<img src={src} />
+			<img
+				className={
+					src.slice(-3) === 'gif' ? 'loading-gif' : 'loading-image'
+				}
+				src={src}
+			/>
 		</div>
 	);
 };
