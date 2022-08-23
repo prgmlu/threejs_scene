@@ -32,7 +32,7 @@ export const threeEditorMouseEvents = (
 	const eventMouseEnd = new THREE.Vector2();
 
 	const raycaster = new THREE.Raycaster();
-	const hoveredMarkers = new Set();
+	let hoveredMarker = null;
 
 	const setMousePosition = (refToUpdate, e, isMobileEvent) => {
 		const rect = renderer.domElement.getBoundingClientRect();
@@ -131,10 +131,8 @@ export const threeEditorMouseEvents = (
 	};
 
 	const resetHovers = () => {
-		hoveredMarkers.forEach((marker) => {
-			marker.onUnhover();
-			hoveredMarkers.delete(marker);
-		});
+		hoveredMarker.onUnhover();
+		hoveredMarker = null;
 	};
 
 	const onMouseMove = (e) => {
@@ -155,29 +153,21 @@ export const threeEditorMouseEvents = (
 		//three cases,
 		// 1- new hover, 2- already hovered, 3- no hovers
 
-		//new hover, append to array and change svg string
-		// console.log(hoveredObjectsOriginalSvgStrings);
-		if (marker && !hoveredMarkers.has(marker)) {
-			// resetHovers(hovererdMarkers)
-
-			//a hovered marker, change opacity
-			// marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace('#c70a4c','black'))
-			// hoveredObjectsOriginalSvgStrings.set(marker, marker.svgSpriteComponent.svgString);
-			hoveredMarkers.add(marker);
-			// marker.userData.onHover(marker);
-			// console.log(marker.svgSpriteComponent.svgString.replace(/$\<path/g,"<path opacity='.9'"))
-			// debugger;
+		// Hovered and marker found
+		if (marker) {
+			// Marker not same as existing hoveredMarker
+			if (hoveredMarker && hoveredMarker !== marker) {
+				hoveredMarker.onUnhover();
+			}
+			// Mark hoveredMarker
+			hoveredMarker = marker;
 			marker.onHover();
-			// marker.svgSpriteComponent.setSVGString(marker.svgSpriteComponent.svgString.replace(/opacity='\.5'/g,"opacity='.9'"))
-			// console.log('EDITED')
-			// console.log(marker.svgSpriteComponent.svgString)
 		}
-		//second case, already hovered, do nothing
-		//no hovers, reset array
-		if (!marker && hoveredMarkers.size !== 0) {
-			resetHovers(hoveredMarkers);
+
+		// No hoveredMarker markers
+		if (!marker && hoveredMarker) {
+			resetHovers();
 		}
-		// console.log(sceneObject)
 
 		//call public callback
 		if (onMouseMoveCallback)
