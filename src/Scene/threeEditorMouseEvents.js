@@ -131,7 +131,7 @@ export const threeEditorMouseEvents = (
 	};
 
 	const resetHovers = () => {
-		hoveredMarker.onUnhover();
+		hoveredMarker?.onUnhover();
 		hoveredMarker = null;
 	};
 
