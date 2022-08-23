@@ -115,10 +115,11 @@ export default class HotspotMarker extends InteractionObject {
 	};
 
 	setAnimationScale = (baseScale, scale = 0.45) => {
-		this.sceneObject.scale.x = baseScale.x * scale;
-		this.sceneObject.scale.y = baseScale.y * scale;
-		this.sceneObject.scale.z = baseScale.z * scale;
-		this.visualObject?.scale.copy(this.sceneObject.scale);
+		this.visualObject?.scale.set(
+			baseScale.x * scale,
+			baseScale.y * scale,
+			baseScale.z * scale,
+		);
 	};
 
 	setHotspotAnimation = () => {
