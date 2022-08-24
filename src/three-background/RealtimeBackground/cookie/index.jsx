@@ -9,18 +9,18 @@ const Cookie = ({ handleClose }) => {
 	const [isCookieAll, setIsCookieAll] = useState(false);
 
 	return (
-		<div className="absolute bottom-0 right-[3.5%] sm:right-[2%] w-[95%] sm:w-2/5 h-fit flex flex-col py-2 px-4 gap-2 bg-white rounded-t-md">
+		<div className="absolute bottom-0 left-1/2 -translate-x-1/2  w-[95%] sm:w-2/5 h-fit flex flex-col py-2 px-4 gap-2 bg-white rounded-t-md">
 			<img
 				className="absolute top-1 right-1.5 cursor-pointer"
 				src={close}
 				onClick={handleClose}
 			/>
 			{isCookieSettings ? (
-				<div className="w-full flex flex-col gap-2">
-					<div className="font-sourceSansProBold text-lg">
+				<div className="w-full flex flex-col gap-2 items-center py-1">
+					<div className="w-[80%] font-sourceSansProBold text-center text-lg text-[#330D0D]">
 						Cookie Settings
 					</div>
-					<div className="flex items-center gap-2">
+					<div className="w-[80%] sm:w-[60%] flex items-center gap-2">
 						<Switch
 							checked={isCookieManage}
 							onChange={setIsCookieManage}
@@ -28,12 +28,14 @@ const Cookie = ({ handleClose }) => {
 							height={24}
 							uncheckedIcon={false}
 							checkedIcon={false}
+							onColor="#330D0D"
+							offColor="#846d6d"
 						/>
-						<label className="font-sourceSansProSemibold text-base">
+						<label className="font-sourceSansProSemibold text-[#330D0D] text-sm">
 							Allow essential cookies
 						</label>
 					</div>
-					<div className="flex items-center gap-2">
+					<div className="w-[80%] sm:w-[60%] flex items-center gap-2">
 						<Switch
 							checked={isCookieAll}
 							onChange={setIsCookieAll}
@@ -41,25 +43,27 @@ const Cookie = ({ handleClose }) => {
 							height={24}
 							uncheckedIcon={false}
 							checkedIcon={false}
+							onColor="#330D0D"
+							offColor="#846d6d"
 						/>
-						<label className="font-sourceSansProSemibold text-base">
+						<label className="font-sourceSansProSemibold text-[#330D0D] text-sm">
 							Allow necessary cookies
 						</label>
 					</div>
 				</div>
 			) : (
-				<div className="text-sm font-sourceSansProRegular">
+				<div className="text-sm font-sourceSansProRegular text-[#330D0D]">
 					This website collects cookies to deliver better user
 					experience.
 				</div>
 			)}
 			<div className="flex items-center gap-2">
-				<button className="w-1/2 h-fit px-2 py-1 border-2 border-black text-base font-sourceSansProRegular rounded cursor-pointer">
+				<button className="w-1/2 h-fit px-2 py-11 border-2 border-[#330D0D] text-[#330D0D] text-base font-sourceSansProRegular rounded cursor-pointer">
 					{isCookieSettings ? 'Allow all cookies' : 'Manage cookies'}
 				</button>
 				<button
 					onClick={() => setIsCookieSettings(true)}
-					className="w-1/2 h-fit px-2 py-1 bg-black text-base text-white font-sourceSansProRegular rounded cursor-pointer"
+					className="w-1/2 h-fit px-2 py-11 bg-[#330D0D] text-base text-white font-sourceSansProRegular rounded cursor-pointer"
 				>
 					{isCookieSettings
 						? 'Confirm my choices'

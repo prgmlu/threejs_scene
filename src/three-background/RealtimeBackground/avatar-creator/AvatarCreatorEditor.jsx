@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
-import cloth from '../static/avatar/menus/clothes.png';
-import body from '../static/avatar/menus/body.png';
-import skin from '../static/avatar/menus/skin.png';
+import TabControls from './customize/TabControls';
 import Outfit from './customize/Outfit';
-import SkinTone from './customize/SkinTone';
 import BodyShape from './customize/BodyShape';
+import Face from './customize/Face';
+import Makeup from './customize/Makeup';
+import { MobileOnlyView } from 'react-device-detect';
 
 function importImgsFolder(r) {
 	let images = [];
@@ -32,6 +32,7 @@ class AvatarCreatorEditor extends Component {
 				),
 			),
 			display: [
+
 				"https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png",
 				"https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png",
 				"https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png",
@@ -40,7 +41,8 @@ class AvatarCreatorEditor extends Component {
 				"https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png",
 				"https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png",
 				"https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png",
-			],
+			
+			]
 		};
 		this.currentScene = props?.currentScene;
 		this.currentAvatar = {};
@@ -51,8 +53,8 @@ class AvatarCreatorEditor extends Component {
 		selectedOutfit: -1,
 	};
 
-	onTabClick = (e) => {
-		this.setState({ activeTab: e.target.id });
+	onTabClick = (id) => {
+		this.setState({ activeTab: id });
 	};
 
 	setBodyType = (e) => {
@@ -87,49 +89,18 @@ class AvatarCreatorEditor extends Component {
 	// }
 
 	render() {
-		const { selectedOutfit } = this.state;
+		const { selectedOutfit, activeTab } = this.state;
 		return (
-			<div className="w-full sm:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-between relative">
-				<div className="w-full sm:w-[70%] h-[10%] sm:h-[12%] flex items-start justify-center gap-3">
-					<img
-						src={body}
-						alt="Body type"
-						id="1"
-						className={`${
-							this.state.activeTab == 1
-								? 'pt-2 pb-4 rounded-t-md'
-								: 'py-2 rounded-md'
-						} px-4 rounded-t-md flex justify-center cursor-pointer object-contain bg-[#D9D9D9]`}
-						onClick={this.onTabClick}
-					/>
-
-					<img
-						src={skin}
-						alt="Skin tone"
-						id="2"
-						className={`${
-							this.state.activeTab == 2
-								? 'pt-2 pb-5 rounded-t-md'
-								: 'py-2.5 rounded-md'
-						} px-4 rounded-t-md flex justify-center cursor-pointer object-contain bg-[#D9D9D9]`}
-						onClick={this.onTabClick}
-					/>
-					<img
-						src={cloth}
-						alt="Outfit"
-						id="3"
-						className={`${
-							this.state.activeTab == 3
-								? 'pt-2 pb-4 rounded-t-md'
-								: 'py-2 rounded-md'
-						} px-4 rounded-t-md flex justify-center cursor-pointer object-contain bg-[#D9D9D9]`}
-						onClick={this.onTabClick}
-					/>
-				</div>
-				<div className="w-[96%] sm:w-[70%] h-[87%] sm:h-[86%] bg-[#D9D9D9] rounded-md gap-x-2 pt-3 px-3">
-					{this.state.activeTab == 1 && <BodyShape />}
-					{this.state.activeTab == 2 && <SkinTone />}
-					{this.state.activeTab == 3 && (
+			<div className="w-full sm:w-1/2 md:w-2/5 lg:w-[45%] h-1/2 sm:h-full flex flex-col justify-between sm:justify-start items-center sm:items-start relative">
+				<TabControls
+					activeTab={activeTab}
+					onTabClick={this.onTabClick}
+				/>
+				<div className="w-[96%] sm:w-[70%] md:w-[80%] h-[87%] sm:h-[86%] md:h-[88%] lg:h-[80%] bg-white rounded-lg gap-x-2 pt-3 px-3">
+					{activeTab == 1 && <BodyShape />}
+					{activeTab == 2 && <Face />}
+					{activeTab == 3 && <Makeup />}
+					{activeTab == 4 && (
 						<Outfit
 							selectedOutfit={selectedOutfit}
 							maleOutfits={this.maleOutfits}
@@ -137,6 +108,13 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 				</div>
+				{!MobileOnlyView && (
+					<div className="w-[96%] sm:w-[70%] md:w-[80%] flex justify-center items-center py-3">
+						<button className="w-fit h-fit self-center text-[#330D0D] px-7 py-0.5 text-sm border-[1px] border-[#330D0D] rounded-md">
+							Save
+						</button>
+					</div>
+				)}
 			</div>
 		);
 	}
