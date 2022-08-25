@@ -266,7 +266,9 @@ const Scene = (props) => {
 			type,
 		);
 
-		if (Object.keys(orbitControlsConfig).length > 0) {
+		if (
+			Object.keys(orbitControlsConfig).length > 0
+		) {
 			controlsRef.current.setupControlsFromConfig(orbitControlsConfig);
 		}
 

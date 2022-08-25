@@ -1,17 +1,23 @@
 import * as THREE from 'three';
 import OrbitControls from './OrbitControls';
+import DeviceOrientationControls from './DeviceOrientationControls';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory';
-import { OculusHandModel } from 'three/examples/jsm/webxr/OculusHandModel';
+import { isAndroid } from 'react-device-detect';
 
 class ThreeController {
 	setupControls(camera, renderer, orbitControlsConfig) {
 		this.startDistance = null;
 		this.camera = camera;
-		this.controls = new OrbitControls(
-			this.camera,
-			renderer.domElement,
-			orbitControlsConfig,
-		);
+		this.controls = isAndroid
+			? new DeviceOrientationControls(this.camera, renderer.domElement)
+			: new OrbitControls(
+					this.camera,
+					renderer.domElement,
+					orbitControlsConfig,
+			  );
+		if (isAndroid) {
+			this.controls.connect();
+		}
 
 		// if (window.count > 1) {
 		renderer.domElement.addEventListener('touchend', (event) => {
@@ -41,9 +47,6 @@ class ThreeController {
 
 				this.startDistance = dist;
 			}
-			// if (!this.deviceOrientationEventFired) {
-			// 	this.deviceOrientationHandler(event);
-			// }
 		});
 		// }
 
