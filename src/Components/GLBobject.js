@@ -3,11 +3,12 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 export default class GLB_object extends THREE.Group {
-	constructor({ url, is_animation_on }) {
+	constructor({ url, is_animation_on, onModelLoaded }) {
 		super();
 		this.glbData = null;
 		this.model = null;
 		this.animations = null;
+		this.onModelLoaded = onModelLoaded;
 		this.clock = new THREE.Clock();
 		this.config = { url, is_animation_on };
 
@@ -54,7 +55,7 @@ export default class GLB_object extends THREE.Group {
 
 		if (this.glbData?.animations?.length > 0) this.handleAnimationLogic();
 		// else this.animations = false;
-
+		this.onModelLoaded && this.onModelLoaded();
 		// const boxHelper = new THREE.BoxHelper(this, 0x101010); //same as BoundingBoxHelper
 		// boxHelper.update();
 		// this.add(boxHelper);

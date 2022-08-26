@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import BackgroundCube from './BackgroundCube';
 import FlatBackground from './FlatBackground';
 import _3DModelScene from './_3DModelScene';

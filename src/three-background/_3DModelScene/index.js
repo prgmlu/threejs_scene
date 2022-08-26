@@ -8,7 +8,6 @@ const _3DModelScene = ({
 	_3dModelURL,
 	backgroundUrl,
 	onBackgroundReady,
-	onBackgroundLoaded,
 }) => {
 	const _3dModelRef = useRef();
 	const lightRef = useRef();
@@ -20,12 +19,12 @@ const _3DModelScene = ({
 			backgroundUrl,
 		});
 		scene.background = new THREE.Color('#79b1ee');
-		console.log('=> _3dModelURL', _3dModelURL);
 		if (_3dModelURL) {
-			_3dModelRef.current = new GLB_object({ url: _3dModelURL });
+			_3dModelRef.current = new GLB_object({
+				url: _3dModelURL,
+				onModelLoaded: onBackgroundReady,
+			});
 			_3dModelRef.current.position.set(0, -0.1, 0);
-			onBackgroundReady();
-			onBackgroundLoaded();
 			scene.add(_3dModelRef.current);
 			addAmbientLight();
 		}
