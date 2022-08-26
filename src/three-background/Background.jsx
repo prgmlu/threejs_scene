@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import BackgroundCube from './BackgroundCube';
 import FlatBackground from './FlatBackground';
+import _3DModelScene from './_3DModelScene';
 
 const Background = ({
 	scene,
@@ -14,53 +15,59 @@ const Background = ({
 	onBackgroundReady = () => {},
 	onBackgroundLoaded = () => {},
 }) => {
-	const [backgroundUrl, setBackgroundUrl] = useState('');
-	const [opacityMapUrl, setOpacityMapUrl] = useState('');
-	const [isFlatScene, setFlatScene] = useState(false);
-	const [imageIntegrity, setImageIntegrity] = useState(null);
-	const [useWebp, setUseWebp] = useState(false);
-	const [skipLargest, setSkipLargest] = useState(false);
-
-	console.log('%c >INIT: - Background', 'color:green', bgConf);
-
-	useEffect(() => {
-		console.log('%c >INIT: - Background', 'color:green');
-		if (bgConf) {
-			setFlatScene(bgConf.isFlatScene);
-			setBackgroundUrl(bgConf.backgroundUrl);
-			setOpacityMapUrl(bgConf.opacityMapUrl);
-			setImageIntegrity(bgConf?.imageIntegrity);
-			setUseWebp(bgConf?.useWebp);
-			setSkipLargest(bgConf?.skipLargest);
-		}
-	}, [bgConf]);
-
-	return isFlatScene ? (
-		<FlatBackground
-			backgroundUrl={backgroundUrl}
-			scene={scene}
-			resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
-			imageIntegrity={imageIntegrity}
-			enablePan={enablePan}
-			type={type}
-			onBackgroundReady={onBackgroundReady}
-			onBackgroundLoaded={onBackgroundLoaded}
-		/>
-	) : (
-		<BackgroundCube
-			backgroundUrl={backgroundUrl}
-			opacityMapUrl={opacityMapUrl}
-			camera={camera}
-			scene={scene}
-			linkedScenes={linkedScenes}
-			imageIntegrity={imageIntegrity}
-			useWebp={useWebp}
-			skipLargest={skipLargest}
-			controller={controller}
-			onBackgroundReady={onBackgroundReady}
-			onBackgroundLoaded={onBackgroundLoaded}
-			materialProperties={bgConf?.materialProperties}
-		/>
+	const sceneConfig = useMemo(
+		() => ({
+			sceneType: bgConf.sceneType,
+			backgroundUrl: bgConf.backgroundUrl,
+			_3model: bgConf._3model,
+			opacityMapUrl: bgConf?.opacityMapUrl,
+			imageIntegrity: bgConf?.imageIntegrity,
+			useWebp: bgConf?.useWebp,
+			skipLargest: bgConf?.skipLargest,
+		}),
+		[bgConf],
+	);
+	console.log('=> 3js: sceneConfig', sceneConfig);
+	return (
+		<>
+			{bgConf.sceneType === 'flat_scene' && (
+				<FlatBackground
+					backgroundUrl={sceneConfig.backgroundUrl}
+					scene={scene}
+					resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
+					imageIntegrity={sceneConfig.imageIntegrity}
+					enablePan={enablePan}
+					type={type}
+					onBackgroundReady={onBackgroundReady}
+					onBackgroundLoaded={onBackgroundLoaded}
+				/>
+			)}
+			{bgConf.sceneType === 'cubemap_scene' && (
+				<BackgroundCube
+					backgroundUrl={sceneConfig.backgroundUrl}
+					opacityMapUrl={sceneConfig.opacityMapUrl}
+					camera={camera}
+					scene={scene}
+					linkedScenes={linkedScenes}
+					imageIntegrity={sceneConfig.imageIntegrity}
+					useWebp={sceneConfig.useWebp}
+					skipLargest={sceneConfig.skipLargest}
+					controller={controller}
+					onBackgroundReady={onBackgroundReady}
+					onBackgroundLoaded={onBackgroundLoaded}
+					materialProperties={bgConf?.materialProperties}
+				/>
+			)}
+			{sceneConfig.sceneType === '3d_model_scene' && (
+				<_3DModelScene
+					backgroundUrl={sceneConfig.backgroundUrl}
+					scene={scene}
+					onBackgroundReady={onBackgroundReady}
+					onBackgroundLoaded={onBackgroundLoaded}
+					_3dModelURL={bgConf._3dModelURL}
+				/>
+			)}
+		</>
 	);
 };
 

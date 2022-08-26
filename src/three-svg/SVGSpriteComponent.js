@@ -44,7 +44,9 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 			}
 			this.setSVGString(icon, svgUrl);
 
-			const cacheKey = isNaN(rotation) ? `${svgUrl}` : `${svgUrl}${rotation}`;
+			const cacheKey = isNaN(rotation)
+				? `${svgUrl}`
+				: `${svgUrl}${rotation}`;
 			SVG_STRING_CACHE[cacheKey] = icon;
 		});
 	};
@@ -93,12 +95,12 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 	}
 
 	onHover = (svgUrl, userData) => {
-		this.setSvgFromUrl(svgUrl, userData)
+		this.setSvgFromUrl(svgUrl, userData);
 		document.body.style.cursor = 'pointer';
 	};
 
 	onUnhover = (svgUrl, userData) => {
-		this.setSvgFromUrl(svgUrl, userData)
+		this.setSvgFromUrl(svgUrl, userData);
 		document.body.style.cursor = 'default';
 	};
 
@@ -118,7 +120,8 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 			this.owner.setVisualObject(this.svgSprite);
 			this.owner.visualObject.renderOrder = 1000;
 			// In Oculus Browser, we need to enable the depth test, so the hotspot visual element is in position with the hotspot.
-			this.owner.visualObject.material.depthTest = browserName === 'Oculus Browser';
+			this.owner.visualObject.material.depthTest =
+				browserName === 'Oculus Browser';
 
 			if (this.owner.scene) {
 				this.owner.scene.add(this.owner.visualObject);

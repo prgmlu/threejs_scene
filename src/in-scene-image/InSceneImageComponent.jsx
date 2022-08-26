@@ -2,11 +2,7 @@ import * as THREE from 'three';
 import React, { useEffect, useRef } from 'react';
 
 const InSceneImageComponent = (props) => {
-	const {
-		src,
-		transform,
-		sceneRef,
-	} = props;
+	const { src, transform, sceneRef } = props;
 
 	const scene = sceneRef?.current;
 	let imageMeshRef = useRef(null);
@@ -23,7 +19,7 @@ const InSceneImageComponent = (props) => {
 
 	const addToScene = () => {
 		scene.add(imageMeshRef.current);
-	}
+	};
 
 	const setupImageMesh = () => {
 		const geometry = new THREE.PlaneGeometry(1, 1);
@@ -34,14 +30,14 @@ const InSceneImageComponent = (props) => {
 		let texture = loader.load(src);
 		texture.minFilter = THREE.LinearFilter;
 		texture.magFilter = THREE.LinearFilter;
-		
-        let material =  new THREE.MeshBasicMaterial( {
+
+		let material = new THREE.MeshBasicMaterial({
 			map: texture,
-			transparent:true,
-			side: THREE.DoubleSide
-		} );
+			transparent: true,
+			side: THREE.DoubleSide,
+		});
 		imageMeshRef.current = new THREE.Mesh(geometry, material);
-		imageMeshRef.current.renderOrder=2;
+		imageMeshRef.current.renderOrder = 2;
 	};
 
 	const onComponentUmount = () => {
@@ -52,9 +48,7 @@ const InSceneImageComponent = (props) => {
 			imageMeshRef.current.material.dispose();
 			imageMeshRef.current.geometry.dispose();
 		}
-
 	};
-
 
 	useEffect(() => {
 		setupImageMesh();

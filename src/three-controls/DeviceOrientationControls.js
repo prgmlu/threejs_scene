@@ -10,10 +10,7 @@
  */
 
 import * as THREE from 'three';
-import {
-	MAX_POLAR_ANGLE,
-	MIN_POLAR_ANGLE,
-} from '../utils/constants';
+import { MAX_POLAR_ANGLE, MIN_POLAR_ANGLE } from '../utils/constants';
 
 const DRAG_INTENT_ENUMS = Object.freeze({
 	UP: 'draggingUp',

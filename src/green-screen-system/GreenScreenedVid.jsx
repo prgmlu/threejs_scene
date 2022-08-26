@@ -1,39 +1,45 @@
 import * as THREE from 'three';
 
-const createGreenScreenMaterial = function (width, height, keyColor, similarity=.4, smoothness=0.135, spill=0.9) {
-  // THREE.ShaderMaterial.call(this);
-  let vals = ({
-    uniforms: {
-      tex: {
-        value: null
-      },
-      keyColor: {
-        value: new THREE.Color(keyColor)
-      },
-      texWidth: {
-        value: width
-      },
-      texHeight: {
-        value: height
-      },
-      similarity: {
-        value: similarity
-      },
-      smoothness: {
-        value: smoothness
-      },
-      spill: {
-        value: spill
-      }
-
-    },
-    vertexShader: `	varying vec2 vUv;
+const createGreenScreenMaterial = function (
+	width,
+	height,
+	keyColor,
+	similarity = 0.4,
+	smoothness = 0.135,
+	spill = 0.9,
+) {
+	// THREE.ShaderMaterial.call(this);
+	let vals = {
+		uniforms: {
+			tex: {
+				value: null,
+			},
+			keyColor: {
+				value: new THREE.Color(keyColor),
+			},
+			texWidth: {
+				value: width,
+			},
+			texHeight: {
+				value: height,
+			},
+			similarity: {
+				value: similarity,
+			},
+			smoothness: {
+				value: smoothness,
+			},
+			spill: {
+				value: spill,
+			},
+		},
+		vertexShader: `	varying vec2 vUv;
 
      void main() {
          vUv = uv;
          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
      }`,
-    fragmentShader: `        uniform sampler2D tex;
+		fragmentShader: `        uniform sampler2D tex;
      uniform float texWidth;
      uniform float texHeight;
 
@@ -72,40 +78,53 @@ const createGreenScreenMaterial = function (width, height, keyColor, similarity=
        gl_FragColor = ProcessChromaKey(texCoord);
      }`,
 
-    transparent: true,
-    opacity: 0
-  });
+		transparent: true,
+		opacity: 0,
+	};
 	let sMat = new THREE.ShaderMaterial();
 	sMat.side = THREE.DoubleSide;
 	sMat.setValues(vals);
 
 	return sMat;
+}; // ChromakeyMaterial
 
-} // ChromakeyMaterial
+export default function GreenScreenedVid(
+	vid,
+	pos,
+	rot,
+	keyColor,
+	similarity = 0.4,
+	smoothness = 0.135,
+	spill = 0.9,
+) {
+	var geometry = new THREE.PlaneGeometry(20, 20);
+	geometry.scale(-1, 1, 1);
 
-export default function GreenScreenedVid(vid, pos,rot,keyColor, similarity=.4, smoothness=0.135, spill=0.9) {
-    var geometry = new THREE.PlaneGeometry(20, 20);
-    geometry.scale(- 1, 1, 1);
-    
-    let material = createGreenScreenMaterial(1280, 720, keyColor, similarity, smoothness, spill);
+	let material = createGreenScreenMaterial(
+		1280,
+		720,
+		keyColor,
+		similarity,
+		smoothness,
+		spill,
+	);
 
-    var vidMesh = new THREE.Mesh(geometry, material);
+	var vidMesh = new THREE.Mesh(geometry, material);
 
-    vidMesh.position.x = pos.x;
-    vidMesh.position.y = pos.y;
-    vidMesh.position.z = pos.z;
+	vidMesh.position.x = pos.x;
+	vidMesh.position.y = pos.y;
+	vidMesh.position.z = pos.z;
 
-    vidMesh.rotation.x = rot.x;
-    vidMesh.rotation.y = rot.y;
-    vidMesh.rotation.z = rot.z;
+	vidMesh.rotation.x = rot.x;
+	vidMesh.rotation.y = rot.y;
+	vidMesh.rotation.z = rot.z;
 
-    
-    if(vid){
-    const video = vid;
+	if (vid) {
+		const video = vid;
 
-    var texture = new THREE.VideoTexture(video);
-    vidMesh.material.uniforms.tex.value = texture;
-    }
+		var texture = new THREE.VideoTexture(video);
+		vidMesh.material.uniforms.tex.value = texture;
+	}
 
-    return vidMesh;
+	return vidMesh;
 }

@@ -237,8 +237,9 @@ class GLBObj extends Component {
 		// );
 
 		// dracoLoader.setDecoderPath('../../node_modules/three/examples/js/libs/draco/gltf/');
-		dracoLoader.setDecoderPath('https://cdn.obsess-vr.com/charlotte-tilbury/gltf/');
-
+		dracoLoader.setDecoderPath(
+			'https://cdn.obsess-vr.com/charlotte-tilbury/gltf/',
+		);
 
 		dracoLoader.setDecoderConfig({ type: 'js' });
 		loader.setDRACOLoader(dracoLoader);
@@ -300,7 +301,9 @@ class GLBObj extends Component {
 		if (window?.rayCastingCheckingObjs) {
 			return this.raycaster.intersectObjects(
 				window.rayCastingCheckingObjs.concat(
-					this.props.sceneRef.current.children.filter((i) => i.type == 'Sprite'),
+					this.props.sceneRef.current.children.filter(
+						(i) => i.type == 'Sprite',
+					),
 				),
 			);
 		}
@@ -321,7 +324,8 @@ class GLBObj extends Component {
 		this.scene = this.props.scene || this.props.sceneRef.current;
 		this.camera = this.props?.camera || window.c.object;
 		this.controls = this.props?.controlers || window.c;
-		this.renderer = this.props.renderer || window['containerInstance_renderer'];
+		this.renderer =
+			this.props.renderer || window['containerInstance_renderer'];
 
 		if (CUSTOM_OBJ) {
 			const light = new THREE.DirectionalLight(0xffffff, 0.8);

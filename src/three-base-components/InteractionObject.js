@@ -82,8 +82,7 @@ export default class InteractionObject extends ThreeSceneObject {
 					// label functions
 					setArrowConfig: this.setArrowConfig,
 					setLabelStyling: this.setLabelStyling,
-					setContainerStyling: this.setContainerStyling
-
+					setContainerStyling: this.setContainerStyling,
 				},
 			},
 		});
