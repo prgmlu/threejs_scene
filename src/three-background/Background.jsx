@@ -27,7 +27,7 @@ const Background = ({
 		}),
 		[bgConf],
 	);
-	console.log('=> 3js: sceneConfig', sceneConfig);
+
 	return (
 		<>
 			{bgConf.sceneType === 'flat_scene' && (
