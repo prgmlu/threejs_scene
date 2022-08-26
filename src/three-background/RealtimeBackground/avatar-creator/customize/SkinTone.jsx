@@ -12,7 +12,7 @@ const SkinTone = ({ color, x, y, selectedIndex, setSelectedIndex }) => {
 			<button
 				onClick={() => setSelectedIndex({ x: x, y: y })}
 				style={{ backgroundColor: color }}
-				className={`w-10 sm:w-12 h-10 sm:h-12 rounded-full cursor-pointer border-2 ${
+				className={`w-10 sm:w-12 h-10_ sm:h-12 rounded-full cursor-pointer border-2 ${
 					x === selectedIndex.x &&
 					y === selectedIndex.y &&
 					'border-[#FF9F9F]'
