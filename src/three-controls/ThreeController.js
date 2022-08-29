@@ -71,6 +71,8 @@ class ThreeController {
 			this.controls.panSpeed = 75.0;
 			this.controls.screenSpacePanning = true;
 			this.controls.touches.ONE = THREE.TOUCH.PAN;
+		} else {
+			this.controls.touches.ONE = THREE.TOUCH.ROTATE;
 		}
 
 		// return this.controls;
