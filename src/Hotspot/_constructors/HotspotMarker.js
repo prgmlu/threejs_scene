@@ -53,6 +53,21 @@ export default class HotspotMarker extends InteractionObject {
 		if (this.onClickCallBack) {
 			this.onClickCallBack();
 		}
+		if (this.animation?.disable_on_interaction) {
+			const clickedHotspots = sessionStorage.getItem('clickedHotspots')
+				? JSON.parse(sessionStorage.getItem('clickedHotspots'))
+				: [];
+			if (!clickedHotspots.includes(this.userData?.props?.hotspotId)) {
+				const newClickedHotspots = [
+					...clickedHotspots,
+					this.userData?.props?.hotspotId,
+				];
+				sessionStorage.setItem(
+					'clickedHotspots',
+					JSON.stringify(newClickedHotspots),
+				);
+			}
+		}
 		this.hideLabel();
 	};
 
@@ -125,9 +140,18 @@ export default class HotspotMarker extends InteractionObject {
 	setHotspotAnimation = () => {
 		switch (this.animation.type) {
 			case 'pulsing': {
-				this.baseScale.setFromMatrixScale(this.transform);
-				this.clock.start();
-				this.setPulsingHotspot();
+				const clickedHotspots = sessionStorage.getItem(
+					'clickedHotspots',
+				)
+					? JSON.parse(sessionStorage.getItem('clickedHotspots'))
+					: [];
+				if (
+					!clickedHotspots.includes(this.userData?.props?.hotspotId)
+				) {
+					this.baseScale.setFromMatrixScale(this.transform);
+					this.clock.start();
+					this.setPulsingHotspot();
+				}
 				break;
 			}
 			default:
@@ -159,12 +183,22 @@ export default class HotspotMarker extends InteractionObject {
 				requestAnimationFrame(this.setPulsingHotspot);
 			} else {
 				// pause after every cycle for a given delay
-				this.animationCycle = hotspot_pulsing_frequency;
-				this.clock.stop();
-				setTimeout(() => {
-					this.clock.start();
-					requestAnimationFrame(this.setPulsingHotspot);
-				}, this.animationDelay);
+				const clickedHotspots = sessionStorage.getItem(
+					'clickedHotspots',
+				)
+					? JSON.parse(sessionStorage.getItem('clickedHotspots'))
+					: [];
+
+				if (
+					!clickedHotspots.includes(this.userData?.props?.hotspotId)
+				) {
+					this.animationCycle = hotspot_pulsing_frequency;
+					this.clock.stop();
+					setTimeout(() => {
+						this.clock.start();
+						requestAnimationFrame(this.setPulsingHotspot);
+					}, this.animationDelay);
+				}
 			}
 		}
 	};
