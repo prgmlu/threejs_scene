@@ -15,6 +15,7 @@ class ThreeController {
 					renderer.domElement,
 					orbitControlsConfig,
 			  );
+
 		if (isAndroid) {
 			this.controls.connect();
 		}
@@ -23,21 +24,22 @@ class ThreeController {
 		renderer.domElement.addEventListener('touchend', (event) => {
 			this.startDistance = null;
 		});
+
 		renderer.domElement.addEventListener('touchmove', (event) => {
 			if (event.touches.length !== 1) {
 				event.preventDefault();
 			}
 
 			if (event.touches.length === 2) {
-				var base = Math.abs(
+				const base = Math.abs(
 					event.touches[1].pageX - event.touches[0].pageX,
 				);
-				var height = Math.abs(
+				const height = Math.abs(
 					event.touches[1].pageY - event.touches[0].pageY,
 				);
-				var dist = Math.sqrt(base ** 2 + height ** 2);
-				var deltaDist = this.startDistance - dist;
-				var temp = this.camera.fov + deltaDist * 0.2;
+				const dist = Math.sqrt(base ** 2 + height ** 2);
+				const deltaDist = this.startDistance - dist;
+				const temp = this.camera.fov + deltaDist * 0.2;
 				// this.camera.position.x+=1;
 
 				if (temp > 20 && temp < 70) {

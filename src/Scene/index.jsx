@@ -11,7 +11,7 @@ import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
 import { threeEditorVREvents } from './threeEditorVREvents';
 import { Background, ColliderSphere } from '../three-background';
-import { browserName, isMobile } from 'react-device-detect';
+import { browserName, isDesktop, isMobile } from 'react-device-detect';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 import LoadingIcon from '../loadingIcon';
@@ -67,6 +67,7 @@ const Scene = (props) => {
 		type,
 		enablePan = false,
 		orbitControlsConfig = {},
+		cameraProperties = {},
 		loadingIconSrc = null,
 		onBackgroundLoaded = () => {},
 	} = props;
@@ -252,9 +253,33 @@ const Scene = (props) => {
 		vrHandsRef.current = vrHands;
 	};
 
+	const getZoomFromProperties = () => {
+		let zoomLevel = 1;
+		if (isMobile && 'mobile_zoom' in cameraProperties) {
+			if (cameraProperties.mobile_zoom !== 0) {
+				zoomLevel = cameraProperties.mobile_zoom;
+			}
+		}
+
+		if (isDesktop && 'desktop_zoom' in cameraProperties) {
+			if (cameraProperties.desktop_zoom !== 0) {
+				zoomLevel = cameraProperties.desktop_zoom;
+			}
+		}
+		return zoomLevel;
+	};
+
+	const setSceneCameraZoom = () => {
+		cameraRef.current.zoom = getZoomFromProperties();
+	};
+
 	const initRoomCamera = () => {
 		// Setup camera for scene
 		cameraRef.current = createOrGetCamera(canvasRef, type);
+		if (cameraProperties && Object.keys(cameraProperties).length > 0) {
+			setSceneCameraZoom();
+		}
+		// cameraRef.current.zoom = 1.75;
 		setupCamera(cameraRef.current);
 	};
 

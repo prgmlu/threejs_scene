@@ -101,8 +101,7 @@ export default function GreenScreenedVid(
 	geometry.scale(-1, 1, 1);
 
 	let material;
-	if(keyColor){
-
+	if (keyColor) {
 		material = createGreenScreenMaterial(
 			1280,
 			720,
@@ -110,15 +109,14 @@ export default function GreenScreenedVid(
 			similarity,
 			smoothness,
 			spill,
-			);
-		}
-		else{
-			material = new THREE.MeshBasicMaterial({
-				side: THREE.DoubleSide,
-				transparent: true,
-				opacity: 1,
-			});
-		}
+		);
+	} else {
+		material = new THREE.MeshBasicMaterial({
+			side: THREE.DoubleSide,
+			transparent: true,
+			opacity: 1,
+		});
+	}
 
 	var vidMesh = new THREE.Mesh(geometry, material);
 
@@ -134,10 +132,9 @@ export default function GreenScreenedVid(
 		const video = vid;
 
 		var texture = new THREE.VideoTexture(video);
-		if(keyColor){
-		vidMesh.material.uniforms.tex.value = texture;
-		}
-		else{
+		if (keyColor) {
+			vidMesh.material.uniforms.tex.value = texture;
+		} else {
 			vidMesh.material.map = texture;
 			vidMesh.material.needsUpdate = true;
 		}

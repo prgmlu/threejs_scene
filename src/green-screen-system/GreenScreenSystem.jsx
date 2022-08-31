@@ -145,13 +145,12 @@ class GreenScreenSystem extends Component {
 		// video.setAttribute('autoplay', 'true');
 		video.muted = true;
 		var texture = new THREE.VideoTexture(video);
-        if(this.keyColor){
+		if (this.keyColor) {
 			vidMesh.material.uniforms.tex.value = texture;
-        }
-        else{
-            vidMesh.material.map = texture;
-            vidMesh.material.needsUpdate = true;
-        }
+		} else {
+			vidMesh.material.map = texture;
+			vidMesh.material.needsUpdate = true;
+		}
 		return video;
 	};
 
