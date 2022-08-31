@@ -4,13 +4,20 @@ import check from '../../static/avatar/menus/check.png';
 import ColorTone from '../ColorTone';
 import SkinTone from './SkinTone';
 
-const BodyShape = () => {
+const BodyShape = ({currentAvatar}) => {
 	const [selectedShape, setSelectedShape] = useState({ x: 0, y: 0 });
 	const [selectedIndex, setSelectedIndex] = useState(0);
+	let counter = 0;
+
+	let bodyMesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
+	
 	const tones = [
 		['#F2D3CE', '#E0B0A6', '#C68D82', '#A36B60', '#7B4B41', '#502E2C'],
 		['#EAC2B9', '#CE9E8F', '#B27F6A', '#8E5D4E', '#643E31'],
-		['#F2D3CE', '#E0B0A6', '#C68D82', '#A36B60', '#7B4B41', '#502E2C'],
+		['#EFD5C8', '#DCB3A1', '#BF9077', '#9D6F55', '#754F38', '#4B3124'],
+		['#E4C8B2', '#CBA487', '#AA8163', '#876144', '#5D412B',],
+		['#EDD8C7', '#D5B69A', '#B99573', '#93724F', '#715236','#483320'],
+		['#E0C8B0', '#C5A57F', '#A5855E', '#81633D', '#594426'],
 	];
 
 	return (
@@ -70,16 +77,20 @@ const BodyShape = () => {
 						key={index}
 						className="flex flex-wrap justify-center items-center gap-2.5"
 					>
-						{group.map((t, idx) => (
-							<SkinTone
-								key={idx}
-								color={t}
-								x={index}
-								y={idx}
-								selectedIndex={selectedIndex}
-								setSelectedIndex={setSelectedIndex}
+						{group.map((t, idx) => {
+							counter++;
+						return	<SkinTone
+							mesh={bodyMesh}
+							key={counter}
+							counter = {counter}
+							color={t}
+							x={index}
+							y={idx}
+							selectedIndex={selectedIndex}
+							setSelectedIndex={setSelectedIndex}
 							/>
-						))}
+						}
+						)}
 					</div>
 				))}
 			</div>

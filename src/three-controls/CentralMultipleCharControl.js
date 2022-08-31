@@ -9,7 +9,7 @@ const ACTIVE = true;
 const USE_TOOLTIP = true;
 
 
-let SOCKET_SERVER_URL = (document.location.href.includes("127.0.0") || document.location.href.includes("localhost") ) ? 'http://192.168.1.122:8000/':"https://avbe.beta.obsess-vr.com/";
+let SOCKET_SERVER_URL = (document.location.href.includes("192.168") || document.location.href.includes("127.0.0") || document.location.href.includes("localhost") ) ? 'http://192.168.1.122:8000/':"https://avbe.beta.obsess-vr.com/";
 
 export default class CentralMultipleCharControls{
     constructor(mainCharControlsObj, otherChars,localAvatarNameRef, localAvatarOutfitStringRef, scene, camera){
@@ -58,6 +58,10 @@ export default class CentralMultipleCharControls{
             this.createSocketAndConnect();
             this.socket.on("connect", () => {
                 this.sendData(); // x8WIv7-mJelg7on_ALbx
+                window.setInterval(()=>{
+                    this.sendData();
+                }
+                ,1000);
               });
                 this.socket.on('message', this.handleMessage.bind(this));
                 this.socket.on('address', this.isNewAddress.bind(this));
@@ -108,14 +112,17 @@ export default class CentralMultipleCharControls{
             char.removeFromScene();
         }
     }
+    disconnectAll(){
+        for(let char of this.otherChars){
+            char.removeFromScene();
+        }
+        this.otherChars = [];
+    }
     
     
     handleMessage(event){
-        let data;
-            data = JSON.parse(event);
+        let data = JSON.parse(event);
 
-        //check if someone disconnected
-        
         for(let address in data){
             //ignore your address
             if(address ==this.address)
@@ -166,6 +173,21 @@ export default class CentralMultipleCharControls{
             
         let data = {};
         data[address] = {};
+        
+        let params = new URLSearchParams(window.location.search);
+
+        if(localStorage.getItem('shoptogether') && (!this.shoptogether)){
+            data[address].shoptogether = localStorage.getItem('shoptogether');
+            this.disconnectAll();
+            this.shoptogether = true;
+            this.sendData();
+        }
+
+        else if(params.has('shoptogether'))
+            data[address].shoptogether = params.get('shoptogether');
+
+        else data[address].shoptogether = null;
+            
         data[address].position = this.mainCharControlsObj.model.position;
         data[address].rotation = this.mainCharControlsObj.model.rotation;
         data[address].isWalking = this.mainCharControlsObj.isWalking;

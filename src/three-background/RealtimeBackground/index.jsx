@@ -140,8 +140,10 @@ function createRandomName(){
 }
 
 function getInitialAvatarOutfitString(){
+    debugger;
+    let x = predeterminedOutfitsWithHair;
     let randomNumber = Math.floor(Math.random() * Object.keys(predeterminedOutfitsWithHair).length);
-    return predeterminedOutfitsWithHair[randomNumber];
+    return x[randomNumber];
 }
 
 

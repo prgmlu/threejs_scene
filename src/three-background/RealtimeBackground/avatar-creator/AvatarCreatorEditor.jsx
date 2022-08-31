@@ -97,9 +97,9 @@ class AvatarCreatorEditor extends Component {
 					onTabClick={this.onTabClick}
 				/>
 				<div className="w-[96%] sm:w-[70%] md:w-[80%] h-[87%] sm:h-[86%] md:h-[88%] lg:h-[80%] bg-white rounded-lg gap-x-2 pt-3 px-3">
-					{activeTab == 1 && <BodyShape />}
-					{activeTab == 2 && <Face />}
-					{activeTab == 3 && <Makeup />}
+					{activeTab == 1 && <BodyShape currentAvatar={this.props.currentAvatar} />}
+					{activeTab == 2 && <Face currentAvatar={this.props.currentAvatar} />}
+					{activeTab == 3 && <Makeup currentAvatar={this.props.currentAvatar} />}
 					{activeTab == 4 && (
 						<Outfit
 							selectedOutfit={selectedOutfit}

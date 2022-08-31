@@ -38,7 +38,7 @@ class AvatarCreator extends Component {
 	};
 
 	loadAvatar = () => {
-		this.currentAvatar.position.set(0, -0.9, -2.7);
+		this.currentAvatar.position.set(0, -1.3, -3.1);
 		this.currentAvatar.rotation.set(0, 0, 0, 'XYZ');
 		this.scene.add(this.currentAvatar);
 	};
@@ -87,7 +87,7 @@ class AvatarCreator extends Component {
 
 	setZoom = (fov) => {
 		this.camera.fov = fov;
-		if (this.camera.fov < 30) this.camera.fov = 30;
+		if (this.camera.fov < 17) this.camera.fov = 17;
 		if (this.camera.fov > 50) this.camera.fov = 50;
 		this.camera.updateProjectionMatrix();
 	};
@@ -195,7 +195,7 @@ class AvatarCreator extends Component {
 							className="scale-75 sm:scale-100 md:scale-150 lg:scale-125"
 						></div>
 					</div>
-					<AvatarCreatorEditor currentScene={this.scene} />
+					{this.props.currentAvatar && <AvatarCreatorEditor currentAvatar={this.props.currentAvatar} currentScene={this.scene} />}
 				</div>
 
 				{MobileOnlyView ? (

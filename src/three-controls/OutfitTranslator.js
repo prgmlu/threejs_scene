@@ -12,6 +12,7 @@ const PINK_SHIRT_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Shirt2Pink_D.pn
 const WHITE_SHIRT_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Shirt2White_D.png";
 const BLACK_SHIRT_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Shirt2Black_D.png";
 
+
 export const setMeshTextureImage  = (mesh, url) =>{
     let textureLoader = new THREE.ImageBitmapLoader();
     textureLoader.load(url, (imageBitmap) => {
@@ -24,12 +25,40 @@ export const setMeshTextureImage  = (mesh, url) =>{
     });
 }
 
+const eyeMeshNames = [
+
+    'Eye',
+    'Eye2',
+    'Eye3',
+    'Eye4',
+
+
+]
+
+const avatarSkinNames = [
+
+    "FemaleAvatar_Body",
+    "FemaleAvatar_Body4",
+
+]
+
 export const getOutfitParts = (model, hide = false, hideHair=true) => {
     let hairs = [];
     let pants = [];
     let shirts = [];
     let shoes = [];
     let glasses = [];
+    let noses = [];
+    let mouthLips = [];
+    let eyeBrows = [];
+    let eyeLashes = [];
+    let eyeLids = [];
+    let eyes = [];
+    let skirts = [];
+
+    let avatarSkins = []
+    
+    
 
     model.traverse((child) => {
             if (child.name.toLowerCase().includes("hair")) {
@@ -62,6 +91,56 @@ export const getOutfitParts = (model, hide = false, hideHair=true) => {
                     child.visible = false;
                 }
             }
+            if (child.name.toLowerCase().includes("nose")) {
+                noses.push(child);
+                if (hide) {
+                    child.visible = false;
+                }
+            }
+            if (child.name.toLowerCase().includes("mouth")) {
+                mouthLips.push(child);
+                if (hide) {
+                    child.visible = false;
+                }
+            }
+            if (child.name.toLowerCase().includes("eyebrow")) {
+                eyeBrows.push(child);
+                if (hide) {
+                    child.visible = false;
+                }
+            }
+            if (child.name.toLowerCase().includes("eyelash")) {
+                eyeLashes.push(child);
+                if (hide) {
+                    child.visible = false;
+                }
+            }
+            if (child.name.toLowerCase().includes("eyelid")) {
+                eyeLids.push(child);
+                if (hide) {
+                    child.visible = false;
+                }
+            }
+            if (eyeMeshNames.includes(child.name)) {
+                eyes.push(child);
+                if (hide) {
+                    child.visible = false;
+                }
+            }
+            if (child.name.toLowerCase().includes("skirt")) {
+                skirts.push(child);
+                if (hide) {
+                    child.visible = false;
+                }
+            }
+
+            if (avatarSkinNames.includes(child.name)) {
+                avatarSkins.push(child);
+                if (hide) {
+                    child.visible = false;
+                }
+            }
+
     });
 
     return {
@@ -69,7 +148,15 @@ export const getOutfitParts = (model, hide = false, hideHair=true) => {
         pants,
         shirts,
         shoes,
-        glasses
+        glasses,
+        noses,
+        mouthLips,
+        eyeBrows,
+        eyeLashes,
+        eyeLids,
+        eyes,
+        skirts,
+        avatarSkins
     };
     
 }
@@ -80,7 +167,15 @@ export const getOutfitStringFromModel = (model, hairColor, pantsColor, shirtColo
         pants,
         shirts,
         shoes,
-        glasses
+        glasses,
+        noses,
+        mouthLips,
+        eyeBrows,
+        eyeLashes,
+        eyeLids,
+        eyes,
+        skirts,
+        avatarSkins
     } = getOutfitParts(model);
 
     let hairMesh = hairs.find(mesh => mesh.visible);
@@ -88,6 +183,14 @@ export const getOutfitStringFromModel = (model, hairColor, pantsColor, shirtColo
     let shirtMesh = shirts.find(mesh => mesh.visible);
     let shoesMesh = shoes.find(mesh => mesh.visible);
     let glassesMesh = glasses.find(mesh => mesh.visible);
+    let noseMesh = noses.find(mesh => mesh.visible);
+    let mouthLipsMesh = mouthLips.find(mesh => mesh.visible);
+    let eyeBrowsMesh = eyeBrows.find(mesh => mesh.visible);
+    let eyeLashesMesh = eyeLashes.find(mesh => mesh.visible);
+    let eyeLidsMesh = eyeLids.find(mesh => mesh.visible);
+    let eyeMesh = eyes.find(mesh => mesh.visible);
+    let skirtMesh = skirts.find(mesh => mesh.visible);
+    let avatarSkinMesh = avatarSkins.find(mesh => mesh.visible);
 
     let outfitObj = {
         hairMesh: hairMesh.name,
@@ -95,9 +198,18 @@ export const getOutfitStringFromModel = (model, hairColor, pantsColor, shirtColo
         glassesMesh: glassesMesh.name,
         shirtMesh: shirtMesh.name,
         shoesMesh: shoesMesh? shoesMesh.name :null,
+        mouthLipsMesh: mouthLipsMesh,
+        eyeBrowsMesh: eyeBrowsMesh,
+        eyeLashesMesh: eyeLashesMesh,
+        eyeLidsMesh: eyeLidsMesh,
+        eyeMesh: eyeMesh,
+        skirtMesh: skirtMesh,
+        noseMesh: noseMesh,
         hairColor: hairColor,
         pantsColor: pantsColor,
-        shirtColor: shirtColor
+        shirtColor: shirtColor,
+        avatarSkinMesh: avatarSkinMesh,
+
     };
 
     return JSON.stringify(outfitObj);
@@ -122,7 +234,15 @@ export const dressUpFromString = (model, outfitString) => {
         pants,
         shirts,
         shoes,
-        glasses
+        glasses,
+        noses,
+        mouthLips,
+        eyeBrows,
+        eyeLashes,
+        eyeLids,
+        eyes,
+        skirts,
+        avatarSkins
     } = getOutfitParts(model, true, (outfit.hairMesh)? true : false);
 
         if(outfit.hairMesh){
@@ -178,12 +298,47 @@ export const dressUpFromString = (model, outfitString) => {
     if(shoesMesh)
         shoesMesh.visible = true;
 
+    let noseMesh = noses.find(mesh => mesh.name === outfit.noseMesh);
+    if(noseMesh)
+        noseMesh.visible = true;
+
     let glassesMesh = glasses.find(mesh => mesh.name === outfit.glassesMesh);
     if(glassesMesh)
         glassesMesh.visible = true;
 
+    let mouthLipsMesh = mouthLips.find(mesh => mesh.name === outfit.mouthLipsMesh);
+    if(mouthLipsMesh)
+        mouthLipsMesh.visible = true;
+
+    let eyeBrowsMesh = eyeBrows.find(mesh => mesh.name === outfit.eyeBrowsMesh);
+    if(eyeBrowsMesh)
+        eyeBrowsMesh.visible = true;
+
+    let eyeLashesMesh = eyeLashes.find(mesh => mesh.name === outfit.eyeLashesMesh);
+    if(eyeLashesMesh)
+        eyeLashesMesh.visible = true;
+
+    let eyeLidsMesh = eyeLids.find(mesh => mesh.name === outfit.eyeLidsMesh);
+    if(eyeLidsMesh)
+        eyeLidsMesh.visible = true;
+    
+    let eyeMesh = eyes.find(mesh => mesh.name === outfit.eyeMesh);
+    if(eyeMesh)
+        eyeMesh.visible = true;
+    
+    let avatarSkinMesh = avatarSkins.find(mesh => mesh.name === outfit.avatarSkinMesh);
+    if(avatarSkinMesh)
+        avatarSkinMesh.visible = true;
+
     let pantsMesh = pants.find(mesh => mesh.name === outfit.pantsMesh);
-    pantsMesh.visible = true;
+    if(pantsMesh)
+        pantsMesh.visible = true;
+
+    let skirtMesh = skirts.find(mesh => mesh.name === outfit.skirtMesh);
+    if(skirtMesh)
+        skirtMesh.visible = true;
+    
+    
 
     if (outfit.pantsColor == 'blue') {
         setMeshTextureImage(pantsMesh, BLUE_PANTS_TEXTURE);
@@ -196,7 +351,9 @@ export const dressUpFromString = (model, outfitString) => {
     }
 
     let shirtMesh = shirts.find(mesh => mesh.name === outfit.shirtMesh);
-    shirtMesh.visible = true;
+    debugger;
+    if(shirtMesh)
+        shirtMesh.visible = true;
 
 
     if (outfit.shirtColor == 'pink') {

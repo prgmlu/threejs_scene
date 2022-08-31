@@ -13,7 +13,10 @@ let charTypeMap = {
         // url:"https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v004.glb",
 
         // url:"https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb",
-        url:"https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_003.glb",
+        // url:"https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_v005.glb",
+        url:"https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_v006.glb",
+        // url:"https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver2.glb",
+
 
         scale: 1,
     }

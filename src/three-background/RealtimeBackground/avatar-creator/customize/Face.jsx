@@ -9,11 +9,76 @@ import d_hair from '../../static/avatar/demo/demo_hair.png';
 import d_eyelash from '../../static/avatar/demo/demo_eyelashes.png';
 import d_eye from '../../static/avatar/demo/demo_eyes.png';
 
-const Face = () => {
+let setHairMesh = (index,currentAvatar) => {
+	let hairNames = [
+		'Hair1',
+		'Hair2',
+		'Hair3',
+		'Hair4',
+		'Hair5',
+	]
+	hairNames.forEach((i)=>{
+		try{
+			currentAvatar.getChildByName(i).visible = false;
+		}
+		catch(e){
+			console.log(e);
+		}
+	});
+
+	let hairMeshName = 'Hair' + (index+1);
+	currentAvatar.getChildByName(hairMeshName).visible = true;
+}
+
+
+
+let setEyebroMesh = (index,currentAvatar) => {
+
+
+	let eyebrowNames = [
+		'Eyebrow1',
+		'Eyebrow2',
+		'Eyebrow3',
+		'Eyebrow4',
+		'Eyebrow5',
+	]
+	eyebrowNames.forEach((i)=>{
+		try{
+			currentAvatar.getChildByName(i).visible = false;
+		}
+		catch(e){
+			console.log(e);
+		}
+	}
+	);
+	
+	let eyebrowMeshName = 'Eyebrow' + (index+1);
+	currentAvatar.getChildByName(eyebrowMeshName).visible = true;
+}
+
+
+const Face = ({currentAvatar}) => {
 	const [selectedStyle, setSelectedStyle] = useState(0);
 	const [dataTones, setDataTones] = useState([]);
 	const [selectedTone, setSelectedTone] = useState(0);
+
 	const titles = ['Hair', 'Eyebrows', 'Eyes'];
+
+	let hairImages = [
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Hair1.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Hair2.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Hair3.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Hair4.png',
+	]
+
+	let eyebrowImages = [
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow1.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow2.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow3.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow4.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow5.png',
+	]
+
 	const demo_items_count = 30;
 
 	useEffect(() => {
@@ -21,14 +86,24 @@ const Face = () => {
 	}, [selectedTone]);
 
 	const getContents = (index) => {
+		let arr;
+		if(index === 0) {
+			arr = hairImages;
+		} else if(index === 1) {
+			arr = eyebrowImages
+		}
+		else if(index === 2) {
+			arr = hairImages
+		}
 		let temp = [];
-		for (let i = 0; i < demo_items_count; i++) {
+		// for (let i = 0; i < demo_items_count; i++) {
+		for (let i = 0; i < arr.length; i++) {
 			switch (index) {
 				case 0:
-					temp.push(d_hair);
+					temp.push(arr[i]);
 					break;
 				case 1:
-					temp.push(d_eyelash);
+					temp.push(arr[i]);
 					break;
 				case 2:
 					temp.push(d_eye);
@@ -75,7 +150,9 @@ const Face = () => {
 						/>
 					</div>
 				</div>
-				<ColorTone title={titles[selectedTone]} />
+				<ColorTone title={titles[selectedTone]} currentAvatar={currentAvatar}
+				selectedTone={selectedTone}
+				 />
 				<div className="w-full h-full flex flex-wrap justify-between gap-y-1 px-1 pb-2 sm:my-2 overflow-y-auto scrollbar-[2px] scrollbar-thumb-gray-500 scrollbar-track-gray-200">
 					{dataTones.map((item, index) => (
 						<div key={index} className="w-fit h-fit relative p-1">
@@ -91,7 +168,16 @@ const Face = () => {
 									'border-2 border-[#FF9F9F]'
 								}`}
 								alt=""
-								onClick={() => setSelectedStyle(index)}
+								onClick={() => {setSelectedStyle(index);
+									if(selectedTone === 0) {
+									 setHairMesh(index, currentAvatar);
+									} else if(selectedTone === 1) {
+										setEyebroMesh(index, currentAvatar);
+									} else if(selectedTone === 2) {
+										// setEyeMesh(index, currentAvatar);
+									}
+
+									}}
 							/>
 						</div>
 					))}

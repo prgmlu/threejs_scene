@@ -37,6 +37,16 @@ const getRenderer = (sceneId = '', type) => {
 	return ret;
 };
 
+const createOrGetScene = () => {
+	if (window.scene) {
+		return window.scene;
+	}
+	const scene = new THREE.Scene();
+	window.scene = scene;
+	localStorage.clear();
+	return scene;
+}
+
 const createOrGetCamera = (camType, canvasRef, sceneId = '', type) => {
 	const aspectRatio =
 		canvasRef.current.offsetWidth / canvasRef.current.offsetHeight;
@@ -143,9 +153,8 @@ const Scene = (props) => {
 	const timeOutRef = useRef(null);
 	const [UI, setUI] = useState();
 	//Scene
-	const sceneRef = useRef(new THREE.Scene());
+	const sceneRef = useRef( createOrGetScene() );
 	const scene = sceneRef.current;
-	window.scene = scene;
 
 	//Renderer
 	const rendererRef = useRef(getRenderer(sceneId, type));

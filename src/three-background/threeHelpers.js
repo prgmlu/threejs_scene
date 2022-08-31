@@ -16,8 +16,11 @@ import { dressUpFromString } from '../three-controls/OutfitTranslator';
 import { GUI } from 'dat.gui';
 import {USE_OLD_CHARACTER_MODEL, SHADOW_MAP_TYPE, SHADOW_ENABLED} from '../three-background/RealtimeBackground/avatar-creator/CustomizationConstants.js';
 
+let USE_OUTFIT_TRANSLATION = false;
 
-let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_003.glb" ;
+
+let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_v006.glb" ;
+// let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver2.glb" ;
 
 const DEBUG_LIGHTS = false;
 
@@ -42,9 +45,22 @@ export const hideAllExceptFirstClothItem = (model) => {
 	let hairs = []
 	let pants = []
 	let shirts = []
+	let shoes = []
+	let glasses = []
+
 	model.traverse((i)=>{
 		if(i.name.includes('Hair')){
 			hairs.push(i);
+			i.visible=false;
+		}
+
+		if(i.name.includes('Glasses')){
+			glasses.push(i);
+			i.visible=false;
+		}
+
+		if(i.name.includes('Shoes')){
+			shoes.push(i);
 			i.visible=false;
 		}
 
@@ -59,9 +75,22 @@ export const hideAllExceptFirstClothItem = (model) => {
 		}
 
 	});
-	hairs[0].visible=true;
-	pants[0].visible=true;
-	shirts[0].visible=true;
+
+	var choice = Math.floor(Math.random() * hairs.length);
+	if(hairs[choice])
+		hairs[choice].visible=true;
+	// choice = Math.floor(Math.random() * glasses.length);
+	// if(glasses[choice])
+	// 	glasses[choice].visible=true;
+	choice = Math.floor(Math.random() * shoes.length);
+	if(shoes[choice])
+		shoes[choice].visible=true;
+	choice = Math.floor(Math.random() * pants.length);
+	if(pants[choice])
+		pants[choice].visible=true;
+	choice = Math.floor(Math.random() * shirts.length);
+	if(shirts[choice])
+		shirts[choice].visible=true;
 }
 
 
@@ -231,9 +260,18 @@ export const loadModelAndAnimations = async (outfitString) => {
 
 			window.model = model;
 
+			if(USE_OUTFIT_TRANSLATION){
+				dressUpFromString(data.scene,outfitString)
+			}
+			else{
+				hideAllExceptFirstClothItem(data.scene)
+			}
+
 
 			// hideAllExceptFirstClothItem(data.scene)
+			debugger;
 			dressUpFromString(data.scene,outfitString)
+
 
 
 
