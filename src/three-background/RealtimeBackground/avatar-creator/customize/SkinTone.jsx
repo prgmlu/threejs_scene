@@ -18,7 +18,7 @@ const SkinTone = ({ color, x, y, selectedIndex, setSelectedIndex, counter, mesh 
 				</span>
 			)}
 			<button
-				onClick={() => {setSelectedIndex({ x: x, y: y }); swapSkinTexture(counter, mesh)}}
+				onClick={() => {setSelectedIndex({ x: x, y: y });swapSkinTexture(counter, mesh)}}
 				style={{ backgroundColor: color }}
 				className={`w-10 sm:w-12 h-10_ sm:h-12 rounded-full cursor-pointer border-2 ${
 					x === selectedIndex.x &&
