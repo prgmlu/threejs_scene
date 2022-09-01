@@ -1,27 +1,16 @@
 import * as THREE from 'three';
 import OrbitControls from './OrbitControls';
-import DeviceOrientationControls from './DeviceOrientationControls';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory';
 
 class ThreeController {
-	setupControls(camera, renderer, orbitControlsConfig, controllerType) {
+	setupControls(camera, renderer, orbitControlsConfig) {
 		this.startDistance = null;
 		this.camera = camera;
-		this.controllerType = controllerType;
-
-		if (controllerType === 'DeviceOrientation') {
-			this.controls = new DeviceOrientationControls(
-				this.camera,
-				renderer.domElement,
-			);
-			this.controls.connect();
-		} else {
-			this.controls = new OrbitControls(
-				this.camera,
-				renderer.domElement,
-				orbitControlsConfig,
-			);
-		}
+		this.controls = new OrbitControls(
+			this.camera,
+			renderer.domElement,
+			orbitControlsConfig,
+		);
 
 		// if (window.count > 1) {
 		renderer.domElement.addEventListener('touchend', (event) => {

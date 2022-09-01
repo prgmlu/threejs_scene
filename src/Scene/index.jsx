@@ -40,23 +40,17 @@ const createOrGetControls = (
 	renderer,
 	orbitControlsConfig,
 	type,
-	controllerType,
 ) => {
 	const controllerKey = `${type}_controller`;
 
 	if (window[controllerKey]) {
-		if (window[controllerKey].controllerType === controllerType) {
-			return window[controllerKey];
-		} else {
-			window[controllerKey].dispose();
-		}
+		return window[controllerKey];
 	}
 
 	window[controllerKey] = ThreeController.setupControls(
 		cameraRef.current,
 		renderer,
 		orbitControlsConfig,
-		controllerType,
 	);
 	return window[controllerKey];
 };
@@ -289,20 +283,14 @@ const Scene = (props) => {
 	};
 
 	const initRoomControls = () => {
-		const controllerType =
-			!bgConf?.isFlatScene && isAndroid ? 'DeviceOrientation' : 'Orbit';
-
 		controlsRef.current = createOrGetControls(
 			cameraRef,
 			renderer,
 			orbitControlsConfig,
 			type,
-			controllerType,
 		);
 
-		if (Object.keys(orbitControlsConfig).length > 0) {
-			controlsRef.current.setupControlsFromConfig(orbitControlsConfig);
-		}
+		controlsRef.current.setupControlsFromConfig(orbitControlsConfig);
 
 		// Disable Rotate for flat scene
 		const enableRotate = !bgConf?.isFlatScene;
