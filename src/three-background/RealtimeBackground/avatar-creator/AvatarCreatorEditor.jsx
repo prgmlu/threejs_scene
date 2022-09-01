@@ -51,7 +51,27 @@ class AvatarCreatorEditor extends Component {
 		activeTab: 1,
 		bodyType: 'male',
 		selectedOutfit: -1,
+		selectedSkintone:1,
+		skintoneX:0,
+		skintoneY:0,
+		selectedMakeup: null,
 	};
+
+	setSkintoneXY(x,y){
+		this.setState({skintoneX:x,skintoneY:y});
+	}
+
+	setSelectedSkintone = (skintone) => {
+		this.setState({
+			selectedSkintone:skintone
+		});
+	}
+
+	setSelectedMakeup = (makeup) => {
+		this.setState({
+			selectedMakeup:makeup
+		});
+	}
 
 	onTabClick = (id) => {
 		this.setState({ activeTab: id });
@@ -97,9 +117,9 @@ class AvatarCreatorEditor extends Component {
 					onTabClick={this.onTabClick}
 				/>
 				<div className="w-[96%] sm:w-[70%] md:w-[80%] h-[87%] sm:h-[86%] md:h-[88%] lg:h-[80%] bg-white rounded-lg gap-x-2 pt-3 px-3">
-					{activeTab == 1 && <BodyShape currentAvatar={this.props.currentAvatar} />}
-					{activeTab == 2 && <Face currentAvatar={this.props.currentAvatar} />}
-					{activeTab == 3 && <Makeup currentAvatar={this.props.currentAvatar} />}
+					{activeTab == 1 && <BodyShape skintoneX={this.state.skintoneX} skintoneY={this.state.skintoneY} setSkintonXY={this.setSkintoneXY.bind(this)} selectedMakeup={this.state.selectedMakeup} setSelectedSkintone={this.setSelectedSkintone.bind(this)} currentAvatar={this.props.currentAvatar} />}
+					{activeTab == 2 && <Face selectedSkintone={this.state.selectedSkintone}  currentAvatar={this.props.currentAvatar} />}
+					{activeTab == 3 && <Makeup selectedMakeup={this.state.selectedMakeup} setSelectedMakeup={this.setSelectedMakeup.bind(this)} selectedSkintone={this.state.selectedSkintone} currentAvatar={this.props.currentAvatar} />}
 					{activeTab == 4 && (
 						<Outfit
 							selectedOutfit={selectedOutfit}

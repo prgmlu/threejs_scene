@@ -8,13 +8,33 @@ import check from '../../static/avatar/menus/check.png';
 import d_eyelash from '../../static/avatar/demo/demo_eyelashes.png';
 import d_eye from '../../static/avatar/demo/demo_eyes.png';
 import d_face from '../../static/avatar/demo/demo_face.png';
+import { setMeshTextureImage } from '../../../../three-controls/OutfitTranslator';
 
-const Makeup = () => {
+let setMakeupFromTexture = (index,currentAvatar,selectedSkintone) => {
+	let ind = index +1;
+	let url = `https://cdn.obsess-vr.com/realtime3d/skintone-makeup-512/Sk${selectedSkintone}_FemaleAvatar${ind}_D.png`;
+	console.log(url)
+	// swap the texture of the mesh
+	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
+	debugger;
+	setMeshTextureImage(mesh, url);
+	// return;
+}
+
+const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMakeup}) => {
 	const [selectedStyle, setSelectedStyle] = useState(0);
 	const [dataTones, setDataTones] = useState([]);
 	const [selectedTone, setSelectedTone] = useState(0);
 	const titles = ['Makeup', 'Eyebrows', 'Eyes'];
 	const demo_items_count = 30;
+
+	let makeupImages = [
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup1.png',
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup2.png',
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup3.png',
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup4.png',
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup5.png',
+	]
 
 	useEffect(() => {
 		getContents(selectedTone);
@@ -22,16 +42,16 @@ const Makeup = () => {
 
 	const getContents = (index) => {
 		let temp = [];
-		for (let i = 0; i < demo_items_count; i++) {
+		for (let i = 0; i < makeupImages.length; i++) {
 			switch (index) {
 				case 0:
-					temp.push(d_face);
+					temp.push(makeupImages[i]);
 					break;
 				case 1:
-					temp.push(d_eyelash);
+					temp.push(makeupImages[i]);
 					break;
 				case 2:
-					temp.push(d_eye);
+					temp.push(makeupImages[i]);
 					break;
 			}
 		}
@@ -79,7 +99,7 @@ const Makeup = () => {
 				<div className="w-full h-full flex flex-wrap justify-between gap-y-1 px-1 pb-2 sm:my-2 overflow-y-auto scrollbar-[2px] scrollbar-thumb-gray-500 scrollbar-track-gray-200">
 					{dataTones.map((item, index) => (
 						<div key={index} className="w-fit h-fit relative p-1">
-							{selectedStyle === index && (
+							{selectedMakeup === index && (
 								<span className="absolute top-0 right-0 w-3 h-3 object-contain">
 									<img src={check} alt="o" />
 								</span>
@@ -91,11 +111,11 @@ const Makeup = () => {
 										? 'w-fit h-14'
 										: 'w-[64px] sm:w-[72px] h-99 px-2 py-11'
 								} object-contain rounded  cursor-pointer shadow-md bg-white ${
-									selectedStyle === index &&
+									selectedMakeup === index &&
 									'border-2 border-[#FF9F9F]'
 								}`}
 								alt=""
-								onClick={() => setSelectedStyle(index)}
+								onClick={() => {setSelectedStyle(index);setSelectedMakeup(index); setMakeupFromTexture(index,currentAvatar,selectedSkintone);}}
 							/>
 						</div>
 					))}

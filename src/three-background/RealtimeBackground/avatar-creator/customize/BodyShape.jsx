@@ -4,9 +4,9 @@ import check from '../../static/avatar/menus/check.png';
 import ColorTone from '../ColorTone';
 import SkinTone from './SkinTone';
 
-const BodyShape = ({currentAvatar}) => {
-	const [selectedShape, setSelectedShape] = useState({ x: 0, y: 0 });
-	const [selectedIndex, setSelectedIndex] = useState(0);
+const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkintonXY, skintoneX, skintoneY}) => {
+	const [selectedShape, setSelectedShape] = useState(1);
+	// const [selectedIndex, setSelectedIndex] = useState({ x: skinToneX || 0, y: skinToneY || 0 });
 	let counter = 0;
 
 	let bodyMesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
@@ -86,8 +86,12 @@ const BodyShape = ({currentAvatar}) => {
 							color={t}
 							x={index}
 							y={idx}
-							selectedIndex={selectedIndex}
-							setSelectedIndex={setSelectedIndex}
+							selectedMakeup={selectedMakeup}
+							// selectedIndex={selectedIndex}
+							skintoneX={skintoneX}
+							skintoneY={skintoneY}
+							setSelectedIndex={setSkintonXY}
+							setSelectedSkintone={setSelectedSkintone}
 							/>
 						}
 						)}
