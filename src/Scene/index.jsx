@@ -283,9 +283,7 @@ const Scene = (props) => {
 	const initRoomCamera = () => {
 		// Setup camera for scene
 		cameraRef.current = createOrGetCamera(canvasRef, type);
-		if (cameraProperties && Object.keys(cameraProperties).length > 0) {
-			setSceneCameraZoom();
-		}
+		setSceneCameraZoom();
 		// cameraRef.current.zoom = 1.75;
 		setupCamera(cameraRef.current);
 	};
