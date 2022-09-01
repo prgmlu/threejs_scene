@@ -56,6 +56,30 @@ let setEyebroMesh = (index,currentAvatar) => {
 	currentAvatar.getChildByName(eyebrowMeshName).visible = true;
 }
 
+let setEyeFromMorphTarget = (index,currentAvatar) => {
+	let morphTargetNames = [
+		'Eyelid1',
+		'Eyelid2',
+		'Eyelid3',
+		'Eyelid4',
+		'Eyelid5',
+		'Eyelid6',
+	];
+	let pts = [];model.traverse((i)=>pts.push(i))
+	let p = pts.filter((i)=>i.morphTargetInfluences)
+	let t=p[0];
+	let t2=p[1];
+	for (let i = 0; i < morphTargetNames.length; i++) {
+		let name = morphTargetNames[i];
+		t.morphTargetInfluences[t.morphTargetDictionary[name]] = 0;
+		t2.morphTargetInfluences[t.morphTargetDictionary[name]] = 0;
+	}
+	let ind = index+1;
+	let name = 'Eyelid' + ind;
+	t.morphTargetInfluences[t.morphTargetDictionary[name]] = 1;
+	t2.morphTargetInfluences[t.morphTargetDictionary[name]] = 1;
+}
+
 
 const Face = ({currentAvatar}) => {
 	const [selectedStyle, setSelectedStyle] = useState(0);
@@ -79,6 +103,15 @@ const Face = ({currentAvatar}) => {
 		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow5.png',
 	]
 
+	let eyeImages = [
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape1.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape2.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape3.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape4.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape5.png',
+		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape6.png',
+	]
+
 	const demo_items_count = 30;
 
 	useEffect(() => {
@@ -93,7 +126,7 @@ const Face = ({currentAvatar}) => {
 			arr = eyebrowImages
 		}
 		else if(index === 2) {
-			arr = hairImages
+			arr = eyeImages
 		}
 		let temp = [];
 		// for (let i = 0; i < demo_items_count; i++) {
@@ -106,7 +139,7 @@ const Face = ({currentAvatar}) => {
 					temp.push(arr[i]);
 					break;
 				case 2:
-					temp.push(d_eye);
+					temp.push(arr[i]);
 					break;
 			}
 		}
@@ -174,7 +207,7 @@ const Face = ({currentAvatar}) => {
 									} else if(selectedTone === 1) {
 										setEyebroMesh(index, currentAvatar);
 									} else if(selectedTone === 2) {
-										// setEyeMesh(index, currentAvatar);
+										setEyeFromMorphTarget(index, currentAvatar);
 									}
 
 									}}
