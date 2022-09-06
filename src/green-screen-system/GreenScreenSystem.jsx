@@ -47,13 +47,17 @@ class GreenScreenSystem extends Component {
 	constructor(props) {
 		super(props);
 		// alert(props.roomId);
+		this.id = props.id;
 		this.scene = this.props.scene || this.props.sceneRef.current;
 		this.srcs = this.props.srcs;
 		this.similarity = this.props.similarity;
 		this.smoothness = this.props.smoothness;
 		this.spill = this.props.spill;
 		this.keyColor = this.props.keyColor;
-
+		this.autoPlay = true;
+		if (props.autoPlay !== undefined) {
+			this.autoPlay = props.autoPlay;
+		}
 		this.positions = [
 			//front
 			{ x: -10 + 0.001, y: 0, z: 0 },
@@ -120,10 +124,19 @@ class GreenScreenSystem extends Component {
 			let vidSrc = src[face];
 			if (vidSrc) {
 				this.vids[i] = this.createVidDom(vidSrc, this.meshes[i]);
-				this.vids[i].play();
+				if (this.autoPlay) {
+					this.vids[i].play();
+				}
 			}
 		}
+
+		document.addEventListener('trigger_gss', this.triggerVideos);
 	}
+
+	triggerVideos = (event) => {
+		if (event.detail?.inSceneId === this.id)
+			this.vids.forEach((vid) => vid.play());
+	};
 
 	createVidDom = (src, vidMesh) => {
 		var video = document.createElement('video');
@@ -173,6 +186,8 @@ class GreenScreenSystem extends Component {
 				domVid.remove();
 			}
 		});
+
+		document.removeEventListener('trigger_gss', this.triggerVideos);
 	}
 
 	render() {
