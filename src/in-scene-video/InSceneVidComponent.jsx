@@ -142,7 +142,7 @@ const InSceneVidComponent = (props) => {
 		} else {
 			const material = createNormalVidMaterial(videoRef.current);
 			videoMeshRef.current = new THREE.Mesh(geometry, material);
-			videoMeshRef.current.renderOrder = 2;
+			videoMeshRef.current.renderOrder = 3;
 			videoMeshRef.current.material.depthTest = false;
 			videoMeshRef.current.material.depthWrite = false;
 		}
