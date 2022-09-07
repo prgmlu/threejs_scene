@@ -18,7 +18,7 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 		const material = new THREE.MeshBasicMaterial({
 			depthTest: false,
 			depthWrite: false,
-			// color: 'black',
+			color: 'black',
 			// wireframe:true
 		});
 
@@ -71,6 +71,7 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 				this.sceneObject.scale.set(this.width, 1, 1);
 			this.sceneObject.material.map = texture;
 			this.sceneObject.material.needsUpdate = true;
+			this.sceneObject.material.color = 'transparent';
 		}
 		this.setPanArea();
 	}
