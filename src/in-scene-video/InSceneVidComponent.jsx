@@ -134,7 +134,7 @@ const InSceneVidComponent = (props) => {
 				vShader,
 			);
 			videoMeshRef.current = new THREE.Mesh(geometry, material);
-			videoMeshRef.current.renderOrder = 2;
+			videoMeshRef.current.renderOrder = 3;
 			videoMeshRef.current.material.depthTest = false;
 			videoMeshRef.current.material.depthWrite = false;
 			videoMeshRef.current.material.uniforms.tex.value =
