@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { isMobile } from 'react-device-detect';
 import ThreeSceneObject from '../../three-base-components/ThreeSceneObject';
 
+THREE.Cache.enabled = true;
+
 export default class ThreeFlatBackground extends ThreeSceneObject {
 	constructor(enablePan, type) {
 		super();
