@@ -46,12 +46,12 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 
 	loadTexture = (url, onBackgroundReady = () => {}) => {
 		this.loader.load(url, (texture) => {
-			onBackgroundReady(true);
 			texture.minFilter = THREE.LinearFilter;
 			texture.magFilter = THREE.LinearFilter;
 			texture.wrapS = THREE.ClampToEdgeWrapping;
 			texture.wrapT = THREE.ClampToEdgeWrapping;
 			this.setMaterial(texture);
+			onBackgroundReady(true);
 		});
 	};
 

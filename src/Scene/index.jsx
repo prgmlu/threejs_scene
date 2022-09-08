@@ -71,6 +71,7 @@ const Scene = (props) => {
 		cameraProperties = {},
 		loadingIconSrc = null,
 		onBackgroundLoaded = () => {},
+		onBackgroundReady = () => {},
 	} = props;
 
 	const [threeReady, setThreeReady] = useState(false);
@@ -505,9 +506,10 @@ const Scene = (props) => {
 		if (props.onDrop) props.onDrop(e, position, maxRenderOrder);
 	};
 
-	const onBackgroundReady = () => {
+	const _onBackgroundReady = () => {
 		setShowLoadingIcon(false);
 		setRenderObjects(true);
+		onBackgroundReady(true);
 	};
 
 	return (
@@ -548,7 +550,7 @@ const Scene = (props) => {
 							enablePan={enablePan && isMobile}
 							type={type}
 							controller={controlsRef.current}
-							onBackgroundReady={onBackgroundReady}
+							onBackgroundReady={_onBackgroundReady}
 							onBackgroundLoaded={onBackgroundLoaded}
 						/>
 					</>

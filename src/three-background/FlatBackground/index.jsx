@@ -11,6 +11,7 @@ const FlatBackground = ({
 	enablePan = false,
 	type,
 	onBackgroundReady = () => {},
+	onBackgroundLoaded = () => {},
 }) => {
 	const flatBackground = useRef();
 
@@ -33,6 +34,11 @@ const FlatBackground = ({
 		};
 	}, []);
 
+	const onLoaded = () => {
+		onBackgroundReady();
+		onBackgroundLoaded();
+	};
+
 	useEffect(() => {
 		//sometimes we want to erase previously loaded image texture
 		//to avoid flickering
@@ -45,7 +51,7 @@ const FlatBackground = ({
 						? imageIntegrity
 						: formatDate(new Date(), 'mmddyyyyhh')
 				}`,
-				(e) => onBackgroundReady(e),
+				onLoaded,
 			);
 		}
 	}, [backgroundUrl]);
