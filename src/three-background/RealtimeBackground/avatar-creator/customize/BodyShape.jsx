@@ -21,9 +21,9 @@ const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkinto
 	];
 
 	return (
-		<div className="flex flex-col gap-2">
-			<div className="font-sourceSansProSemibold text-lg">Body Shape</div>
-			<div className="flex flex-wrap gap-x-4 gap-y-2">
+		<div className="w-full h-full flex flex-col gap-1">
+			<div className="h-[10%] font-sourceSansProSemibold text-lg">Body Shape</div>
+			<div className="h-fit flex flex-wrap gap-x-4 gap-y-2 py-1">
 				<button
 					onClick={() => setSelectedShape(1)}
 					className={`w-24 shadow-md ${
@@ -70,8 +70,9 @@ const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkinto
 					)}
 				</button>
 			</div>
-			<ColorTone title="Skin tone" />
-			<div className="w-full h-40 flex flex-col overflow-y-auto">
+			<div className="h-[70%] sm:h-[80%] flex flex-col justify-between pb-2">
+				<ColorTone title="Skin tone" />
+				<div className="w-full h-[80%] flex flex-col overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 				{tones.map((group, index) => (
 					<div
 						key={index}
@@ -98,6 +99,7 @@ const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkinto
 					</div>
 				))}
 			</div>
+		</div>
 		</div>
 	);
 };

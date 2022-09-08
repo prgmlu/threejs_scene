@@ -195,24 +195,17 @@ class AvatarCreator extends Component {
 							className="scale-75 sm:scale-100 md:scale-150 lg:scale-125"
 						></div>
 					</div>
-					{this.props.currentAvatar && <AvatarCreatorEditor currentAvatar={this.props.currentAvatar} currentScene={this.scene} />}
+					{this.props.currentAvatar && <AvatarCreatorEditor currentAvatar={this.props.currentAvatar} currentScene={this.scene}
+					camera={this.camera}
+					 />}
 				</div>
 
-				{MobileOnlyView ? (
-					<button
+				<button
 						onClick={() => this.setState({ isCookieShown: true })}
-						className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
+						className="z-50 absolute left-4 bottom-[55%] -translate-y-1/2  sm:bottom-12 sm:left-1/2 sm:-translate-x-1/2 font-bold text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
 					>
 						Cookie Policy
 					</button>
-				) : (
-					<button
-						onClick={() => this.setState({ isCookieShown: true })}
-						className="absolute left-4 top-[45%] -translate-y-1/2 font-bold text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
-					>
-						Cookie Policy
-					</button>
-				)}
 
 				{isCookieShown && (
 					<div className="fixed sm:absolute md:fixed lg:absolute inset-0 w-full h-full bg-black/60 sm:bg-transparent">

@@ -22,6 +22,7 @@ function importImgsFolder(r) {
 class AvatarCreatorEditor extends Component {
 	constructor(props) {
 		super(props);
+		this.camera = this.props.camera;
 		this.textureLoader = new THREE.TextureLoader();
 		this.maleOutfits = {
 			textures: importImgsFolder(
@@ -75,6 +76,24 @@ class AvatarCreatorEditor extends Component {
 
 	onTabClick = (id) => {
 		this.setState({ activeTab: id });
+		if(id==1){
+			//body shape
+			this.camera.position.set(0,0,0)
+		}
+		if(id==2){
+			// face
+			this.camera.position.set(0.015,0.235,-2.5)
+		}
+		if(id==3){
+			//makup
+			this.camera.position.set(0.015,0.235,-2.5)
+		}
+		if(id==4){
+			//outfit
+			this.camera.position.set(0,0,0)
+		}
+
+
 	};
 
 	setBodyType = (e) => {
