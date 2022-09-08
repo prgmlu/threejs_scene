@@ -14,7 +14,7 @@ const InteractiveGLBComponent = ({
 		return null;
 	}
 
-	let model, cubeBackgroundInterval;
+	let model;
 	let camera = window.containerInstance_camera;
 	let controller = window.containerInstance_controller;
 	let renderer = window.containerInstance_renderer;
@@ -47,6 +47,9 @@ const InteractiveGLBComponent = ({
 
 	const svgLoader = new SVGLoader();
 	const loader = new GLTFLoader();
+
+	let directionalLight, pointLight;
+
 	const cubeTextureLoader = new THREE.CubeTextureLoader();
 	THREE.Cache.enabled = true;
 	const updateAllMaterials = () => {
@@ -59,6 +62,48 @@ const InteractiveGLBComponent = ({
 					hotspotData.props.data?.envMapIntensity;
 			}
 		});
+	};
+
+	const addLights = () => {
+		if (hotspotData?.props?.data?.directionalLight) {
+			directionalLight = new THREE.DirectionalLight(
+				hotspotData.props.data.directionalLight.color,
+				hotspotData.props.data.directionalLight.intensity,
+			);
+			directionalLight.position.set(
+				hotspotData.props.data.directionalLight.transform.position.x,
+				hotspotData.props.data.directionalLight.transform.position.y,
+				hotspotData.props.data.directionalLight.transform.position.z,
+			);
+			directionalLight.rotation.set(
+				hotspotData.props.data.directionalLight.transform.rotation.x,
+				hotspotData.props.data.directionalLight.transform.rotation.y,
+				hotspotData.props.data.directionalLight.transform.rotation.z,
+			);
+			scene.add(pointLight);
+		}
+
+		if (hotspotData?.props?.data?.pointLight) {
+			pointLight = new THREE.PointLight(
+				hotspotData.props.data.pointLight.color,
+				hotspotData.props.data.pointLight.intensity,
+			);
+			pointLight.position.set(
+				hotspotData.props.data.pointLight.transform.position.x,
+				hotspotData.props.data.pointLight.transform.position.y,
+				hotspotData.props.data.pointLight.transform.position.z,
+			);
+			scene.add(directionalLight);
+		}
+	};
+
+	const removeLights = () => {
+		if (directionalLight) {
+			scene.remove(directionalLight);
+		}
+		if (pointLight) {
+			scene.remove(pointLight);
+		}
 	};
 
 	const onMouseMove = (event) => {
@@ -175,24 +220,25 @@ const InteractiveGLBComponent = ({
 
 	const animate = () => {
 		requestAnimationFrame(animate);
+		if (hotspotData.props.data.lookAtEnabled) {
+			checkObjectRotation();
 
-		checkObjectRotation();
+			if (controller.enabled === false && hotspotMouseOver === false) {
+				rotateObject(model);
+				return;
+			}
 
-		if (controller.enabled === false && hotspotMouseOver === false) {
-			rotateObject(model);
-			return;
-		}
-
-		if (isObjectReset === false) {
-			resetObject(model);
-			return;
+			if (isObjectReset === false) {
+				resetObject(model);
+				return;
+			}
 		}
 
 		animateGLTF();
 	};
 
 	const addHotspots = () => {
-		hotspotData.props.data.hotspots.forEach((hotspot) => {
+		hotspotData?.props?.data?.hotspots?.forEach((hotspot) => {
 			svgLoader.load(hotspot.props.icon.path, (data) => {
 				const paths = data.paths;
 				const group = new THREE.Group();
@@ -253,12 +299,14 @@ const InteractiveGLBComponent = ({
 		document.removeEventListener('touchstart', onTouchStart, false);
 		document.removeEventListener('touchend', onTouchEnd, false);
 		document.removeEventListener('touchmove', onTouchMove, false);
+		document.removeEventListener('glb_event_hotspot', processEvent);
 	};
 
 	const onComponentUmount = () => {
 		scene.remove(model);
 		resetRendererToNormal();
 		removeEventListeners();
+		removeLights();
 	};
 
 	const prepareRendererForGLTF = () => {
@@ -275,9 +323,38 @@ const InteractiveGLBComponent = ({
 		}
 	};
 
+	const updateGLBColor = (data) => {
+		const updateMap = {};
+		data.forEach((item) => (updateMap[item.meshName] = item.color));
+		model.traverse((object) => {
+			if (object.isMesh) {
+				const name = object.name;
+				if (name in updateMap) {
+					const updateTo = updateMap[name];
+					object.material.color.set(
+						new THREE.Color(
+							`rgb(${updateTo.r}, ${updateTo.g}, ${updateTo.b})`,
+						),
+					);
+					material.needsUpdate = true;
+				}
+			}
+		});
+	};
+
+	const processEvent = (e) => {
+		const eventName = e?.detail?.eventName;
+		switch (eventName) {
+			case 'GLB_UPDATE_COLOR':
+				updateGLBColor(e?.detail?.apply);
+				break;
+			default:
+				break;
+		}
+	};
+
 	useEffect(() => {
 		prepareRendererForGLTF();
-
 		Promise.all([
 			cubeTextureLoader.loadAsync([
 				hotspotData.props.data.envMaps.px,
@@ -295,6 +372,7 @@ const InteractiveGLBComponent = ({
 				scene.environment = environmentMap;
 				model = gltf.scene; //glb
 
+				addLights();
 				prepareMixerForGLTF(gltf);
 				addHotspots();
 
@@ -314,6 +392,7 @@ const InteractiveGLBComponent = ({
 					hotspotData.props.data.objectTransform.scale.z,
 				);
 				scene.add(model);
+
 				updateAllMaterials();
 				animate();
 			})
@@ -327,6 +406,7 @@ const InteractiveGLBComponent = ({
 		document.addEventListener('touchstart', onTouchStart, false);
 		document.addEventListener('touchend', onTouchEnd, false);
 		document.addEventListener('touchmove', onTouchMove, false);
+		document.addEventListener('glb_event_hotspot', processEvent);
 
 		return () => {
 			onComponentUmount();
