@@ -11,11 +11,11 @@ import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
 import { threeEditorVREvents } from './threeEditorVREvents';
 import { Background, ColliderSphere } from '../three-background';
-import { browserName, isDesktop, isMobile } from 'react-device-detect';
+import { browserName, isDesktop, isMobile, isAndroid } from 'react-device-detect';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 import LoadingIcon from '../loadingIcon';
-import { isAndroid } from 'react-device-detect';
+import TWEEN from '@tweenjs/tween.js';
 
 const getRenderer = (type) => {
 	const rendererKey = `${type}_renderer`;
@@ -52,6 +52,7 @@ const createOrGetControls = (
 		renderer,
 		orbitControlsConfig,
 	);
+
 	return window[controllerKey];
 };
 
@@ -161,6 +162,8 @@ const Scene = (props) => {
 
 			renderer?.render(scene, cameraRef.current);
 			css2DRenderer.render(scene, cameraRef.current);
+			TWEEN.update();
+
 			// if (controllerUpdate) controllerUpdate();
 		}
 	};
@@ -369,6 +372,89 @@ const Scene = (props) => {
 		});
 	};
 
+	const onMouseUpMarker = (e, sceneObject, marker, isDragEvent) => {
+		if (marker?.userData?.focusOnClick && marker?.sceneObject) {
+			console.log('=> onMouseUpMarker', marker);
+			rotateCameraTowardsHotspot(marker.sceneObject).then(() => {
+				props.onMouseUp(e, sceneObject, marker, isDragEvent);
+			});
+		} else {
+			props.onMouseUp(e, sceneObject, marker, isDragEvent);
+		}
+	};
+
+	const getSceneCenterPos = () => {
+		const position = new THREE.Vector3(0, 0, -10);
+		position.applyQuaternion(cameraRef.current.quaternion);
+		return position;
+	};
+
+	const rotateCameraTowardsHotspot = (marker) => {
+		return new Promise((resolve, reject) => {
+			// calculate time taken to move from the center to marker position.
+			const speed = 5;
+			const centerPosition = getSceneCenterPos();
+			const distanceFromCenter = Math.sqrt(
+				(marker.position.x - centerPosition.x) *
+					(marker.position.x - centerPosition.x) +
+					(marker.position.y - centerPosition.y) *
+						(marker.position.y - centerPosition.y) +
+					(marker.position.z - centerPosition.z) *
+						(marker.position.z - centerPosition.z),
+			);
+			// time in milliseconds.
+			const time = (distanceFromCenter / speed) * 500;
+
+			const distance = new THREE.Vector3()
+				.subVectors(
+					cameraRef.current.position,
+					controlsRef.current.target,
+				)
+				.length();
+			const storedMarkerPosition = new THREE.Vector3(
+				marker.position.x,
+				marker.position.y,
+				marker.position.z,
+			);
+			const startRotation = new THREE.Euler().copy(
+				cameraRef.current.rotation,
+			);
+			cameraRef.current.lookAt(storedMarkerPosition);
+			const endRotation = new THREE.Euler().copy(
+				cameraRef.current.rotation,
+			);
+			cameraRef.current.rotation.copy(startRotation);
+
+			new TWEEN.Tween(cameraRef.current.rotation)
+				.to(
+					{
+						x: endRotation.x,
+						y: endRotation.y,
+						z: endRotation.z,
+					},
+					time,
+				)
+				.easing(TWEEN.Easing.Linear.None)
+				.onUpdate(() => {
+					cameraRef.current.updateProjectionMatrix();
+				})
+				.onComplete(() => {
+					console.log('=> anim complete');
+					clearAnimation();
+					const normal = new THREE.Vector3(0, 0, -1).applyEuler(
+						cameraRef.current.rotation,
+					);
+					controlsRef.current.target = new THREE.Vector3()
+						.add(cameraRef.current.position)
+						.add(normal.setLength(distance));
+					resolve();
+				})
+				.start();
+
+			animate();
+		});
+	};
+
 	//Events
 	useEffect(() => {
 		let canvasContainer = canvasRef.current;
@@ -387,7 +473,7 @@ const Scene = (props) => {
 			allowEventsForMarkerTypeOnly,
 			allowHotspotsToMove,
 			props.onMouseDown,
-			props.onMouseUp,
+			onMouseUpMarker,
 			props.onMouseMove,
 		);
 
