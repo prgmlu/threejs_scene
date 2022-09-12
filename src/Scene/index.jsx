@@ -391,6 +391,7 @@ const Scene = (props) => {
 
 	const rotateCameraTowardsHotspot = (marker) => {
 		return new Promise((resolve, reject) => {
+			cameraRef.current.rotation.order = 'YXZ';
 			// calculate time taken to move from the center to marker position.
 			const speed = 5;
 			const centerPosition = getSceneCenterPos();
