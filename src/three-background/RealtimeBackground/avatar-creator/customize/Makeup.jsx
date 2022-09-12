@@ -59,10 +59,9 @@ const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMak
 	};
 
 	return (
-		<div className="w-full h-full flex flex-col">
-			<div className="w-full h-full flex flex-col px-2">
-				<div className="flex flex-col gap-2">
-					<div className="w-full flex flex-wrap items-center justify-between">
+		<div className="w-full h-full flex flex-col px-2 gap-2">
+			<div className="w-full h-fit flex flex-col">
+				<div className="w-full flex flex-wrap items-center justify-between">
 						<img
 							className={`w-24 sm:w-[70px] md:w-[27%] h-99 object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 0
@@ -93,10 +92,9 @@ const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMak
 							alt="EYE"
 							onClick={() => setSelectedTone(2)}
 						/>
-					</div>
 				</div>
 				<ColorTone title={titles[selectedTone]} />
-				<div className="w-full h-full flex flex-wrap justify-between gap-y-1 px-1 pb-2 sm:my-2 overflow-y-auto scrollbar-[2px] scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+				<div className="w-full h-[80%] flex flex-wrap justify-between gap-y-1 pr-2.5 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 					{dataTones.map((item, index) => (
 						<div key={index} className="w-fit h-fit relative p-1">
 							{selectedMakeup === index && (

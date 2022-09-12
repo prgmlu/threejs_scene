@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
+import SkinTone from './SkinTone';
 import check from '../../static/avatar/menus/check.png';
 import ColorTone from '../ColorTone';
-import SkinTone from './SkinTone';
 
 const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkintonXY, skintoneX, skintoneY}) => {
 	const [selectedShape, setSelectedShape] = useState(1);
@@ -22,8 +22,10 @@ const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkinto
 
 	return (
 		<div className="w-full h-full flex flex-col gap-1">
-			<div className="h-[10%] font-sourceSansProSemibold text-lg">Body Shape</div>
-			<div className="h-fit flex flex-wrap gap-x-4 gap-y-2 py-1">
+			<div className="h-[10%] font-sourceSansProSemibold text-lg">
+				Body Shape
+			</div>
+			<div className="h-fit flex flex-wrap gap-x-4 gap-y-2 py-11">
 				<button
 					onClick={() => setSelectedShape(1)}
 					className={`w-24 shadow-md ${

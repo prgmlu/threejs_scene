@@ -147,10 +147,9 @@ const Face = ({currentAvatar}) => {
 	};
 
 	return (
-		<div className="w-full h-full flex flex-col">
-			<div className="w-full h-full flex flex-col px-2">
-				<div className="flex flex-col gap-2">
-					<div className="w-full flex flex-wrap items-center justify-between">
+		<div className="w-full h-full flex flex-col px-2 gap-2">
+			<div className="h-fit flex flex-col">
+				<div className="w-full h-fit flex flex-wrap items-center justify-between">
 						<img
 							className={`w-24 sm:w-[70px] md:w-[27%] h-99 object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 0
@@ -181,22 +180,21 @@ const Face = ({currentAvatar}) => {
 							alt="EYE"
 							onClick={() => setSelectedTone(2)}
 						/>
-					</div>
 				</div>
 				<ColorTone title={titles[selectedTone]} currentAvatar={currentAvatar}
 				selectedTone={selectedTone}
 				 />
-				<div className="w-full h-full flex flex-wrap justify-between gap-y-1 px-1 pb-2 sm:my-2 overflow-y-auto scrollbar-[2px] scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+				<div className="w-full h-[80%] flex flex-wrap gap-1.5 pr-2.5 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 					{dataTones.map((item, index) => (
 						<div key={index} className="w-fit h-fit relative p-1">
 							{selectedStyle === index && (
-								<span className="absolute top-0 right-0 w-3 h- object-contain">
+								<span className="absolute top-0 right-0 w-3 h-3 object-contain">
 									<img src={check} alt="o" />
 								</span>
 							)}
 							<img
 								src={item}
-								className={`w-[70px] sm:w-[72px] h-99 object-contain rounded px-2 py-11 cursor-pointer shadow-md bg-white ${
+								className={`w-[65px] sm:w-[70px] h-12 object-contain rounded px-2 py-11 cursor-pointer shadow-md bg-white ${
 									selectedStyle === index &&
 									'border-2 border-[#FF9F9F]'
 								}`}

@@ -9,14 +9,14 @@ const Cookie = ({ handleClose }) => {
 	const [isCookieAll, setIsCookieAll] = useState(false);
 
 	return (
-		<div className="absolute bottom-0 left-1/2 -translate-x-1/2  w-[95%] sm:w-2/5 h-fit flex flex-col py-2 px-4 gap-2 bg-white rounded-t-md">
+		<div className="z-50 absolute bottom-0 left-1/2 -translate-x-1/2  w-[95%] sm:w-2/5 h-fit flex flex-col py-2 px-4 gap-2 bg-white rounded-t-md">
 			<img
 				className="absolute top-1 right-1.5 cursor-pointer"
 				src={close}
 				onClick={handleClose}
 			/>
 			{isCookieSettings ? (
-				<div className="w-full flex flex-col gap-2 items-center py-1">
+				<div className="w-full flex flex-col gap-2 items-center py-11">
 					<div className="w-[80%] font-sourceSansProBold text-center text-lg text-[#330D0D]">
 						Cookie Settings
 					</div>

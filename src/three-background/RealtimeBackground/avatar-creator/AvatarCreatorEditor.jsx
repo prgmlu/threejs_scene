@@ -2,22 +2,9 @@ import React, { Component } from 'react';
 import * as THREE from 'three';
 import TabControls from './customize/TabControls';
 import Outfit from './customize/Outfit';
-import BodyShape from './customize/BodyShape';
 import Face from './customize/Face';
+import BodyShape from './customize/BodyShape';
 import Makeup from './customize/Makeup';
-import { MobileOnlyView } from 'react-device-detect';
-
-function importImgsFolder(r) {
-	let images = [];
-	r.keys().map((item) => {
-		images.push({
-			type: item.split('./')[1].split('_')[0],
-			name: item.split('./')[1].split('.')[0],
-			src: r(item).default,
-		});
-	});
-	return images;
-}
 
 class AvatarCreatorEditor extends Component {
 	constructor(props) {
@@ -25,13 +12,6 @@ class AvatarCreatorEditor extends Component {
 		this.camera = this.props.camera;
 		this.textureLoader = new THREE.TextureLoader();
 		this.maleOutfits = {
-			textures: importImgsFolder(
-				require.context(
-					'../static/avatar/outfit/male/textures',
-					false,
-					/\.(png)$/,
-				),
-			),
 			display: [
 
 				"https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png",
@@ -47,7 +27,17 @@ class AvatarCreatorEditor extends Component {
 		};
 		this.currentScene = props?.currentScene;
 		this.currentAvatar = {};
+
+		//add eventlistener to handle resize
+		window.addEventListener('resize', this.handleWindowResize.bind(this));
+		
 	}
+
+	handleWindowResize(){
+		//set the state of the window size
+		this.setState({windowWidth:window.innerWidth,windowHeight:window.innerHeight});
+	}
+
 	state = {
 		activeTab: 1,
 		bodyType: 'male',
@@ -56,6 +46,8 @@ class AvatarCreatorEditor extends Component {
 		skintoneX:0,
 		skintoneY:0,
 		selectedMakeup: null,
+		windowWidth: window.innerWidth,
+		windowHeight: window.innerHeight,
 	};
 
 	setSkintoneXY(x,y){
@@ -128,14 +120,14 @@ class AvatarCreatorEditor extends Component {
 	// }
 
 	render() {
-		const { selectedOutfit, activeTab } = this.state;
+		const { selectedOutfit, activeTab, windowWidth } = this.state;
 		return (
 			<div className="w-full sm:w-1/2 md:w-2/5 lg:w-[45%] h-1/2 sm:h-full flex flex-col justify-between sm:justify-start items-center sm:items-start relative">
 				<TabControls
 					activeTab={activeTab}
 					onTabClick={this.onTabClick}
 				/>
-				<div className="w-[96%] sm:w-[70%] md:w-[80%] h-[87%] sm:h-[86%] md:h-[88%] lg:h-[80%] bg-white rounded-lg gap-x-2 pt-3 px-3">
+				<div className="w-[96%] sm:w-[70%] md:w-[80%] h-[70%] sm:h-[86%] md:h-[88%] lg:h-[80%] bg-white rounded-lg gap-x-2 pt-3 px-3 relative">
 					{activeTab == 1 && <BodyShape skintoneX={this.state.skintoneX} skintoneY={this.state.skintoneY} setSkintonXY={this.setSkintoneXY.bind(this)} selectedMakeup={this.state.selectedMakeup} setSelectedSkintone={this.setSelectedSkintone.bind(this)} currentAvatar={this.props.currentAvatar} />}
 					{activeTab == 2 && <Face selectedSkintone={this.state.selectedSkintone}  currentAvatar={this.props.currentAvatar} />}
 					{activeTab == 3 && <Makeup selectedMakeup={this.state.selectedMakeup} setSelectedMakeup={this.setSelectedMakeup.bind(this)} selectedSkintone={this.state.selectedSkintone} currentAvatar={this.props.currentAvatar} />}
@@ -147,7 +139,7 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 				</div>
-				{!MobileOnlyView && (
+				{windowWidth <=480 && (
 					<div className="w-[96%] sm:w-[70%] md:w-[80%] flex justify-center items-center py-3">
 						<button className="w-fit h-fit self-center text-[#330D0D] px-7 py-0.5 text-sm border-[1px] border-[#330D0D] rounded-md">
 							Save
