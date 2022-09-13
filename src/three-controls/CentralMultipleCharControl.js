@@ -5,7 +5,7 @@ import {
     dressUpFromString
 } from './OutfitTranslator';
 
-const ACTIVE = false;
+const ACTIVE = true;
 const USE_TOOLTIP = true;
 
 
@@ -14,6 +14,8 @@ let SOCKET_SERVER_URL = (document.location.href.includes("192.168") || document.
 export default class CentralMultipleCharControls{
     constructor(mainCharControlsObj, otherChars,localAvatarNameRef, localAvatarOutfitStringRef, scene, camera){
         this.mainCharControlsObj = mainCharControlsObj;
+
+        window.that = this;
         
         this.localAvatarNameRef = localAvatarNameRef;
         this.localAvatarOutfitStringRef = localAvatarOutfitStringRef;
@@ -58,6 +60,9 @@ export default class CentralMultipleCharControls{
             this.createSocketAndConnect();
             this.socket.on("connect", () => {
                 this.sendData(); // x8WIv7-mJelg7on_ALbx
+                // this.room = 'general';
+                this.ownRoom = Math.random();
+                this.room = this.ownRoom;
                 window.setInterval(()=>{
                     this.sendData();
                 }
@@ -105,11 +110,15 @@ export default class CentralMultipleCharControls{
         }
     }
 
+    purgeRemoteChar(char){
+        this.otherChars.splice(this.otherChars.indexOf(char), 1);
+        char.removeFromScene();
+    }
+
     handleDisconnect(address){;
         let char = this.getCharByAddress(address);
         if(char){
-            this.otherChars.splice(this.otherChars.indexOf(char), 1);
-            char.removeFromScene();
+            this.purgeRemoteChar(char);
         }
     }
     disconnectAll(){
@@ -129,14 +138,17 @@ export default class CentralMultipleCharControls{
             continue;
             
             let char = this.getCharByAddress(address);
-            
-            if(!char){
+            // console.log(this.room, data[address].room)
+            if(!char && data[address].room == this.room){
                 //new character entered
                 char = this.createRemoteCharacter(data[address].position,data[address].rotation, address, data[address].name, data[address].outfitString);
                 this.otherChars.push(char);
                 this.sendData();
             }
-            if(char.model){
+            if(char && char.model){
+                if(data[address].room != this.room){
+                    this.purgeRemoteChar(char);
+                }
                 if(char.charName != data[address].name){
                     char.updateName(data[address].name);
                 }
@@ -165,6 +177,9 @@ export default class CentralMultipleCharControls{
             this.socket = io.connect(SOCKET_SERVER_URL,{rejectUnauthorized: false });
     }
 
+    isShopTogetherSession(params){
+        return (params.has('shoptogether') || localStorage.getItem('shoptogether')) && (!this.shoptogether) && isSessionActive;
+    }
     sendData(){
         if(!this.scene.children.includes(window.model)) return;
         let address = this.address;
@@ -175,23 +190,44 @@ export default class CentralMultipleCharControls{
         data[address] = {};
         
         let params = new URLSearchParams(window.location.search);
+        let isSessionActive = localStorage.getItem('isSessionActive');
+        isSessionActive = isSessionActive == 'true'? true:false;
 
-        if(localStorage.getItem('shoptogether') && (!this.shoptogether)){
-            data[address].shoptogether = localStorage.getItem('shoptogether');
+        window.isSessionActive = isSessionActive;
+
+        data[address].isSessionActive = isSessionActive;
+        data[address].shoptogether = this.sessionId;
+
+        // if it's the first time the session is active
+        if( this.isShopTogetherSession(params) ){
+            this.sessionId = params.has('shoptogether')? params.get('shoptogether'):localStorage.getItem('shoptogether');
+            data[address].shoptogether = this.sessionId;
+            
             this.disconnectAll();
             this.shoptogether = true;
-            this.sendData();
+            
+            this.socket.emit('chooseRoom',this.sessionId);
+            this.room = this.sessionId;
         }
 
-        else if(params.has('shoptogether'))
-            data[address].shoptogether = params.get('shoptogether');
 
-        else data[address].shoptogether = null;
+        // if a user ends his session
+        if(this.shoptogether && !isSessionActive){
+            this.socket.emit('sessionDisconnect')
+            this.disconnectAll();
+            this.shoptogether = false;
+            this.socket.emit('chooseRoom',this.ownRoom);
+            this.room = this.ownRoom;
+            // this.socket.emit('chooseRoom','general');
+            // this.room = 'general';
+        }
+        // else data[address].shoptogether = null;
             
         data[address].position = this.mainCharControlsObj.model.position;
         data[address].rotation = this.mainCharControlsObj.model.rotation;
         data[address].isWalking = this.mainCharControlsObj.isWalking;
         data[address].isWaving = this.mainCharControlsObj.isWaving;
+        data[address].room = this.room;
 
         data[address].outfitString = this.localAvatarOutfitStringRef.current;
 

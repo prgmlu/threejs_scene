@@ -175,7 +175,6 @@ class AvatarCreator extends Component {
 					isCookieShown && 'bg-white/50'
 				} overflow-hidden absolute z-30`}
 			>
-				{!isWindowSize && (
 					<div className="absolute w-full sm:w-fit z-10 top-3 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
 						<button
 							onClick={() => this.closeModal()}
@@ -188,11 +187,12 @@ class AvatarCreator extends Component {
 							/>
 							Back
 						</button>
-						<button className="text-center text-black text-base px-6 py-2 sm:py-11 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6">
+						<button
+							onClick={() => this.closeModal()}
+						 className="text-center text-black text-base px-6 py-2 sm:py-11 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6">
 							Save
 						</button>
 					</div>
-				)}
 				<div className="w-full h-full sm:h-3/4 md:h-[90%] flex flex-col sm:flex-row items-center">
 					<div className="w-full sm:w-1/2 md:w-2/5 lg:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-start sm:justify-center">
 						<input

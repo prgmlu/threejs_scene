@@ -235,7 +235,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
             scene.add(model);
             setAvatar(model);
-            removeBottomBar();
+            // removeBottomBar();
         }
 
         loadStoreAndModel();
