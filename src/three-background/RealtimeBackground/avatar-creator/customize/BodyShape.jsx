@@ -9,7 +9,7 @@ const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkinto
 	// const [selectedIndex, setSelectedIndex] = useState({ x: skinToneX || 0, y: skinToneY || 0 });
 	let counter = 0;
 
-	let bodyMesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
+	let bodyMesh = currentAvatar.getChildByName('FemaleAvatar_Body1');
 	
 	const tones = [
 		['#F2D3CE', '#E0B0A6', '#C68D82', '#A36B60', '#7B4B41', '#502E2C'],
@@ -73,7 +73,9 @@ const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkinto
 				</button>
 			</div>
 			<div className="h-[70%] sm:h-[80%] flex flex-col justify-between pb-2">
-				<ColorTone title="Skin tone" />
+				<ColorTone title="Skin tone"
+				currentAvatar={currentAvatar}
+				 />
 				<div className="w-full h-[80%] flex flex-col overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 				{tones.map((group, index) => (
 					<div

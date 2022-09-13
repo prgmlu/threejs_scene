@@ -32,6 +32,50 @@ let setHairColor = (color,currentAvatar) => {
 	hairMesh.material.color.set(color);
 }
 
+let setEyebrowColor = (color,currentAvatar) => {
+	let eyebrows = [
+		'Eyebrow1',
+	];
+
+	eyebrows.forEach((i)=>{
+		try{
+			let mesh = currentAvatar.getChildByName(i);
+			let material = mesh.material;
+			material.map = null;
+			material.color.set(color);
+			material.needsUpdate = true;
+		}
+		catch(e){
+			console.log(e);
+		}
+	}
+	);
+
+}
+
+let setEyeColor = (color,currentAvatar) => {
+	let eyebrows = [
+		'Eye1',
+	];
+
+	eyebrows.forEach((i)=>{
+		try{
+			let mesh = currentAvatar.getChildByName(i);
+			let material = mesh.material;
+			material.map = null;
+			material.color.set(color);
+			material.needsUpdate = true;
+		}
+		catch(e){
+			debugger;
+			console.log(e);
+		}
+	}
+	);
+}
+
+
+
 const ColorTone = ({ title ,currentAvatar, selectedTone}) => {
 
 	const [color, setColor] = useState('#000');
@@ -54,7 +98,17 @@ const ColorTone = ({ title ,currentAvatar, selectedTone}) => {
 				{isPickerVisible && (
 					<ColorPicker
 						selectedColor={color}
-						handlePicker={(c)=>{setColor(c); setHairColor(c,currentAvatar); }}
+						handlePicker={(c)=>{setColor(c);
+							if(title == 'Hair'){
+								setHairColor(c,currentAvatar);
+							}
+							if(title == 'Eyebrows'){
+								setEyebrowColor(c,currentAvatar);
+							}
+							if(title == 'Eyes'){
+								setEyeColor(c,currentAvatar);
+							}
+							 }}
 						handleClose={setIsPickerVisible}
 					/>
 				)}

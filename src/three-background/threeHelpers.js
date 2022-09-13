@@ -19,8 +19,8 @@ import {USE_OLD_CHARACTER_MODEL, SHADOW_MAP_TYPE, SHADOW_ENABLED} from '../three
 let USE_OUTFIT_TRANSLATION = false;
 
 
-let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver2.glb" ;
-// let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver6.glb" ;
+// let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver2.glb" ;
+let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver6.glb" ;
 
 const DEBUG_LIGHTS = false;
 
@@ -259,6 +259,7 @@ export const loadModelAndAnimations = async (outfitString) => {
 			// const model = createCube();
 
 			window.model = model;
+			
 
 			if(USE_OUTFIT_TRANSLATION){
 				dressUpFromString(data.scene,outfitString)
@@ -273,6 +274,13 @@ export const loadModelAndAnimations = async (outfitString) => {
 			dressUpFromString(data.scene,outfitString)
 
 
+			model.getChildByName("Eyebrow1").visible = true;
+
+			model.getChildByName("Eye1").material.color.set('black');
+			model.getChildByName("Eye1").material.needsUpdate = true;
+
+			model.getChildByName("Eyebrow1").material.color.set('black');
+			model.getChildByName("Eyebrow1").material.needsUpdate = true;
 
 
 

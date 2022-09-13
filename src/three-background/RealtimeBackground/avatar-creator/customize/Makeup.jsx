@@ -15,7 +15,7 @@ let setMakeupFromTexture = (index,currentAvatar,selectedSkintone) => {
 	let url = `https://cdn.obsess-vr.com/realtime3d/skintone-makeup-512/Sk${selectedSkintone}_FemaleAvatar${ind}_D.png`;
 	console.log(url)
 	// swap the texture of the mesh
-	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
+	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1');
 	debugger;
 	setMeshTextureImage(mesh, url);
 	addRoughness(currentAvatar);
@@ -25,7 +25,7 @@ let setMakeupFromTexture = (index,currentAvatar,selectedSkintone) => {
 let addRoughness = (currentAvatar) => {
 	let roughnessTextureUrl = "https://cdn.obsess-vr.com/realtime3d/roughness/Sk_FemaleAvatar_R.png";
 	let roughnessTexture = new THREE.TextureLoader().load(roughnessTextureUrl);
-	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
+	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1');
 	mesh.material.roughnessMap = roughnessTexture;
 	mesh.material.needsUpdate = true;
 }
@@ -102,7 +102,9 @@ const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMak
 							onClick={() => setSelectedTone(2)}
 						/>
 				</div>
-				<ColorTone title={titles[selectedTone]} />
+				<ColorTone title={titles[selectedTone]}
+				currentAvatar={currentAvatar}
+				 />
 				<div className="w-full h-[80%] flex flex-wrap justify-between gap-y-1 pr-2.5 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 					{dataTones.map((item, index) => (
 						<div key={index} className="w-fit h-fit relative p-1">
