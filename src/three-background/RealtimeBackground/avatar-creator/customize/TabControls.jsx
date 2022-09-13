@@ -6,15 +6,15 @@ import makeup from '../../static/avatar/menus/brush.png';
 
 const TabControls = ({ activeTab, onTabClick }) => {
 	return (
-		<div className="w-full sm:w-[70%] md:w-[80%] h-[10%] sm:h-[12%] md:h-[13%] lg:h[15%] flex items-start justify-center gap-3">
+		<div className="w-full sm:w-full md:w-[95%] lg:w-[85%] h-fit sm:h-[12%] md:h-[13%] lg:h-[15%] flex items-start justify-center gap-3">
 			<img
 				src={body}
 				alt="Body type"
 				id="1"
 				className={`${
 					activeTab == 1
-						? 'pt-2 pb-5 md:pb-2 rounded-t-md'
-						: 'py-2 rounded-md'
+						? 'pt-2 pb-4 rounded-t-md'
+						: 'pt-2 pb-2 rounded-md'
 				} px-3 rounded-t-md flex justify-center cursor-pointer object-contain bg-white`}
 				onClick={() => onTabClick(1)}
 			/>
@@ -24,8 +24,8 @@ const TabControls = ({ activeTab, onTabClick }) => {
 				id="2"
 				className={`${
 					activeTab == 2
-						? 'pt-2 pb-5 rounded-t-md'
-						: 'py-2.5 rounded-md'
+						? 'pt-2 pb-4 rounded-t-md'
+						: 'pt-2 pb-2.5 rounded-md'
 				} px-3 rounded-t-md flex justify-center cursor-pointer object-contain bg-white`}
 				onClick={() => onTabClick(2)}
 			/>
@@ -35,8 +35,8 @@ const TabControls = ({ activeTab, onTabClick }) => {
 				id="2"
 				className={`${
 					activeTab == 3
-						? 'pt-2 pb-5 rounded-t-md'
-						: 'py-2.5 rounded-md'
+						? 'pt-2 pb-4 rounded-t-md'
+						: 'pt-2 pb-2.5 rounded-md'
 				} px-3 rounded-t-md flex justify-center cursor-pointer object-contain bg-white`}
 				onClick={() => onTabClick(3)}
 			/>
@@ -47,7 +47,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 				className={`${
 					activeTab == 4
 						? 'pt-2 pb-4 rounded-t-md'
-						: 'py-2 rounded-md'
+						: 'pt-2 pb-2 rounded-md'
 				} px-3 rounded-t-md flex justify-center cursor-pointer object-contain bg-white`}
 				onClick={() => onTabClick(4)}
 			/>

@@ -33,17 +33,15 @@ class AvatarCreatorEditor extends Component {
 				),
 			),
 			display: [
-
-				"https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png",
-				"https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png",
-				"https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png",
-				"https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png",
-				"https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png",
-				"https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png",
-				"https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png",
-				"https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png",
-			
-			]
+				'https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png',
+				'https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png',
+				'https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png',
+				'https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png',
+				'https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png',
+				'https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png',
+				'https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png',
+				'https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png',
+			],
 		};
 		this.currentScene = props?.currentScene;
 		this.currentAvatar = {};
@@ -52,48 +50,46 @@ class AvatarCreatorEditor extends Component {
 		activeTab: 1,
 		bodyType: 'male',
 		selectedOutfit: -1,
-		selectedSkintone:1,
-		skintoneX:0,
-		skintoneY:0,
+		selectedSkintone: 1,
+		skintoneX: 0,
+		skintoneY: 0,
 		selectedMakeup: null,
 	};
 
-	setSkintoneXY(x,y){
-		this.setState({skintoneX:x,skintoneY:y});
+	setSkintoneXY(x, y) {
+		this.setState({ skintoneX: x, skintoneY: y });
 	}
 
 	setSelectedSkintone = (skintone) => {
 		this.setState({
-			selectedSkintone:skintone
+			selectedSkintone: skintone,
 		});
-	}
+	};
 
 	setSelectedMakeup = (makeup) => {
 		this.setState({
-			selectedMakeup:makeup
+			selectedMakeup: makeup,
 		});
-	}
+	};
 
 	onTabClick = (id) => {
 		this.setState({ activeTab: id });
-		if(id==1){
+		if (id == 1) {
 			//body shape
-			this.camera.position.set(0,0,0)
+			this.camera.position.set(0, 0, 0);
 		}
-		if(id==2){
+		if (id == 2) {
 			// face
-			this.camera.position.set(0.015,0.235,-2.5)
+			this.camera.position.set(0.015, 0.235, -2.5);
 		}
-		if(id==3){
+		if (id == 3) {
 			//makup
-			this.camera.position.set(0.015,0.235,-2.5)
+			this.camera.position.set(0.015, 0.235, -2.5);
 		}
-		if(id==4){
+		if (id == 4) {
 			//outfit
-			this.camera.position.set(0,0,0)
+			this.camera.position.set(0, 0, 0);
 		}
-
-
 	};
 
 	setBodyType = (e) => {
@@ -135,10 +131,35 @@ class AvatarCreatorEditor extends Component {
 					activeTab={activeTab}
 					onTabClick={this.onTabClick}
 				/>
-				<div className="w-[96%] sm:w-[70%] md:w-[80%] h-[87%] sm:h-[86%] md:h-[88%] lg:h-[80%] bg-white rounded-lg gap-x-2 pt-3 px-3">
-					{activeTab == 1 && <BodyShape skintoneX={this.state.skintoneX} skintoneY={this.state.skintoneY} setSkintonXY={this.setSkintoneXY.bind(this)} selectedMakeup={this.state.selectedMakeup} setSelectedSkintone={this.setSelectedSkintone.bind(this)} currentAvatar={this.props.currentAvatar} />}
-					{activeTab == 2 && <Face selectedSkintone={this.state.selectedSkintone}  currentAvatar={this.props.currentAvatar} />}
-					{activeTab == 3 && <Makeup selectedMakeup={this.state.selectedMakeup} setSelectedMakeup={this.setSelectedMakeup.bind(this)} selectedSkintone={this.state.selectedSkintone} currentAvatar={this.props.currentAvatar} />}
+				<div className="w-[96%] sm:w-full md:w-[95%] lg:w-[85%] h-[80%] sm:h-[86%] md:h-[88%] lg:h-[80%] bg-white rounded-lg gap-x-2 pt-3 px-3 relative">
+					{activeTab == 1 && (
+						<BodyShape
+							skintoneX={this.state.skintoneX}
+							skintoneY={this.state.skintoneY}
+							setSkintonXY={this.setSkintoneXY.bind(this)}
+							selectedMakeup={this.state.selectedMakeup}
+							setSelectedSkintone={this.setSelectedSkintone.bind(
+								this,
+							)}
+							currentAvatar={this.props.currentAvatar}
+						/>
+					)}
+					{activeTab == 2 && (
+						<Face
+							selectedSkintone={this.state.selectedSkintone}
+							currentAvatar={this.props.currentAvatar}
+						/>
+					)}
+					{activeTab == 3 && (
+						<Makeup
+							selectedMakeup={this.state.selectedMakeup}
+							setSelectedMakeup={this.setSelectedMakeup.bind(
+								this,
+							)}
+							selectedSkintone={this.state.selectedSkintone}
+							currentAvatar={this.props.currentAvatar}
+						/>
+					)}
 					{activeTab == 4 && (
 						<Outfit
 							selectedOutfit={selectedOutfit}

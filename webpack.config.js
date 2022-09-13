@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { ModuleFederationPlugin } = require('webpack').container;
 const deps = require('./package.json').dependencies;
-const TerserPlugin = require('terser-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
 const prodEnvs = ['production', 'client'];
 
 const getMode = (env) => {
@@ -16,9 +16,9 @@ const getMode = (env) => {
 
 const getPublicPath = (env = 'development', modulePath = '') => {
 	if (env === 'development') {
-		return 'http://192.168.1.122:4000/';
+		//return 'http://192.168.1.122:4000/';
 		// return 'http://192.168.1.37:4000/';
-		// return 'http://localhost:4000/';
+		return 'http://localhost:4000/';
 	}
 	return `https://modules.obsess-vr.com/${modulePath}/`;
 };
@@ -37,36 +37,41 @@ module.exports = (env) => {
 		);
 	}
 
-    pluginsArr.push(new ModuleFederationPlugin({
-        name: "threejs_scene",
-        filename: "remoteEntry.js",
-        exposes:{
-            "./Scene": "./src/Scene",
-            "./Hotspot": "./src/Hotspot",
-            "./InSceneVidComponent": "./src/in-scene-video/InSceneVidComponent",
-            "./FireEffect": "./src/fire-effect/FireEffect",
-            "./WaterEffect": "./src/water-effect/WaterEffect",
-            "./InSceneImageComponent": "./src/in-scene-image/InSceneImageComponent",
-            "./GreenScreenSystem": "./src/green-screen-system/GreenScreenSystem",
-            "./AnimatedGLB": "./src/AnimatedGLB"
-        },
-        shared: {
-            ...deps,
-            react: {
-                shareScope: 'default',
-                singleton: true,
-            },
-            'react-dom': {
-                singleton: true,
-            },
-            three: {
-                import: "three",
-                singleton: true,
-                shareScope: "default",
-                requiredVersion: '0.137.0'
-            },
-        }
-    }));
+	pluginsArr.push(
+		new ModuleFederationPlugin({
+			name: 'threejs_scene',
+			filename: 'remoteEntry.js',
+			exposes: {
+				'./Scene': './src/Scene',
+				'./Hotspot': './src/Hotspot',
+				'./InSceneVidComponent':
+					'./src/in-scene-video/InSceneVidComponent',
+				'./FireEffect': './src/fire-effect/FireEffect',
+				'./WaterEffect': './src/water-effect/WaterEffect',
+				'./InSceneImageComponent':
+					'./src/in-scene-image/InSceneImageComponent',
+				'./GreenScreenSystem':
+					'./src/green-screen-system/GreenScreenSystem',
+				'./AnimatedGLB': './src/AnimatedGLB',
+			},
+			shared: {
+				...deps,
+				react: {
+					shareScope: 'default',
+					singleton: true,
+				},
+				'react-dom': {
+					singleton: true,
+				},
+				three: {
+					import: 'three',
+					singleton: true,
+					shareScope: 'default',
+					requiredVersion: '0.137.0',
+				},
+			},
+		}),
+	);
 
 	const config = {
 		mode: getMode(buildEnv),
@@ -83,16 +88,14 @@ module.exports = (env) => {
 			rules: [
 				{
 					test: /\.(glb|jpg|gltf|png)$/,
-					use:
-					[
+					use: [
 						{
 							loader: 'file-loader',
-							options:
-							{
-								outputPath: 'assets/models/'
-							}
-						}
-					]
+							options: {
+								outputPath: 'assets/models/',
+							},
+						},
+					],
 				},
 				{
 					test: /\.(js|jsx)$/,
@@ -130,16 +133,18 @@ module.exports = (env) => {
 	}
 
 	if (prodEnvs.includes(buildEnv)) {
-		config.optimization = {minimizer : [
-			new TerserPlugin({
-				terserOptions: {
-					compress: {
-						drop_console: true
+		config.optimization = {
+			minimizer: [
+				new TerserPlugin({
+					terserOptions: {
+						compress: {
+							drop_console: true,
+						},
+						mangle: true,
 					},
-					mangle: true,
-				}
-			})
-		]}
+				}),
+			],
+		};
 	}
 	return config;
 };

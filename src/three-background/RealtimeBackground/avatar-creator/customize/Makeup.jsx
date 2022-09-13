@@ -10,18 +10,23 @@ import d_eye from '../../static/avatar/demo/demo_eyes.png';
 import d_face from '../../static/avatar/demo/demo_face.png';
 import { setMeshTextureImage } from '../../../../three-controls/OutfitTranslator';
 
-let setMakeupFromTexture = (index,currentAvatar,selectedSkintone) => {
-	let ind = index +1;
+let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
+	let ind = index + 1;
 	let url = `https://cdn.obsess-vr.com/realtime3d/skintone-makeup-512/Sk${selectedSkintone}_FemaleAvatar${ind}_D.png`;
-	console.log(url)
+	console.log(url);
 	// swap the texture of the mesh
 	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
 	debugger;
 	setMeshTextureImage(mesh, url);
 	// return;
-}
+};
 
-const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMakeup}) => {
+const Makeup = ({
+	selectedSkintone,
+	setSelectedMakeup,
+	currentAvatar,
+	selectedMakeup,
+}) => {
 	const [selectedStyle, setSelectedStyle] = useState(0);
 	const [dataTones, setDataTones] = useState([]);
 	const [selectedTone, setSelectedTone] = useState(0);
@@ -34,7 +39,7 @@ const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMak
 		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup3.png',
 		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup4.png',
 		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup5.png',
-	]
+	];
 
 	useEffect(() => {
 		getContents(selectedTone);
@@ -62,9 +67,9 @@ const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMak
 		<div className="w-full h-full flex flex-col">
 			<div className="w-full h-full flex flex-col px-2">
 				<div className="flex flex-col gap-2">
-					<div className="w-full flex flex-wrap items-center justify-between">
+					<div className="w-full flex flex-wrap items-center justify-around">
 						<img
-							className={`w-24 sm:w-[70px] md:w-[27%] h-99 object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
+							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 0
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
@@ -74,7 +79,7 @@ const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMak
 							onClick={() => setSelectedTone(0)}
 						/>
 						<img
-							className={`w-24 sm:w-[70px] md:w-[27%] h-99 object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
+							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 1
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
@@ -84,7 +89,7 @@ const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMak
 							onClick={() => setSelectedTone(1)}
 						/>
 						<img
-							className={`w-24 sm:w-[70px] md:w-[27%] h-99 object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
+							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 2
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
@@ -96,7 +101,7 @@ const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMak
 					</div>
 				</div>
 				<ColorTone title={titles[selectedTone]} />
-				<div className="w-full h-full flex flex-wrap justify-between gap-y-1 px-1 pb-2 sm:my-2 overflow-y-auto scrollbar-[2px] scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-between gap-y-1 px-1 pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
 					{dataTones.map((item, index) => (
 						<div key={index} className="w-fit h-fit relative p-1">
 							{selectedMakeup === index && (
@@ -106,16 +111,20 @@ const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMak
 							)}
 							<img
 								src={item}
-								className={`${
-									selectedTone === 0
-										? 'w-fit h-14'
-										: 'w-[64px] sm:w-[72px] h-99 px-2 py-11'
-								} object-contain rounded  cursor-pointer shadow-md bg-white ${
+								className={`w-[64px] h-fit object-contain rounded p-1 cursor-pointer shadow-md bg-white ${
 									selectedMakeup === index &&
 									'border-2 border-[#FF9F9F]'
 								}`}
 								alt=""
-								onClick={() => {setSelectedStyle(index);setSelectedMakeup(index); setMakeupFromTexture(index,currentAvatar,selectedSkintone);}}
+								onClick={() => {
+									setSelectedStyle(index);
+									setSelectedMakeup(index);
+									setMakeupFromTexture(
+										index,
+										currentAvatar,
+										selectedSkintone,
+									);
+								}}
 							/>
 						</div>
 					))}
