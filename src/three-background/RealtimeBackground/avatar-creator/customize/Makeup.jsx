@@ -12,7 +12,7 @@ import { setMeshTextureImage } from '../../../../three-controls/OutfitTranslator
 
 let setMakeupFromTexture = (index,currentAvatar,selectedSkintone) => {
 	let ind = index +1;
-	let url = `https://cdn.obsess-vr.com/realtime3d/skintone-makeup-512/Sk${selectedSkintone}_FemaleAvatar${ind}_D.png`;
+	let url = `https://cdn.obsess-vr.com/realtime3d/tones_new/Sk${selectedSkintone}_FemaleAvatar${ind}_D.png`;
 	console.log(url)
 	// swap the texture of the mesh
 	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1');

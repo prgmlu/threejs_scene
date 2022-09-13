@@ -5,7 +5,7 @@ import {setMeshTextureImage} from '../../../../three-controls/OutfitTranslator';
 let swapSkinTexture = (textureIndex, mesh,selectedMakeup) => {
 	let url;
 	if(selectedMakeup || selectedMakeup === 0){
-		url = `https://cdn.obsess-vr.com/realtime3d/skintone-makeup-512/Sk${textureIndex}_FemaleAvatar${selectedMakeup+1}_D.png`;
+		url = `https://cdn.obsess-vr.com/realtime3d/tones_new/Sk${textureIndex}_FemaleAvatar${selectedMakeup+1}_D.png`;
 
 	}
 	else
