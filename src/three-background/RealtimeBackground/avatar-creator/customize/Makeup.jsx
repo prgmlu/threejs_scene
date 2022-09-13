@@ -18,7 +18,16 @@ let setMakeupFromTexture = (index,currentAvatar,selectedSkintone) => {
 	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
 	debugger;
 	setMeshTextureImage(mesh, url);
+	addRoughness(currentAvatar);
 	// return;
+}
+
+let addRoughness = (currentAvatar) => {
+	let roughnessTextureUrl = "https://cdn.obsess-vr.com/realtime3d/roughness/Sk_FemaleAvatar_R.png";
+	let roughnessTexture = new THREE.TextureLoader().load(roughnessTextureUrl);
+	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
+	mesh.material.roughnessMap = roughnessTexture;
+	mesh.material.needsUpdate = true;
 }
 
 const Makeup = ({selectedSkintone, setSelectedMakeup, currentAvatar, selectedMakeup}) => {
