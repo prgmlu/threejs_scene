@@ -133,10 +133,16 @@ const Face = ({ currentAvatar }) => {
 	};
 
 	return (
+<<<<<<< HEAD
 		<div className="w-full h-full flex flex-col">
 			<div className="w-full h-full flex flex-col px-2">
 				<div className="flex flex-col gap-2">
 					<div className="w-full flex flex-wrap items-center justify-around">
+=======
+		<div className="w-full h-full flex flex-col px-2 gap-2">
+			<div className="h-fit flex flex-col">
+				<div className="w-full h-fit flex flex-wrap items-center justify-between">
+>>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
 						<img
 							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 0
@@ -167,8 +173,8 @@ const Face = ({ currentAvatar }) => {
 							alt="EYE"
 							onClick={() => setSelectedTone(2)}
 						/>
-					</div>
 				</div>
+<<<<<<< HEAD
 				<ColorTone
 					title={titles[selectedTone]}
 					currentAvatar={currentAvatar}
@@ -179,12 +185,26 @@ const Face = ({ currentAvatar }) => {
 						<div key={index} className="w-fit h-fit relative p-1">
 							{selectedStyle === index && (
 								<span className="absolute top-0 right-0 w-3 h-[12px] object-contain">
+=======
+				<ColorTone title={titles[selectedTone]} currentAvatar={currentAvatar}
+				selectedTone={selectedTone}
+				 />
+				<div className="w-full h-[80%] flex flex-wrap gap-1.5 pr-2.5 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+					{dataTones.map((item, index) => (
+						<div key={index} className="w-fit h-fit relative p-1">
+							{selectedStyle === index && (
+								<span className="absolute top-0 right-0 w-3 h-3 object-contain">
+>>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
 									<img src={check} alt="o" />
 								</span>
 							)}
 							<img
 								src={item}
+<<<<<<< HEAD
 								className={`w-[70px] sm:w-[87px] h-[50px] object-cover rounded px-2 py-1 cursor-pointer shadow-md bg-white ${
+=======
+								className={`w-[65px] sm:w-[70px] h-12 object-contain rounded px-2 py-11 cursor-pointer shadow-md bg-white ${
+>>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
 									selectedStyle === index &&
 									'border-2 border-[#FF9F9F]'
 								}`}

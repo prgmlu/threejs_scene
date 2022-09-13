@@ -16,7 +16,11 @@ const getMode = (env) => {
 
 const getPublicPath = (env = 'development', modulePath = '') => {
 	if (env === 'development') {
+<<<<<<< HEAD
 		//return 'http://192.168.1.122:4000/';
+=======
+		// return 'http://192.168.1.122:4000/';
+>>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
 		// return 'http://192.168.1.37:4000/';
 		return 'http://localhost:4000/';
 	}

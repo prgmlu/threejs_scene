@@ -64,10 +64,16 @@ const Makeup = ({
 	};
 
 	return (
+<<<<<<< HEAD
 		<div className="w-full h-full flex flex-col">
 			<div className="w-full h-full flex flex-col px-2">
 				<div className="flex flex-col gap-2">
 					<div className="w-full flex flex-wrap items-center justify-around">
+=======
+		<div className="w-full h-full flex flex-col px-2 gap-2">
+			<div className="w-full h-fit flex flex-col">
+				<div className="w-full flex flex-wrap items-center justify-between">
+>>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
 						<img
 							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 0
@@ -98,10 +104,13 @@ const Makeup = ({
 							alt="EYE"
 							onClick={() => setSelectedTone(2)}
 						/>
-					</div>
 				</div>
 				<ColorTone title={titles[selectedTone]} />
+<<<<<<< HEAD
 				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-between gap-y-1 px-1 pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+=======
+				<div className="w-full h-[80%] flex flex-wrap justify-between gap-y-1 pr-2.5 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+>>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
 					{dataTones.map((item, index) => (
 						<div key={index} className="w-fit h-fit relative p-1">
 							{selectedMakeup === index && (

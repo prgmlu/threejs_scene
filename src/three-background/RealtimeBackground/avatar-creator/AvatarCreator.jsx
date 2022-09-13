@@ -36,11 +36,25 @@ class AvatarCreator extends Component {
 		this.currentAvatar = props?.currentAvatar;
 		this.saveAvatar = props?.saveAvatar;
 		this.closeModal = props?.closeModal;
+
+		window.addEventListener('resize', this.handleWindowResize.bind(this));
+
+	}
+
+	handleWindowResize(){
+		if(window.innerWidth >= 1280){
+			this.setState({isWindowSize:true})
+		}
+		else{
+			this.setState({isWindowSize:false})
+		}
+
 	}
 
 	state = {
 		isCookieShown: false,
 		username: '',
+		isWindowSize: window.innerWidth >= 1280 ? true : false,
 	};
 
 	loadAvatar = () => {
@@ -154,18 +168,20 @@ class AvatarCreator extends Component {
 		this.renderer.render(this.scene, this.camera);
 	};
 
+
 	handleClose = () => {
 		this.setState({ isCookieShown: false });
 	};
 
 	render() {
-		const { isCookieShown, username } = this.state;
+		const { isCookieShown, username, isWindowSize } = this.state;
 		return (
 			<div
 				className={`flex flex-col items-center justify-center w-[95%] sm:w-4/5 h-[95%] sm:h-[85%] md:h-[95%] lg:h-[85%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-[#7c6a6a] via-[#c1b8b8] to-[#FFF2F2] rounded-md ${
 					isCookieShown && 'bg-white/50'
 				} overflow-hidden absolute z-30`}
 			>
+<<<<<<< HEAD
 				{/* {!MobileOnlyView && (
 					<img
 						className="w-7 h-77 cursor-pointer absolute -top-2 -right-2 z-20"
@@ -192,6 +208,30 @@ class AvatarCreator extends Component {
 					<div className="w-full sm:w-1/2 md:w-2/5 lg:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-start sm:justify-center">
 						<input
 							className="w-32 z-50 outline-none text-center text-white text-sm rounded-[4px] px-2 py-1.5 sm:mt-10 border-[1px]  border-[#330D0D] bg-[#330d0d4d]"
+=======
+				{!isWindowSize && (
+					<div className="absolute w-full sm:w-fit z-10 top-3 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
+						<button
+							onClick={() => this.closeModal()}
+							className="flex items-center text-white text-base px-2  py-2 sm:py-11 gap-2 rounded-md cursor-pointer bg-black mr-0 sm:mr-6"
+						>
+							<img
+								src={back}
+								alt="BACK"
+								className="object-contain"
+							/>
+							Back
+						</button>
+						<button className="text-center text-black text-base px-6 py-2 sm:py-11 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6">
+							Save
+						</button>
+					</div>
+				)}
+				<div className="w-full h-full sm:h-3/4 md:h-[90%] flex flex-col sm:flex-row items-center">
+					<div className="w-full sm:w-1/2 md:w-2/5 lg:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-start sm:justify-center">
+						<input
+							className="w-32 h-88 z-50 outline-none text-center text-white text-sm rounded-[4px] px-1 py-11 mt-[11px] sm:mt-0 border-[1px]  border-[#330D0D] bg-[#330d0d4d]"
+>>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
 							placeholder="Username"
 							value={username}
 							onChange={({ target }) =>
