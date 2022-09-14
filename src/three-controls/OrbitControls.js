@@ -1126,6 +1126,11 @@ class OrbitControls extends EventDispatcher {
 				: MAX_AZIMUTH_ANGLE,
 		);
 	}
+
+	setupAutoRotate = ({ enabled, autoRotateSpeed = 2.0 }) => {
+		this.autoRotate = enabled;
+		this.autoRotateSpeed = autoRotateSpeed;
+	};
 }
 
 // This set of controls performs orbiting, dollying (zooming), and panning.

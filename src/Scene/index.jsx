@@ -11,7 +11,12 @@ import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
 import { threeEditorVREvents } from './threeEditorVREvents';
 import { Background, ColliderSphere } from '../three-background';
-import { browserName, isDesktop, isMobile, isAndroid } from 'react-device-detect';
+import {
+	browserName,
+	isDesktop,
+	isMobile,
+	isAndroid,
+} from 'react-device-detect';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 import LoadingIcon from '../loadingIcon';
@@ -73,6 +78,9 @@ const Scene = (props) => {
 		loadingIconSrc = null,
 		onBackgroundLoaded = () => {},
 		onBackgroundReady = () => {},
+		autoRotateConfig = {
+			enabled: false,
+		},
 	} = props;
 
 	const [threeReady, setThreeReady] = useState(false);
@@ -163,7 +171,7 @@ const Scene = (props) => {
 			renderer?.render(scene, cameraRef.current);
 			css2DRenderer.render(scene, cameraRef.current);
 			TWEEN.update();
-
+			controllerUpdate && controllerUpdate();
 			// if (controllerUpdate) controllerUpdate();
 		}
 	};
@@ -300,6 +308,7 @@ const Scene = (props) => {
 		const enableRotate = !bgConf?.isFlatScene;
 
 		ThreeController.setupPanControls(enablePan, enableRotate);
+		controlsRef.current.setupAutoRotate(autoRotateConfig);
 	};
 
 	const initRoomCss2DRenderer = () => {
