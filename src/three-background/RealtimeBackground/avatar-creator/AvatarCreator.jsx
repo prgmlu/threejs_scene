@@ -11,7 +11,6 @@ import {
 import AvatarCreatorEditor from './AvatarCreatorEditor';
 import Cookie from '../cookie';
 import back from '../static/avatar/menus/back.png';
-import close from '../static/avatar/menus/close.png';
 import edit from '../static/avatar/edit.png';
 import '../../../assets/css/output.css';
 
@@ -177,14 +176,7 @@ class AvatarCreator extends Component {
 					isCookieShown && 'bg-white/50'
 				} overflow-hidden absolute z-30`}
 			>
-				{isWindowSize ? (
-					<img
-						className="w-7 h-77 cursor-pointer absolute -top-2 -right-2 z-20"
-						src={close}
-						alt="CLOSE"
-						onClick={() => this.closeModal()}
-					/>
-				) : (
+				{!isWindowSize && (
 					<div className="absolute w-full sm:w-fit z-10 top-3 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
 						<button
 							onClick={() => this.closeModal()}

@@ -162,6 +162,16 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 				</div>
+				{windowWidth >= 1440 && (
+					<div className="w-full flex justify-center items-center py-3">
+						<button
+							style={{ border: '1px solid #330D0D' }}
+							className="w-fit h-fit self-center text-[#330D0D] px-7 py-0.5 text-sm rounded-md cursor-pointer"
+						>
+							Save
+						</button>
+					</div>
+				)}
 			</div>
 		);
 	}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AvatarButton from './ui/AvatarButton';
 import AvatarCreator from './avatar-creator/AvatarCreator';
+import close from './static/avatar/menus/close.png';
 
 const CUSTOMIZE_AVATAR = true;
 class AvatarCreatorContainer extends Component {
@@ -88,7 +89,7 @@ class AvatarCreatorContainer extends Component {
 
 	render() {
 		return (
-			<>
+			<div className="w-full h-full relative">
 				<AvatarButton showModal={this.showAvatarCreator} />
 				{this.state.isAvatarCreatorActive && (
 					<AvatarCreator
@@ -102,7 +103,16 @@ class AvatarCreatorContainer extends Component {
 						currentAvatar={this.props.avatar}
 					/>
 				)}
-			</>
+				{window.innerWidth >= 1440 &&
+					this.state.isAvatarCreatorActive && (
+						<img
+							className="w-6 h-6 cursor-pointer absolute top-[6%] right-[9.25%] z-50"
+							src={close}
+							alt="CLOSE"
+							onClick={() => this.closeAvatarCreator()}
+						/>
+					)}
+			</div>
 		);
 	}
 }
