@@ -11,12 +11,7 @@ import { threeEditorMouseEvents } from './threeEditorMouseEvents';
 import { threeEditorKeyboardEvents } from './threeEditorKeyboardEvents';
 import { threeEditorVREvents } from './threeEditorVREvents';
 import { Background, ColliderSphere } from '../three-background';
-import {
-	browserName,
-	isDesktop,
-	isMobile,
-	isAndroid,
-} from 'react-device-detect';
+import { browserName, isDesktop, isMobile } from 'react-device-detect';
 import DebugUI from '../utils/DebugUI';
 import './main.scss';
 import LoadingIcon from '../loadingIcon';
@@ -171,8 +166,7 @@ const Scene = (props) => {
 			renderer?.render(scene, cameraRef.current);
 			css2DRenderer.render(scene, cameraRef.current);
 			TWEEN.update();
-			controllerUpdate && controllerUpdate();
-			// if (controllerUpdate) controllerUpdate();
+			autoRotateConfig?.enabled && controllerUpdate && controllerUpdate();
 		}
 	};
 
