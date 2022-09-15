@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { useEffect } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
+import TWEEN from '@tweenjs/tween.js';
 
 const InteractiveGLBComponent = ({
 	sceneRef,
@@ -16,6 +17,7 @@ const InteractiveGLBComponent = ({
 
 	let model;
 	let camera = window.containerInstance_camera;
+	const cameraPos = camera.position.clone();
 	let controller = window.containerInstance_controller;
 	let renderer = window.containerInstance_renderer;
 
@@ -336,10 +338,87 @@ const InteractiveGLBComponent = ({
 							`rgb(${updateTo.r}, ${updateTo.g}, ${updateTo.b})`,
 						),
 					);
-					material.needsUpdate = true;
+					object.material.needsUpdate = true;
 				}
 			}
 		});
+	};
+
+	const getSceneCenterPos = () => {
+		const position = new THREE.Vector3(0, 0, -10);
+		position.applyQuaternion(camera.quaternion);
+		return position;
+	};
+
+	const rotateCameraTowardsModel = (marker) => {
+		camera.rotation.reorder('YXZ');
+		// calculate time taken to move from the center to marker position.
+		const speed = 5;
+		const centerPosition = getSceneCenterPos();
+		const distanceFromCenter = Math.sqrt(
+			(marker.position.x - centerPosition.x) *
+				(marker.position.x - centerPosition.x) +
+				(marker.position.y - centerPosition.y) *
+					(marker.position.y - centerPosition.y) +
+				(marker.position.z - centerPosition.z) *
+					(marker.position.z - centerPosition.z),
+		);
+
+		// time in milliseconds.
+		const time = (distanceFromCenter / speed) * 500;
+
+		const distance = new THREE.Vector3()
+			.subVectors(camera.position, controller.target)
+			.length();
+		const storedMarkerPosition = new THREE.Vector3(
+			marker.position.x,
+			marker.position.y,
+			marker.position.z,
+		);
+		const startRotation = new THREE.Euler().copy(camera.rotation);
+		camera.lookAt(storedMarkerPosition);
+		const endRotation = new THREE.Euler().copy(camera.rotation);
+		camera.rotation.copy(startRotation);
+
+		new TWEEN.Tween(camera.rotation)
+			.to(
+				{
+					x: endRotation.x,
+					y: endRotation.y,
+					z: endRotation.z,
+				},
+				time,
+			)
+			.easing(TWEEN.Easing.Linear.None)
+			.onUpdate(() => {
+				camera.updateProjectionMatrix();
+			})
+			.onComplete(() => {
+				const normal = new THREE.Vector3(0, 0, -1).applyEuler(
+					camera.rotation,
+				);
+				controller.target = new THREE.Vector3()
+					.add(camera.position)
+					.add(normal.setLength(distance));
+			})
+			.start();
+	};
+
+	const resetCameraPosition = () => {
+		camera.position.x = cameraPos.x;
+		camera.position.y = cameraPos.y;
+		camera.position.z = cameraPos.z;
+	};
+
+	const modelNotInFocus = () => {
+		// Check if model is visibile or within camera's field of view (FOV)
+		const frustum = new THREE.Frustum();
+		const matrix = new THREE.Matrix4().multiplyMatrices(
+			camera.projectionMatrix,
+			camera.matrixWorldInverse,
+		);
+		frustum.setFromProjectionMatrix(matrix);
+		return !frustum.containsPoint(model.position);
 	};
 
 	const processEvent = (e) => {
@@ -347,6 +426,10 @@ const InteractiveGLBComponent = ({
 		switch (eventName) {
 			case 'GLB_UPDATE_COLOR':
 				updateGLBColor(e?.detail?.apply);
+				if (modelNotInFocus()) {
+					rotateCameraTowardsModel(model);
+					resetCameraPosition();
+				}
 				break;
 			default:
 				break;
