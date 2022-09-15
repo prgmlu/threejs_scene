@@ -6,7 +6,7 @@ import makeup from '../../static/avatar/menus/brush.png';
 
 const TabControls = ({ activeTab, onTabClick }) => {
 	return (
-		<div className="w-full sm:w-full md:w-[95%] lg:w-[85%] h-fit sm:h-[12%] md:h-[8%] lg:h-[15%] flex items-start justify-center gap-3">
+		<div className="w-full sm:w-full md:w-[95%] lg:w-[85%] h-fit sm:h-[12%] md:h-[5%] flex items-start justify-center gap-3">
 			<img
 				src={body}
 				alt="Body type"
