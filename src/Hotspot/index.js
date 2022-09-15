@@ -12,22 +12,19 @@ import {
 //TODO: object with hotspot_type =='image_marker' has prop sceneObject == null???
 const Hotspot = (props) => {
 	const {
-		imageURL,
-		imageHoverURL,
 		type,
 		transform,
 		collider_transform,
 		sceneRef,
 		setMaxRenderOrder,
 		userData,
-
+		
 		// accessibility
-		onMouseUp,
+		onAccessibilityMarkerClicked,
 		activeNavIndex,
 		navMarkerIndex,
 		activeHotspotIndex,
 		hotspotMarkerIndex,
-		accessibilityHighlightColor,
 	} = props;
 
 	const markerRef = useRef();
@@ -87,7 +84,7 @@ const Hotspot = (props) => {
 		if (hotspotMarkerIndex !== activeHotspotIndex) return;
 		e.preventDefault();
 		e.stopPropagation();
-		onMouseUp(e, undefined, markerRef.current, undefined);
+		onAccessibilityMarkerClicked(e, undefined, markerRef.current, undefined);
 	};
 
 	const highlightMarker = (marker) => {
@@ -96,19 +93,19 @@ const Hotspot = (props) => {
 			navMarkerIndex === activeNavIndex &&
 			marker.userData.type === 'NavMarker'
 		) {
-			marker.svgSpriteComponent.setColor(accessibilityHighlightColor);
+			marker.onHover();
 		} else if (
 			hotspotMarkerIndex === activeHotspotIndex &&
 			marker.userData.type === 'HotspotMarker'
 		) {
-			marker.svgSpriteComponent.setColor(accessibilityHighlightColor);
+			marker.onHover();
 		} else {
-			marker.svgSpriteComponent.setColor(marker.primaryColor);
+			marker.onUnhover();
 		}
 	};
 
 	useEffect(() => {
-		if (type === 'hotspot') {
+		if (type === 'HotspotMarker') {
 			highlightMarker(markerRef.current);
 		}
 		document.addEventListener('keyup', onEnterPressAccessibilityEvent);
@@ -120,7 +117,7 @@ const Hotspot = (props) => {
 			);
 		};
 	}, [activeNavIndex, activeHotspotIndex]);
-
+	
 	return false;
 };
 
