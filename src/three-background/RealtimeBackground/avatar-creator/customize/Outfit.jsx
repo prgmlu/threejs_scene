@@ -18,11 +18,7 @@ const Outfit = ({ maleOutfits, selectedOutfit, setOutfit }) => {
 						<img
 							id={outfit.name}
 							src={outfit}
-<<<<<<< HEAD
 							className={`w-[60px] sm:w-24 h-fit object-cover bg-white p-[2px] rounded-md cursor-pointer ${
-=======
-							className={`w-[75px] sm:w-20 h-full sm:h-24 shadow-md object-cover bg-white py-11 rounded-md cursor-pointer ${
->>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
 								selectedOutfit === index &&
 								'border-2 border-[#FF9F9F]'
 							}`}

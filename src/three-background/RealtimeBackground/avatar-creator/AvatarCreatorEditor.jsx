@@ -28,12 +28,14 @@ class AvatarCreatorEditor extends Component {
 
 		//add eventlistener to handle resize
 		window.addEventListener('resize', this.handleWindowResize.bind(this));
-		
 	}
 
-	handleWindowResize(){
+	handleWindowResize() {
 		//set the state of the window size
-		this.setState({windowWidth:window.innerWidth,windowHeight:window.innerHeight});
+		this.setState({
+			windowWidth: window.innerWidth,
+			windowHeight: window.innerHeight,
+		});
 	}
 
 	state = {
@@ -118,13 +120,12 @@ class AvatarCreatorEditor extends Component {
 	render() {
 		const { selectedOutfit, activeTab, windowWidth } = this.state;
 		return (
-			<div className="w-full sm:w-1/2 md:w-2/5 lg:w-[45%] h-1/2 sm:h-full flex flex-col justify-between sm:justify-start items-center sm:items-start relative">
+			<div className="w-full sm:w-1/2 md:w-[80%] lg:w-[45%] h-1/2 sm:h-full flex flex-col justify-between sm:justify-start items-center sm:items-start relative md:gap-2 lg:gap-0">
 				<TabControls
 					activeTab={activeTab}
 					onTabClick={this.onTabClick}
 				/>
-<<<<<<< HEAD
-				<div className="w-[96%] sm:w-full md:w-[95%] lg:w-[85%] h-[80%] sm:h-[86%] md:h-[88%] lg:h-[80%] bg-white rounded-lg gap-x-2 pt-3 px-3 relative">
+				<div className="w-[96%] sm:w-full md:w-[95%] lg:w-[85%] h-[80%]  md:h-[70%] bg-white rounded-lg gap-x-2 pt-3 px-3 relative">
 					{activeTab == 1 && (
 						<BodyShape
 							skintoneX={this.state.skintoneX}
@@ -153,12 +154,6 @@ class AvatarCreatorEditor extends Component {
 							currentAvatar={this.props.currentAvatar}
 						/>
 					)}
-=======
-				<div className="w-[96%] sm:w-[70%] md:w-[80%] h-[70%] sm:h-[86%] md:h-[88%] lg:h-[80%] bg-white rounded-lg gap-x-2 pt-3 px-3 relative">
-					{activeTab == 1 && <BodyShape skintoneX={this.state.skintoneX} skintoneY={this.state.skintoneY} setSkintonXY={this.setSkintoneXY.bind(this)} selectedMakeup={this.state.selectedMakeup} setSelectedSkintone={this.setSelectedSkintone.bind(this)} currentAvatar={this.props.currentAvatar} />}
-					{activeTab == 2 && <Face selectedSkintone={this.state.selectedSkintone}  currentAvatar={this.props.currentAvatar} />}
-					{activeTab == 3 && <Makeup selectedMakeup={this.state.selectedMakeup} setSelectedMakeup={this.setSelectedMakeup.bind(this)} selectedSkintone={this.state.selectedSkintone} currentAvatar={this.props.currentAvatar} />}
->>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
 					{activeTab == 4 && (
 						<Outfit
 							selectedOutfit={selectedOutfit}
@@ -167,13 +162,6 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 				</div>
-				{windowWidth <=480 && (
-					<div className="w-[96%] sm:w-[70%] md:w-[80%] flex justify-center items-center py-3">
-						<button className="w-fit h-fit self-center text-[#330D0D] px-7 py-0.5 text-sm border-[1px] border-[#330D0D] rounded-md">
-							Save
-						</button>
-					</div>
-				)}
 			</div>
 		);
 	}

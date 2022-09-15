@@ -12,7 +12,6 @@ import AvatarCreatorEditor from './AvatarCreatorEditor';
 import back from '../static/avatar/menus/back.png';
 import Cookie from '../cookie';
 import close from '../static/avatar/menus/close.png';
-import { MobileOnlyView } from 'react-device-detect';
 import '../../../assets/css/output.css';
 
 class AvatarCreator extends Component {
@@ -38,23 +37,20 @@ class AvatarCreator extends Component {
 		this.closeModal = props?.closeModal;
 
 		window.addEventListener('resize', this.handleWindowResize.bind(this));
-
 	}
 
-	handleWindowResize(){
-		if(window.innerWidth >= 1280){
-			this.setState({isWindowSize:true})
+	handleWindowResize() {
+		if (window.innerWidth >= 1440) {
+			this.setState({ isWindowSize: true });
+		} else {
+			this.setState({ isWindowSize: false });
 		}
-		else{
-			this.setState({isWindowSize:false})
-		}
-
 	}
 
 	state = {
 		isCookieShown: false,
 		username: '',
-		isWindowSize: window.innerWidth >= 1280 ? true : false,
+		isWindowSize: window.innerWidth >= 1440 ? true : false,
 	};
 
 	loadAvatar = () => {
@@ -168,7 +164,6 @@ class AvatarCreator extends Component {
 		this.renderer.render(this.scene, this.camera);
 	};
 
-
 	handleClose = () => {
 		this.setState({ isCookieShown: false });
 	};
@@ -181,39 +176,18 @@ class AvatarCreator extends Component {
 					isCookieShown && 'bg-white/50'
 				} overflow-hidden absolute z-30`}
 			>
-<<<<<<< HEAD
-				{/* {!MobileOnlyView && (
+				{isWindowSize ? (
 					<img
 						className="w-7 h-77 cursor-pointer absolute -top-2 -right-2 z-20"
 						src={close}
 						alt="CLOSE"
 						onClick={() => this.closeModal()}
 					/>
-				)} */}
-
-				<div className="absolute w-full sm:w-fit z-10 top-3 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
-					<button
-						onClick={() => this.closeModal()}
-						className="flex items-center text-white text-base px-2.5  py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-black mr-0 sm:mr-6"
-					>
-						<img src={back} alt="BACK" className="object-contain" />
-						Back
-					</button>
-					<button className="text-center text-black text-base px-4 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6">
-						Save
-					</button>
-				</div>
-
-				<div className="w-full h-full sm:h-3/4 md:h-[90%] flex flex-col sm:flex-row items-center">
-					<div className="w-full sm:w-1/2 md:w-2/5 lg:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-start sm:justify-center">
-						<input
-							className="w-32 z-50 outline-none text-center text-white text-sm rounded-[4px] px-2 py-1.5 sm:mt-10 border-[1px]  border-[#330D0D] bg-[#330d0d4d]"
-=======
-				{!isWindowSize && (
+				) : (
 					<div className="absolute w-full sm:w-fit z-10 top-3 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
 						<button
 							onClick={() => this.closeModal()}
-							className="flex items-center text-white text-base px-2  py-2 sm:py-11 gap-2 rounded-md cursor-pointer bg-black mr-0 sm:mr-6"
+							className="flex items-center text-white text-base px-2.5  py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-black mr-0 sm:mr-6"
 						>
 							<img
 								src={back}
@@ -222,7 +196,7 @@ class AvatarCreator extends Component {
 							/>
 							Back
 						</button>
-						<button className="text-center text-black text-base px-6 py-2 sm:py-11 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6">
+						<button className="text-center text-black text-base px-4 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6">
 							Save
 						</button>
 					</div>
@@ -230,8 +204,7 @@ class AvatarCreator extends Component {
 				<div className="w-full h-full sm:h-3/4 md:h-[90%] flex flex-col sm:flex-row items-center">
 					<div className="w-full sm:w-1/2 md:w-2/5 lg:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-start sm:justify-center">
 						<input
-							className="w-32 h-88 z-50 outline-none text-center text-white text-sm rounded-[4px] px-1 py-11 mt-[11px] sm:mt-0 border-[1px]  border-[#330D0D] bg-[#330d0d4d]"
->>>>>>> 7b06d74b13952e945fecca5094e2b26aea0e0b0c
+							className="w-32 z-50 outline-none text-center text-white text-sm rounded-[4px] px-2 py-1.5 mt-3 sm:mt-10 border-[1px]  border-[#330D0D] bg-[#330d0d4d]"
 							placeholder="Username"
 							value={username}
 							onChange={({ target }) =>
@@ -252,12 +225,14 @@ class AvatarCreator extends Component {
 					)}
 				</div>
 
-				<button
-					onClick={() => this.setState({ isCookieShown: true })}
-					className="z-40 absolute left-4 bottom-[50%] sm:bottom-[1%] -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 font-bold text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
-				>
-					Cookie Policy
-				</button>
+				{window.innerWidth > 960 && (
+					<button
+						onClick={() => this.setState({ isCookieShown: true })}
+						className="z-40 absolute left-4 bottom-[50%] sm:bottom-[1%] -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 font-bold text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
+					>
+						Cookie Policy
+					</button>
+				)}
 
 				{isCookieShown && (
 					<div className="fixed sm:absolute md:fixed lg:absolute inset-0 w-full h-full bg-black/60 sm:bg-transparent">

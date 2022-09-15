@@ -4,24 +4,32 @@ import SkinTone from './SkinTone';
 import check from '../../static/avatar/menus/check.png';
 import ColorTone from '../ColorTone';
 
-const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkintonXY, skintoneX, skintoneY}) => {
+const BodyShape = ({
+	currentAvatar,
+	selectedMakeup,
+	setSelectedSkintone,
+	setSkintonXY,
+	skintoneX,
+	skintoneY,
+}) => {
 	const [selectedShape, setSelectedShape] = useState(1);
 	// const [selectedIndex, setSelectedIndex] = useState({ x: skinToneX || 0, y: skinToneY || 0 });
 	let counter = 0;
 
-	let bodyMesh = currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
-	
+	let bodyMesh =
+		currentAvatar.getChildByName('FemaleAvatar_Body1').children[0];
+
 	const tones = [
 		['#F2D3CE', '#E0B0A6', '#C68D82', '#A36B60', '#7B4B41', '#502E2C'],
 		['#EAC2B9', '#CE9E8F', '#B27F6A', '#8E5D4E', '#643E31'],
 		['#EFD5C8', '#DCB3A1', '#BF9077', '#9D6F55', '#754F38', '#4B3124'],
-		['#E4C8B2', '#CBA487', '#AA8163', '#876144', '#5D412B',],
-		['#EDD8C7', '#D5B69A', '#B99573', '#93724F', '#715236','#483320'],
+		['#E4C8B2', '#CBA487', '#AA8163', '#876144', '#5D412B'],
+		['#EDD8C7', '#D5B69A', '#B99573', '#93724F', '#715236', '#483320'],
 		['#E0C8B0', '#C5A57F', '#A5855E', '#81633D', '#594426'],
 	];
 
 	return (
-		<div className="w-full h-full flex flex-col gap-1">
+		<div className="w-full h-full flex flex-col gap-1 pb-0.5 overflow-y-hidden">
 			<div className="h-[10%] font-sourceSansProSemibold text-lg">
 				Body Shape
 			</div>
@@ -75,33 +83,36 @@ const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkinto
 			<div className="h-[70%] sm:h-[80%] flex flex-col justify-between pb-2">
 				<ColorTone title="Skin tone" />
 				<div className="w-full h-[80%] flex flex-col overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
-				{tones.map((group, index) => (
-					<div
-						key={index}
-						className="flex flex-wrap justify-center items-center gap-2.5"
-					>
-						{group.map((t, idx) => {
-							counter++;
-						return	<SkinTone
-							mesh={bodyMesh}
-							key={counter}
-							counter = {counter}
-							color={t}
-							x={index}
-							y={idx}
-							selectedMakeup={selectedMakeup}
-							// selectedIndex={selectedIndex}
-							skintoneX={skintoneX}
-							skintoneY={skintoneY}
-							setSelectedIndex={setSkintonXY}
-							setSelectedSkintone={setSelectedSkintone}
-							/>
-						}
-						)}
-					</div>
-				))}
+					{tones.map((group, index) => (
+						<div
+							key={index}
+							className="flex flex-wrap justify-center items-center gap-2.5"
+						>
+							{group.map((t, idx) => {
+								counter++;
+								return (
+									<SkinTone
+										mesh={bodyMesh}
+										key={counter}
+										counter={counter}
+										color={t}
+										x={index}
+										y={idx}
+										selectedMakeup={selectedMakeup}
+										// selectedIndex={selectedIndex}
+										skintoneX={skintoneX}
+										skintoneY={skintoneY}
+										setSelectedIndex={setSkintonXY}
+										setSelectedSkintone={
+											setSelectedSkintone
+										}
+									/>
+								);
+							})}
+						</div>
+					))}
+				</div>
 			</div>
-		</div>
 		</div>
 	);
 };
