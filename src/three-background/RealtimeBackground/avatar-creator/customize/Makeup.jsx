@@ -5,9 +5,7 @@ import hair from '../../static/avatar/menus/hair_short.png';
 import eyelash from '../../static/avatar/menus/eyelash.png';
 import eye from '../../static/avatar/menus/eye.png';
 import check from '../../static/avatar/menus/check.png';
-import d_eyelash from '../../static/avatar/demo/demo_eyelashes.png';
-import d_eye from '../../static/avatar/demo/demo_eyes.png';
-import d_face from '../../static/avatar/demo/demo_face.png';
+import makeup_one from '../../static/avatar/makeup/make1.png';
 import { setMeshTextureImage } from '../../../../three-controls/OutfitTranslator';
 
 let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
@@ -66,71 +64,34 @@ const Makeup = ({
 	return (
 		<div className="w-full h-full flex flex-col">
 			<div className="w-full h-full flex flex-col px-2">
-				<div className="flex flex-col gap-2">
-					<div className="w-full flex flex-wrap items-center justify-around">
-						<img
-							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
-								selectedTone === 0
-									? 'bg-white border-[1.5px] border-black'
-									: 'bg-white/50'
-							}`}
-							src={hair}
-							alt="HAIR"
-							onClick={() => setSelectedTone(0)}
-						/>
-						<img
-							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
-								selectedTone === 1
-									? 'bg-white border-[1.5px] border-black'
-									: 'bg-white/50'
-							}`}
-							src={eyelash}
-							alt="EYELASH"
-							onClick={() => setSelectedTone(1)}
-						/>
-						<img
-							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
-								selectedTone === 2
-									? 'bg-white border-[1.5px] border-black'
-									: 'bg-white/50'
-							}`}
-							src={eye}
-							alt="EYE"
-							onClick={() => setSelectedTone(2)}
-						/>
-					</div>
-					<ColorTone title={titles[selectedTone]} />
-					<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-between gap-y-1 px-1 pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
-						{dataTones.map((item, index) => (
-							<div
-								key={index}
-								className="w-fit h-fit relative p-1"
-							>
-								{selectedMakeup === index && (
-									<span className="absolute top-0 right-0 w-3 h-3 object-contain">
-										<img src={check} alt="o" />
-									</span>
-								)}
-								<img
-									src={item}
-									className={`w-[64px] h-fit object-contain rounded p-1 cursor-pointer shadow-md bg-white ${
-										selectedMakeup === index &&
-										'border-2 border-[#FF9F9F]'
-									}`}
-									alt=""
-									onClick={() => {
-										setSelectedStyle(index);
-										setSelectedMakeup(index);
-										setMakeupFromTexture(
-											index,
-											currentAvatar,
-											selectedSkintone,
-										);
-									}}
-								/>
-							</div>
-						))}
-					</div>
+				<div className="font-sourceSansProSemibold text-lg">Makeup</div>
+				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-between gap-1 px-1 pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+					{dataTones.map((item, index) => (
+						<div key={index} className="w-fit h-fit relative p-1">
+							{selectedMakeup === index && (
+								<span className="absolute top-0 right-0 w-3 h-3 object-contain">
+									<img src={check} alt="o" />
+								</span>
+							)}
+							<img
+								src={makeup_one}
+								className={`w-[90px] h-fit object-cover rounded p-1 cursor-pointer shadow-md bg-white ${
+									selectedMakeup === index &&
+									'border-2 border-[#FF9F9F]'
+								}`}
+								alt=""
+								onClick={() => {
+									setSelectedStyle(index);
+									setSelectedMakeup(index);
+									setMakeupFromTexture(
+										index,
+										currentAvatar,
+										selectedSkintone,
+									);
+								}}
+							/>
+						</div>
+					))}
 				</div>
 			</div>
 		</div>

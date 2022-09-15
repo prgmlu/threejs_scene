@@ -2,7 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import SkinTone from './SkinTone';
 import check from '../../static/avatar/menus/check.png';
-import ColorTone from '../ColorTone';
+import shape_one from '../../static/avatar/bodyshape/shape1.png';
+import shape_two from '../../static/avatar/bodyshape/shape2.png';
 
 const BodyShape = ({
 	currentAvatar,
@@ -29,89 +30,80 @@ const BodyShape = ({
 	];
 
 	return (
-		<div className="w-full h-full flex flex-col gap-1 pb-0.5 overflow-y-hidden">
-			<div className="h-[10%] font-sourceSansProSemibold text-lg">
+		<div className="w-full h-full flex flex-col justify-between overflow-y-hidden">
+			<div className="h-fit font-sourceSansProSemibold text-lg pb-2">
 				Body Shape
 			</div>
-			<div className="h-fit flex flex-wrap gap-x-4 gap-y-2 py-11">
-				<button
-					onClick={() => setSelectedShape(1)}
-					className={`w-24 shadow-md ${
+			<div className="h-fit flex flex-wrap gap-x-6 gap-y-1">
+				<div
+					className={`relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedShape === 1
-							? 'bg-white border-[0.25px] border-[#FF9F9F]'
-							: 'bg-white/50'
-					} text-sm font-sourceSansProSemibold rounded px-2 py-1.5 relative`}
+							? 'border-[2px] border-[#FF9F9F]'
+							: 'border-transparent'
+					}`}
 				>
-					Feminine
 					{selectedShape === 1 && (
 						<span className="absolute -top-1.5 -right-1.5 w-4 h-4 object-contain">
 							<img src={check} alt="o" />
 						</span>
 					)}
-				</button>
-				<button
-					onClick={() => setSelectedShape(2)}
-					className={`w-24 shadow-md ${
+					<img
+						className="scale-75 px-3"
+						src={shape_one}
+						alt=""
+						onClick={() => setSelectedShape(1)}
+					/>
+				</div>
+				<div
+					className={`relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedShape === 2
-							? 'bg-white border-[0.25px] border-[#FF9F9F]'
-							: 'bg-white/50'
-					} text-sm font-sourceSansProSemibold rounded px-2 py-1.5 relative`}
+							? 'border-[2px] border-[#FF9F9F]'
+							: 'border-transparent'
+					}`}
 				>
-					Masculine
 					{selectedShape === 2 && (
 						<span className="absolute -top-1.5 -right-1.5 w-4 h-4 object-contain">
 							<img src={check} alt="o" />
 						</span>
 					)}
-				</button>
-				<button
-					onClick={() => setSelectedShape(0)}
-					className={`w-24 shadow-md ${
-						selectedShape === 0
-							? 'bg-white border-[0.25px] border-[#FF9F9F]'
-							: 'bg-white/50'
-					} text-sm font-sourceSansProSemibold rounded px-2 py-1.5 relative`}
-				>
-					Unspecified
-					{selectedShape === 0 && (
-						<span className="absolute -top-1.5 -right-1.5 w-4 h-4 object-contain">
-							<img src={check} alt="o" />
-						</span>
-					)}
-				</button>
-			</div>
-			<div className="h-[70%] sm:h-[80%] flex flex-col justify-between pb-2">
-				<ColorTone title="Skin tone" />
-				<div className="w-full h-[80%] flex flex-col overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
-					{tones.map((group, index) => (
-						<div
-							key={index}
-							className="flex flex-wrap justify-center items-center gap-2.5"
-						>
-							{group.map((t, idx) => {
-								counter++;
-								return (
-									<SkinTone
-										mesh={bodyMesh}
-										key={counter}
-										counter={counter}
-										color={t}
-										x={index}
-										y={idx}
-										selectedMakeup={selectedMakeup}
-										// selectedIndex={selectedIndex}
-										skintoneX={skintoneX}
-										skintoneY={skintoneY}
-										setSelectedIndex={setSkintonXY}
-										setSelectedSkintone={
-											setSelectedSkintone
-										}
-									/>
-								);
-							})}
-						</div>
-					))}
+					<img
+						className="scale-75 px-3"
+						src={shape_two}
+						alt=""
+						onClick={() => setSelectedShape(2)}
+					/>
 				</div>
+			</div>
+			<div className="font-sourceSansProSemibold text-lg py-3">
+				Skin Tone
+			</div>
+			<div className="w-full h-fit max-h-[50%] flex flex-col gap-1 pb-1 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+				{tones.map((group, index) => (
+					<div
+						key={index}
+						className="flex flex-wrap justify-center items-center gap-3"
+					>
+						{group.map((t, idx) => {
+							counter++;
+							return (
+								<SkinTone
+									mesh={bodyMesh}
+									key={counter}
+									counter={counter}
+									color={t}
+									x={index}
+									y={idx}
+									selectedMakeup={selectedMakeup}
+									// selectedIndex={selectedIndex}
+									skintoneX={skintoneX}
+									skintoneY={skintoneY}
+									setSelectedIndex={setSkintonXY}
+									setSelectedSkintone={setSelectedSkintone}
+								/>
+							);
+						})}
+					</div>
+				))}
 			</div>
 		</div>
 	);

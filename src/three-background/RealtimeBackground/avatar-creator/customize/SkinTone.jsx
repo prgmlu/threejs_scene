@@ -32,24 +32,28 @@ const SkinTone = ({
 	setSelectedSkintone,
 }) => {
 	return (
-		<div className="w-fit h-fit relative">
+		<button
+			onClick={() => {
+				setSelectedIndex(x, y);
+				swapSkinTexture(counter, mesh, selectedMakeup);
+				setSelectedSkintone(counter);
+			}}
+			className={`w-10 sm:w-12 h-[40px] sm:h-12 rounded-full relative`}
+			style={{
+				backgroundColor: color,
+				border: `${
+					x === skintoneX && y === skintoneY
+						? '2px solid #FF9F9F'
+						: 'none'
+				}`,
+			}}
+		>
 			{x === skintoneX && y === skintoneY && (
 				<span className="absolute top-0 right-0 w-3 h-3 object-contain">
 					<img src={check} alt="o" />
 				</span>
 			)}
-			<button
-				onClick={() => {
-					setSelectedIndex(x, y);
-					swapSkinTexture(counter, mesh, selectedMakeup);
-					setSelectedSkintone(counter);
-				}}
-				style={{ backgroundColor: color }}
-				className={`w-10 sm:w-12 h-[40px] sm:h-12 rounded-full cursor-pointer border-2 ${
-					x === skintoneX && y === skintoneY && 'border-[#FF9F9F]'
-				}`}
-			></button>
-		</div>
+		</button>
 	);
 };
 

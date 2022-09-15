@@ -9,6 +9,7 @@ module.exports = {
 				sourceSansProRegular: ['Source Sans Pro Regular'],
 				sourceSansProSemibold: ['Source Sans Pro Semibold'],
 				sourceSansProBold: ['Source Sans Pro Bold'],
+				helvetic: ['HelveticaNeueLTPro-Medium'],
 			},
 		},
 	},
