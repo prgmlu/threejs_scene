@@ -10,9 +10,6 @@ import { RELEVANT_STORE_PARTS_NAMES } from './avatar-creator/CustomizationConsta
 //import draco loader
 import { DRACOLoader } from './DRACOLoader.js';
 
-// let femaleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver7.glb";
-let maleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_005.glb";
-// let maleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_003.glb";
 
 const STORE_Y_OFFSET = 7;
 
@@ -282,7 +279,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         async function loadStoreAndModel() {
 
             let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver7_4.glb";
-            let M_MODEL_URL = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004.glb";
+            let M_MODEL_URL = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004_1.glb";
 
             let [_,maleModelMixerMap, femaleModelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations(M_MODEL_URL,localAvatarOutfitStringRef.current), loadModelAndAnimations(FEM_MODEL_URL,localAvatarOutfitStringRef.current)]);
 
@@ -292,6 +289,11 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
             
             
             window.maleModel = maleModel;
+
+            window.maleModel.getChildByName('Hair1').visible=false;
+            window.maleModel.getChildByName('Hair2').visible=true;
+            window.maleModel.getChildByName('Outfit1').visible=true;
+
             window.femaleModel = femaleModel;
             
             
