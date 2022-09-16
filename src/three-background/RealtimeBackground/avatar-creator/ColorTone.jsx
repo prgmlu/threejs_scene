@@ -66,7 +66,8 @@ let setEyeColor = (color,currentAvatar) => {
 
 
 const ColorTone = ({ title, currentAvatar, selectedTone }) => {
-	const [color, setColor] = useState('#000');
+	// const [color, setColor] = useState('#000');
+	const [color, setColor] = useState({'Hair': '#000', 'Eyebrows': '#000', 'Eyes': '#000'});
 	const [isPickerVisible, setIsPickerVisible] = useState(false);
 
 	return (
@@ -81,12 +82,17 @@ const ColorTone = ({ title, currentAvatar, selectedTone }) => {
 				<div
 					onClick={() => setIsPickerVisible(true)}
 					className={`w-10 h-[32px] rounded-r-md cursor-pointer`}
-					style={{ backgroundColor: color }}
+					style={{ backgroundColor: color[title] }}
 				></div>
 				{isPickerVisible && (
 					<ColorPicker
-						selectedColor={color}
-						handlePicker={(c)=>{setColor(c);
+						selectedColor={color[title]}
+						handlePicker={(c)=>{
+							let newColor = c;
+
+							let newObj = {...color};
+							newObj[title] = newColor;
+							setColor(newObj);
 							if(title == 'Hair'){
 								setHairColor(c,currentAvatar);
 							}

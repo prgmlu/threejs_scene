@@ -56,7 +56,7 @@ class AvatarCreator extends Component {
 	};
 
 	loadAvatar = () => {
-		this.currentAvatar.position.set(0, -1.3, -3.1);
+		this.currentAvatar.position.set(0, -1.3, -3.2);
 		this.currentAvatar.rotation.set(0, 0, 0, 'XYZ');
 		this.scene.add(this.currentAvatar);
 	};
