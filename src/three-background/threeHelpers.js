@@ -16,11 +16,12 @@ import { dressUpFromString } from '../three-controls/OutfitTranslator';
 import { GUI } from 'dat.gui';
 import {USE_OLD_CHARACTER_MODEL, SHADOW_MAP_TYPE, SHADOW_ENABLED} from '../three-background/RealtimeBackground/avatar-creator/CustomizationConstants.js';
 
-let USE_OUTFIT_TRANSLATION = false;
+let USE_OUTFIT_TRANSLATION = true;
 
 
 // let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver2.glb" ;
 let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver6.glb" ;
+// let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_003.glb" ;
 
 const DEBUG_LIGHTS = false;
 
@@ -261,28 +262,27 @@ export const loadModelAndAnimations = async (outfitString) => {
 			window.model = model;
 			
 
-			if(USE_OUTFIT_TRANSLATION){
+			if(outfitString && USE_OUTFIT_TRANSLATION){
 				dressUpFromString(data.scene,outfitString)
 			}
 			else{
 				hideAllExceptFirstClothItem(data.scene)
 			}
 
+			try{
+				model.getChildByName("Eyebrow1").visible = true;
+	
+				model.getChildByName("Eye1").material.color.set('black');
+				model.getChildByName("Eye1").material.needsUpdate = true;
+	
+				model.getChildByName("Eyebrow1").material.color.set('black');
+				model.getChildByName("Eyebrow1").material.needsUpdate = true;
+			}
+			catch(e){
+				console.log(e)
+			}
 
-			// hideAllExceptFirstClothItem(data.scene)
 			debugger;
-			dressUpFromString(data.scene,outfitString)
-
-
-			model.getChildByName("Eyebrow1").visible = true;
-
-			model.getChildByName("Eye1").material.color.set('black');
-			model.getChildByName("Eye1").material.needsUpdate = true;
-
-			model.getChildByName("Eyebrow1").material.color.set('black');
-			model.getChildByName("Eyebrow1").material.needsUpdate = true;
-
-
 
 			const charAnimations = animations;
 

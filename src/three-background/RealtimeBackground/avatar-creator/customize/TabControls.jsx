@@ -8,7 +8,8 @@ const TabControls = ({ activeTab, onTabClick }) => {
 	return (
 		<div className="w-full sm:w-full md:w-[95%] lg:w-[85%] h-fit sm:h-[12%] md:h-[8%] lg:h-[15%] flex items-start justify-center gap-3">
 			<img
-				src={body}
+				// src={body}
+				src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/body.svg"}
 				alt="Body type"
 				id="1"
 				className={`${
@@ -19,7 +20,8 @@ const TabControls = ({ activeTab, onTabClick }) => {
 				onClick={() => onTabClick(1)}
 			/>
 			<img
-				src={skin}
+				// src={skin}
+				src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/face.svg"}
 				alt="Skin tone"
 				id="2"
 				className={`${
@@ -30,7 +32,8 @@ const TabControls = ({ activeTab, onTabClick }) => {
 				onClick={() => onTabClick(2)}
 			/>
 			<img
-				src={makeup}
+				// src={makeup}
+				src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/makeup.svg"}
 				alt="Makeup"
 				id="2"
 				className={`${
@@ -41,7 +44,8 @@ const TabControls = ({ activeTab, onTabClick }) => {
 				onClick={() => onTabClick(3)}
 			/>
 			<img
-				src={cloth}
+				// src={cloth}
+				src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/outfit.svg"}
 				alt="Outfit"
 				id="3"
 				className={`${

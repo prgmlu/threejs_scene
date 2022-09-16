@@ -12,7 +12,7 @@ export default class AvatarButton extends Component {
 	render() {
 		return (
             <div className='avatar-editor-button' onClick={this.showModal}>
-                <img className='avatar-editor-icon' src={avatarIcon} />
+                <img className='avatar-editor-icon' src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/edit_avatar.svg"} />
             </div>
         )
     }

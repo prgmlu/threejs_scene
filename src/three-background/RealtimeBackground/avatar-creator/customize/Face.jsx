@@ -76,27 +76,36 @@ const Face = ({ currentAvatar }) => {
 	const titles = ['Hair', 'Eyebrows', 'Eyes'];
 
 	let hairImages = [
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Hair1.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Hair2.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Hair3.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Hair4.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair1.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair2.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair3.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair4.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair5.png',
 	];
 
 	let eyebrowImages = [
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow1.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow2.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow3.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow4.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow5.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyebrows/eyebrow1.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyebrows/eyebrow2.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyebrows/eyebrow3.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyebrows/eyebrow4.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyebrows/eyebrow5.png',
 	];
 
+	// let eyebrowImages = [
+	// 	'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow1.png',
+	// 	'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow2.png',
+	// 	'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow3.png',
+	// 	'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow4.png',
+	// 	'https://cdn.obsess-vr.com/realtime3d/skintones/Eyebrow5.png',
+	// ];
+
 	let eyeImages = [
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape1.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape2.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape3.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape4.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape5.png',
-		'https://cdn.obsess-vr.com/realtime3d/skintones/Eyeshape6.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyes/eye1.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyes/eye2.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyes/eye3.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyes/eye4.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyes/eye5.png',
+		'https://cdn.obsess-vr.com/realtime3d/ct_ui/eyes/eye6.png',
 	];
 
 	const demo_items_count = 30;
@@ -143,7 +152,8 @@ const Face = ({ currentAvatar }) => {
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
 							}`}
-							src={hair}
+							// src={hair}
+							src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/hair.svg"}
 							alt="HAIR"
 							onClick={() => setSelectedTone(0)}
 						/>
@@ -153,7 +163,8 @@ const Face = ({ currentAvatar }) => {
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
 							}`}
-							src={eyelash}
+							src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/eyebrows.svg"}
+							// src={eyelash}
 							alt="EYELASH"
 							onClick={() => setSelectedTone(1)}
 						/>
@@ -163,7 +174,7 @@ const Face = ({ currentAvatar }) => {
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
 							}`}
-							src={eye}
+							src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/eyes.svg"}
 							alt="EYE"
 							onClick={() => setSelectedTone(2)}
 						/>
@@ -181,7 +192,7 @@ const Face = ({ currentAvatar }) => {
 							>
 								{selectedStyle === index && (
 									<span className="absolute top-0 right-0 w-3 h-[12px] object-contain">
-										<img src={check} alt="o" />
+										<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
 									</span>
 								)}
 								<img

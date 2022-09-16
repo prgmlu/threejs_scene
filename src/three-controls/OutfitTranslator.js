@@ -264,30 +264,10 @@ export const dressUpFromString = (model, outfitString) => {
         if(outfit.hairMesh){
         
         let hairMesh = hairs.find(mesh => mesh.name === outfit.hairMesh);
-        // if(!hairMesh){
-        //     debugger;
-        // }
-        hairMesh.visible = true;
-
-        if(USE_OLD_CHARACTER_MODEL){
-            let meshNumber = 1;
-            if(outfit.hairMesh.includes("2")){
-                meshNumber = 2;
-            }
-            if(outfit.hairMesh.includes("3")){
-                meshNumber = 3;
-            }
-    
-            if (outfit.hairColor == 'Red') {
-                setMeshTextureImage(hairMesh, RED_HAIR_TEXTURES[meshNumber - 1]);
-            }
-            if (outfit.hairColor == 'Brown') {
-                setMeshTextureImage(hairMesh, BROWN_HAIR_TEXTURES[meshNumber - 1]);
-            }
-            if (outfit.hairColor == 'Blonde') {
-                setMeshTextureImage(hairMesh,   BLONDE_HAIR_TEXTURES[meshNumber - 1]);
-            }
+        if(hairMesh){
+            hairMesh.visible = true;
         }
+
         else{
             let meshNumber = 1;
             if(outfit.hairMesh.includes("3")){
@@ -371,7 +351,6 @@ export const dressUpFromString = (model, outfitString) => {
     }
 
     let shirtMesh = shirts.find(mesh => mesh.name === outfit.shirtMesh);
-    debugger;
     if(shirtMesh)
         shirtMesh.visible = true;
 

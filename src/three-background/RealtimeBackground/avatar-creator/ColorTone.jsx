@@ -57,7 +57,6 @@ let setEyeColor = (color,currentAvatar) => {
 			material.needsUpdate = true;
 		}
 		catch(e){
-			debugger;
 			console.log(e);
 		}
 	}
@@ -76,7 +75,7 @@ const ColorTone = ({ title, currentAvatar, selectedTone }) => {
 			<div className="flex">
 				<img
 					className="rounded-l-md px-2.5 py-1 bg-white object-contain"
-					src={picker}
+					src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/palette.svg"}
 					alt="pick"
 				/>
 				<div

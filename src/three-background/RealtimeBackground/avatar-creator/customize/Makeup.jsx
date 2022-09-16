@@ -14,7 +14,6 @@ let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
 	console.log(url);
 	// swap the texture of the mesh
 	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1');
-	debugger;
 	setMeshTextureImage(mesh, url);
 	addRoughness(currentAvatar);
 	// return;
@@ -41,11 +40,11 @@ const Makeup = ({
 	const demo_items_count = 30;
 
 	let makeupImages = [
-		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup1.png',
-		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup2.png',
-		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup3.png',
-		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup4.png',
-		'https://cdn.obsess-vr.com/realtime3d/placeholders/Makeup5.png',
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup1.png',
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup2.png',
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup3.png',
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup4.png',
+		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup5.png',
 	];
 
 	useEffect(() => {
@@ -79,7 +78,7 @@ const Makeup = ({
 						<div key={index} className="w-fit h-fit relative p-1">
 							{selectedMakeup === index && (
 								<span className="absolute top-0 right-0 w-3 h-3 object-contain">
-									<img src={check} alt="o" />
+									<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
 								</span>
 							)}
 							<img

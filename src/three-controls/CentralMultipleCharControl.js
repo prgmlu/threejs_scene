@@ -5,7 +5,7 @@ import {
     dressUpFromString
 } from './OutfitTranslator';
 
-const ACTIVE = true;
+const ACTIVE = false;
 const USE_TOOLTIP = true;
 
 

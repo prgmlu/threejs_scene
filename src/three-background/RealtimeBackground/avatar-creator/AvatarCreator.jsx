@@ -18,6 +18,8 @@ class AvatarCreator extends Component {
 	constructor(props) {
 		super(props);
 		this.scene = createScene();
+		window.miniScene = this.scene;
+		this.switchAvatar = this.props.switchAvatar;
 		this.renderer = createRenderer();
 		this.renderer.setSize(
 			window.innerWidth * 0.3528,
@@ -176,14 +178,7 @@ class AvatarCreator extends Component {
 					isCookieShown && 'bg-white/50'
 				} overflow-hidden absolute z-30`}
 			>
-				{isWindowSize ? (
-					<img
-						className="w-7 h-77 cursor-pointer absolute -top-2 -right-2 z-20"
-						src={close}
-						alt="CLOSE"
-						onClick={() => this.closeModal()}
-					/>
-				) : (
+				{!isWindowSize && (
 					<div className="absolute w-full sm:w-fit z-10 top-3 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
 						<button
 							onClick={() => this.closeModal()}
@@ -230,6 +225,8 @@ class AvatarCreator extends Component {
 							currentAvatar={this.props.currentAvatar}
 							currentScene={this.scene}
 							camera={this.camera}
+							closeModal={this.props.closeModal}
+							switchAvatar={this.props.switchAvatar}
 						/>
 					)}
 				</div>

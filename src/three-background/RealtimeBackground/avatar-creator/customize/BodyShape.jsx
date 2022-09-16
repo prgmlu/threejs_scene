@@ -2,11 +2,10 @@ import React from 'react';
 import { useState } from 'react';
 import SkinTone from './SkinTone';
 import check from '../../static/avatar/menus/check.png';
-const FEMALE_SHAPE = "https://cdn.obsess-vr.com/realtime3d/female_shape.png";
-const MALE_SHAPE = "https://cdn.obsess-vr.com/realtime3d/male_shape.png"
+const FEMALE_SHAPE = "https://cdn.obsess-vr.com/realtime3d/ct_ui/feminine.svg";
+const MALE_SHAPE = "https://cdn.obsess-vr.com/realtime3d/ct_ui/masculine.svg";
 
-const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkintonXY, skintoneX, skintoneY}) => {
-	const [selectedShape, setSelectedShape] = useState(1);
+const BodyShape = ({currentAvatar,selectedBodyshape, setSelectedBodyshape, selectedMakeup, setSelectedSkintone,setSkintonXY, skintoneX, skintoneY}) => {
 	// const [selectedIndex, setSelectedIndex] = useState({ x: skinToneX || 0, y: skinToneY || 0 });
 	let counter = 0;
 
@@ -28,43 +27,43 @@ const BodyShape = ({currentAvatar, selectedMakeup, setSelectedSkintone,setSkinto
 			</div>
 			<div className="h-fit flex flex-wrap gap-x-6 gap-y-1">
 				<div
-					onClick={() => setSelectedShape(1)}
+					onClick={() => { setSelectedBodyshape('female')}}
 					className={`relative cursor-pointer rounded-[4px] shadow-md ${
-						selectedShape === 1
+						selectedBodyshape === 'female'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
 					}`}
 				>
-					{selectedShape === 1 && (
+					{selectedBodyshape === 'female' && (
 						<span className="absolute -top-1.5 -right-1.5 w-4 h-4 object-contain">
-							<img src={check} alt="o" />
+							<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
 						</span>
 					)}
 					<img
 						className="scale-75 px-3"
 						src={FEMALE_SHAPE}
 						alt=""
-						onClick={() => setSelectedShape(1)}
+						onClick={() => { setSelectedBodyshape('female')}}
 					/>
 				</div>
 				<div
-					onClick={() => setSelectedShape(2)}
+					onClick={() => { setSelectedBodyshape('male')}}
 					className={`relative cursor-pointer rounded-[4px] shadow-md ${
-						selectedShape === 2
+						selectedBodyshape === 'male'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
 					}`}
 				>
-					{selectedShape === 2 && (
+					{selectedBodyshape === 'male' && (
 						<span className="absolute -top-1.5 -right-1.5 w-4 h-4 object-contain">
-							<img src={check} alt="o" />
+							<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
 						</span>
 					)}
 					<img
 						className="scale-75 px-3"
 						src={MALE_SHAPE}
 						alt=""
-						onClick={() => setSelectedShape(2)}
+						onClick={() => { setSelectedBodyshape('male')}}
 					/>
 				</div>
 			</div>

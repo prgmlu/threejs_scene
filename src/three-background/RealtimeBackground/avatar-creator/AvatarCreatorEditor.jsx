@@ -10,17 +10,16 @@ class AvatarCreatorEditor extends Component {
 	constructor(props) {
 		super(props);
 		this.camera = this.props.camera;
+		this.switchAvatar = this.props.switchAvatar;
+		this.closeModal = this.props.closeModal;
 		this.textureLoader = new THREE.TextureLoader();
 		this.maleOutfits = {
 			display: [
-				'https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png',
-				'https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png',
-				'https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png',
-				'https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png',
-				'https://cdn.obsess-vr.com/realtime3d/outfits/image (7).png',
-				'https://cdn.obsess-vr.com/realtime3d/outfits/image (8).png',
-				'https://cdn.obsess-vr.com/realtime3d/outfits/image (9).png',
-				'https://cdn.obsess-vr.com/realtime3d/outfits/image (10).png',
+				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit1.png',
+				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit2.png',
+				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit3.png',
+				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit4.png',
+				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit5.png',
 			],
 		};
 		this.currentScene = props?.currentScene;
@@ -46,6 +45,7 @@ class AvatarCreatorEditor extends Component {
 		skintoneX: 0,
 		skintoneY: 0,
 		selectedMakeup: null,
+		selectedBodyshape:'female',
 		windowWidth: window.innerWidth,
 		windowHeight: window.innerHeight,
 	};
@@ -63,6 +63,13 @@ class AvatarCreatorEditor extends Component {
 	setSelectedMakeup = (makeup) => {
 		this.setState({
 			selectedMakeup: makeup,
+		});
+	};
+
+	setSelectedBodyshape = (bodyshape) => {
+		// this.switchAvatar(bodyshape);
+		this.setState({
+			selectedBodyshape: bodyshape,
 		});
 	};
 
@@ -143,6 +150,8 @@ class AvatarCreatorEditor extends Component {
 							setSelectedSkintone={this.setSelectedSkintone.bind(
 								this,
 							)}
+							selectedBodyshape={this.state.selectedBodyshape}
+							setSelectedBodyshape={this.setSelectedBodyshape.bind(this)}
 							currentAvatar={this.props.currentAvatar}
 						/>
 					)}
@@ -170,6 +179,17 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 				</div>
+				{windowWidth >= 1440 && (
+					<div className="w-full flex justify-center items-center py-3">
+						<button
+							style={{ border: '1px solid #330D0D' }}
+							className="w-fit h-fit self-center text-[#330D0D] px-7 py-0.5 text-sm rounded-md cursor-pointer"
+							onClick={this.props.closeModal}
+						>
+							Save
+						</button>
+					</div>
+				)}
 			</div>
 		);
 	}

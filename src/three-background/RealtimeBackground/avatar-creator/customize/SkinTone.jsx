@@ -50,7 +50,7 @@ const SkinTone = ({
 		>
 			{x === skintoneX && y === skintoneY && (
 				<span className="absolute top-0 right-0 w-3 h-3 object-contain">
-					<img src={check} alt="o" />
+					<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
 				</span>
 			)}
 		</button>

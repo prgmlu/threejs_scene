@@ -58,7 +58,14 @@ export default class CharacterControls {
             this.playerCollider = new Capsule(start,end,0.45);
 
             this.worldOctree = new Octree();
-            this.worldOctree.fromGraphNode(window.store.getObjectByName(RELEVANT_STORE_PARTS_NAMES[0]));
+            try{
+                this.worldOctree.fromGraphNode(window.store.getObjectByName(RELEVANT_STORE_PARTS_NAMES[0]));
+            }
+            catch(e){
+                this.worldOctree.fromGraphNode(window.store)
+                // console.log("error in octree creation");
+            }
+
             // this.octreeHelper = new OctreeHelper(this.worldOctree);
             // this.scene.add(this.octreeHelper)
 
@@ -326,7 +333,7 @@ export default class CharacterControls {
                 this.currentAction = newAction;
             }
             this.charMixer.update(updateDelta)
-            this.storeMixer.update(updateDelta)
+            // this.storeMixer.update(updateDelta)
         }
 
         if (this.currentAction == ANIMATION_NAMES['walk'] || isWalking) {

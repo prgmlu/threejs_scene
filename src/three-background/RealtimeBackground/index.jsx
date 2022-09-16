@@ -7,7 +7,18 @@ import './output.css';
 import { predeterminedOutfitsWithHair } from './avatar-creator/predeterminedOutfits';
 import { RELEVANT_STORE_PARTS_NAMES } from './avatar-creator/CustomizationConstants';
 
+//import draco loader
+import { DRACOLoader } from './DRACOLoader.js';
+
+let femaleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver6.glb";
+let maleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_003.glb";
+
 const STORE_Y_OFFSET = 7;
+
+let hideAllHotspots = (scene) => {
+
+    scene.children.filter((i)=>{return i.name=='marker' || i.name=='visualObject'}).forEach((i)=>{i.visible=false;});
+}
 
 let adjustHotspots = (scene) => {
 
@@ -140,7 +151,6 @@ function createRandomName(){
 }
 
 function getInitialAvatarOutfitString(){
-    debugger;
     let x = predeterminedOutfitsWithHair;
     let randomNumber = Math.floor(Math.random() * Object.keys(predeterminedOutfitsWithHair).length);
     return x[randomNumber];
@@ -158,6 +168,30 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
     const localAvatarNameRef = useRef(createRandomName());
     const localAvatarOutfitStringRef = useRef(getInitialAvatarOutfitString());
     window.localAvatarOutfitStringRef = localAvatarOutfitStringRef;
+
+    let switchAvatar = async (avType) => {
+        let url;
+        if(avType == 'male'){
+            url = maleModelUrl;
+        }
+        else {
+            url = femaleModelUrl;
+        }
+        let modelMixerMap = await loadModelAndAnimations(url,null,avType);
+            let [model,mixer,animMap ] = modelMixerMap ; 
+            model.position.set(0,-1.3,-3.1);
+            setCharMixer(mixer);
+            setAnimationsMap(animMap);
+            //remove old avatar from scene
+            miniScene.remove(avatar);
+            setAvatar(model);
+            // add new avatar to scene
+            // scene.add(model);
+            window.miniScene.add(model);
+    }
+
+    window.switchAvatar = switchAvatar;
+
 
 
     let handleAnimations = (data)=>{
@@ -190,10 +224,17 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         
         let loader = new GLTFLoader();
 		loader.crossOrigin = true;
+
+        // draco
+        let dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath( 'https://cdn.obsess-vr.com/charlotte-tilbury/gltf/' );
+        loader.setDRACOLoader( dracoLoader );
+
         
         function loadStore () {
             return new Promise((resolve, reject) => {
-                loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v032.glb",(storeGlb) => {
+                // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v032.glb",(storeGlb) => {
+                loader.load("https://cdn.obsess-vr.com/realtime3d/CT_Holiday2022_v004.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_sceneAnim_v030.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v026.glb",(storeGlb) => {
@@ -204,8 +245,12 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
                     });
 
                     // i.receiveShadow = true;
-                    
-                    storeGlb.scene.getObjectByName(RELEVANT_STORE_PARTS_NAMES[0]).receiveShadow = true;
+                    try{
+                        storeGlb.scene.getObjectByName(RELEVANT_STORE_PARTS_NAMES[0]).receiveShadow = true;
+                    }
+                    catch(e){
+                        console.log(e);
+                    }
                     
                     setUpNormalLights(scene);
 
@@ -252,9 +297,12 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
     return (
         <>
-        {adjustHotspots(scene)}
+        {/* {adjustHotspots(scene)} */}
+        {hideAllHotspots(scene)}
         { avatar && charControls &&  <AvatarCreatorContainer charControls={charControls} avatar={avatar} scene={scene} avatarPos={avatar.position} localAvatarNameRef={localAvatarNameRef}
-        localAvatarOutfitStringRef={localAvatarOutfitStringRef}/>}
+        localAvatarOutfitStringRef={localAvatarOutfitStringRef}
+        switchAvatar={switchAvatar}
+        />}
 
 		{avatar &&  <RealtimeControls scene={scene} camera={camera} renderer={renderer} avatar={avatar} setCharControls={setCharControls} orbitControls={controller}
             charMixer={charMixer} animationsMap={animationsMap} storeMixer={storeMixer} charControls={charControls} 
