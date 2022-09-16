@@ -1,7 +1,26 @@
 import React from 'react';
 import check from '../../static/avatar/menus/check.png';
 
-const Outfit = ({ maleOutfits, selectedOutfit, setOutfit }) => {
+let switchOutfit = (e, index, currentAvatar) => {
+	let outfitNames = [
+		'Outfit1',
+		'Outfit2',
+		'Outfit3',
+		'Outfit4',
+		'Outfit5',
+	];
+
+	// make them all invisible
+	for (let i = 0; i < outfitNames.length; i++) {
+		currentAvatar.getObjectByName(outfitNames[i]).visible = false;
+	}
+
+	// make the selected one visible
+	currentAvatar.getObjectByName(outfitNames[index]).visible = true;
+
+}
+
+const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar }) => {
 	return (
 		<div className="w-full h-full flex flex-col gap-1 scrollbar">
 			<div className="font-sourceSansProSemibold text-lg">Outfit</div>
@@ -25,7 +44,7 @@ const Outfit = ({ maleOutfits, selectedOutfit, setOutfit }) => {
 								selectedOutfit === index &&
 								'border-2 border-[#FF9F9F]'
 							}`}
-							onClick={(e) => setOutfit(e, index)}
+							onClick={(e) => {setOutfit(e, index); switchOutfit(e, index, currentAvatar) }}
 						/>
 					</div>
 				))}

@@ -108,16 +108,16 @@ class AvatarCreatorEditor extends Component {
 	setOutfit = (e, index) => {
 		this.setState({ selectedOutfit: index }, () => {});
 
-		let selectedItem = this.maleOutfits.textures.filter((texture) => {
-			return texture.name == e.target.id;
-		})[0];
-		let selectedTexture = this.textureLoader.load(selectedItem.src);
-		this.currentScene.children[0].children[0].getObjectByName(
-			e.target.className,
-		).material.map = selectedTexture;
-		this.currentScene.children[0].children[0].getObjectByName(
-			e.target.className,
-		).material.needsUpdate = true;
+		// let selectedItem = this.maleOutfits.textures.filter((texture) => {
+		// 	return texture.name == e.target.id;
+		// })[0];
+		// let selectedTexture = this.textureLoader.load(selectedItem.src);
+		// this.currentScene.children[0].children[0].getObjectByName(
+		// 	e.target.className,
+		// ).material.map = selectedTexture;
+		// this.currentScene.children[0].children[0].getObjectByName(
+		// 	e.target.className,
+		// ).material.needsUpdate = true;
 	};
 
 	handlePicker = (value) => {
@@ -176,6 +176,7 @@ class AvatarCreatorEditor extends Component {
 							selectedOutfit={selectedOutfit}
 							maleOutfits={this.maleOutfits}
 							setOutfit={this.setOutfit}
+							currentAvatar={this.props.currentAvatar}
 						/>
 					)}
 				</div>

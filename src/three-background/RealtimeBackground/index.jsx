@@ -10,8 +10,9 @@ import { RELEVANT_STORE_PARTS_NAMES } from './avatar-creator/CustomizationConsta
 //import draco loader
 import { DRACOLoader } from './DRACOLoader.js';
 
-let femaleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver6.glb";
-let maleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_003.glb";
+// let femaleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver7.glb";
+let maleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004.glb";
+// let maleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_003.glb";
 
 const STORE_Y_OFFSET = 7;
 

@@ -42,6 +42,14 @@ const avatarSkinNames = [
 
 ]
 
+let outfitNames = [
+    "Outfit1",
+    "Outfit2",
+    "Outfit3",
+    "Outfit4",
+    "Outfit5",
+]
+
 export const getOutfitParts = (model, hide = false, hideHair=true) => {
     let hairs = [];
     let pants = [];
@@ -57,7 +65,8 @@ export const getOutfitParts = (model, hide = false, hideHair=true) => {
     let skirts = [];
     let dresses = [];
 
-    let avatarSkins = []
+    let avatarSkins = [];
+    let outfits = [];
     
     
 
@@ -68,6 +77,18 @@ export const getOutfitParts = (model, hide = false, hideHair=true) => {
                     child.visible = false;
                 }
             }
+
+
+            if (outfitNames.includes(child.name)){
+                outfits.push(child);
+                if (hide){
+                    child.visible = false;
+                }
+            }
+
+
+
+
             if(child.name.toLowerCase().includes("dress")){
                 dresses.push(child);
                 if(hide){
@@ -166,7 +187,8 @@ export const getOutfitParts = (model, hide = false, hideHair=true) => {
         eyes,
         skirts,
         avatarSkins,
-        dresses
+        dresses,
+        outfits
 
     };
     
@@ -187,7 +209,8 @@ export const getOutfitStringFromModel = (model, hairColor, pantsColor, shirtColo
         eyes,
         skirts,
         avatarSkins,
-        dresses
+        dresses,
+        outfits
     } = getOutfitParts(model);
 
     let hairMesh = hairs.find(mesh => mesh.visible);
@@ -205,6 +228,7 @@ export const getOutfitStringFromModel = (model, hairColor, pantsColor, shirtColo
     let avatarSkinMesh = avatarSkins.find(mesh => mesh.visible);
 
     let dressMesh = dresses.find(mesh => mesh.visible);
+    let outfitMesh = outfits.find(mesh => mesh.visible);
 
     let outfitObj = {
         hairMesh: hairMesh.name,
@@ -223,7 +247,8 @@ export const getOutfitStringFromModel = (model, hairColor, pantsColor, shirtColo
         pantsColor: pantsColor,
         shirtColor: shirtColor,
         avatarSkinMesh: avatarSkinMesh,
-        dressMesh: dressMesh
+        dressMesh: dressMesh,
+        outfitMesh: outfitMesh
 
     };
 
@@ -258,7 +283,8 @@ export const dressUpFromString = (model, outfitString) => {
         eyes,
         skirts,
         avatarSkins,
-        dresses
+        dresses,
+        outfits
     } = getOutfitParts(model, true, (outfit.hairMesh)? true : false);
 
         if(outfit.hairMesh){
@@ -337,6 +363,11 @@ export const dressUpFromString = (model, outfitString) => {
     let skirtMesh = skirts.find(mesh => mesh.name === outfit.skirtMesh);
     if(skirtMesh)
         skirtMesh.visible = true;
+
+    let outfitMesh = outfits.find(mesh => mesh.name === outfit.outfitMesh);
+    if(outfitMesh)
+        outfitMesh.visible = true;
+        
     
     
 
