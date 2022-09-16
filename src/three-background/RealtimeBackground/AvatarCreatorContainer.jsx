@@ -3,7 +3,7 @@ import AvatarButton from './ui/AvatarButton';
 import AvatarCreator from './avatar-creator/AvatarCreator';
 import close from './static/avatar/menus/close.png';
 
-const CUSTOMIZE_AVATAR = true;
+const CUSTOMIZE_AVATAR = false;
 class AvatarCreatorContainer extends Component {
 	constructor(props) {
 		super(props);
