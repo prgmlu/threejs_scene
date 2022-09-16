@@ -10,7 +10,7 @@ class AvatarCreatorContainer extends Component {
 		this.currentClothing = [];
 
 		this.scene = this.props.scene;
-		this.avatar = this.props.avatar;
+		this.avatars = this.props.avatars;
 
 		this.charControls = this.props.charControls;
 
@@ -67,8 +67,8 @@ class AvatarCreatorContainer extends Component {
 	};
 
 	showAvatarCreator = () => {
-		this.backUpAvatarClothesToArr(this.props.avatar, this.currentClothing);
-		this.backUpPosition(this.props.avatar.position);
+		this.backUpAvatarClothesToArr(this.props.avatars[0], this.currentClothing);
+		this.backUpPosition(this.props.avatars[0].position);
 		this.setIsAvatarCreatorActive(true);
 	};
 
@@ -101,7 +101,7 @@ class AvatarCreatorContainer extends Component {
 						saveAvatar={this.saveAvatar}
 						closeModal={this.closeAvatarCreator}
 						switchAvatar={this.props.switchAvatar}
-						currentAvatar={this.props.avatar}/>}
+						currentAvatars={this.props.avatars}/>}
 										{window.innerWidth >= 1440 &&
 					this.state.isAvatarCreatorActive && (
 						<img

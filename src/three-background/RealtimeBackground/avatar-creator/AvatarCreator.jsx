@@ -34,7 +34,7 @@ class AvatarCreator extends Component {
 		this.myRef = React.createRef();
 		this.lastMPos = { x: 0, y: 0 };
 		this.canRotate = false;
-		this.currentAvatar = props?.currentAvatar;
+		this.currentAvatars = props?.currentAvatars;
 		this.saveAvatar = props?.saveAvatar;
 		this.closeModal = props?.closeModal;
 
@@ -56,9 +56,10 @@ class AvatarCreator extends Component {
 	};
 
 	loadAvatar = () => {
-		this.currentAvatar.position.set(0, -1.3, -3.2);
-		this.currentAvatar.rotation.set(0, 0, 0, 'XYZ');
-		this.scene.add(this.currentAvatar);
+
+		this.currentAvatars.forEach((i)=>i.position.set(0, -1.3, -3.2));
+		this.currentAvatars.forEach((i)=>i.rotation.set(0, 0, 0, 'XYZ'));
+		this.currentAvatars.forEach((i)=>this.scene.add(i));
 	};
 
 	rotateAvatar = (e) => {
@@ -75,7 +76,7 @@ class AvatarCreator extends Component {
 				this.first = false;
 
 				//rotate your object accordingly
-				this.currentAvatar.rotation.y -= deltaX * 0.03;
+				this.currentAvatars.forEach((i)=>i.rotation.y -= deltaX * 0.03);
 			}
 
 			//save current mouse Position for next time
@@ -93,7 +94,7 @@ class AvatarCreator extends Component {
 				this.first = false;
 
 				//rotate your object accordingly
-				this.currentAvatar.rotation.y -= deltaX * 0.01;
+				this.currentAvatars.forEach((i)=>i.rotation.y -= deltaX * 0.01);
 			}
 
 			//save current mouse Position for next time
@@ -220,9 +221,9 @@ class AvatarCreator extends Component {
 							className="scale-75 sm:scale-100 md:scale-150 lg:scale-125"
 						></div>
 					</div>
-					{this.props.currentAvatar && (
+					{this.props.currentAvatars && (
 						<AvatarCreatorEditor
-							currentAvatar={this.props.currentAvatar}
+							currentAvatar={this.props.currentAvatars[1]}
 							currentScene={this.scene}
 							camera={this.camera}
 							closeModal={this.props.closeModal}

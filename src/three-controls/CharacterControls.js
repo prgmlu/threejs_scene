@@ -27,8 +27,9 @@ const OLD_COLLISION_METHOD = false;
 
 export default class CharacterControls {
 
-    constructor(model, charMixer, animationsMap, orbitControl, camera, currentAction = ANIMATION_NAMES['idle'] , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues,localAvatarNameRef,localAvatarOutfitStringRef, scene){
-        this.model = model;
+    constructor(models, charMixers, animationsMaps, orbitControl, camera, currentAction = ANIMATION_NAMES['idle'] , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues,localAvatarNameRef,localAvatarOutfitStringRef, scene){
+        this.model = models[0];
+        this.models = models;
 
         this.enabled = true;
         this.joystickBroadcast = directionValues;
@@ -40,16 +41,6 @@ export default class CharacterControls {
 
         
 
-        if(OLD_COLLISION_METHOD){
-            //array of bounding objs
-            this.model.boundingObjs = createBoundingObjs(this.model.position);
-            window.boundingObjs = this.model.boundingObjs;
-            
-            this.model.boundingObjs.forEach((i)=>{
-                scene.add(i);
-            })
-        }
-        
         // else{
             let start = model.position.clone();
             let end = model.position.clone();
@@ -87,22 +78,24 @@ export default class CharacterControls {
         // }
 
 
-        this.charMixer = charMixer;
+        this.charMixers = charMixers;
 
-        this.charMixer.addEventListener(
+        this.charMixers.forEach((i)=>{i.addEventListener(
             'finished',
             (e) => {
-                if(e.action == this.animationsMap.get(ANIMATION_NAMES['wave'])
+                if(e.action == this.animationsMaps[0].get(ANIMATION_NAMES['wave'])
                 ){
                     this.isWaving = false;
                 }
             }
         )
+        })
 
 
 
         this.storeMixer = storeMixer;
-        this.animationsMap = animationsMap;
+        this.animationsMap = animationsMaps[0];
+        this.animationsMaps = animationsMaps;
         this.currentAction = currentAction;
 
 		this.collisionDetection = new CollisionDetection([]);
@@ -116,7 +109,12 @@ export default class CharacterControls {
 
         
         if(animated){
-            this.animationsMap.forEach((value, key) => {
+            this.animationsMaps[0].forEach((value, key) => {
+                if (key == this.currentAction) {
+                    value.play();
+                }
+            })
+            this.animationsMaps[1].forEach((value, key) => {
                 if (key == currentAction) {
                     value.play();
                 }
@@ -174,7 +172,7 @@ export default class CharacterControls {
 
             // rotate model
             this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffset)
-            this.model.quaternion.rotateTowards(this.rotateQuarternion, .1)
+            this.models.forEach((i)=>i.quaternion.rotateTowards(this.rotateQuarternion, .1));
 
             // calculate direction
             //walk direction is the same as the camera direction
@@ -192,22 +190,12 @@ export default class CharacterControls {
 
             return [moveX, moveZ]
     }
+    
 
 
     handleCollision(moveX, moveZ){
-        this.model.position.x -=  (1* moveX)
-        this.model.position.z -=  (1* moveZ)
-        
-        if(OLD_COLLISION_METHOD){
-            this.model.boundingObjs.forEach((i)=>{
-                i.position.x -=  (1* moveX);
-                i.position.z -=  (1* moveZ);
-                i.rotation.x+=Math.random()*.1;
-                i.rotation.y+=Math.random()*.1;
-                i.rotation.z+=Math.random()*.1;
-            })
-        }
-
+        this.models.forEach((i)=>i.position.x -=  (1* moveX));
+        this.models.forEach((i)=>i.position.z -=  (1* moveZ));
         // this.goToLastSafePlace();
     }
 
@@ -230,20 +218,7 @@ export default class CharacterControls {
         
         let collisionHappened = false;
 
-        if(OLD_COLLISION_METHOD){
-            for(var i=0; i<this.model.boundingObjs.length; i++){
-                let boundingObj = this.model.boundingObjs[i];
-                this.boundingGeometry = new Geometry().fromBufferGeometry(boundingObj.geometry);
-                collisionHappened = this.collisionDetection.detectCollision(this.boundingGeometry, boundingObj.matrix, boundingObj.position);
-                if(collisionHappened){
-                    return true;
-                }
-            }
         }
-        else{
-
-        }
-    }
 
     setUpCollisionDetection(){
         this.collisionDetection.setCollisionObjects(getStoreParts());
@@ -263,9 +238,13 @@ export default class CharacterControls {
 
     }
     playWaveAnimation(){
-        let c = this.animationsMap.get(ANIMATION_NAMES.wave);
+        let c = this.animationsMaps[0].get(ANIMATION_NAMES.wave);
         c.setLoop(THREE.LoopOnce);
         c.reset().play();
+
+        let d = this.animationsMaps[1].get(ANIMATION_NAMES.wave);
+        d.setLoop(THREE.LoopOnce);
+        d.reset().play();
 
     }
     handleKeyup = (e) => {
@@ -324,15 +303,22 @@ export default class CharacterControls {
         if(this.animated){
             let newAction = isWalking? ANIMATION_NAMES['walk'] : ANIMATION_NAMES['idle'];
             if (this.currentAction != newAction) {
-                const toPlay = this.animationsMap.get(newAction);
-                const current = this.animationsMap.get(this.currentAction);
+                const toPlay = this.animationsMaps[0].get(newAction);
+                const current = this.animationsMaps[0].get(this.currentAction);
                 
                 current.fadeOut(FADE_DURATION);
                 toPlay.reset().fadeIn(FADE_DURATION).play();
                 
+                
+                const toPlay2 = this.animationsMaps[1].get(newAction);
+                const current2 = this.animationsMaps[1].get(this.currentAction);
+                
+                current2.fadeOut(FADE_DURATION);
+                toPlay2.reset().fadeIn(FADE_DURATION).play();
+                
                 this.currentAction = newAction;
             }
-            this.charMixer.update(updateDelta)
+            this.charMixers.forEach((i)=>i.update(updateDelta));
             // this.storeMixer.update(updateDelta)
         }
 
@@ -346,16 +332,9 @@ export default class CharacterControls {
 
             let [moveX, moveZ] = this.getMovesFromDirectionClick(directionOffset, angleYCameraDirection, updateDelta);
 
-            this.model.position.x += moveX
-            this.model.position.z += moveZ
+            this.models.forEach((i)=>i.position.x += moveX);
+            this.models.forEach((i)=>i.position.z += moveZ);
             
-            if(OLD_COLLISION_METHOD){
-
-                this.model.boundingObjs.forEach((i)=>{
-                    i.position.x += moveX; 
-                    i.position.z += moveZ;
-                });
-            }
             // else{
                 this.playerCollider .start.x = this.model.position.x;
                 this.playerCollider .start.z = this.model.position.z;

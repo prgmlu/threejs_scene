@@ -159,11 +159,19 @@ function getInitialAvatarOutfitString(){
 
 
 const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller }) => {
-    const [avatar, setAvatar] = useState(null);
-    const [charMixer, setCharMixer] = useState(null);
+    
+    const [mAvatar, setMAvatar] = useState(null);
+    const [fAvatar, setFAvatar] = useState(null);
+
+    const [maleCharMixer, setMaleCharMixer] = useState(null);
+    const [femaleCharMixer, setFemaleCharMixer] = useState(null);
+
     const [storeMixer, setStoreMixer] = useState(null);
     const [room, setRoom] = useState(null);
-    const [animationsMap, setAnimationsMap] = useState(null);
+
+    const [maleAnimationsMap, setMaleAnimationsMap] = useState(null);
+    const [femaleAnimationsMap, setFemaleAnimationsMap] = useState(null);
+
     const [charControls, setCharControls] = useState(null);
 
     const localAvatarNameRef = useRef(createRandomName());
@@ -180,7 +188,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         }
         let modelMixerMap = await loadModelAndAnimations(url,null,avType);
             let [model,mixer,animMap ] = modelMixerMap ; 
-            model.position.set(0,-1.3,-3.1);
+            model.position.set(0,-1.3,-3.2);
             setCharMixer(mixer);
             setAnimationsMap(animMap);
             //remove old avatar from scene
@@ -273,14 +281,35 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
         async function loadStoreAndModel() {
 
-            let [_,modelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations(localAvatarOutfitStringRef.current)]);
+            let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver7_4.glb";
+            let M_MODEL_URL = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004.glb";
 
-            let [model, charMixer, animationsMap ] = modelMixerMap;
-            setCharMixer(charMixer);
-            setAnimationsMap(animationsMap);
+            let [_,maleModelMixerMap, femaleModelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations(M_MODEL_URL,localAvatarOutfitStringRef.current), loadModelAndAnimations(FEM_MODEL_URL,localAvatarOutfitStringRef.current)]);
 
-            scene.add(model);
-            setAvatar(model);
+            let [maleModel, maleCharMixer, maleAnimationsMap ] = maleModelMixerMap;
+            let [femaleModel, femaleCharMixer, femaleAnimationsMap ] = femaleModelMixerMap;
+
+            
+            
+            window.maleModel = maleModel;
+            window.femaleModel = femaleModel;
+            
+            
+            setFemaleCharMixer(femaleCharMixer);
+            setMaleCharMixer(maleCharMixer);
+            
+            setFemaleAnimationsMap(femaleAnimationsMap);
+            setMaleAnimationsMap(maleAnimationsMap);
+            
+            scene.add(maleModel);
+            scene.add(femaleModel);
+
+            maleModel.visible = false;
+            
+            setFAvatar(femaleModel);
+            setMAvatar(maleModel);
+            
+            // setAvatar(maleModel);
             // removeBottomBar();
         }
 
@@ -298,18 +327,18 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
     return (
         <>
-        {/* {adjustHotspots(scene)} */}
-        {hideAllHotspots(scene)}
-        { avatar && charControls &&  <AvatarCreatorContainer charControls={charControls} avatar={avatar} scene={scene} avatarPos={avatar.position} localAvatarNameRef={localAvatarNameRef}
-        localAvatarOutfitStringRef={localAvatarOutfitStringRef}
-        switchAvatar={switchAvatar}
-        />}
+            {/* {adjustHotspots(scene)} */}
+            {hideAllHotspots(scene)}
+            {mAvatar && charControls && <AvatarCreatorContainer charControls={charControls} avatars={[mAvatar, fAvatar]} scene={scene} avatarPos={mAvatar.position} localAvatarNameRef={localAvatarNameRef}
+                localAvatarOutfitStringRef={localAvatarOutfitStringRef}
+                switchAvatar={switchAvatar}
+            />}
 
-		{avatar &&  <RealtimeControls scene={scene} camera={camera} renderer={renderer} avatar={avatar} setCharControls={setCharControls} orbitControls={controller}
-            charMixer={charMixer} animationsMap={animationsMap} storeMixer={storeMixer} charControls={charControls} 
-            localAvatarNameRef={localAvatarNameRef}
-            localAvatarOutfitStringRef={localAvatarOutfitStringRef}
-         />}
+            {mAvatar && <RealtimeControls scene={scene} camera={camera} renderer={renderer} femaleAvatar={fAvatar} maleAvatar={mAvatar} setCharControls={setCharControls} orbitControls={controller}
+                charMixers={[maleCharMixer, femaleCharMixer]} animationsMaps={[maleAnimationsMap, femaleAnimationsMap]} storeMixer={storeMixer} charControls={charControls}
+                localAvatarNameRef={localAvatarNameRef}
+                localAvatarOutfitStringRef={localAvatarOutfitStringRef}
+            />}
         </>
     );
 };

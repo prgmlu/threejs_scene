@@ -29,7 +29,6 @@ export default class JoystickControls extends Component {
         this.camera = this.props.camera;
         this.renderer = this.props.renderer;
         this.orbitControls = this.props.orbitControls;
-        this.avatar = this.props.avatar;
 
 		this.myRef = React.createRef();
     }
@@ -58,52 +57,25 @@ export default class JoystickControls extends Component {
             this.tempVector
                 .set(0, 0, -this.directionValues[0])
                 .applyAxisAngle(this.upVector, angle)
-            // this.avatar.position.addScaledVector(
-            //     this.tempVector,
-            //     1
-            // )
         }
 
         if (this.directionValues[1] > 0) {
             this.tempVector
                 .set(0, 0, this.directionValues[1])
                 .applyAxisAngle(this.upVector, angle)
-            // this.avatar.position.addScaledVector(
-            //     this.tempVector,
-            //     1
-            // )
         }
 
         if (this.directionValues[3] > 0) {
             this.tempVector
                 .set(-this.directionValues[3], 0, 0)
                 .applyAxisAngle(this.upVector, angle)
-            // this.avatar.position.addScaledVector(
-            //     this.tempVector,
-            //     1
-            // )
         }
 
         if (this.directionValues[2] > 0) {
             this.tempVector
                 .set(this.directionValues[2], 0, 0)
                 .applyAxisAngle(this.upVector, angle)
-            // this.avatar.position.addScaledVector(
-            //     this.tempVector,
-            //     1
-            // )
         }
-
-        this.avatar.updateMatrixWorld()
-
-        //this.orbitControls.target.set( this.avatar.position.x, this.avatar.position.y, this.avatar.position.z );
-        // reposition camera
-        // this.camera.position.sub(this.orbitControls.target)
-        // this.orbitControls.target.copy(this.avatar.position)
-        // this.camera.position.add(this.avatar.position)
-
-
-
     }
 
 

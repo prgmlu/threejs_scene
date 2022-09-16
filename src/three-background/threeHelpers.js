@@ -18,11 +18,6 @@ import {USE_OLD_CHARACTER_MODEL, SHADOW_MAP_TYPE, SHADOW_ENABLED} from '../three
 
 let USE_OUTFIT_TRANSLATION = true;
 
-
-// let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver2.glb" ;
-let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver7_4.glb" ;
-// let MODEL_URL = USE_OLD_CHARACTER_MODEL? "https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v005.glb": "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004.glb" ;
-
 const DEBUG_LIGHTS = false;
 
 let gui;
@@ -234,7 +229,7 @@ export const resetRenderer = (renderer) => {
 }
 
 
-export const loadModelAndAnimations = async (outfitString) => {
+export const loadModelAndAnimations = async (url,outfitString) => {
 	return new Promise((resolve, reject) => {
 		let loader = new GLTFLoader();
 		// let fbxLoader = new FBXLoader();
@@ -250,7 +245,7 @@ export const loadModelAndAnimations = async (outfitString) => {
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v004.glb", (data) => {
 
 
-			loader.load(MODEL_URL, (data) => {
+			loader.load(url, (data) => {
 
 			// loader.load("https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_003.glb", (data) => {
 

@@ -27,7 +27,7 @@ const BodyShape = ({currentAvatar,selectedBodyshape, setSelectedBodyshape, selec
 			</div>
 			<div className="h-fit flex flex-wrap gap-x-6 gap-y-1">
 				<div
-					onClick={() => { setSelectedBodyshape('female')}}
+					onClick={() => { window.maleModel.visible=false;window.femaleModel.visible=true; setSelectedBodyshape('female')}}
 					className={`relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'female'
 							? 'border-[2px] border-[#FF9F9F]'
@@ -43,11 +43,11 @@ const BodyShape = ({currentAvatar,selectedBodyshape, setSelectedBodyshape, selec
 						className="scale-75 px-3"
 						src={FEMALE_SHAPE}
 						alt=""
-						onClick={() => { setSelectedBodyshape('female')}}
+						onClick={() => { window.maleModel.visible=false;window.femaleModel.visible=true; setSelectedBodyshape('female')}}
 					/>
 				</div>
 				<div
-					onClick={() => { setSelectedBodyshape('male')}}
+					onClick={() => { window.femaleModel.visible=false;window.maleModel.visible=true; setSelectedBodyshape('male')}}
 					className={`relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'male'
 							? 'border-[2px] border-[#FF9F9F]'
@@ -63,7 +63,7 @@ const BodyShape = ({currentAvatar,selectedBodyshape, setSelectedBodyshape, selec
 						className="scale-75 px-3"
 						src={MALE_SHAPE}
 						alt=""
-						onClick={() => { setSelectedBodyshape('male')}}
+						onClick={() => { window.femaleModel.visible=false;window.maleModel.visible=true; setSelectedBodyshape('male')}}
 					/>
 				</div>
 			</div>
