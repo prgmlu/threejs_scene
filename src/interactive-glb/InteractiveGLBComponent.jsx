@@ -50,7 +50,7 @@ const InteractiveGLBComponent = ({
 	const svgLoader = new SVGLoader();
 	const loader = new GLTFLoader();
 
-	let directionalLight, pointLight;
+	let directionalLight, pointLight, ambientLight;
 
 	const cubeTextureLoader = new THREE.CubeTextureLoader();
 	THREE.Cache.enabled = true;
@@ -82,7 +82,8 @@ const InteractiveGLBComponent = ({
 				hotspotData.props.data.directionalLight.transform.rotation.y,
 				hotspotData.props.data.directionalLight.transform.rotation.z,
 			);
-			scene.add(pointLight);
+			scene.add(directionalLight);
+			
 		}
 
 		if (hotspotData?.props?.data?.pointLight) {
@@ -95,7 +96,15 @@ const InteractiveGLBComponent = ({
 				hotspotData.props.data.pointLight.transform.position.y,
 				hotspotData.props.data.pointLight.transform.position.z,
 			);
-			scene.add(directionalLight);
+			scene.add(pointLight);
+		}
+
+		if (hotspotData?.props?.data?.ambientLight) {
+			ambientLight = new THREE.AmbientLight(
+				hotspotData.props.data.ambientLight.color, 
+				hotspotData.props.data.ambientLight.intensity,
+			);
+			scene.add(ambientLight);
 		}
 	};
 
@@ -105,6 +114,9 @@ const InteractiveGLBComponent = ({
 		}
 		if (pointLight) {
 			scene.remove(pointLight);
+		}
+		if (ambientLight) {
+			scene.remove(ambientLight);
 		}
 	};
 
@@ -292,6 +304,9 @@ const InteractiveGLBComponent = ({
 		renderer.shadowMap.enabled = false;
 		renderer.toneMapping = THREE.NoToneMapping;
 		renderer.shadowMap.enabled = false;
+		if(hotspotData?.props?.data?.toneMappingExposure) {
+			renderer.toneMappingExposure = 1;
+		}
 	};
 
 	const removeEventListeners = () => {
@@ -313,6 +328,13 @@ const InteractiveGLBComponent = ({
 
 	const prepareRendererForGLTF = () => {
 		renderer.antialias = true;
+		if(hotspotData?.props?.data?.toneMappingExposure) {
+			renderer.toneMappingExposure = hotspotData?.props?.data?.toneMappingExposure;
+		}
+		if (hotspotData?.props?.data?.useLinearToneMapping) {
+			renderer.toneMapping = THREE.LinearToneMapping;
+			return;
+		}
 		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 	};
 
