@@ -11,7 +11,7 @@ import { RELEVANT_STORE_PARTS_NAMES } from './avatar-creator/CustomizationConsta
 import { DRACOLoader } from './DRACOLoader.js';
 
 // let femaleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver7.glb";
-let maleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004.glb";
+let maleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_005.glb";
 // let maleModelUrl = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_003.glb";
 
 const STORE_Y_OFFSET = 7;
@@ -329,7 +329,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         <>
             {/* {adjustHotspots(scene)} */}
             {hideAllHotspots(scene)}
-            {mAvatar && charControls && <AvatarCreatorContainer charControls={charControls} avatars={[mAvatar, fAvatar]} scene={scene} avatarPos={mAvatar.position} localAvatarNameRef={localAvatarNameRef}
+            {mAvatar && charControls && <AvatarCreatorContainer charControls={charControls} avatar={fAvatar} avatars={[mAvatar, fAvatar]} scene={scene} avatarPos={mAvatar.position} localAvatarNameRef={localAvatarNameRef}
                 localAvatarOutfitStringRef={localAvatarOutfitStringRef}
                 switchAvatar={switchAvatar}
             />}

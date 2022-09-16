@@ -53,8 +53,10 @@ class AvatarCreatorContainer extends Component {
 		this.avatarPos = pos.clone();
 	};
 
-	readBackupPosition(pos) {
+	readBackupPosition(poss) {
+	poss.forEach((pos)=>{
 		pos.copy(this.avatarPos.clone());
+	});
 	}
 
 	setIsAvatarCreatorActive = (val) => {
@@ -67,7 +69,7 @@ class AvatarCreatorContainer extends Component {
 	};
 
 	showAvatarCreator = () => {
-		this.backUpAvatarClothesToArr(this.props.avatars[0], this.currentClothing);
+		// this.backUpAvatarClothesToArr(this.props.avatars[0], this.currentClothing);
 		this.backUpPosition(this.props.avatars[0].position);
 		this.setIsAvatarCreatorActive(true);
 	};
@@ -77,16 +79,22 @@ class AvatarCreatorContainer extends Component {
 		this.readBackupPosition(this.props.avatar.position);
 		// this.props.avatar.position.copy(this.avatarPos.clone());
 		this.currentClothing = [];
-		this.scene.add(this.props.avatar);
+		// this.scene.add(this.props.avatar);
+		this.props.avatars.forEach((i)=>{
+			this.scene.add(i);
+		})
 	};
 
 	closeAvatarCreator = () => {
 		this.setIsAvatarCreatorActive(false);
-		this.readBackupPosition(this.props.avatar.position);
-		this.dressUpAvatarFromArray(this.props.avatar, this.currentClothing);
+		this.readBackupPosition([this.props.avatars[0].position,this.props.avatars[1].position]);
+		// this.dressUpAvatarFromArray(this.props.avatar, this.currentClothing);
 
 		this.currentClothing = [];
-		this.scene.add(this.props.avatar);
+		// this.scene.add(this.props.avatar);
+		this.props.avatars.forEach((i)=>{
+			this.scene.add(i);
+		})
 	};
 
 	render() {
