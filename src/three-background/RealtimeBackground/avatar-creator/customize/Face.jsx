@@ -44,29 +44,29 @@ let setEyebroMesh = (index, currentAvatar) => {
 };
 
 let setEyeFromMorphTarget = (index, currentAvatar) => {
-	let morphTargetNames = [
-		'Eyelid1',
-		'Eyelid2',
-		'Eyelid3',
-		'Eyelid4',
-		'Eyelid5',
-		'Eyelid6',
-	];
-	let pts = [];
-	model.traverse((i) => pts.push(i));
-	let p = pts.filter((i) => i.morphTargetInfluences);
-	let t = p[0];
-	let t2 = p[1];
-	for (let i = 0; i < morphTargetNames.length; i++) {
-		let name = morphTargetNames[i];
-		t.morphTargetInfluences[t.morphTargetDictionary[name]] = 0;
-		t2.morphTargetInfluences[t.morphTargetDictionary[name]] = 0;
+	debugger;
+
+	let body = currentAvatar.getChildByName('FemaleAvatar_Body1');
+	let influences = body.morphTargetInfluences;
+	let EyeShapeCount = 6;
+	for (let i = 0; i < EyeShapeCount; i++) {
+		influences[i] = 0;
 	}
-	let ind = index + 1;
-	let name = 'Eyelid' + ind;
-	t.morphTargetInfluences[t.morphTargetDictionary[name]] = 1;
-	t2.morphTargetInfluences[t.morphTargetDictionary[name]] = 1;
+	influences[index] = 1;
 };
+
+
+let setEyebrowFromMorphTarget = (index, currentAvatar) => {
+
+	let browMesh = currentAvatar.getChildByName('Eyebrow1');
+
+	//loop over the morph targets and set the influence to 0
+	for (let i = 0; i < browMesh.morphTargetInfluences.length; i++) {
+		browMesh.morphTargetInfluences[i] = 0;
+	}
+	// set the index to 1
+	browMesh.morphTargetInfluences[index] = 1;
+}
 
 const Face = ({ currentAvatar }) => {
 	const [selectedStyle, setSelectedStyle] = useState(0);
@@ -207,7 +207,7 @@ const Face = ({ currentAvatar }) => {
 										if (selectedTone === 0) {
 											setHairMesh(index, currentAvatar);
 										} else if (selectedTone === 1) {
-											setEyebroMesh(index, currentAvatar);
+											setEyebrowFromMorphTarget(index, currentAvatar);
 										} else if (selectedTone === 2) {
 											setEyeFromMorphTarget(
 												index,

@@ -5,11 +5,11 @@ import { setMeshTextureImage } from '../../../../three-controls/OutfitTranslator
 let swapSkinTexture = (textureIndex, mesh, selectedMakeup) => {
 	let url;
 	if(selectedMakeup || selectedMakeup === 0){
-		url = `https://cdn.obsess-vr.com/realtime3d/tones_new/Sk${textureIndex}_FemaleAvatar${
+		url = `https://cdn.obsess-vr.com/realtime3d/new_uv_skintones/Sk${textureIndex}_FemaleAvatar${
 			selectedMakeup + 1
 		}_D.png`;
 	} else
-		url = `https://cdn.obsess-vr.com/realtime3d/skintones/Sk${textureIndex}_FemaleAvatar_D.png`;
+		url = `https://cdn.obsess-vr.com/realtime3d/new_uv_skintones_only/Sk${textureIndex}_FemaleAvatar_D.png`;
 
 	console.log(url);
 	// let url = `https://cdn.obsess-vr.com/realtime3d/skintone-makeup-512/Sk${randomNumber}_FemaleAvatar${randomNumber2}_D.png`;

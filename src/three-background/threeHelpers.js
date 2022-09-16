@@ -135,13 +135,28 @@ const bgArray = useArmani ? [
 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/bluesky/pz.jpg",
 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/bluesky/nz.jpg",
 ] : [
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/px.png",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/nx.png",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/py.png",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/ny.png",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/pz.png",
-	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/nz.png",
+	"https://cdn.obsess-vr.com/realtime3d/purple_night_sky/px.png",
+	"https://cdn.obsess-vr.com/realtime3d/purple_night_sky/nx.png",
+	"https://cdn.obsess-vr.com/realtime3d/purple_night_sky/py.png",
+	"https://cdn.obsess-vr.com/realtime3d/purple_night_sky/ny.png",
+	"https://cdn.obsess-vr.com/realtime3d/purple_night_sky/pz.png",
+	"https://cdn.obsess-vr.com/realtime3d/purple_night_sky/nz.png",
 ]
+// const bgArray = useArmani ? [
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/bluesky/px.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/bluesky/nx.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/bluesky/py.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/bluesky/ny.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/bluesky/pz.jpg",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/bluesky/nz.jpg",
+// ] : [
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/px.png",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/nx.png",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/py.png",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/ny.png",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/pz.png",
+// 	"https://cdn.obsess-vr.com/realtime3d/static/environmentMaps/ct_bgmap/nz.png",
+// ]
 
 export const createScene = () => {
 	var scene = new THREE.Scene();
