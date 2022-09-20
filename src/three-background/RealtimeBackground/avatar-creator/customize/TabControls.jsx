@@ -6,49 +6,49 @@ import makeup from '../../static/avatar/menus/brush.png';
 
 const TabControls = ({ activeTab, onTabClick }) => {
 	return (
-		<div className="w-full sm:w-full md:w-[95%] lg:w-[85%] h-fit sm:h-[12%] md:h-[5%] flex items-start justify-center gap-3">
+		<div className="w-full sm:w-full md:w-[95%] lg:w-[85%] h-[8%] sm:h-[12%]  flex items-start justify-center gap-3 lg:gap-6">
 			<img
 				src={body}
 				alt="Body type"
 				id="1"
-				className={`${
-					activeTab == 1
-						? 'pt-2 pb-4 rounded-t-md'
-						: 'pt-2 pb-2 rounded-md'
-				} px-3 rounded-t-md flex justify-center cursor-pointer object-contain bg-white`}
+				className={`w-[13%] ${
+					activeTab === 1
+						? 'h-full pb-1.5 sm:pb-3.5 px-1.5 sm:px-2.5'
+						: 'h-[80%] pb-1 sm:pb-2 px-1 sm:px-2'
+				} pt-2 object-contain rounded-t-md flex justify-center cursor-pointer bg-white`}
 				onClick={() => onTabClick(1)}
 			/>
 			<img
 				src={skin}
 				alt="Skin tone"
 				id="2"
-				className={`${
-					activeTab == 2
-						? 'pt-2 pb-4 rounded-t-md'
-						: 'pt-2 pb-2.5 rounded-md'
-				} px-3 rounded-t-md flex justify-center cursor-pointer object-contain bg-white`}
+				className={`w-[13%] ${
+					activeTab === 2
+						? 'h-full pb-1.5 sm:pb-3.5 px-1.5 sm:px-2.5'
+						: 'h-[80%] pb-1 sm:pb-2 px-1 sm:px-2'
+				} pt-2 object-contain rounded-t-md flex justify-center cursor-pointer bg-white`}
 				onClick={() => onTabClick(2)}
 			/>
 			<img
 				src={makeup}
 				alt="Makeup"
 				id="2"
-				className={`${
-					activeTab == 3
-						? 'pt-2 pb-4 rounded-t-md'
-						: 'pt-2 pb-2.5 rounded-md'
-				} px-3 rounded-t-md flex justify-center cursor-pointer object-contain bg-white`}
+				className={`w-[13%] ${
+					activeTab === 3
+						? 'h-full pb-1.5 sm:pb-3.5 px-1.5 sm:px-2.5'
+						: 'h-[80%] pb-1 sm:pb-2 px-1 sm:px-2'
+				} pt-2 object-contain rounded-t-md flex justify-center cursor-pointer bg-white`}
 				onClick={() => onTabClick(3)}
 			/>
 			<img
 				src={cloth}
 				alt="Outfit"
 				id="3"
-				className={`${
-					activeTab == 4
-						? 'pt-2 pb-4 rounded-t-md'
-						: 'pt-2 pb-2 rounded-md'
-				} px-3 rounded-t-md flex justify-center cursor-pointer object-contain bg-white`}
+				className={`w-[13%] ${
+					activeTab === 4
+						? 'h-full pb-1.5 sm:pb-3.5 px-1.5 sm:px-2.5'
+						: 'h-[80%] pb-1 sm:pb-2 px-1 sm:px-2'
+				} pt-2 object-contain rounded-t-md flex justify-center cursor-pointer bg-white`}
 				onClick={() => onTabClick(4)}
 			/>
 		</div>

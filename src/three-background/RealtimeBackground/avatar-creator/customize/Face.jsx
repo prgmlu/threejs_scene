@@ -133,12 +133,12 @@ const Face = ({ currentAvatar }) => {
 	};
 
 	return (
-		<div className="w-full h-full flex flex-col">
+		<div className="w-full h-full flex flex-col overflow-y-auto">
 			<div className="w-full h-full flex flex-col px-2">
 				<div className="flex flex-col gap-2">
 					<div className="w-full flex flex-wrap items-center justify-around">
 						<img
-							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
+							className={`w-[30%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 0
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
@@ -148,7 +148,7 @@ const Face = ({ currentAvatar }) => {
 							onClick={() => setSelectedTone(0)}
 						/>
 						<img
-							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-6 py-2 cursor-pointer shadow-md ${
+							className={`w-[30%] h-[36px] object-contain rounded px-6 py-2 cursor-pointer shadow-md ${
 								selectedTone === 1
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
@@ -158,7 +158,7 @@ const Face = ({ currentAvatar }) => {
 							onClick={() => setSelectedTone(1)}
 						/>
 						<img
-							className={`w-24 sm:w-[70px] md:w-[27%] h-[36px] object-contain rounded px-6 py-2 cursor-pointer shadow-md ${
+							className={`w-[30%] h-[36px] object-contain rounded px-6 py-2 cursor-pointer shadow-md ${
 								selectedTone === 2
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
@@ -186,7 +186,7 @@ const Face = ({ currentAvatar }) => {
 								)}
 								<img
 									src={item}
-									className={`w-[70px] sm:w-[87px] h-[50px] object-cover rounded px-2 py-1 cursor-pointer shadow-md bg-white ${
+									className={`w-[60px] sm:w-[87px] h-[60px]  sm:h-[87px] object-cover rounded px-2 py-1 cursor-pointer shadow-md bg-white ${
 										selectedStyle === index &&
 										'border-2 border-[#FF9F9F]'
 									}`}

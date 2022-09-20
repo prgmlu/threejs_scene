@@ -75,7 +75,7 @@ const Makeup = ({
 							)}
 							<img
 								src={makeup_one}
-								className={`w-[90px] h-fit object-cover rounded p-1 cursor-pointer shadow-md bg-white ${
+								className={`w-[50px] sm:w-[90px] h-fit object-cover rounded p-1 cursor-pointer shadow-md bg-white ${
 									selectedMakeup === index &&
 									'border-2 border-[#FF9F9F]'
 								}`}
