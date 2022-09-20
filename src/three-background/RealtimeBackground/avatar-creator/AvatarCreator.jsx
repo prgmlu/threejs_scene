@@ -199,7 +199,7 @@ class AvatarCreator extends Component {
 						</button>
 					</div>
 				)}
-				<div className="w-full h-full sm:h-3/4 md:h-[90%] flex flex-col sm:flex-row items-center">
+				<div className="w-full h-full sm:h-3/4 md:h-[85%] flex flex-col sm:flex-row items-center">
 					<div className="w-full sm:w-1/2 md:w-2/5 lg:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-start sm:justify-center">
 						<div className="z-50 w-fit h-fit flex items-center mt-3 sm:mt-10 rounded-[4px] border-[1px]  border-[#330D0D]">
 							<img
@@ -208,8 +208,8 @@ class AvatarCreator extends Component {
 								className="bg-[#330D0D] py-1.5 px-2.5 rounded-l-[3px]"
 							/>
 							<input
-								className="w-28 h-full z-50 font-medium outline-none text-center text-white text-base rounded-r-[4px] px-2 py-0.5 bg-[#330d0d4d]"
-								placeholder="Username"
+								className="w-20 sm:w-32 h-full z-50 font-medium outline-none text-center text-white text-sm rounded-r-[4px] px-2 py-0.5 bg-[#330d0d4d]"
+								placeholder="Set avatar name"
 								value={username}
 								onChange={({ target }) =>
 									this.setState({ username: target.value })

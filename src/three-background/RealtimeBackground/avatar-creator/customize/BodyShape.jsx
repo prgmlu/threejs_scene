@@ -21,14 +21,14 @@ const BodyShape = ({currentAvatar,selectedBodyshape, setSelectedBodyshape, selec
 	];
 
 	return (
-		<div className="w-full h-full flex flex-col justify-between overflow-y-hidden">
+		<div className="w-full h-full flex flex-col justify-between overflow-y-auto">
 			<div className="h-fit font-sourceSansProSemibold text-lg pb-2">
 				Body Shape
 			</div>
 			<div className="h-fit flex flex-wrap gap-x-6 gap-y-1">
 				<div
 					onClick={() => { window.maleModel.visible=false;window.femaleModel.visible=true; setSelectedBodyshape('female')}}
-					className={`relative cursor-pointer rounded-[4px] shadow-md ${
+					className={`w-fit h-fit px-3 py-1 relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'female'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
@@ -40,7 +40,7 @@ const BodyShape = ({currentAvatar,selectedBodyshape, setSelectedBodyshape, selec
 						</span>
 					)}
 					<img
-						className="scale-75 px-3"
+						className="min-h-fit h-fit scale-75"
 						src={FEMALE_SHAPE}
 						alt=""
 						onClick={() => { window.maleModel.visible=false;window.femaleModel.visible=true; setSelectedBodyshape('female')}}
@@ -48,7 +48,7 @@ const BodyShape = ({currentAvatar,selectedBodyshape, setSelectedBodyshape, selec
 				</div>
 				<div
 					onClick={() => { window.femaleModel.visible=false;window.maleModel.visible=true; setSelectedBodyshape('male')}}
-					className={`relative cursor-pointer rounded-[4px] shadow-md ${
+					className={`w-fit h-fit px-3 py-1 relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'male'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
@@ -60,7 +60,7 @@ const BodyShape = ({currentAvatar,selectedBodyshape, setSelectedBodyshape, selec
 						</span>
 					)}
 					<img
-						className="scale-75 px-3"
+						className="min-h-fit h-fit scale-75"
 						src={MALE_SHAPE}
 						alt=""
 						onClick={() => { window.femaleModel.visible=false;window.maleModel.visible=true; setSelectedBodyshape('male')}}
@@ -70,30 +70,33 @@ const BodyShape = ({currentAvatar,selectedBodyshape, setSelectedBodyshape, selec
 			<div className="font-sourceSansProSemibold text-lg py-3">
 				Skin Tone
 			</div>
-			<div className="w-full h-fit max-h-[50%] flex flex-col gap-1 pb-1 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+			<div className="w-full h-fit max-h-[50%] flex flex-col px-1.5 gap-1 pb-1 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 				{tones.map((group, index) => (
 					<div
 						key={index}
-						className="flex flex-wrap justify-center items-center gap-3"
+						className={`flex flex-wrap items-center justify-between  ${
+							index % 2 === 0 ? 'px-2' : 'px-10'
+						}`}
 					>
 						{group.map((t, idx) => {
 							counter++;
-						return	<SkinTone
-							mesh={bodyMesh}
-							key={counter}
-							counter={counter}
-							color={t}
-							x={index}
-							y={idx}
-							selectedMakeup={selectedMakeup}
-							// selectedIndex={selectedIndex}
-							skintoneX={skintoneX}
-							skintoneY={skintoneY}
-							setSelectedIndex={setSkintonXY}
-							setSelectedSkintone={setSelectedSkintone}
-							/>
-						}
-						)}
+							return (
+								<SkinTone
+									mesh={bodyMesh}
+									key={counter}
+									counter={counter}
+									color={t}
+									x={index}
+									y={idx}
+									selectedMakeup={selectedMakeup}
+									// selectedIndex={selectedIndex}
+									skintoneX={skintoneX}
+									skintoneY={skintoneY}
+									setSelectedIndex={setSkintonXY}
+									setSelectedSkintone={setSelectedSkintone}
+								/>
+							);
+						})}
 					</div>
 				))}
 			</div>

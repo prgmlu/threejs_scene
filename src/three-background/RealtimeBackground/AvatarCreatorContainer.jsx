@@ -99,7 +99,8 @@ class AvatarCreatorContainer extends Component {
 
 	render() {
 		return (
-			<div >
+			<div className="w-full h-full relative">
+
 
 				<AvatarButton showModal={this.showAvatarCreator}/>
 				{this.state.isAvatarCreatorActive && <AvatarCreator

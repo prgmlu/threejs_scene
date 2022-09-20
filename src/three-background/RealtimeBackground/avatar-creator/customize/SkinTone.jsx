@@ -38,7 +38,7 @@ const SkinTone = ({
 				swapSkinTexture(counter, mesh, selectedMakeup);
 				setSelectedSkintone(counter);
 			}}
-			className={`w-10 sm:w-12 h-[40px] sm:h-12 rounded-full relative`}
+			className={`w-[32px] sm:w-12 md:w-[80px] lg:w-28 h-[32px] sm:h-12 md:h-[80px] lg:h-28 rounded-full relative`}
 			style={{
 				backgroundColor: color,
 				border: `${
@@ -49,8 +49,9 @@ const SkinTone = ({
 			}}
 		>
 			{x === skintoneX && y === skintoneY && (
-				<span className="absolute top-0 right-0 w-3 h-3 object-contain">
-					<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
+				<span className="absolute top-0 right-0 w-2.5 sm:w-3 h-2.5 sm:h-3 object-contain">
+					{/* <img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" /> */}
+					<img src={check} alt="o" />
 				</span>
 			)}
 		</button>
