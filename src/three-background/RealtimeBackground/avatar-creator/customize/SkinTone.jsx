@@ -4,7 +4,7 @@ import { setMeshTextureImage } from '../../../../three-controls/OutfitTranslator
 
 let swapSkinTexture = (textureIndex, mesh, selectedMakeup) => {
 	let url;
-	if(selectedMakeup || selectedMakeup === 0){
+	if (selectedMakeup || selectedMakeup === 0) {
 		url = `https://cdn.obsess-vr.com/realtime3d/new_uv_skintones/Sk${textureIndex}_FemaleAvatar${
 			selectedMakeup + 1
 		}_D.png`;
@@ -38,7 +38,7 @@ const SkinTone = ({
 				swapSkinTexture(counter, mesh, selectedMakeup);
 				setSelectedSkintone(counter);
 			}}
-			className={`w-[32px] sm:w-12 md:w-[80px] lg:w-28 h-[32px] sm:h-12 md:h-[80px] lg:h-28 rounded-full relative`}
+			className={`w-[32px] sm:w-12 h-[32px] sm:h-12 rounded-full relative`}
 			style={{
 				backgroundColor: color,
 				border: `${

@@ -12,7 +12,7 @@ import AvatarCreatorEditor from './AvatarCreatorEditor';
 import Cookie from '../cookie';
 import back from '../static/avatar/menus/back.png';
 import close from '../static/avatar/menus/close.png';
-const EDIT = "https://cdn.obsess-vr.com/realtime3d/edit.png"
+const EDIT = 'https://cdn.obsess-vr.com/realtime3d/edit.png';
 
 class AvatarCreator extends Component {
 	constructor(props) {
@@ -56,10 +56,9 @@ class AvatarCreator extends Component {
 	};
 
 	loadAvatar = () => {
-
-		this.currentAvatars.forEach((i)=>i.position.set(0, -1.3, -3.2));
-		this.currentAvatars.forEach((i)=>i.rotation.set(0, 0, 0, 'XYZ'));
-		this.currentAvatars.forEach((i)=>this.scene.add(i));
+		this.currentAvatars.forEach((i) => i.position.set(0, -1.3, -3.2));
+		this.currentAvatars.forEach((i) => i.rotation.set(0, 0, 0, 'XYZ'));
+		this.currentAvatars.forEach((i) => this.scene.add(i));
 	};
 
 	rotateAvatar = (e) => {
@@ -76,7 +75,9 @@ class AvatarCreator extends Component {
 				this.first = false;
 
 				//rotate your object accordingly
-				this.currentAvatars.forEach((i)=>i.rotation.y -= deltaX * 0.03);
+				this.currentAvatars.forEach(
+					(i) => (i.rotation.y -= deltaX * 0.03),
+				);
 			}
 
 			//save current mouse Position for next time
@@ -94,7 +95,9 @@ class AvatarCreator extends Component {
 				this.first = false;
 
 				//rotate your object accordingly
-				this.currentAvatars.forEach((i)=>i.rotation.y -= deltaX * 0.01);
+				this.currentAvatars.forEach(
+					(i) => (i.rotation.y -= deltaX * 0.01),
+				);
 			}
 
 			//save current mouse Position for next time
@@ -175,7 +178,7 @@ class AvatarCreator extends Component {
 		const { isCookieShown, username, isWindowSize } = this.state;
 		return (
 			<div
-				className={`flex flex-col items-center justify-center w-[95%] sm:w-4/5 h-[95%] sm:h-[85%] md:h-[95%] lg:h-[85%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-[#7c6a6a] via-[#c1b8b8] to-[#FFF2F2] rounded-md ${
+				className={`flex flex-col items-center justify-center w-[95%] sm:w-4/5 h-[95%] sm:h-[85%] md:h-[95%] lg:h-[80%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-[#7c6a6a] via-[#c1b8b8] to-[#FFF2F2] rounded-md ${
 					isCookieShown && 'bg-white/50'
 				} overflow-hidden absolute z-30`}
 			>
@@ -194,7 +197,8 @@ class AvatarCreator extends Component {
 						</button>
 						<button
 							onClick={() => this.closeModal()}
-						 className="text-center text-black text-base px-4 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6">
+							className="text-center text-black text-base px-4 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6"
+						>
 							Save
 						</button>
 					</div>
@@ -245,6 +249,16 @@ class AvatarCreator extends Component {
 					<div className="fixed sm:absolute md:fixed lg:absolute inset-0 w-full h-full bg-black/60 sm:bg-transparent">
 						<Cookie handleClose={this.handleClose} />{' '}
 					</div>
+				)}
+
+				{(window.innerWidth >= 1440) &
+				(
+					<img
+						className="w-12 h-12 cursor-pointer absolute top-[6%] right-[9.25%] z-50"
+						src={close}
+						alt="CLOSE"
+						onClick={() => this.closeModal()}
+					/>
 				)}
 			</div>
 		);

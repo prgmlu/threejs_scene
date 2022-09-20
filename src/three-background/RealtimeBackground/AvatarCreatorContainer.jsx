@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import AvatarButton from './ui/AvatarButton';
 import AvatarCreator from './avatar-creator/AvatarCreator';
-import close from './static/avatar/menus/close.png';
 
 const CUSTOMIZE_AVATAR = false;
 class AvatarCreatorContainer extends Component {
@@ -54,9 +53,9 @@ class AvatarCreatorContainer extends Component {
 	};
 
 	readBackupPosition(poss) {
-	poss.forEach((pos)=>{
-		pos.copy(this.avatarPos.clone());
-	});
+		poss.forEach((pos) => {
+			pos.copy(this.avatarPos.clone());
+		});
 	}
 
 	setIsAvatarCreatorActive = (val) => {
@@ -80,49 +79,46 @@ class AvatarCreatorContainer extends Component {
 		// this.props.avatar.position.copy(this.avatarPos.clone());
 		this.currentClothing = [];
 		// this.scene.add(this.props.avatar);
-		this.props.avatars.forEach((i)=>{
+		this.props.avatars.forEach((i) => {
 			this.scene.add(i);
-		})
+		});
 	};
 
 	closeAvatarCreator = () => {
 		this.setIsAvatarCreatorActive(false);
-		this.readBackupPosition([this.props.avatars[0].position,this.props.avatars[1].position]);
+		this.readBackupPosition([
+			this.props.avatars[0].position,
+			this.props.avatars[1].position,
+		]);
 		// this.dressUpAvatarFromArray(this.props.avatar, this.currentClothing);
 
 		this.currentClothing = [];
 		// this.scene.add(this.props.avatar);
-		this.props.avatars.forEach((i)=>{
+		this.props.avatars.forEach((i) => {
 			this.scene.add(i);
-		})
+		});
 	};
 
 	render() {
 		return (
-			<div className="w-full h-full relative">
-
-
-				<AvatarButton showModal={this.showAvatarCreator}/>
-				{this.state.isAvatarCreatorActive && <AvatarCreator
+			<div className="p-2">
+				<AvatarButton showModal={this.showAvatarCreator} />
+				{this.state.isAvatarCreatorActive && (
+					<AvatarCreator
 						localAvatarNameRef={this.props.localAvatarNameRef}
-						localAvatarOutfitStringRef={this.props.localAvatarOutfitStringRef}
+						localAvatarOutfitStringRef={
+							this.props.localAvatarOutfitStringRef
+						}
 						active={this.state.isAvatarCreatorActive}
 						saveAvatar={this.saveAvatar}
 						closeModal={this.closeAvatarCreator}
 						switchAvatar={this.props.switchAvatar}
-						currentAvatars={this.props.avatars}/>}
-										{window.innerWidth >= 1440 &&
-					this.state.isAvatarCreatorActive && (
-						<img
-							className="w-12 h-12 cursor-pointer absolute top-[6%] right-[9.25%] z-50"
-							src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/x_button.svg"}
-							alt="CLOSE"
-							onClick={() => this.closeAvatarCreator()}
-						/>
-					)}
-            </div>
-        );
-    }
+						currentAvatars={this.props.avatars}
+					/>
+				)}
+			</div>
+		);
+	}
 }
 
 export default AvatarCreatorContainer;
