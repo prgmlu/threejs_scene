@@ -68,8 +68,9 @@ export const setupCSS2DRenderer = (css2DRenderer, canvas) => {
 	canvas.appendChild(css2DRenderer.domElement);
 };
 
-export const createCSS2DRenderer = () => {
+export const createCSS2DRenderer = (type) => {
+	const rendererKey = `${type}_css2DRenderer`;
 	const ret = window.css2DRenderer || new CSS2DRenderer();
-	window.css2DRenderer = ret;
+	window[rendererKey] = ret;
 	return ret;
 };

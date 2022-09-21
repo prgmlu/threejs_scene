@@ -95,7 +95,7 @@ const Scene = (props) => {
 	let renderer = rendererRef.current;
 	const glContext = renderer?.getContext('webgl');
 
-	const css2DRendererRef = useRef(createCSS2DRenderer());
+	const css2DRendererRef = useRef(createCSS2DRenderer(type));
 	let css2DRenderer = css2DRendererRef.current;
 
 	// useRef used to prevent Scene from losing variable references.
