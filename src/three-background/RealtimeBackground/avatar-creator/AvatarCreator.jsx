@@ -180,7 +180,7 @@ class AvatarCreator extends Component {
 			<div
 				className={`flex flex-col items-center justify-center w-[95%] sm:w-4/5 h-[95%] sm:h-[85%] md:h-[95%] lg:h-[80%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-[#7c6a6a] via-[#c1b8b8] to-[#FFF2F2] rounded-md ${
 					isCookieShown && 'bg-white/50'
-				} overflow-hidden absolute z-30`}
+				} overflow-x-hidden overflow-y-auto absolute z-30`}
 			>
 				{!isWindowSize && (
 					<div className="absolute w-full sm:w-fit z-10 top-3 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">

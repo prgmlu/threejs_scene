@@ -24,7 +24,7 @@ const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar }) => {
 	return (
 		<div className="w-full h-full flex flex-col gap-1 scrollbar">
 			<div className="font-sourceSansProSemibold text-lg">Outfit</div>
-			<div className="w-full h-fit max-h-[95%] flex flex-wrap gap-2 overflow-y-auto py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+			<div className="w-full h-fit max-h-[95%] flex flex-wrap gap-2 overflow-x-hidden overflow-y-auto py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 				{maleOutfits.display.map((outfit, index) => (
 					<div
 						key={index}

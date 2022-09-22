@@ -180,7 +180,7 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 				</div>
-				{windowWidth >= 1440 && (
+				 
 					<div className="w-full flex justify-center items-center py-3">
 						<button
 							style={{ border: '1px solid #330D0D' }}
@@ -190,7 +190,7 @@ class AvatarCreatorEditor extends Component {
 							Save
 						</button>
 					</div>
-				)}
+				
 			</div>
 		);
 	}

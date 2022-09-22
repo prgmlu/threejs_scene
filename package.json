@@ -15,7 +15,7 @@
 		"prettier": "prettier --check src/",
 		"format": "prettier --write src/",
 		"analyze": "npm run build:prod && source-map-explorer 'dist/*.js'",
-		"tailwind-watch": "npx tailwindcss -i ./src/assets/css/input.css -o ./src/assets/css/output.css --watch"
+		"tailwind-watch": "npx tailwindcss -i ./src/assets/css/input.css -o ./src/three-background/RealtimeBackground/output.css --watch"
 	},
 	"files": [
 		"README.md",

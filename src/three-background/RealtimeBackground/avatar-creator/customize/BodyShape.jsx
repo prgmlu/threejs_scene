@@ -2,8 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import SkinTone from './SkinTone';
 import check from '../../static/avatar/menus/check.png';
-const FEMALE_SHAPE = 'https://cdn.obsess-vr.com/realtime3d/ct_ui/feminine.svg';
-const MALE_SHAPE = 'https://cdn.obsess-vr.com/realtime3d/ct_ui/masculine.svg';
+import FEMALE_SHAPE from '../../../../three-background/RealtimeBackground/static/avatar/shapes/feminine.png';
+import MALE_SHAPE from '../../../../three-background/RealtimeBackground/static/avatar/shapes/masculine.png';
 
 const BodyShape = ({
 	currentAvatar,
@@ -41,7 +41,7 @@ const BodyShape = ({
 						window.femaleModel.visible = true;
 						setSelectedBodyshape('female');
 					}}
-					className={`w-fit h-fit px-3 relative cursor-pointer rounded-[4px] shadow-md ${
+					className={`w-[25%] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'female'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
@@ -58,7 +58,7 @@ const BodyShape = ({
 						</span>
 					)}
 					<img
-						className="min-h-fit h-fit scale-75"
+						className="min-h-full h-full scale-75"
 						src={FEMALE_SHAPE}
 						alt=""
 						onClick={() => {
@@ -74,7 +74,7 @@ const BodyShape = ({
 						window.maleModel.visible = true;
 						setSelectedBodyshape('male');
 					}}
-					className={`w-fit h-fit px-3 relative cursor-pointer rounded-[4px] shadow-md ${
+					className={`w-[25%] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'male'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
@@ -91,7 +91,7 @@ const BodyShape = ({
 						</span>
 					)}
 					<img
-						className="min-h-fit h-fit scale-75"
+						className="min-h-full h-full w-full scale-75"
 						src={MALE_SHAPE}
 						alt=""
 						onClick={() => {
