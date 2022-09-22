@@ -235,7 +235,6 @@ class AvatarCreator extends Component {
 						/>
 					)}
 				</div>
-
 				{window.innerWidth > 960 && (
 					<button
 						onClick={() => this.setState({ isCookieShown: true })}
@@ -247,10 +246,9 @@ class AvatarCreator extends Component {
 
 				{isCookieShown && (
 					<div className="fixed sm:absolute md:fixed lg:absolute inset-0 w-full h-full bg-black/60 sm:bg-transparent">
-						<Cookie handleClose={this.handleClose} />{' '}
+						<Cookie handleClose={this.handleClose} />
 					</div>
 				)}
-
 				{(window.innerWidth >= 1440) &
 				(
 					<img

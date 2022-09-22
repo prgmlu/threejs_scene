@@ -2,14 +2,14 @@ import React from 'react';
 import cloth from '../../static/avatar/menus/clothes.png';
 import body from '../../static/avatar/menus/body.png';
 import skin from '../../static/avatar/menus/skin.png';
-import makeup from '../../static/avatar/menus/brush.png';
+import makeup from '../../static/avatar/menus/makeup.png';
 
 const TabControls = ({ activeTab, onTabClick }) => {
 	return (
 		<div className="w-full sm:w-full md:w-[95%] lg:w-[85%] h-[8%] sm:h-[12%]  flex items-start justify-center gap-3 lg:gap-6">
 			<img
 				// src={body}
-				src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/body.svg"}
+				src={'https://cdn.obsess-vr.com/realtime3d/ct_ui/body.svg'}
 				alt="Body type"
 				id="1"
 				className={`w-[13%] ${
@@ -21,7 +21,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 			/>
 			<img
 				// src={skin}
-				src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/face.svg"}
+				src={'https://cdn.obsess-vr.com/realtime3d/ct_ui/face.svg'}
 				alt="Skin tone"
 				id="2"
 				className={`w-[13%] ${
@@ -32,8 +32,8 @@ const TabControls = ({ activeTab, onTabClick }) => {
 				onClick={() => onTabClick(2)}
 			/>
 			<img
-				// src={makeup}
-				src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/makeup.svg"}
+				src={makeup}
+				//src={'https://cdn.obsess-vr.com/realtime3d/ct_ui/makeup.svg'}
 				alt="Makeup"
 				id="2"
 				className={`w-[13%] ${
@@ -45,7 +45,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 			/>
 			<img
 				// src={cloth}
-				src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/outfit.svg"}
+				src={'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfit.svg'}
 				alt="Outfit"
 				id="3"
 				className={`w-[13%] ${

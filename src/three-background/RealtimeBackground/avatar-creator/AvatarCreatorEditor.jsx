@@ -45,7 +45,7 @@ class AvatarCreatorEditor extends Component {
 		skintoneX: 0,
 		skintoneY: 0,
 		selectedMakeup: null,
-		selectedBodyshape:'female',
+		selectedBodyshape: 'female',
 		windowWidth: window.innerWidth,
 		windowHeight: window.innerHeight,
 	};
@@ -77,25 +77,25 @@ class AvatarCreatorEditor extends Component {
 		this.setState({ activeTab: id });
 		if (id == 1) {
 			//body shape
-			this.camera.position.set(0, 0, 0)
+			this.camera.position.set(0, 0, 0);
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}
 		if (id == 2) {
 			// face
-			this.camera.position.set(0.015, 0.235, -2.5)
+			this.camera.position.set(0.015, 0.235, -2.5);
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}
 		if (id == 3) {
 			//makup
-			this.camera.position.set(0.015,0.235,-2.5)
+			this.camera.position.set(0.015, 0.235, -2.5);
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}
 		if (id == 4) {
 			//outfit
-			this.camera.position.set(0, 0, 0)
+			this.camera.position.set(0, 0, 0);
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}
@@ -140,7 +140,7 @@ class AvatarCreatorEditor extends Component {
 					activeTab={activeTab}
 					onTabClick={this.onTabClick}
 				/>
-				<div className="w-[96%] sm:w-full md:w-[95%] lg:w-[85%] h-[92%] sm:h-[95%] bg-white rounded-lg gap-x-2 pt-3 px-3 relative -mt-[1px]">
+				<div className="w-[96%] sm:w-full md:w-[95%] lg:w-[85%] h-[92%] sm:h-[85%] bg-white rounded-lg gap-x-2 pt-3 px-3 relative -mt-[1px]">
 					{activeTab == 1 && (
 						<BodyShape
 							skintoneX={this.state.skintoneX}
@@ -151,7 +151,9 @@ class AvatarCreatorEditor extends Component {
 								this,
 							)}
 							selectedBodyshape={this.state.selectedBodyshape}
-							setSelectedBodyshape={this.setSelectedBodyshape.bind(this)}
+							setSelectedBodyshape={this.setSelectedBodyshape.bind(
+								this,
+							)}
 							currentAvatar={this.props.currentAvatar}
 						/>
 					)}
@@ -181,10 +183,10 @@ class AvatarCreatorEditor extends Component {
 					)}
 				</div>
 				{windowWidth >= 1440 && (
-					<div className="w-full flex justify-center items-center py-3">
+					<div className="w-[96%] sm:w-full md:w-[95%] lg:w-[85%] flex items-center justify-end py-3">
 						<button
 							style={{ border: '1px solid #330D0D' }}
-							className="w-fit h-fit self-center text-[#330D0D] px-7 py-0.5 text-sm rounded-md cursor-pointer"
+							className="w-fit h-fit text-[#330D0D] px-7 py-0.5 text-sm rounded-md cursor-pointer"
 							onClick={this.props.closeModal}
 						>
 							Save

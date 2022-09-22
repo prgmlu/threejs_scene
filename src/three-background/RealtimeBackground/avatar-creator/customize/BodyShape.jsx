@@ -30,7 +30,7 @@ const BodyShape = ({
 	];
 
 	return (
-		<div className="w-full h-full flex flex-col justify-between overflow-y-auto">
+		<div className="w-full h-full flex flex-col overflow-y-auto gap-2">
 			<div className="h-fit font-sourceSansProSemibold text-lg pb-2">
 				Body Shape
 			</div>
@@ -102,10 +102,8 @@ const BodyShape = ({
 					/>
 				</div>
 			</div>
-			<div className="font-sourceSansProSemibold text-lg py-3">
-				Skin Tone
-			</div>
-			<div className="w-full h-fit max-h-[50%] flex flex-col px-1.5 gap-1 pb-1 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+			<div className="font-sourceSansProSemibold text-lg">Skin Tone</div>
+			<div className="w-full h-fit max-h-[60%] flex flex-col px-1.5 gap-1 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 				{tones.map((group, index) => (
 					<div
 						key={index}
