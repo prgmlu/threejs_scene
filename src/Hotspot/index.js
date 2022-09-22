@@ -88,7 +88,6 @@ const Hotspot = (props) => {
 	};
 
 	const highlightMarker = (marker) => {
-		if (!marker?.svgSpriteComponent.svgString) return;
 		if (
 			navMarkerIndex === activeNavIndex &&
 			marker.userData.type === 'NavMarker'
