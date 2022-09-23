@@ -182,7 +182,7 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 				</div>
-				{windowWidth > 1440 && (
+				{windowWidth >= 1440 && (
 					<div className="w-full flex justify-end items-center mt-4">
 						<button
 							style={{ border: '1px solid #330D0D' }}

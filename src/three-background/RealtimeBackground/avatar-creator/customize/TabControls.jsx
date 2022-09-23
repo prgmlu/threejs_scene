@@ -83,7 +83,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 			<div
 				onClick={() => onTabClick(4)}
 				className={
-					'w-[18%] h-[70%] sm:h-[30%] rounded-md flex justify-center relative min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] items-center py-1 px-1.5 bg-white'
+					'min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] w-[18%] h-[70%] rounded-md flex justify-center relative items-center py-1 px-1.5 bg-white'
 				}
 			>
 				<img
