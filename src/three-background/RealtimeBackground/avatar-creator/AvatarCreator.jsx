@@ -180,10 +180,10 @@ class AvatarCreator extends Component {
 			<div
 				className={`flex flex-col items-center justify-center w-[95%] sm:w-4/5 h-[95%] sm:h-[85%] md:h-[95%] lg:h-[80%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-[#7c6a6a] via-[#c1b8b8] to-[#FFF2F2] rounded-md ${
 					isCookieShown && 'bg-white/50'
-				} overflow-hidden absolute z-30`}
+				} overflow-visible absolute z-30`}
 			>
 				{!isWindowSize && (
-					<div className="absolute w-full sm:w-fit z-10 top-3 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
+					<div className="absolute w-full sm:w-fit z-10 top-1 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
 						<button
 							onClick={() => this.closeModal()}
 							className="flex items-center text-white text-base px-2.5 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-black mr-0 sm:mr-6"
@@ -236,7 +236,7 @@ class AvatarCreator extends Component {
 					)}
 				</div>
 
-				{window.innerWidth > 960 && (
+				{(window.innerWidth > 960 && window.innerHeight > 750) && (
 					<button
 						onClick={() => this.setState({ isCookieShown: true })}
 						className="z-40 absolute no-underline left-4 bottom-[50%] sm:bottom-[1%] mb-2 -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 font-bold text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
@@ -254,7 +254,7 @@ class AvatarCreator extends Component {
 				{(window.innerWidth >= 1440) &&
 				(
 					<img
-						className="w-12 h-12 cursor-pointer absolute top-[10px] right-[10px] z-50"
+						className="w-12 h-12 cursor-pointer absolute top-[-20px] right-[-20px] z-50"
 						src={close}
 						alt="CLOSE"
 						onClick={() => this.closeModal()}

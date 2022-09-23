@@ -292,7 +292,7 @@ export const loadModelAndAnimations = async (url,outfitString) => {
 				console.log(e)
 			}
 
-			debugger;
+			// debugger;
 
 			const charAnimations = animations;
 

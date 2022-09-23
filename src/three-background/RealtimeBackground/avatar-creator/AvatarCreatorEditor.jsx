@@ -45,7 +45,7 @@ class AvatarCreatorEditor extends Component {
 		skintoneX: 0,
 		skintoneY: 0,
 		selectedMakeup: null,
-		selectedBodyshape:'female',
+		selectedBodyshape: 'female',
 		windowWidth: window.innerWidth,
 		windowHeight: window.innerHeight,
 	};
@@ -77,25 +77,25 @@ class AvatarCreatorEditor extends Component {
 		this.setState({ activeTab: id });
 		if (id == 1) {
 			//body shape
-			this.camera.position.set(0, 0, 0)
+			this.camera.position.set(0, 0, 0);
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}
 		if (id == 2) {
 			// face
-			this.camera.position.set(0.015, 0.235, -2.5)
+			this.camera.position.set(0.015, 0.235, -2.5);
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}
 		if (id == 3) {
 			//makup
-			this.camera.position.set(0.015,0.235,-2.5)
+			this.camera.position.set(0.015, 0.235, -2.5);
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}
 		if (id == 4) {
 			//outfit
-			this.camera.position.set(0, 0, 0)
+			this.camera.position.set(0, 0, 0);
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}
@@ -140,7 +140,7 @@ class AvatarCreatorEditor extends Component {
 					activeTab={activeTab}
 					onTabClick={this.onTabClick}
 				/>
-				<div className="w-full h-[70%] mb-3 white-shadow-container bg-white rounded-lg gap-x-2 pt-3 px-3 relative">
+				<div className="w-full md:w-[95%] sm:w-[95%] overflow-y-auto h-[70%] md:h-[90%] sm:h-[90%] mb-3 sm:mb-0 white-shadow-container bg-white rounded-lg gap-x-2 md:pt-3 lg:pt-3 xl:pt-3 sm:pt-1 px-3 relative">
 					{activeTab == 1 && (
 						<BodyShape
 							skintoneX={this.state.skintoneX}
@@ -151,7 +151,9 @@ class AvatarCreatorEditor extends Component {
 								this,
 							)}
 							selectedBodyshape={this.state.selectedBodyshape}
-							setSelectedBodyshape={this.setSelectedBodyshape.bind(this)}
+							setSelectedBodyshape={this.setSelectedBodyshape.bind(
+								this,
+							)}
 							currentAvatar={this.props.currentAvatar}
 						/>
 					)}
@@ -170,7 +172,7 @@ class AvatarCreatorEditor extends Component {
 							selectedSkintone={this.state.selectedSkintone}
 							currentAvatar={this.props.currentAvatar}
 						/>
-					)} 	
+					)}
 					{activeTab == 4 && (
 						<Outfit
 							selectedOutfit={selectedOutfit}
@@ -180,7 +182,7 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 				</div>
-				 
+				{windowWidth > 1440 && (
 					<div className="w-full flex justify-end items-center mt-4">
 						<button
 							style={{ border: '1px solid #330D0D' }}
@@ -190,7 +192,7 @@ class AvatarCreatorEditor extends Component {
 							Save
 						</button>
 					</div>
-				
+				)}
 			</div>
 		);
 	}

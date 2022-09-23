@@ -41,7 +41,7 @@ const BodyShape = ({
 						window.femaleModel.visible = true;
 						setSelectedBodyshape('female');
 					}}
-					className={`w-[25%] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md max-h-[8rem] max-w-[6rem] ${
+					className={`w-[25%] max-h-[8rem] max-w-[6rem] md:max-w-[4rem] sm:max-w-[4rem] md:max-h-[4rem] sm:max-h-[4rem] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'female'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
@@ -74,7 +74,7 @@ const BodyShape = ({
 						window.maleModel.visible = true;
 						setSelectedBodyshape('male');
 					}}
-					className={`w-[25%] max-h-[8rem] max-w-[6rem] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md ${
+					className={`w-[25%] max-h-[8rem] max-w-[6rem] md:max-w-[4rem] sm:max-w-[4rem] md:max-h-[4rem] sm:max-h-[4rem] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'male'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
@@ -107,6 +107,7 @@ const BodyShape = ({
 			</div>
 			<div className="w-full h-fit max-h-[50%] flex flex-col px-1.5 gap-1 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 				{tones.map((group, index) => (
+					
 					<div
 						key={index}
 						className={`flex flex-wrap items-center justify-between  ${
