@@ -1983,6 +1983,11 @@ video {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .md\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
   .md\:pt-3 {
     padding-top: 0.75rem;
   }

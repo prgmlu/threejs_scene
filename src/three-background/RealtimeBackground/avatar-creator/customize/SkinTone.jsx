@@ -38,7 +38,7 @@ const SkinTone = ({
 				swapSkinTexture(counter, mesh, selectedMakeup);
 				setSelectedSkintone(counter);
 			}}
-			className={`w-[32px] sm:w-8 h-[32px] sm:h-8 rounded-full relative`}
+			className={`w-[32px] sm:w-12 h-[32px] sm:h-12 rounded-full relative`}
 			style={{
 				backgroundColor: color,
 				border: `${

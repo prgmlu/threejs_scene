@@ -111,7 +111,7 @@ const BodyShape = ({
 					<div
 						key={index}
 						className={`flex flex-nowrap sm:mb-1.5 items-center justify-between  ${
-							index % 2 === 0 ? 'lg:px-2 sm:px-1' : 'lg:px-10 sm:px-3'
+							index % 2 === 0 ? 'px-2' : 'px-10'
 						}`}
 					>
 						{group.map((t, idx) => {
