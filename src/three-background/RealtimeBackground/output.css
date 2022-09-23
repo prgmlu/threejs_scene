@@ -863,6 +863,10 @@ video {
   height: 60%;
 }
 
+.h-\[18px\] {
+  height: 18px;
+}
+
 .max-h-\[8rem\] {
   max-height: 8rem;
 }
@@ -881,6 +885,10 @@ video {
 
 .max-h-\[32px\] {
   max-height: 32px;
+}
+
+.max-h-\[15\%\] {
+  max-height: 15%;
 }
 
 .min-h-full {
@@ -981,6 +989,10 @@ video {
   width: 13%;
 }
 
+.w-\[18px\] {
+  width: 18px;
+}
+
 .min-w-\[3rem\] {
   min-width: 3rem;
 }
@@ -991,6 +1003,10 @@ video {
 
 .max-w-\[32px\] {
   max-width: 32px;
+}
+
+.max-w-\[15\%\] {
+  max-width: 15%;
 }
 
 .-translate-x-1\/2 {
@@ -1941,6 +1957,26 @@ video {
     height: 90%;
   }
 
+  .md\:h-9 {
+    height: 2.25rem;
+  }
+
+  .md\:h-\[32px\] {
+    height: 32px;
+  }
+
+  .md\:h-8 {
+    height: 2rem;
+  }
+
+  .md\:h-12 {
+    height: 3rem;
+  }
+
+  .md\:h-10 {
+    height: 2.5rem;
+  }
+
   .md\:max-h-\[4rem\] {
     max-height: 4rem;
   }
@@ -1963,6 +1999,26 @@ video {
 
   .md\:w-\[95\%\] {
     width: 95%;
+  }
+
+  .md\:w-9 {
+    width: 2.25rem;
+  }
+
+  .md\:w-\[32px\] {
+    width: 32px;
+  }
+
+  .md\:w-8 {
+    width: 2rem;
+  }
+
+  .md\:w-12 {
+    width: 3rem;
+  }
+
+  .md\:w-10 {
+    width: 2.5rem;
   }
 
   .md\:min-w-\[2rem\] {
@@ -1988,6 +2044,21 @@ video {
     padding-right: 0.5rem;
   }
 
+  .md\:px-1 {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .md\:px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .md\:px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
   .md\:pt-3 {
     padding-top: 0.75rem;
   }
@@ -2002,12 +2073,28 @@ video {
     height: 80%;
   }
 
+  .lg\:h-16 {
+    height: 4rem;
+  }
+
+  .lg\:h-14 {
+    height: 3.5rem;
+  }
+
   .lg\:w-1\/2 {
     width: 50%;
   }
 
   .lg\:w-\[45\%\] {
     width: 45%;
+  }
+
+  .lg\:w-16 {
+    width: 4rem;
+  }
+
+  .lg\:w-14 {
+    width: 3.5rem;
   }
 
   .lg\:scale-100 {
@@ -2044,7 +2131,29 @@ video {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .xl\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .xl\:px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
   .xl\:pt-3 {
     padding-top: 0.75rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .\32xl\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .\32xl\:px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 }

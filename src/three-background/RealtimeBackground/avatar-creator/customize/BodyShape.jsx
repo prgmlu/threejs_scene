@@ -28,7 +28,6 @@ const BodyShape = ({
 		['#EDD8C7', '#D5B69A', '#B99573', '#93724F', '#715236', '#483320'],
 		['#E0C8B0', '#C5A57F', '#A5855E', '#81633D', '#594426'],
 	];
-
 	return (
 		<div className="w-full h-full flex flex-col justify-between overflow-y-auto">
 			<div className="h-fit font-sourceSansProSemibold text-lg pb-2">
@@ -110,7 +109,7 @@ const BodyShape = ({
 					
 					<div
 						key={index}
-						className={`flex flex-nowrap sm:mb-1.5 items-center justify-between  ${
+						className={`flex flex-nowrap items-center justify-between  ${
 							index % 2 === 0 ? 'px-2' : 'px-10'
 						}`}
 					>
