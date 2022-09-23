@@ -180,7 +180,7 @@ class AvatarCreator extends Component {
 			<div
 				className={`flex flex-col items-center justify-center w-[95%] sm:w-4/5 h-[95%] sm:h-[85%] md:h-[95%] lg:h-[80%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-[#7c6a6a] via-[#c1b8b8] to-[#FFF2F2] rounded-md ${
 					isCookieShown && 'bg-white/50'
-				} overflow-x-hidden overflow-y-auto absolute z-30`}
+				} overflow-hidden absolute z-30`}
 			>
 				{!isWindowSize && (
 					<div className="absolute w-full sm:w-fit z-10 top-3 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
@@ -203,7 +203,7 @@ class AvatarCreator extends Component {
 						</button>
 					</div>
 				)}
-				<div className="w-full h-full sm:h-3/4 md:h-[85%] flex flex-col sm:flex-row items-center">
+				<div className="w-full h-[90%] flex flex-col sm:flex-row items-center">
 					<div className="w-full sm:w-1/2 md:w-2/5 lg:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-start sm:justify-center">
 						<div className="z-50 w-fit h-fit flex items-center mt-3 sm:mt-10 rounded-[4px] border-[1px]  border-[#330D0D]">
 							<img
@@ -222,7 +222,7 @@ class AvatarCreator extends Component {
 						</div>
 						<div
 							ref={this.myRef}
-							className="scale-75 sm:scale-100 md:scale-150 lg:scale-125"
+							className="scale-75 sm:scale-100 md:scale-125 lg:scale-100"
 						></div>
 					</div>
 					{this.props.currentAvatars && (
@@ -239,22 +239,22 @@ class AvatarCreator extends Component {
 				{window.innerWidth > 960 && (
 					<button
 						onClick={() => this.setState({ isCookieShown: true })}
-						className="z-40 absolute left-4 bottom-[50%] sm:bottom-[1%] -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 font-bold text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
+						className="z-40 absolute no-underline left-4 bottom-[50%] sm:bottom-[1%] mb-2 -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 font-bold text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
 					>
-						Cookie Policy
+						By using our website, you agree to the use of cookies.
 					</button>
 				)}
 
 				{isCookieShown && (
 					<div className="fixed sm:absolute md:fixed lg:absolute inset-0 w-full h-full bg-black/60 sm:bg-transparent">
-						<Cookie handleClose={this.handleClose} />{' '}
+						<Cookie handleClose={this.handleClose} />
 					</div>
 				)}
 
-				{(window.innerWidth >= 1440) &
+				{(window.innerWidth >= 1440) &&
 				(
 					<img
-						className="w-12 h-12 cursor-pointer absolute top-[6%] right-[9.25%] z-50"
+						className="w-12 h-12 cursor-pointer absolute top-[10px] right-[10px] z-50"
 						src={close}
 						alt="CLOSE"
 						onClick={() => this.closeModal()}

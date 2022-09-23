@@ -135,12 +135,12 @@ class AvatarCreatorEditor extends Component {
 	render() {
 		const { selectedOutfit, activeTab, windowWidth } = this.state;
 		return (
-			<div className="w-full sm:w-1/2 md:w-[80%] lg:w-[45%] h-1/2 sm:h-full flex flex-col justify-start items-center sm:items-start relative">
+			<div className="w-full sm:w-1/2 md:w-[80%] lg:w-[45%] h-1/2 sm:h-full flex flex-col relative justify-start items-center sm:items-start relative">
 				<TabControls
 					activeTab={activeTab}
 					onTabClick={this.onTabClick}
 				/>
-				<div className="w-[96%] sm:w-full md:w-[95%] lg:w-[85%] h-[92%] sm:h-[95%] bg-white rounded-lg gap-x-2 pt-3 px-3 relative -mt-[1px]">
+				<div className="w-full h-[70%] mb-3 white-shadow-container bg-white rounded-lg gap-x-2 pt-3 px-3 relative">
 					{activeTab == 1 && (
 						<BodyShape
 							skintoneX={this.state.skintoneX}
@@ -170,7 +170,7 @@ class AvatarCreatorEditor extends Component {
 							selectedSkintone={this.state.selectedSkintone}
 							currentAvatar={this.props.currentAvatar}
 						/>
-					)}
+					)} 	
 					{activeTab == 4 && (
 						<Outfit
 							selectedOutfit={selectedOutfit}
@@ -181,10 +181,10 @@ class AvatarCreatorEditor extends Component {
 					)}
 				</div>
 				 
-					<div className="w-full flex justify-center items-center py-3">
+					<div className="w-full flex justify-end items-center mt-4">
 						<button
 							style={{ border: '1px solid #330D0D' }}
-							className="w-fit h-fit self-center text-[#330D0D] px-7 py-0.5 text-sm rounded-md cursor-pointer"
+							className="w-fit h-fit self-center bg-white text-[#330D0D] px-[2.5rem] py-[0.5rem] text-sm rounded-md cursor-pointer"
 							onClick={this.props.closeModal}
 						>
 							Save
