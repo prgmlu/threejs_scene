@@ -863,13 +863,15 @@ video {
   height: 60%;
 }
 
-.h-\[18px\] {
-  height: 18px;
-}
 
 .max-h-\[8rem\] {
   max-height: 8rem;
 }
+
+.h-\[18px\] {
+  height: 18px;
+}
+
 
 .max-h-\[50\%\] {
   max-height: 50%;
