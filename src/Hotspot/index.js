@@ -7,6 +7,7 @@ import {
 	createAndRenderImageHotspot,
 	createAndRenderLabel,
 } from '../utils';
+import Object3dMarker from './_constructors/Object3dMarker';
 
 //TODO: refactor setMaxRenderOrder
 //TODO: object with hotspot_type =='image_marker' has prop sceneObject == null???
@@ -18,13 +19,14 @@ const Hotspot = (props) => {
 		sceneRef,
 		setMaxRenderOrder,
 		userData,
-		
+
 		// accessibility
 		onAccessibilityMarkerClicked,
 		activeNavIndex,
 		navMarkerIndex,
 		activeHotspotIndex,
 		hotspotMarkerIndex,
+		camera,
 	} = props;
 
 	const markerRef = useRef();
@@ -69,6 +71,10 @@ const Hotspot = (props) => {
 			}
 		} else if (type === 'Label') {
 			markerRef.current = createAndRenderLabel(sceneRef, props);
+		} else if (type === '3d_model') {
+			const marker = new Object3dMarker(props);
+			marker.addToScene(sceneRef.current);
+			markerRef.current = marker;
 		}
 
 		return () => {
@@ -84,7 +90,12 @@ const Hotspot = (props) => {
 		if (hotspotMarkerIndex !== activeHotspotIndex) return;
 		e.preventDefault();
 		e.stopPropagation();
-		onAccessibilityMarkerClicked(e, undefined, markerRef.current, undefined);
+		onAccessibilityMarkerClicked(
+			e,
+			undefined,
+			markerRef.current,
+			undefined,
+		);
 	};
 
 	const highlightMarker = (marker) => {
@@ -116,7 +127,7 @@ const Hotspot = (props) => {
 			);
 		};
 	}, [activeNavIndex, activeHotspotIndex]);
-	
+
 	return false;
 };
 

@@ -377,7 +377,6 @@ const Scene = (props) => {
 
 	const onMouseUpMarker = (e, sceneObject, marker, isDragEvent) => {
 		if (marker?.userData?.focusOnClick && marker?.sceneObject) {
-			console.log('=> onMouseUpMarker', marker);
 			rotateCameraTowardsHotspot(marker.sceneObject).then(() => {
 				props.onMouseUp(e, sceneObject, marker, isDragEvent);
 			});
@@ -443,7 +442,6 @@ const Scene = (props) => {
 					cameraRef.current.updateProjectionMatrix();
 				})
 				.onComplete(() => {
-					console.log('=> anim complete');
 					clearAnimation();
 					const normal = new THREE.Vector3(0, 0, -1).applyEuler(
 						cameraRef.current.rotation,
@@ -626,6 +624,7 @@ const Scene = (props) => {
 						React.cloneElement(child, {
 							sceneRef,
 							setMaxRenderOrder,
+							camera: cameraRef.current,
 						}),
 					)}
 

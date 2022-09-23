@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import BackgroundCube from './BackgroundCube';
 import FlatBackground from './FlatBackground';
-import _3DModelScene from './_3DModelScene';
+import _3DScene from './_3DScene';
+import * as THREE from 'three';
 
 const Background = ({
 	scene,
@@ -15,6 +16,93 @@ const Background = ({
 	onBackgroundReady = () => {},
 	onBackgroundLoaded = () => {},
 }) => {
+	const ambientLightRef = useRef();
+	const directionalLightRef = useRef();
+
+	const initLight = (type = 'ambient', config = {}) => {
+		const lightInstance =
+			type === 'ambient'
+				? THREE.AmbientLight
+				: type === 'directional'
+				? THREE.DirectionalLight
+				: false;
+		const refInstance =
+			type === 'ambient'
+				? ambientLightRef
+				: type === 'directional'
+				? directionalLightRef
+				: false;
+		refInstance.current = new lightInstance(
+			config.color || 0xffffff,
+			config.intensity || 1,
+		);
+		refInstance.current.name = `${type}-light`;
+		refInstance.current.userData.config = config;
+		scene.add(refInstance.current);
+	};
+
+	const updateLightConf = (type = 'ambient', config = {}) => {
+		const refInstance =
+			type === 'ambient'
+				? ambientLightRef
+				: type === 'directional'
+				? directionalLightRef
+				: false;
+
+		if (config.color)
+			refInstance.current.color = new THREE.Color(config.color);
+		if (config?.intensity >= 0)
+			refInstance.current.intensity = config.intensity;
+		refInstance.current.userData.config = config; //update config
+	};
+	const isPropsEqual = (obj1, obj2) =>
+		JSON.stringify(obj1) === JSON.stringify(obj2);
+
+	//Ambient Light
+	useEffect(() => {
+		if (bgConf?.ambient_light && !ambientLightRef.current)
+			initLight('ambient', bgConf?.ambient_light);
+		//config changed
+		else if (
+			bgConf?.ambient_light &&
+			ambientLightRef.current &&
+			!isPropsEqual(
+				bgConf?.directional_light,
+				ambientLightRef.current.userData.config,
+			)
+		) {
+			updateLightConf('ambient', bgConf?.ambient_light);
+		}
+		//was turned off
+		else if (!bgConf?.ambient_light && ambientLightRef.current) {
+			scene.remove(ambientLightRef.current);
+			ambientLightRef.current = null;
+		}
+	}, [bgConf?.ambient_light]);
+
+	//Directional Light
+	useEffect(() => {
+		//first time enabled
+		if (bgConf?.directional_light && !directionalLightRef.current)
+			initLight('directional', bgConf?.directional_light);
+		//config changed
+		else if (
+			bgConf?.directional_light &&
+			directionalLightRef.current &&
+			!isPropsEqual(
+				bgConf?.directional_light,
+				directionalLightRef.current.userData.config,
+			)
+		) {
+			updateLightConf('directional', bgConf?.directional_light);
+		}
+		//was disabled
+		else if (!bgConf?.directional_light && directionalLightRef.current) {
+			scene.remove(directionalLightRef.current);
+			directionalLightRef.current = null;
+		}
+	}, [bgConf?.directional_light]);
+
 	const sceneConfig = useMemo(
 		() => ({
 			sceneType: bgConf.sceneType,
@@ -58,13 +146,12 @@ const Background = ({
 					materialProperties={bgConf?.materialProperties}
 				/>
 			)}
-			{sceneConfig.sceneType === '3d_model_scene' && (
-				<_3DModelScene
-					backgroundUrl={sceneConfig.backgroundUrl}
+			{['3d_model_scene', '3d_scene'].includes(bgConf?.sceneType) && (
+				<_3DScene
 					scene={scene}
+					{...bgConf}
 					onBackgroundReady={onBackgroundReady}
 					onBackgroundLoaded={onBackgroundLoaded}
-					_3dModelURL={bgConf._3dModelURL}
 				/>
 			)}
 		</>
