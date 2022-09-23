@@ -31,6 +31,7 @@ class AvatarCreator extends Component {
 			0.1,
 			1000,
 		);
+		window.cc = this.camera;
 		this.myRef = React.createRef();
 		this.lastMPos = { x: 0, y: 0 };
 		this.canRotate = false;
@@ -56,7 +57,7 @@ class AvatarCreator extends Component {
 	};
 
 	loadAvatar = () => {
-		this.currentAvatars.forEach((i) => i.position.set(0, -1.3, -3.2));
+		this.currentAvatars.forEach((i) => i.position.set(0, -.8, -2.6));
 		this.currentAvatars.forEach((i) => i.rotation.set(0, 0, 0, 'XYZ'));
 		this.currentAvatars.forEach((i) => this.scene.add(i));
 	};

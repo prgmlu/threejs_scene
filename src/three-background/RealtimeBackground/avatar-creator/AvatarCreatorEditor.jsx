@@ -77,25 +77,25 @@ class AvatarCreatorEditor extends Component {
 		this.setState({ activeTab: id });
 		if (id == 1) {
 			//body shape
-			this.camera.position.set(0, 0, 0);
+			this.camera.position.set(0, 0, 0)
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}
 		if (id == 2) {
 			// face
-			this.camera.position.set(0.015, 0.235, -2.5);
-			this.camera.fov = 50;
+			this.camera.position.set(0, 0.6, -.8)
+			this.camera.fov = 20;
 			this.camera.updateProjectionMatrix();
 		}
 		if (id == 3) {
 			//makup
-			this.camera.position.set(0.015, 0.235, -2.5);
-			this.camera.fov = 50;
+			this.camera.position.set(0, 0.6, -.8)
+			this.camera.fov = 20;
 			this.camera.updateProjectionMatrix();
 		}
 		if (id == 4) {
 			//outfit
-			this.camera.position.set(0, 0, 0);
+			this.camera.position.set(0, 0, 0)
 			this.camera.fov = 50;
 			this.camera.updateProjectionMatrix();
 		}

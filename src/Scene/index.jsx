@@ -32,6 +32,7 @@ const getRendererKey = (type, sceneId) => {
 const getRenderer = (sceneId = '', type) => {
 	const rendererKey = getRendererKey(type, sceneId);
 	const ret = window[rendererKey] || new THREE.WebGLRenderer();
+	window.mainRenderer = ret;
 	window[rendererKey] = ret;
 	ret.info.autoReset = true;
 	return ret;

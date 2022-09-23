@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import {resetRenderer, setUpEnvMap, loadModelAndAnimations, setUpNormalLights} from '../threeHelpers';
+import {resetRenderer, setUpEnvMap, loadModelAndAnimations, setUpNormalLights, setUpSceneBackground} from '../threeHelpers';
 import AvatarCreatorContainer from './AvatarCreatorContainer';
 import RealtimeControls from './RealtimeControls';
 import './output.css';
@@ -157,6 +157,9 @@ function getInitialAvatarOutfitString(){
 
 const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller }) => {
     
+    setUpSceneBackground (scene, true);
+
+    
     const [mAvatar, setMAvatar] = useState(null);
     const [fAvatar, setFAvatar] = useState(null);
 
@@ -185,7 +188,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         }
         let modelMixerMap = await loadModelAndAnimations(url,null,avType);
             let [model,mixer,animMap ] = modelMixerMap ; 
-            model.position.set(0,-1.3,-3.2);
+            model.position.set(0,-.8,-2.6);
             setCharMixer(mixer);
             setAnimationsMap(animMap);
             //remove old avatar from scene
@@ -240,7 +243,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         function loadStore () {
             return new Promise((resolve, reject) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v032.glb",(storeGlb) => {
-                loader.load("https://cdn.obsess-vr.com/realtime3d/CT_Holiday2022_v004.glb",(storeGlb) => {
+                loader.load("https://cdn.obsess-vr.com/realtime3d/CT_Holiday2022_v015.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_sceneAnim_v030.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v026.glb",(storeGlb) => {
@@ -267,7 +270,12 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
                         handleAnimations(storeGlb);
                     }
 
-                    scene.add(storeGlb.scene);
+                    // scene.add(storeGlb.scene);
+
+                    if(!window.toAddObjs)
+                        window.toAddObjs = [];
+                    window.toAddObjs.push(storeGlb.scene);
+
                     storeGlb.scene.scale.set(...STORE_SCALE)
 
                     window.store = storeGlb.scene;
@@ -278,7 +286,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
         async function loadStoreAndModel() {
 
-            let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver7_4.glb";
+            let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver8.glb";
             let M_MODEL_URL = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004_1.glb";
 
             let [_,maleModelMixerMap, femaleModelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations(M_MODEL_URL,localAvatarOutfitStringRef.current), loadModelAndAnimations(FEM_MODEL_URL,localAvatarOutfitStringRef.current)]);
@@ -303,8 +311,13 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
             setFemaleAnimationsMap(femaleAnimationsMap);
             setMaleAnimationsMap(maleAnimationsMap);
             
-            scene.add(maleModel);
-            scene.add(femaleModel);
+            // scene.add(maleModel);
+            // scene.add(femaleModel);
+
+            if(!window.toAddObjs)
+                window.toAddObjs = [];
+            window.toAddObjs.push(maleModel);
+            window.toAddObjs.push(femaleModel);
 
             maleModel.visible = false;
             

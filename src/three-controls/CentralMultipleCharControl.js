@@ -5,6 +5,8 @@ import {
     dressUpFromString
 } from './OutfitTranslator';
 
+import {setUpSceneBackground, adjustRenderer} from '../three-background/threeHelpers';
+
 const ACTIVE = false;
 const USE_TOOLTIP = true;
 
@@ -77,6 +79,32 @@ export default class CentralMultipleCharControls{
         // this.update();
 
         if(!window.mainAnimationLoopHooks) window.mainAnimationLoopHooks = [];
+
+        //find the scene object with name entrancePlaneMesh
+
+        let entrancePlaneMesh = this.scene.children.filter((x)=>x.name == 'entrancePlaneMesh')[0];
+        // alert(entrancePlaneMesh);
+
+        setUpSceneBackground(this.scene, false);
+        adjustRenderer(window.mainRenderer);
+
+
+
+
+        //add all the items inside window.toAddObjs
+        //to the scene\
+
+        window.toAddObjs.forEach((i)=>{
+            this.scene.add(i);
+        })
+
+        if(entrancePlaneMesh){
+            debugger;
+            this.scene.remove(entrancePlaneMesh);
+            delete entrancePlaneMesh.onBeforeRender
+
+        }
+        // scene.children.
         window.mainAnimationLoopHooks.push(this.update.bind(this));
     }
 

@@ -304,6 +304,8 @@ export const loadModelAndAnimations = async (url,outfitString) => {
 			// let initModelPos = [0, .1,5 ];
 			// model.position.set(...initModelPos);
 
+			model.position.set(2,0,2)
+
 			model.scale.set(...MODEL_SCALE);
 
 			resolve([model, mixer, animationsMap]);
@@ -429,14 +431,31 @@ export const setUpEnvMap = (scene, renderer) => {
 }
 
 
-export const setUpSceneBackground = (scene) => {
-	const cubeTextureLoader = new THREE.CubeTextureLoader()
+export const setUpSceneBackground = (scene, placeHolderImage=false) => {
 
-	const backgroundMap = cubeTextureLoader.load(bgArray, (tex) => {
 
-		tex.encoding = THREE.sRGBEncoding
-		scene.background = tex
-	})
+	if(placeHolderImage){
+		const loader = new THREE.TextureLoader()
+		const backgroundMap = loader.load("https://cdn.obsess-vr.com/realtime3d/placeholder_img.jpg", (tex) => {
+			
+			// tex.encoding = THREE.sRGBEncoding
+			// tex.toneMapping = THREE.ACESFilmicToneMapping;
+			scene.background = tex;
+			// scene.background.encoding = THREE.sRGBEncoding;
+
+		})
+	}
+
+
+	else{
+
+		const cubeTextureLoader = new THREE.CubeTextureLoader()
+		const backgroundMap = cubeTextureLoader.load(bgArray, (tex) => {
+			
+			tex.encoding = THREE.sRGBEncoding
+			scene.background = tex
+		})
+	}
 
 
 	// let texLoader = new THREE.TextureLoader();
