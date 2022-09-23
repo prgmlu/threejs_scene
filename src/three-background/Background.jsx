@@ -42,8 +42,6 @@ const Background = ({
 				if(bgConf.backgroundUrl.includes("62222274f4e810f086e0bb25")) {
 
 					setUpEnvMap(scene, renderer);
-					setUpSceneBackground (scene);
-					adjustRenderer(renderer);
 
 					setRealtimeScene(true);
 					setFlatScene(false)

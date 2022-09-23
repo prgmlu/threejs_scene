@@ -26,7 +26,6 @@
 		"canvg": "^3.0.9",
 		"merge-images": "^2.0.0",
 		"nipplejs": "^0.9.1",
-		"octree-helper": "^1.1.6",
 		"prop-types": "^15.7.2",
 		"react-colorful": "^5.6.1",
 		"react-device-detect": "^2.2.2",
