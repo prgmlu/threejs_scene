@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import AnimationMarker from './_constructors/AnimationMarker'
 import PropTypes from 'prop-types';
 import {
 	createAndRenderHotspotMarkerOnEvent,
@@ -8,6 +9,20 @@ import {
 	createAndRenderLabel,
 } from '../utils';
 import Object3dMarker from './_constructors/Object3dMarker';
+
+const createAndRenderAnimatedHotspot = (props, sceneRef, point, isNewRecord) => {
+	//1. Create Animation Marker
+	const marker = new AnimationMarker({
+		...props,
+		clickPoint: isNewRecord && point
+	});
+
+	//2. Render Marker
+	marker.addToScene(sceneRef.current);
+
+	return marker;
+};
+
 
 //TODO: refactor setMaxRenderOrder
 //TODO: object with hotspot_type =='image_marker' has prop sceneObject == null???
@@ -29,6 +44,7 @@ const Hotspot = (props) => {
 		camera,
 	} = props;
 
+	let hotspot_type = userData?.props?.hotspot_type;
 	const markerRef = useRef();
 
 	useEffect(() => {
@@ -40,7 +56,18 @@ const Hotspot = (props) => {
 		);
 		const { e, point } = sceneRef.current.userData?.clickData || {};
 
-		if (type === 'HotspotMarker') {
+		// animation Hotspot
+		if (type === 'HotspotMarker' && hotspot_type === 'animation') {
+			// debugger;
+			markerRef.current = createAndRenderAnimatedHotspot(
+				props,
+				sceneRef,
+				point,
+				isNewRecord,
+			)
+		}
+
+		if (type === 'HotspotMarker' && hotspot_type !== 'animation') {
 			//new markers has no transform values. Currently interpreted as a new record
 			if (isNewRecord) {
 				markerRef.current = createAndRenderHotspotMarkerOnEvent(
