@@ -36,15 +36,15 @@ const BodyShape = ({
 			<div className="h-fit font-sourceSansProSemibold text-lg pb-2">
 				Body Shape
 			</div>
-			<div className="h-fit flex flex-wrap gap-x-6 gap-y-1">
-				<div
+			<div className="min-h-[35%] max-h-[35%] flex flex-wrap gap-x-6 gap-y-1">
+					<div
 					onClick={() => {
 						maleAvatar.visible = false;
 						femaleAvatar.visible = true;
 						window.visibleType = 'female';
 						setSelectedBodyshape('female');
 					}}
-					className={`w-[25%] max-h-[8rem] max-w-[6rem] md:max-w-[4rem] sm:max-w-[4rem] md:max-h-[4rem] sm:max-h-[4rem] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md ${
+					className={` flex justify-center w-[25%] h-[100%] max-h-[8rem] max-w-[6rem] px-3 relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'female'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
@@ -79,7 +79,7 @@ const BodyShape = ({
 						window.visibleType = 'male';
 						setSelectedBodyshape('male');
 					}}
-					className={`w-[25%] max-h-[8rem] max-w-[6rem] md:max-w-[4rem] sm:max-w-[4rem] md:max-h-[4rem] sm:max-h-[4rem] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md ${
+					className={` flex justify-center  w-[25%] h-[100%] h-full px-3 max-h-[8rem] max-w-[6rem] relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'male'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
@@ -96,7 +96,7 @@ const BodyShape = ({
 						</span>
 					)}
 					<img
-						className="min-h-full h-full w-full scale-75"
+						className="min-h-full h-full scale-75"
 						src={MALE_SHAPE}
 						alt=""
 						onClick={() => {
@@ -116,7 +116,7 @@ const BodyShape = ({
 					
 					<div
 						key={index}
-						className={`flex flex-nowrap sm:mb-1.5 items-center justify-between  ${
+						className={`flex flex-nowrap sm:mb-1.5 mx-auto w-[80%] md:w-full items-center justify-between  ${
 							index % 2 === 0 ? 'px-2' : 'px-10'
 						}`}
 					>

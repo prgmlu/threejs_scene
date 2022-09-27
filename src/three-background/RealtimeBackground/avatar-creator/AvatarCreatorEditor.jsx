@@ -135,12 +135,12 @@ class AvatarCreatorEditor extends Component {
 	render() {
 		const { selectedOutfit, activeTab, windowWidth } = this.state;
 		return (
-			<div className="w-full sm:w-1/2 md:w-[80%] lg:w-[45%] h-1/2 sm:h-full flex flex-col relative justify-start items-center sm:items-start relative">
+			<div className="w-full md:w-[80%] lg:w-[45%] min-h-[80%] sm:min-h-[80%] md:min-h-[64%] h-[60%] md:h-full flex flex-col relative justify-start items-center sm:items-start relative">
 				<TabControls
 					activeTab={activeTab}
 					onTabClick={this.onTabClick}
 				/>
-				<div className="w-full md:w-[95%] sm:w-[95%] overflow-y-auto h-[70%] md:h-[90%] sm:h-[90%] mb-3 sm:mb-0 white-shadow-container bg-white rounded-lg gap-x-2 md:pt-3 lg:pt-3 xl:pt-3 sm:pt-1 px-3 relative">
+				<div className="w-full md:w-[95%] mx-auto sm:w-[95%] overflow-y-auto h-[70%]  md:h-[90%] sm:h-[90%] mb-3 sm:mb-0 white-shadow-container bg-white rounded-lg gap-x-2 md:pt-3 lg:pt-3 xl:pt-3 sm:pt-1 px-3 relative">
 					{activeTab == 1 && (
 						<BodyShape
 							skintoneX={this.state.skintoneX}

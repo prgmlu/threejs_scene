@@ -183,7 +183,7 @@ const Face = ({ currentAvatar }) => {
 						currentAvatar={currentAvatar}
 						selectedTone={selectedTone}
 					/>
-					<div className="w-full h-fit max-h-[80%]  grid grid-cols-6 xl:grid-cols-4 2xs:grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-1 pr-2.5 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+				<div className="w-full h-fit max-h-[80%]  grid grid-cols-4 gap-1 pr-2.5 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 						{dataTones.map((item, index) => (
 							<div
 								key={index}

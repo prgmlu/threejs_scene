@@ -184,10 +184,10 @@ class AvatarCreator extends Component {
 				} overflow-visible absolute z-30`}
 			>
 				{!isWindowSize && (
-					<div className="absolute w-full sm:w-fit z-10 top-1 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-start items-center">
+					<div className="md:absolute gap-2 w-[100%] sm:w-[80%] z-10 top-1 left-0 sm:left-4 px-3 sm:px-0 flex justify-between sm:justify-center items-center">
 						<button
 							onClick={() => this.closeModal()}
-							className="flex items-center text-white text-base px-2.5 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-black mr-0 sm:mr-6"
+							className="flex items-center text-white text-base px-2.5 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-black"
 						>
 							<img
 								src={back}
@@ -196,6 +196,21 @@ class AvatarCreator extends Component {
 							/>
 							Back
 						</button>
+						<div className="z-50 w-fit h-fit items-center rounded-[4px] border-[1px]  border-[#330D0D] flex md:hidden">
+							<img
+								src={EDIT}
+								alt="I"
+								className="bg-[#330D0D] py-1.5 px-2.5 rounded-l-[3px]"
+							/>
+							<input
+								className="w-20 sm:w-32 h-full z-50 font-medium outline-none text-center text-white text-sm rounded-r-[4px] px-2 py-1 bg-[#330d0d4d]"
+								placeholder="Set avatar name"
+								value={username}
+								onChange={({ target }) =>
+									this.setState({ username: target.value })
+								}
+							/>
+						</div>
 						<button
 							onClick={() => this.closeModal()}
 							className="text-center text-black text-base px-4 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6"
@@ -204,9 +219,9 @@ class AvatarCreator extends Component {
 						</button>
 					</div>
 				)}
-				<div className="w-full h-[90%] flex flex-col sm:flex-row items-center">
-					<div className="w-full sm:w-1/2 md:w-2/5 lg:w-1/2 h-1/2 sm:h-full flex flex-col items-center justify-start sm:justify-center">
-						<div className="z-50 w-fit h-fit flex items-center mt-3 sm:mt-10 rounded-[4px] border-[1px]  border-[#330D0D]">
+				<div className="w-full h-[90%] column flex flex-col md:flex-row items-center md:mt-auto lg:mt-0">
+					<div className="w-full md:w-1/2 lg:w-1/2 h-[40%] md:h-full flex flex-col items-center justify-start sm:justify-center">
+						<div className="z-50 w-fit h-fit items-center mt-3 sm:mt-10 rounded-[4px] border-[1px]  border-[#330D0D] hidden md:flex">
 							<img
 								src={EDIT}
 								alt="I"
@@ -223,7 +238,7 @@ class AvatarCreator extends Component {
 						</div>
 						<div
 							ref={this.myRef}
-							className="scale-75 sm:scale-100 md:scale-125 lg:scale-100"
+							className="scale-75 md:scale-125 lg:scale-100"
 						></div>
 					</div>
 					{this.props.currentAvatars && (

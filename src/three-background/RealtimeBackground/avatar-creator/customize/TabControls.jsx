@@ -10,7 +10,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 			<div
 				onClick={() => onTabClick(1)}
 				className={
-					'w-[18%] min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] h-[70%] rounded-md flex relative justify-center items-center py-1.5 px-1.5 bg-white'
+					'w-[18%] min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] h-[90%] md:h-[70%] rounded-md flex relative justify-center items-center py-1.5 px-1.5 bg-white'
 				}
 			>
 				<img
@@ -34,7 +34,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 			<div
 				onClick={() => onTabClick(2)}
 				className={
-					'min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] w-[18%] h-[70%] rounded-md flex justify-center relative items-center py-1 px-1.5 bg-white'
+					'min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] w-[18%] h-[90%] md:h-[70%] rounded-md flex justify-center relative items-center py-1 px-1.5 bg-white'
 				}
 			>
 				<img
@@ -59,7 +59,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 			<div
 				onClick={() => onTabClick(3)}
 				className={
-					'w-[18%] h-[70%] rounded-md min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] flex justify-center relative items-center py-1 px-1.5 bg-white'
+					'w-[18%] h-[90%] md:h-[70%] rounded-md min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] flex justify-center relative items-center py-1 px-1.5 bg-white'
 				}
 			>
 				<img
@@ -83,7 +83,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 			<div
 				onClick={() => onTabClick(4)}
 				className={
-					'min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] w-[18%] h-[70%] rounded-md flex justify-center relative items-center py-1 px-1.5 bg-white'
+					'min-w-[3rem] sm:min-w-[2rem] sm:min-h-[2rem] md:min-h-[2rem] md:min-w-[2rem] min-h-[3rem] w-[18%] h-[90%] md:h-[70%] rounded-md flex justify-center relative items-center py-1 px-1.5 bg-white'
 				}
 			>
 				<img
