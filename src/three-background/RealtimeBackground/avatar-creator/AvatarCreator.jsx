@@ -229,6 +229,8 @@ class AvatarCreator extends Component {
 					{this.props.currentAvatars && (
 						<AvatarCreatorEditor
 							currentAvatar={this.props.currentAvatars[1]}
+							maleAvatar={this.props.currentAvatars[0]}
+							femaleAvatar={this.props.currentAvatars[1]}
 							currentScene={this.scene}
 							camera={this.camera}
 							closeModal={this.props.closeModal}

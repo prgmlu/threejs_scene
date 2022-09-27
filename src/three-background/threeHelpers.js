@@ -9,14 +9,14 @@ import {
 	FBXLoader
 } from 'three/examples/jsm/loaders/FBXLoader';
 
-import { dressUpFromString } from '../three-controls/OutfitTranslator';
-
-// import avatar from './av.glb'
+import { dressUpFromString } from '../three-controls/CharacterControls/OutfitTranslator.js';
 
 import { GUI } from 'dat.gui';
-import {USE_OLD_CHARACTER_MODEL, SHADOW_MAP_TYPE, SHADOW_ENABLED} from '../three-background/RealtimeBackground/avatar-creator/CustomizationConstants.js';
+import {USE_OLD_CHARACTER_MODEL, SHADOW_MAP_TYPE, SHADOW_ENABLED} from './RealtimeBackground/avatar-creator/CustomizationConstants.js';
+
 
 let USE_OUTFIT_TRANSLATION = true;
+
 
 const DEBUG_LIGHTS = false;
 
@@ -38,6 +38,7 @@ if(DEBUG_LIGHTS){
 
 
 export const hideAllExceptFirstClothItem = (model) => {
+	debugger;
 	let hairs = []
 	let pants = []
 	let shirts = []
@@ -232,33 +233,9 @@ export const resetRenderer = (renderer) => {
 export const loadModelAndAnimations = async (url,outfitString) => {
 	return new Promise((resolve, reject) => {
 		let loader = new GLTFLoader();
-		// let fbxLoader = new FBXLoader();
-		// fbxLoader.crossOrigin = true;
 		loader.crossOrigin = true;
-		// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/mixamoriggedopaque.glb", (data) => {
-		// loader.load("https://cdn.obsess-vr.com/realtime3d/Default_Female.glb", (data) => {
-		// loader.load("https://cdn.obsess-vr.com/realtime3d/Newhair_female_v002.glb", (data) => {
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/defaultChar_female_v002.glb", (data) => {
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v003.glb", (data) => {
-
-
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/defaultChar_female_v004.glb", (data) => {
-
-
 			loader.load(url, (data) => {
-
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_003.glb", (data) => {
-
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_001.glb", (data) => {
-			// loader.load(avatar, (data) => {
-
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/c098fb1c-db90-467a-9fbe-db2d62eac5df.glb", (data) => {
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/female.glb", (data) => {
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/rigged.glb", (data) => {
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/defualtChar_female_v001.fbx", (data) => {
-			// loader.load("https://cdn.obsess-vr.com/realtime3d/static/glb_files/animations.glb", (anims) => {
 			let animations = data.animations;
-
 			const model = data.scene;
 
 			model.traverse((i) => {
@@ -266,33 +243,27 @@ export const loadModelAndAnimations = async (url,outfitString) => {
 				i.frustumCulled = false;
 				// i.receiveShadow = true;
 			})
-
-			// const model = createCube();
-
 			window.model = model;
-			
 
-			if(outfitString && USE_OUTFIT_TRANSLATION){
-				dressUpFromString(data.scene,outfitString)
+			if(outfitString.current && USE_OUTFIT_TRANSLATION){
+				dressUpFromString(model,outfitString.current)
 			}
 			else{
-				hideAllExceptFirstClothItem(data.scene)
+				hideAllExceptFirstClothItem(model)
 			}
 
 			try{
-				model.getChildByName("Eyebrow1").visible = true;
+				model.getObjectByName("Eyebrow1").visible = true;
 	
-				model.getChildByName("Eye1").material.color.set('black');
-				model.getChildByName("Eye1").material.needsUpdate = true;
+				model.getObjectByName("Eye1").material.color.set('black');
+				model.getObjectByName("Eye1").material.needsUpdate = true;
 	
-				model.getChildByName("Eyebrow1").material.color.set('black');
-				model.getChildByName("Eyebrow1").material.needsUpdate = true;
+				model.getObjectByName("Eyebrow1").material.color.set('black');
+				model.getObjectByName("Eyebrow1").material.needsUpdate = true;
 			}
 			catch(e){
 				console.log(e)
 			}
-
-			// debugger;
 
 			const charAnimations = animations;
 
@@ -462,17 +433,6 @@ export const setUpSceneBackground = (scene, placeHolderImage=false) => {
 	// var tex = texLoader.load('https://cdn.obsess-vr.com/lululemon/fish.jpeg');
 	// scene.background = tex;
 }
-
-export const getStoreParts = function () {
-	let p = [];
-	window.store.traverse((i) => {
-		p.push(i)
-	})
-	window.p = p;
-	return p;
-}
-
-window.getStoreParts = getStoreParts;
 
 export const offsetBoundingObjs = (position, boundingObjs, offset = .5) => {
 	boundingObjs[0].position.set(position.x + offset, position.y + 1, position.z + offset)

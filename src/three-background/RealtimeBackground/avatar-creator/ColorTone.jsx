@@ -8,7 +8,7 @@ let setHairColor = (color, currentAvatar) => {
 
 	hairs.forEach((i) => {
 		try {
-			let mesh = currentAvatar.getChildByName(i);
+			let mesh = currentAvatar.getObjectByName(i);
 			let material = mesh.material;
 			material.map = null;
 			material.color.set(color);
@@ -18,7 +18,7 @@ let setHairColor = (color, currentAvatar) => {
 		}
 	});
 
-	let hairMesh = currentAvatar.getChildByName('Hair1');
+	let hairMesh = currentAvatar.getObjectByName('Hair1');
 	hairMesh.material.color.set(color);
 };
 
@@ -29,7 +29,7 @@ let setEyebrowColor = (color,currentAvatar) => {
 
 	eyebrows.forEach((i)=>{
 		try{
-			let mesh = currentAvatar.getChildByName(i);
+			let mesh = currentAvatar.getObjectByName(i);
 			let material = mesh.material;
 			material.map = null;
 			material.color.set(color);
@@ -50,7 +50,7 @@ let setEyeColor = (color,currentAvatar) => {
 
 	eyebrows.forEach((i)=>{
 		try{
-			let mesh = currentAvatar.getChildByName(i);
+			let mesh = currentAvatar.getObjectByName(i);
 			let material = mesh.material;
 			material.map = null;
 			material.color.set(color);

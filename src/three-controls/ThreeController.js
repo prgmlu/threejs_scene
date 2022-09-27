@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import OrbitControls from './OrbitControls';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory';
 import { OculusHandModel } from 'three/examples/jsm/webxr/OculusHandModel';
-import CharacterControls from './CharacterControls';
+import {CharacterControls} from './CharacterControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { ANIMATION_NAMES } from './Constants';
+import { ANIMATION_NAMES } from './CharacterControls/Constants';
 
 
 
@@ -48,7 +48,7 @@ class ThreeController {
 	}
 
 
-	setupCharacterControls(models, charMixers, animationsMaps, storeMixer, directionValues,localAvatarNameRef,localAvatarOutfitStringRef, scene, camera) {
+	setupCharacterControls(models, charMixers, animationsMaps, storeMixer, directionValues,localAvatarNameRef,femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, scene, camera) {
         this.controls.minDistance = 2;
         this.controls.maxDistance = 6;
         this.controls.enablePan = false;
@@ -56,7 +56,7 @@ class ThreeController {
 
         // this.controls.minPolarAngle = - Math.PI / 2 - 0.05;
 
-		this.characterControls = new CharacterControls(models, charMixers, animationsMaps, this.controls, this.camera, ANIMATION_NAMES['idle'],null, [], true, true ,false,storeMixer,directionValues,localAvatarNameRef,localAvatarOutfitStringRef, scene);
+		this.characterControls = new CharacterControls(models, charMixers, animationsMaps, this.controls, this.camera, ANIMATION_NAMES['idle'],null, [], true, true ,false,storeMixer,directionValues,localAvatarNameRef,femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, scene);
 		// this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
 
         return this.characterControls;

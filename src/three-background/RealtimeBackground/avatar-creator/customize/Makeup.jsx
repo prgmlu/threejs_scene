@@ -6,7 +6,7 @@ import eyelash from '../../static/avatar/menus/eyelash.png';
 import eye from '../../static/avatar/menus/eye.png';
 import check from '../../static/avatar/menus/check.png';
 // import makeup_one from '../../static/avatar/makeup/make1.png';
-import { setMeshTextureImage } from '../../../../three-controls/OutfitTranslator';
+import { setMeshTextureImage } from '../../../../three-controls/CharacterControls/OutfitTranslator.js';
 
 let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
 	let ind = index + 1;
@@ -14,7 +14,7 @@ let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
 	// let url = `https://cdn.obsess-vr.com/realtime3d/tones_new/Sk${selectedSkintone}_FemaleAvatar${ind}_D.png`;
 	console.log(url);
 	// swap the texture of the mesh
-	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1');
+	let mesh = currentAvatar.getObjectByName('FemaleAvatar_Body1');
 	setMeshTextureImage(mesh, url);
 	addRoughness(currentAvatar);
 	// return;
@@ -23,7 +23,7 @@ let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
 let addRoughness = (currentAvatar) => {
 	let roughnessTextureUrl = "https://cdn.obsess-vr.com/realtime3d/roughness/Sk_FemaleAvatar_R.png";
 	let roughnessTexture = new THREE.TextureLoader().load(roughnessTextureUrl);
-	let mesh = currentAvatar.getChildByName('FemaleAvatar_Body1');
+	let mesh = currentAvatar.getObjectByName('FemaleAvatar_Body1');
 	mesh.material.roughnessMap = roughnessTexture;
 	mesh.material.needsUpdate = true;
 }

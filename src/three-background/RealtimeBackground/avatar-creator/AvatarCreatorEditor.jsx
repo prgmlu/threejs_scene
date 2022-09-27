@@ -155,12 +155,16 @@ class AvatarCreatorEditor extends Component {
 								this,
 							)}
 							currentAvatar={this.props.currentAvatar}
+							maleAvatar={this.props.maleAvatar}
+							femaleAvatar={this.props.femaleAvatar}
 						/>
 					)}
 					{activeTab == 2 && (
 						<Face
 							selectedSkintone={this.state.selectedSkintone}
 							currentAvatar={this.props.currentAvatar}
+							maleAvatar={this.props.maleAvatar}
+							femaleAvatar={this.props.femaleAvatar}
 						/>
 					)}
 					{activeTab == 3 && (
@@ -171,6 +175,8 @@ class AvatarCreatorEditor extends Component {
 							)}
 							selectedSkintone={this.state.selectedSkintone}
 							currentAvatar={this.props.currentAvatar}
+							maleAvatar={this.props.maleAvatar}
+							femaleAvatar={this.props.femaleAvatar}
 						/>
 					)}
 					{activeTab == 4 && (
@@ -179,6 +185,8 @@ class AvatarCreatorEditor extends Component {
 							maleOutfits={this.maleOutfits}
 							setOutfit={this.setOutfit}
 							currentAvatar={this.props.currentAvatar}
+							maleAvatar={this.props.maleAvatar}
+							femaleAvatar={this.props.femaleAvatar}
 						/>
 					)}
 				</div>

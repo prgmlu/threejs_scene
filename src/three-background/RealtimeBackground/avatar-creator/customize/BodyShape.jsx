@@ -7,6 +7,8 @@ import MALE_SHAPE from '../../../../three-background/RealtimeBackground/static/a
 
 const BodyShape = ({
 	currentAvatar,
+	maleAvatar,
+	femaleAvatar,
 	selectedBodyshape,
 	setSelectedBodyshape,
 	selectedMakeup,
@@ -18,7 +20,7 @@ const BodyShape = ({
 	// const [selectedIndex, setSelectedIndex] = useState({ x: skinToneX || 0, y: skinToneY || 0 });
 	let counter = 0;
 
-	let bodyMesh = currentAvatar.getChildByName('FemaleAvatar_Body1');
+	let bodyMesh = currentAvatar.getObjectByName('FemaleAvatar_Body1');
 
 	const tones = [
 		['#F2D3CE', '#E0B0A6', '#C68D82', '#A36B60', '#7B4B41', '#502E2C'],
@@ -37,8 +39,9 @@ const BodyShape = ({
 			<div className="h-fit flex flex-wrap gap-x-6 gap-y-1">
 				<div
 					onClick={() => {
-						window.maleModel.visible = false;
-						window.femaleModel.visible = true;
+						maleAvatar.visible = false;
+						femaleAvatar.visible = true;
+						window.visibleType = 'female';
 						setSelectedBodyshape('female');
 					}}
 					className={`w-[25%] max-h-[8rem] max-w-[6rem] md:max-w-[4rem] sm:max-w-[4rem] md:max-h-[4rem] sm:max-h-[4rem] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md ${
@@ -62,16 +65,18 @@ const BodyShape = ({
 						src={FEMALE_SHAPE}
 						alt=""
 						onClick={() => {
-							window.maleModel.visible = false;
-							window.femaleModel.visible = true;
+							maleAvatar.visible = false;
+							femaleAvatar.visible = true;
+							window.visibleType = 'female';
 							setSelectedBodyshape('female');
 						}}
 					/>
 				</div>
 				<div
 					onClick={() => {
-						window.femaleModel.visible = false;
-						window.maleModel.visible = true;
+						femaleAvatar.visible = false;
+						maleAvatar.visible = true;
+						window.visibleType = 'male';
 						setSelectedBodyshape('male');
 					}}
 					className={`w-[25%] max-h-[8rem] max-w-[6rem] md:max-w-[4rem] sm:max-w-[4rem] md:max-h-[4rem] sm:max-h-[4rem] h-full px-3 relative cursor-pointer rounded-[4px] shadow-md ${
@@ -95,8 +100,9 @@ const BodyShape = ({
 						src={MALE_SHAPE}
 						alt=""
 						onClick={() => {
-							window.femaleModel.visible = false;
-							window.maleModel.visible = true;
+							femaleAvatar.visible = false;
+							maleAvatar.visible = true;
+							window.visibleType = 'male';
 							setSelectedBodyshape('male');
 						}}
 					/>

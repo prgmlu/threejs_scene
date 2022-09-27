@@ -1,6 +1,6 @@
 import React from 'react';
 import check from '../../static/avatar/menus/check.png';
-import { setMeshTextureImage } from '../../../../three-controls/OutfitTranslator';
+import { setMeshTextureImage } from '../../../../three-controls/CharacterControls/OutfitTranslator.js';
 
 let swapSkinTexture = (textureIndex, mesh, selectedMakeup) => {
 	let url;

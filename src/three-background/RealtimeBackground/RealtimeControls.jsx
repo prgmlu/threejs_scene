@@ -1,17 +1,18 @@
-import JoystickControls from "../../three-controls/JoystickControls"
+import JoystickControls from "../../three-controls/CharacterControls/JoystickControls"
 import React, { useEffect, useState, useRef } from 'react';
 import ThreeController from '../../three-controls/ThreeController';
 
+
+
 export default function RealtimeControls(props) {
-    let { scene, camera, renderer, maleAvatar, femaleAvatar, charMixers, animationsMaps, storeMixer, setCharControls,orbitControls, localAvatarNameRef,localAvatarOutfitStringRef } = props;
+    let { scene, camera, renderer, maleAvatar, femaleAvatar, charMixers, animationsMaps, storeMixer, setCharControls,orbitControls, localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef } = props;
     let [joystickBroadcast, setJoystickBroadcast] = useState(null);
     let controlsLoaded = useRef(false);
     let directionValues = useRef([0,0,0,0])
     
     useEffect(() => {
-        let u = ThreeController.setupCharacterControls([maleAvatar,femaleAvatar], charMixers, animationsMaps, storeMixer, directionValues.current,localAvatarNameRef,localAvatarOutfitStringRef, scene,camera);
+        let u = ThreeController.setupCharacterControls([maleAvatar,femaleAvatar], charMixers, animationsMaps, storeMixer, directionValues.current,localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, scene,camera);
         setCharControls(u);
-        u.setUpCollisionDetection();
         controlsLoaded.current = true;
     } ,[])
 

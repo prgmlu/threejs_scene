@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import {resetRenderer, setUpEnvMap, loadModelAndAnimations, setUpNormalLights, setUpSceneBackground} from '../threeHelpers';
+import {resetRenderer, setUpEnvMap, loadModelAndAnimations, setUpNormalLights, setUpSceneBackground, hideAllExceptFirstClothItem} from '../threeHelpers';
+
 import AvatarCreatorContainer from './AvatarCreatorContainer';
 import RealtimeControls from './RealtimeControls';
 import './output.css';
-import { predeterminedOutfitsWithHair } from './avatar-creator/predeterminedOutfits';
+import { femalePredeterminedOutfitsWithHair,malePredeterminedOutfitsWithHair } from './avatar-creator/predeterminedOutfits';
 import { RELEVANT_STORE_PARTS_NAMES } from './avatar-creator/CustomizationConstants';
 
 //import draco loader
@@ -12,6 +13,8 @@ import { DRACOLoader } from './DRACOLoader.js';
 
 
 const STORE_Y_OFFSET = 7;
+
+
 
 let hideAllHotspots = (scene) => {
 
@@ -148,10 +151,17 @@ function createRandomName(){
     return name;
 }
 
-function getInitialAvatarOutfitString(){
-    let x = predeterminedOutfitsWithHair;
-    let randomNumber = Math.floor(Math.random() * Object.keys(predeterminedOutfitsWithHair).length);
-    return x[randomNumber];
+function getInitialAvatarOutfitString(type){
+    if(type == 'male'){
+        let x = malePredeterminedOutfitsWithHair;
+        let randomNumber = Math.floor(Math.random() * Object.keys(malePredeterminedOutfitsWithHair).length);
+        return x[randomNumber];
+    }
+    if(type == 'female'){
+        let x = femalePredeterminedOutfitsWithHair;
+        let randomNumber = Math.floor(Math.random() * Object.keys(femalePredeterminedOutfitsWithHair).length);
+        return x[randomNumber];
+    }
 }
 
 
@@ -175,8 +185,12 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
     const [charControls, setCharControls] = useState(null);
 
     const localAvatarNameRef = useRef(createRandomName());
-    const localAvatarOutfitStringRef = useRef(getInitialAvatarOutfitString());
-    window.localAvatarOutfitStringRef = localAvatarOutfitStringRef;
+
+    const femaleLocalAvatarOutfitStringRef = useRef(getInitialAvatarOutfitString('female'));
+    window.femaleLocalAvatarOutfitStringRef = femaleLocalAvatarOutfitStringRef;
+    
+    const maleLocalAvatarOutfitStringRef = useRef(getInitialAvatarOutfitString('male'));
+    window.maleLocalAvatarOutfitStringRef = maleLocalAvatarOutfitStringRef;
 
     let switchAvatar = async (avType) => {
         let url;
@@ -286,24 +300,19 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
         async function loadStoreAndModel() {
 
-            let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver8.glb";
+            let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver9.glb";
             let M_MODEL_URL = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004_1.glb";
 
-            let [_,maleModelMixerMap, femaleModelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations(M_MODEL_URL,localAvatarOutfitStringRef.current), loadModelAndAnimations(FEM_MODEL_URL,localAvatarOutfitStringRef.current)]);
+            let [_,maleModelMixerMap, femaleModelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations(M_MODEL_URL,maleLocalAvatarOutfitStringRef), loadModelAndAnimations(FEM_MODEL_URL,femaleLocalAvatarOutfitStringRef)]);
 
             let [maleModel, maleCharMixer, maleAnimationsMap ] = maleModelMixerMap;
             let [femaleModel, femaleCharMixer, femaleAnimationsMap ] = femaleModelMixerMap;
 
-            
-            
+
             window.maleModel = maleModel;
 
-            window.maleModel.getChildByName('Hair1').visible=false;
-            window.maleModel.getChildByName('Hair2').visible=true;
-            window.maleModel.getChildByName('Outfit1').visible=true;
 
-            window.femaleModel = femaleModel;
-            
+            window.visibleType = 'female';
             
             setFemaleCharMixer(femaleCharMixer);
             setMaleCharMixer(maleCharMixer);
@@ -345,14 +354,16 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
             {/* {adjustHotspots(scene)} */}
             {hideAllHotspots(scene)}
             {mAvatar && charControls && <AvatarCreatorContainer charControls={charControls} avatar={fAvatar} avatars={[mAvatar, fAvatar]} scene={scene} avatarPos={mAvatar.position} localAvatarNameRef={localAvatarNameRef}
-                localAvatarOutfitStringRef={localAvatarOutfitStringRef}
+                femaleLocalAvatarOutfitStringRef={femaleLocalAvatarOutfitStringRef}
+                maleLocalAvatarOutfitStringRef={maleLocalAvatarOutfitStringRef}
                 switchAvatar={switchAvatar}
             />}
 
             {mAvatar && <RealtimeControls scene={scene} camera={camera} renderer={renderer} femaleAvatar={fAvatar} maleAvatar={mAvatar} setCharControls={setCharControls} orbitControls={controller}
                 charMixers={[maleCharMixer, femaleCharMixer]} animationsMaps={[maleAnimationsMap, femaleAnimationsMap]} storeMixer={storeMixer} charControls={charControls}
                 localAvatarNameRef={localAvatarNameRef}
-                localAvatarOutfitStringRef={localAvatarOutfitStringRef}
+                femaleLocalAvatarOutfitStringRef={femaleLocalAvatarOutfitStringRef}
+                maleLocalAvatarOutfitStringRef={maleLocalAvatarOutfitStringRef}
             />}
         </>
     );

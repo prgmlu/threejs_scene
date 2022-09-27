@@ -13,14 +13,14 @@ let setHairMesh = (index, currentAvatar) => {
 	let hairNames = ['Hair1', 'Hair2', 'Hair3', 'Hair4', 'Hair5'];
 	hairNames.forEach((i) => {
 		try {
-			currentAvatar.getChildByName(i).visible = false;
+			currentAvatar.getObjectByName(i).visible = false;
 		} catch (e) {
 			console.log(e);
 		}
 	});
 
 	let hairMeshName = 'Hair' + (index + 1);
-	currentAvatar.getChildByName(hairMeshName).visible = true;
+	currentAvatar.getObjectByName(hairMeshName).visible = true;
 };
 
 let setEyebroMesh = (index, currentAvatar) => {
@@ -33,20 +33,19 @@ let setEyebroMesh = (index, currentAvatar) => {
 	];
 	eyebrowNames.forEach((i) => {
 		try {
-			currentAvatar.getChildByName(i).visible = false;
+			currentAvatar.getObjectByName(i).visible = false;
 		} catch (e) {
 			console.log(e);
 		}
 	});
 
 	let eyebrowMeshName = 'Eyebrow' + (index + 1);
-	currentAvatar.getChildByName(eyebrowMeshName).visible = true;
+	currentAvatar.getObjectByName(eyebrowMeshName).visible = true;
 };
 
 let setEyeFromMorphTarget = (index, currentAvatar) => {
-	// debugger;
 
-	let body = currentAvatar.getChildByName('FemaleAvatar_Body1');
+	let body = currentAvatar.getObjectByName('FemaleAvatar_Body1');
 	let influences = body.morphTargetInfluences;
 	let EyeShapeCount = 6;
 	for (let i = 0; i < EyeShapeCount; i++) {
@@ -58,7 +57,7 @@ let setEyeFromMorphTarget = (index, currentAvatar) => {
 
 let setEyebrowFromMorphTarget = (index, currentAvatar) => {
 
-	let browMesh = currentAvatar.getChildByName('Eyebrow1');
+	let browMesh = currentAvatar.getObjectByName('Eyebrow1');
 
 	//loop over the morph targets and set the influence to 0
 	for (let i = 0; i < browMesh.morphTargetInfluences.length; i++) {
