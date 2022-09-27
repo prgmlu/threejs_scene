@@ -227,18 +227,18 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         setStoreMixer(newStoreMixer);
     }
 
-    useEffect(() => {
-        const script = document.createElement('script');
+    // useEffect(() => {
+    //     const script = document.createElement('script');
       
-        script.src = "https://cdn.obsess-vr.com/realtime3d/pleaserotate.js";
-        script.async = true;
+    //     script.src = "https://cdn.obsess-vr.com/realtime3d/pleaserotate.js";
+    //     script.async = true;
       
-        document.body.appendChild(script);
+    //     document.body.appendChild(script);
       
-        return () => {
-          document.body.removeChild(script);
-        }
-      }, []);
+    //     return () => {
+    //       document.body.removeChild(script);
+    //     }
+    //   }, []);
 
 
     useEffect(() => {
