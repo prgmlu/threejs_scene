@@ -477,6 +477,7 @@ const Scene = (props) => {
 			props.onMouseDown,
 			onMouseUpMarker,
 			props.onMouseMove,
+			type,
 		);
 
 		const {
