@@ -129,6 +129,10 @@ export default class SVGSpriteComponent extends ThreeSceneObjectComponent {
 		}
 	}
 
+	setOwnerHotspotInSVG(owner){
+		this.svgSprite.userData.owner = owner;
+	}
+
 	removeOwner() {
 		if (!this.owner) {
 			console.error(

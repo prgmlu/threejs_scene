@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
+import { isAndroid } from 'react-device-detect';
 
 export default class HotspotMarker extends InteractionObject {
 	constructor({
@@ -47,6 +48,7 @@ export default class HotspotMarker extends InteractionObject {
 		this.imageHoverURL = imageHoverURL;
 		this.svgSpriteComponent = new SVGSpriteComponent(iconConfig);
 		this.svgSpriteComponent.setSvgFromUrl(imageURL, userData);
+		if (isAndroid) this.svgSpriteComponent.setOwnerHotspotInSVG(this);
 	}
 
 	onClick = () => {

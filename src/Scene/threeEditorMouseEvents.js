@@ -1,5 +1,6 @@
 import { Vector3, Matrix4 } from 'three';
 import * as THREE from 'three';
+import { isAndroid } from 'react-device-detect';
 
 export const threeEditorMouseEvents = (
 	sceneRef,
@@ -12,6 +13,7 @@ export const threeEditorMouseEvents = (
 	onMouseDownCallback,
 	onMouseUpCallback,
 	onMouseMoveCallback,
+	type,
 ) => {
 	const DESKTOP_THRESHOLD = 0.005;
 	const MIN_ZOOM_FOV = 20;
@@ -65,6 +67,11 @@ export const threeEditorMouseEvents = (
 
 	const getIntersectedMarkerObject = (intersects) => {
 		return intersects.find((intersect) => {
+			if (isAndroid) {
+				const svgParentBox = intersect?.userData?.owner?.sceneObject?.name === 'marker';
+				return svgParentBox || intersect?.object?.name === 'marker';
+			}
+			
 			const markerType = intersect?.object?.owner?.hotspot_type;
 			//apply extra filter
 			if (allowEventsForMarkerTypeOnly && markerType)
@@ -111,20 +118,22 @@ export const threeEditorMouseEvents = (
 		}
 
 		raycaster.setFromCamera(mouseCoord, cameraRef.current);
+		
 		const intersects = raycaster.intersectObjects(
 			sceneRef.current.children,
+			true,
 		);
-
+		
 		const sceneObject = getIntersectedMarkerObject(intersects);
 		// const sceneObject = markerIntersection?.object;
 		// const sceneObject =
 		// 	isMarkerClicked && focusedObject ? focusedObject : null;
-
+		
 		if (sceneObject?.object?.owner?.onClick) {
 			sceneObject.object?.owner.onClick();
 		}
 		const marker = sceneObject?.object?.owner;
-
+		
 		// public method/callback
 		if (onMouseUpCallback)
 			return onMouseUpCallback(e, sceneObject, marker, isDragEvent);
