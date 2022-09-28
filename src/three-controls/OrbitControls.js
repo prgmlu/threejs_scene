@@ -1116,13 +1116,17 @@ class OrbitControls extends EventDispatcher {
 
 		this.minAzimuthAngle = MathUtils.degToRad(
 			'min_horizontal_angle' in orbitControlsConfig
-				? orbitControlsConfig.min_horizontal_angle
+				? orbitControlsConfig.min_horizontal_angle === 0
+					? -Infinity
+					: orbitControlsConfig.min_horizontal_angle
 				: MIN_AZIMUTH_ANGLE,
 		); // radians
 
 		this.maxAzimuthAngle = MathUtils.degToRad(
 			'max_horizontal_angle' in orbitControlsConfig
-				? orbitControlsConfig.max_horizontal_angle
+				? orbitControlsConfig.max_horizontal_angle === 0
+					? Infinity
+					: orbitControlsConfig.max_horizontal_angle
 				: MAX_AZIMUTH_ANGLE,
 		);
 	}
