@@ -82,8 +82,6 @@ const Scene = (props) => {
 	const [showLoadingIcon, setShowLoadingIcon] = useState(true);
 	const [renderObjects, setRenderObjects] = useState(false);
 	const [maxRenderOrder, setMaxRenderOrderAction] = useState(1);
-	const [animationId, setAnimationId] = useState();
-	const timeOutRef = useRef(null);
 	const [UI, setUI] = useState();
 
 	//Scene
@@ -148,26 +146,13 @@ const Scene = (props) => {
 			setMaxRenderOrderAction(renderOrder + 1);
 	};
 
-	const animate = (controllerUpdate = false, animationKey) => {
-		if (renderer.xr.enabled) {
-			renderer.setAnimationLoop(() => {
-				renderer?.render(scene, cameraRef.current);
-				if (controllerUpdate) controllerUpdate();
-			});
-		} else {
-			timeOutRef.current = setTimeout(() => {
-				if (animationKey) {
-					window[animationKey] = requestAnimationFrame(() =>
-						animate(controllerUpdate, animationKey),
-					);
-				}
-			}, 1000 / fps);
-
+	const animate = (controllerUpdate = false) => {
+		renderer.setAnimationLoop(() => {
 			renderer?.render(scene, cameraRef.current);
 			css2DRenderer.render(scene, cameraRef.current);
 			TWEEN.update();
 			autoRotateConfig?.enabled && controllerUpdate && controllerUpdate();
-		}
+		});
 	};
 
 	const handleContextLoss = (e) => {
@@ -313,10 +298,7 @@ const Scene = (props) => {
 	};
 
 	const initRoomAnimationLoop = () => {
-		const animationKey = `${type}_animationId`;
-		window[animationKey] = '';
-		setAnimationId(animationKey);
-		animate(controlsRef.current.update, animationKey);
+		animate(controlsRef.current.update);
 	};
 
 	const initRoom = () => {
@@ -452,8 +434,6 @@ const Scene = (props) => {
 					resolve();
 				})
 				.start();
-
-			animate();
 		});
 	};
 
@@ -528,11 +508,7 @@ const Scene = (props) => {
 	}, [sceneRef, vrControlsRef]);
 
 	const clearAnimation = () => {
-		if (animationId) {
-			window.cancelAnimationFrame(window[animationId]);
-			clearTimeout(timeOutRef.current);
-			delete window[animationId];
-		}
+		renderer.setAnimationLoop(null);
 	};
 
 	//windowResizer placed separately because it requires to track and call UI & setUI
