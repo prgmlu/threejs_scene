@@ -9,7 +9,8 @@ const FADE_DURATION = .4;
 
 let charTypeMap = {
     "female":{
-        url:"https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver9.glb",
+        url:"https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver11.glb",
+        // url:"https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_JPEG_DRACO_Ver10.glb",
         scale: 1,
     },
     "male":{

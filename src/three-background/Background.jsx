@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BackgroundCube from './BackgroundCube';
 import FlatBackground from './FlatBackground';
 import RealtimeBackgroundContainer from './RealtimeBackground';
-import { setUpEnvMap, setUpSceneBackground, adjustRenderer } from './threeHelpers';
+import { setUpEnvMap } from './threeHelpers';
 
 const Background = ({
 	scene,

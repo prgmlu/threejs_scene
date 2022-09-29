@@ -14,7 +14,7 @@ const USE_TOOLTIP = true;
 let SOCKET_SERVER_URL = (document.location.href.includes("192.168") || document.location.href.includes("127.0.0") || document.location.href.includes("localhost") ) ? 'http://192.168.1.122:8000/':"https://avbe.beta.obsess-vr.com/";
 
 export default class CentralMultipleCharControls{
-    constructor(mainCharControlsObj, otherChars,localAvatarNameRef, femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, scene, camera){
+    constructor(mainCharControlsObj, otherChars,localAvatarNameRef, femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef, scene, camera){
         this.mainCharControlsObj = mainCharControlsObj;
 
         window.that = this;
@@ -24,6 +24,8 @@ export default class CentralMultipleCharControls{
         this.maleLocalAvatarOutfitStringRef = maleLocalAvatarOutfitStringRef;
         this.prevFemaleLocalAvatarOutfitString = femaleLocalAvatarOutfitStringRef.current;
         this.prevMaleLocalAvatarOutfitString = maleLocalAvatarOutfitStringRef.current;
+
+        this.visibleGenderRef = visibleGenderRef;
 
         this.prevLocalAvatarName = localAvatarNameRef.current;
 
@@ -83,10 +85,6 @@ export default class CentralMultipleCharControls{
 
         if(!window.mainAnimationLoopHooks) window.mainAnimationLoopHooks = [];
 
-        //find the scene object with name entrancePlaneMesh
-
-        let entrancePlaneMesh = this.scene.children.filter((x)=>x.name == 'entrancePlaneMesh')[0];
-        // alert(entrancePlaneMesh);
 
         setUpSceneBackground(this.scene, false);
         adjustRenderer(window.mainRenderer);
@@ -97,16 +95,10 @@ export default class CentralMultipleCharControls{
         //add all the items inside window.toAddObjs
         //to the scene\
 
-        window.toAddObjs.forEach((i)=>{
+        toAddObjsRef.current.forEach((i)=>{
             this.scene.add(i);
         })
 
-        if(entrancePlaneMesh){
-            this.scene.remove(entrancePlaneMesh);
-            delete entrancePlaneMesh.onBeforeRender
-
-        }
-        // scene.children.
         window.mainAnimationLoopHooks.push(this.update.bind(this));
     }
 
@@ -145,7 +137,7 @@ export default class CentralMultipleCharControls{
         char.removeFromScene();
     }
 
-    handleDisconnect(address){;
+    handleDisconnect(address){
         let chars = this.getCharsByAddress(address);
         for(let char of chars){
             this.purgeRemoteChar(char);
@@ -239,6 +231,7 @@ export default class CentralMultipleCharControls{
     createSocketAndConnect(){
             var io = require('socket.io-client');
             this.socket = io.connect(SOCKET_SERVER_URL,{rejectUnauthorized: false });
+            window.socket = this.socket;
     }
 
     isShopTogetherSession(params){
@@ -293,7 +286,7 @@ export default class CentralMultipleCharControls{
         data[address].isWaving = this.mainCharControlsObj.isWaving;
         data[address].room = this.room;
         // data[address].visibleType = 'female';
-        data[address].visibleType = window.visibleType;
+        data[address].visibleType = this.visibleGenderRef.current;
 
         data[address].femaleOutfitString = this.femaleLocalAvatarOutfitStringRef.current;
         data[address].maleOutfitString = this.maleLocalAvatarOutfitStringRef.current;

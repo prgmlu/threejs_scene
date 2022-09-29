@@ -1,7 +1,7 @@
 import React from 'react';
 import check from '../../static/avatar/menus/check.png';
 
-let switchOutfit = (e, index, currentAvatar) => {
+let switchOutfit = (e, index, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGender) => {
 	let outfitNames = [
 		'Outfit1',
 		'Outfit2',
@@ -17,10 +17,24 @@ let switchOutfit = (e, index, currentAvatar) => {
 
 	// make the selected one visible
 	currentAvatar.getObjectByName(outfitNames[index]).visible = true;
+	if(visibleGender == 'male'){
+		updateOutfitString(outfitNames[index], maleLocalAvatarOutfitStringRef);
+	}
+	else{
+		updateOutfitString(outfitNames[index], femaleLocalAvatarOutfitStringRef);
+	}
 
 }
 
-const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar }) => {
+let updateOutfitString = (outfitName, ref) => {
+	let u = JSON.parse(ref.current)
+	u.outfitMesh=outfitName;
+	ref.current = JSON.stringify(u);
+}
+
+
+
+const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef }) => {
 	return (
 		<div className="w-full h-full flex flex-col gap-1 scrollbar">
 			<div className="font-sourceSansProSemibold text-lg">Outfit</div>
@@ -44,7 +58,7 @@ const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar }) => {
 								selectedOutfit === index &&
 								'border-2 border-[#FF9F9F]'
 							}`}
-							onClick={(e) => {setOutfit(e, index); switchOutfit(e, index, currentAvatar) }}
+							onClick={(e) => {setOutfit(e, index); switchOutfit(e, index, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef.current) }}
 						/>
 					</div>
 				))}

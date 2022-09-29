@@ -9,7 +9,17 @@ import d_hair from '../../static/avatar/demo/demo_hair.png';
 import d_eyelash from '../../static/avatar/demo/demo_eyelashes.png';
 import d_eye from '../../static/avatar/demo/demo_eyes.png';
 
-let setHairMesh = (index, currentAvatar) => {
+
+
+let updateOutfitString = (outfitName, ref) => {
+let u = JSON.parse(ref.current)
+u.hairMesh=outfitName;
+ref.current = JSON.stringify(u);
+}
+
+
+
+let setHairMesh = (index, currentAvatar, visibleGender) => {
 	let hairNames = ['Hair1', 'Hair2', 'Hair3', 'Hair4', 'Hair5'];
 	hairNames.forEach((i) => {
 		try {
@@ -21,6 +31,18 @@ let setHairMesh = (index, currentAvatar) => {
 
 	let hairMeshName = 'Hair' + (index + 1);
 	currentAvatar.getObjectByName(hairMeshName).visible = true;
+
+
+
+	if(visibleGender == 'male'){
+		updateOutfitString(hairMeshName, maleLocalAvatarOutfitStringRef);
+	}
+	else{
+		updateOutfitString(hairMeshName, femaleLocalAvatarOutfitStringRef);
+	}
+
+
+
 };
 
 let setEyebroMesh = (index, currentAvatar) => {
@@ -67,7 +89,7 @@ let setEyebrowFromMorphTarget = (index, currentAvatar) => {
 	browMesh.morphTargetInfluences[index] = 1;
 }
 
-const Face = ({ currentAvatar }) => {
+const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef }) => {
 	const [selectedStyle, setSelectedStyle] = useState(0);
 	const [dataTones, setDataTones] = useState([]);
 	const [selectedTone, setSelectedTone] = useState(0);
@@ -204,7 +226,7 @@ const Face = ({ currentAvatar }) => {
 									onClick={() => {
 										setSelectedStyle(index);
 										if (selectedTone === 0) {
-											setHairMesh(index, currentAvatar);
+											setHairMesh(index, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef.current);
 										} else if (selectedTone === 1) {
 											setEyebrowFromMorphTarget(index, currentAvatar);
 										} else if (selectedTone === 2) {

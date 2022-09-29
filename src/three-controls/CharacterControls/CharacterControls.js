@@ -86,7 +86,7 @@ export const ApproxAtan2 = ( y,  x) =>
 
 export default class CharacterControls {
 
-    constructor(models, charMixers, animationsMaps, orbitControl, camera, currentAction = ANIMATION_NAMES['idle'] , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues,localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, scene){
+    constructor(models, charMixers, animationsMaps, orbitControl, camera, currentAction = ANIMATION_NAMES['idle'] , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues,localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef, scene){
         this.model = models[0];
         this.models = models;
 
@@ -205,7 +205,7 @@ export default class CharacterControls {
 		document.addEventListener('keydown', this.handleKeydown, false);
 		document.addEventListener('keyup', this.handleKeyup, false);
 
-        this.CentralMultipleCharControl = new CentralMultipleCharControl(this,[],localAvatarNameRef, femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, this.scene, this.camera);
+        this.CentralMultipleCharControl = new CentralMultipleCharControl(this,[],localAvatarNameRef, femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef, this.scene, this.camera);
 
 
 
@@ -289,6 +289,14 @@ export default class CharacterControls {
         }
 
     }
+
+    removeEvents = () => {
+        document.removeEventListener('keydown', this.handleKeydown, false);
+        document.removeEventListener('keyup', this.handleKeyup, false);
+
+        this.keysPressed = {};
+    }
+
     playWaveAnimation(){
         let c = this.animationsMaps[0].get(ANIMATION_NAMES.wave);
         c.setLoop(THREE.LoopOnce);
@@ -302,6 +310,7 @@ export default class CharacterControls {
     handleKeyup = (e) => {
             this.enabled && ((this.keysPressed)[e.key.toLowerCase()] = false);
         }
+
 
     removeEvents = () => {
         document.removeEventListener('keydown',this.handleKeydown)

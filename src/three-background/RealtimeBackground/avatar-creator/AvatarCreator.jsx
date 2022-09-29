@@ -12,7 +12,48 @@ import AvatarCreatorEditor from './AvatarCreatorEditor';
 import Cookie from '../cookie';
 import back from '../static/avatar/menus/back.png';
 import close from '../static/avatar/menus/close.png';
+
+import {AVATAR_EDITOR_AVATAR_POSITION,
+	AVATAR_EDITOR_AVATAR_ROTATION} from './CustomizationConstants';
+
 const EDIT = 'https://cdn.obsess-vr.com/realtime3d/edit.png';
+
+
+import { GUI } from 'dat.gui';
+
+const createDatGui = function(obj, folderName){
+	if (!window.DATGUI_DEFINED){
+		var guiDiv = document.createElement('div');
+		guiDiv.style.zIndex = 99;
+		guiDiv.style.position = 'fixed';
+		guiDiv.style.top = '0px';
+		var bod = document.getElementsByTagName('body')[0];
+		bod.appendChild(guiDiv);
+
+		const gui = new GUI({autoPlace:false});
+		window.gui = gui;
+		// gui.close();
+		// var cont = document.getElementById('datgui');
+		guiDiv.appendChild(gui.domElement);
+		window.DATGUI_DEFINED = true;
+
+	}
+	const folder = gui.addFolder(folderName);
+
+	// const folder1 = gui.addFolder('folder1');
+
+	// folder1.add(obj.material.uniforms.lacunarity, 'value').name('lacunarity x').min(0).max(10).step(0.001);
+	// folder1.add(obj.material.uniforms.gain, 'value').name('gain y').min(0).max(10).step(0.001);
+	// folder1.add(obj.material.uniforms.magnitude, 'value').name('magnitude z').min(0).max(10).step(0.001);
+
+	folder.add(obj.rotation, 'x').name('rotation x').min(-7).max(7).step(0.001);
+	folder.add(obj.rotation, 'y').name('rotation y').min(-7).max(7).step(0.001);
+	folder.add(obj.rotation, 'z').name('rotation z').min(-7).max(7).step(0.001);
+
+	folder.add(obj.position, 'x').name('position x').min(-10).max(10).step(0.001);
+	folder.add(obj.position, 'y').name('position y').min(-10).max(10).step(0.001);
+	folder.add(obj.position, 'z').name('position z').min(-10).max(10).step(0.001);
+}
 
 class AvatarCreator extends Component {
 	constructor(props) {
@@ -31,7 +72,16 @@ class AvatarCreator extends Component {
 			0.1,
 			1000,
 		);
-		window.cc = this.camera;
+
+		window.miniCamera = this.camera;
+
+		// add camera helper
+		// this.cameraHelper = new THREE.CameraHelper(this.camera);
+		// this.scene.add(this.cameraHelper);
+
+		// createDatGui(this.camera, Math.random());
+		// createDatGui(window.femaleModel, Math.random());
+		
 		this.myRef = React.createRef();
 		this.lastMPos = { x: 0, y: 0 };
 		this.canRotate = false;
@@ -39,6 +89,8 @@ class AvatarCreator extends Component {
 		this.saveAvatar = props?.saveAvatar;
 		this.closeModal = props?.closeModal;
 
+
+		
 		window.addEventListener('resize', this.handleWindowResize.bind(this));
 	}
 
@@ -52,14 +104,16 @@ class AvatarCreator extends Component {
 
 	state = {
 		isCookieShown: false,
-		username: '',
+		username: this.props.localAvatarNameRef.current,
 		isWindowSize: window.innerWidth >= 1440 ? true : false,
 	};
 
 	loadAvatar = () => {
-		this.currentAvatars.forEach((i) => i.position.set(0, -.8, -2.6));
-		this.currentAvatars.forEach((i) => i.rotation.set(0, 0, 0, 'XYZ'));
+		this.currentAvatars.forEach((i) => i.position.fromArray(AVATAR_EDITOR_AVATAR_POSITION));
+		this.currentAvatars.forEach((i) => i.rotation.fromArray(AVATAR_EDITOR_AVATAR_ROTATION));
 		this.currentAvatars.forEach((i) => this.scene.add(i));
+
+
 	};
 
 	rotateAvatar = (e) => {
@@ -206,8 +260,10 @@ class AvatarCreator extends Component {
 								className="w-20 sm:w-32 h-full z-50 font-medium outline-none text-center text-white text-sm rounded-r-[4px] px-2 py-1 bg-[#330d0d4d]"
 								placeholder="Set avatar name"
 								value={username}
-								onChange={({ target }) =>
+								onChange={({ target }) =>{
+									this.props.localAvatarNameRef.current = target.value;
 									this.setState({ username: target.value })
+								}
 								}
 							/>
 						</div>
@@ -231,8 +287,10 @@ class AvatarCreator extends Component {
 								className="w-20 sm:w-32 h-full z-50 font-medium outline-none text-center text-white text-sm rounded-r-[4px] px-2 py-0.5 bg-[#330d0d4d]"
 								placeholder="Set avatar name"
 								value={username}
-								onChange={({ target }) =>
+								onChange={({ target }) =>{
+									this.props.localAvatarNameRef.current = target.value;
 									this.setState({ username: target.value })
+								}
 								}
 							/>
 						</div>
@@ -243,6 +301,12 @@ class AvatarCreator extends Component {
 					</div>
 					{this.props.currentAvatars && (
 						<AvatarCreatorEditor
+
+							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
+							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
+
+							visibleGenderRef={this.props.visibleGenderRef}
+
 							currentAvatar={this.props.currentAvatars[1]}
 							maleAvatar={this.props.currentAvatars[0]}
 							femaleAvatar={this.props.currentAvatars[1]}

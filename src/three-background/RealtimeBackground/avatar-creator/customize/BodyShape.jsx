@@ -16,6 +16,7 @@ const BodyShape = ({
 	setSkintonXY,
 	skintoneX,
 	skintoneY,
+	visibleGenderRef
 }) => {
 	// const [selectedIndex, setSelectedIndex] = useState({ x: skinToneX || 0, y: skinToneY || 0 });
 	let counter = 0;
@@ -41,7 +42,7 @@ const BodyShape = ({
 					onClick={() => {
 						maleAvatar.visible = false;
 						femaleAvatar.visible = true;
-						window.visibleType = 'female';
+						visibleGenderRef.current = 'female';
 						setSelectedBodyshape('female');
 					}}
 					className={` flex justify-center w-[25%] h-[100%] max-h-[8rem] max-w-[6rem] px-3 relative cursor-pointer rounded-[4px] shadow-md ${
@@ -67,7 +68,7 @@ const BodyShape = ({
 						onClick={() => {
 							maleAvatar.visible = false;
 							femaleAvatar.visible = true;
-							window.visibleType = 'female';
+							visibleGenderRef.current = 'female';
 							setSelectedBodyshape('female');
 						}}
 					/>
@@ -76,7 +77,7 @@ const BodyShape = ({
 					onClick={() => {
 						femaleAvatar.visible = false;
 						maleAvatar.visible = true;
-						window.visibleType = 'male';
+						visibleGenderRef.current = 'male';
 						setSelectedBodyshape('male');
 					}}
 					className={` flex justify-center  w-[25%] h-[100%] h-full px-3 max-h-[8rem] max-w-[6rem] relative cursor-pointer rounded-[4px] shadow-md ${
@@ -102,7 +103,7 @@ const BodyShape = ({
 						onClick={() => {
 							femaleAvatar.visible = false;
 							maleAvatar.visible = true;
-							window.visibleType = 'male';
+							visibleGenderRef.current = 'male';
 							setSelectedBodyshape('male');
 						}}
 					/>

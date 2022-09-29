@@ -109,6 +109,12 @@ class AvatarCreatorContainer extends Component {
 						localAvatarOutfitStringRef={
 							this.props.localAvatarOutfitStringRef
 						}
+
+						femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
+						maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
+
+						visibleGenderRef={this.props.visibleGenderRef}
+
 						active={this.state.isAvatarCreatorActive}
 						saveAvatar={this.saveAvatar}
 						closeModal={this.closeAvatarCreator}

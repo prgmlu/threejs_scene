@@ -5,6 +5,12 @@ import Outfit from './customize/Outfit';
 import Face from './customize/Face';
 import BodyShape from './customize/BodyShape';
 import Makeup from './customize/Makeup';
+import {AVATAR_EDITOR_AVATAR_POSITION,
+	AVATAR_EDITOR_AVATAR_ROTATION,
+	ZOOM_ON_FACE_POSITION,
+	ZOOM_ON_FACE_ROTATION
+	
+} from './CustomizationConstants';
 
 class AvatarCreatorEditor extends Component {
 	constructor(props) {
@@ -77,30 +83,50 @@ class AvatarCreatorEditor extends Component {
 		this.setState({ activeTab: id });
 		if (id == 1) {
 			//body shape
-			this.camera.position.set(0, 0, 0)
-			this.camera.fov = 50;
-			this.camera.updateProjectionMatrix();
+			// this.camera.position.set(0, 0, 0)
+			// this.camera.fov = 50;
+			// this.camera.updateProjectionMatrix();
+			this.props.femaleAvatar.position.fromArray(AVATAR_EDITOR_AVATAR_POSITION);
+			this.props.maleAvatar.position.fromArray(AVATAR_EDITOR_AVATAR_POSITION);
+
+			this.props.femaleAvatar.rotation.fromArray(AVATAR_EDITOR_AVATAR_ROTATION);
+			this.props.maleAvatar.rotation.fromArray(AVATAR_EDITOR_AVATAR_ROTATION);
 		}
 		if (id == 2) {
 			// face
-			this.camera.position.set(0, 0.6, -.8)
-			this.camera.fov = 20;
-			this.camera.updateProjectionMatrix();
+			// this.camera.position.set(0, 0.6, -.8)
+			// this.camera.fov = 20;
+			// this.camera.updateProjectionMatrix();
+			this.props.femaleAvatar.position.fromArray(ZOOM_ON_FACE_POSITION)
+			this.props.maleAvatar.position.fromArray(ZOOM_ON_FACE_POSITION)
+			
+			this.props.femaleAvatar.rotation.fromArray(ZOOM_ON_FACE_ROTATION)
+			this.props.maleAvatar.rotation.fromArray(ZOOM_ON_FACE_ROTATION)
 		}
 		if (id == 3) {
 			//makup
-			this.camera.position.set(0, 0.6, -.8)
-			this.camera.fov = 20;
-			this.camera.updateProjectionMatrix();
+			// this.camera.position.set(0, 0.6, -.8)
+			// this.camera.fov = 20;
+			// this.camera.updateProjectionMatrix();
+			this.props.femaleAvatar.position.fromArray(ZOOM_ON_FACE_POSITION)
+			this.props.maleAvatar.position.fromArray(ZOOM_ON_FACE_POSITION)
+			
+			this.props.femaleAvatar.rotation.fromArray(ZOOM_ON_FACE_ROTATION)
+			this.props.maleAvatar.rotation.fromArray(ZOOM_ON_FACE_ROTATION)
 		}
 		if (id == 4) {
 			//outfit
-			this.camera.position.set(0, 0, 0)
-			this.camera.fov = 50;
-			this.camera.updateProjectionMatrix();
+			// this.camera.position.set(0, 0, 0)
+			// this.camera.fov = 50;
+			// this.camera.updateProjectionMatrix();
+			this.props.femaleAvatar.position.fromArray(AVATAR_EDITOR_AVATAR_POSITION);
+			this.props.maleAvatar.position.fromArray(AVATAR_EDITOR_AVATAR_POSITION);
+
+			this.props.femaleAvatar.rotation.fromArray(AVATAR_EDITOR_AVATAR_ROTATION);
+			this.props.maleAvatar.rotation.fromArray(AVATAR_EDITOR_AVATAR_ROTATION);
 		}
 	};
-
+	
 	setBodyType = (e) => {
 		this.setState({ bodyType: e.target.id });
 	};
@@ -143,6 +169,11 @@ class AvatarCreatorEditor extends Component {
 				<div className="w-full md:w-[95%] mx-auto sm:w-[95%] overflow-y-auto h-[70%]  md:h-[90%] sm:h-[90%] mb-3 sm:mb-0 white-shadow-container bg-white rounded-lg gap-x-2 md:pt-3 lg:pt-3 xl:pt-3 sm:pt-1 px-3 relative">
 					{activeTab == 1 && (
 						<BodyShape
+
+							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
+							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
+							visibleGenderRef={this.props.visibleGenderRef}
+
 							skintoneX={this.state.skintoneX}
 							skintoneY={this.state.skintoneY}
 							setSkintonXY={this.setSkintoneXY.bind(this)}
@@ -161,6 +192,12 @@ class AvatarCreatorEditor extends Component {
 					)}
 					{activeTab == 2 && (
 						<Face
+
+							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
+							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
+							visibleGenderRef={this.props.visibleGenderRef}
+
+
 							selectedSkintone={this.state.selectedSkintone}
 							currentAvatar={this.props.currentAvatar}
 							maleAvatar={this.props.maleAvatar}
@@ -169,6 +206,12 @@ class AvatarCreatorEditor extends Component {
 					)}
 					{activeTab == 3 && (
 						<Makeup
+
+							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
+							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
+							visibleGenderRef={this.props.visibleGenderRef}
+
+
 							selectedMakeup={this.state.selectedMakeup}
 							setSelectedMakeup={this.setSelectedMakeup.bind(
 								this,
@@ -181,6 +224,11 @@ class AvatarCreatorEditor extends Component {
 					)}
 					{activeTab == 4 && (
 						<Outfit
+
+							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
+							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
+							visibleGenderRef={this.props.visibleGenderRef}
+
 							selectedOutfit={selectedOutfit}
 							maleOutfits={this.maleOutfits}
 							setOutfit={this.setOutfit}

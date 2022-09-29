@@ -165,9 +165,13 @@ function getInitialAvatarOutfitString(type){
 }
 
 
-const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller }) => {
+const RealtimeBackground = React.memo(({ scene, renderer,camera, backgroundUrl, controller }) => {
     
     setUpSceneBackground (scene, true);
+
+    let toAddObjsRef = useRef([]);
+
+    window.toAddObjsRef = toAddObjsRef;
 
     
     const [mAvatar, setMAvatar] = useState(null);
@@ -185,6 +189,8 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
     const [charControls, setCharControls] = useState(null);
 
     const localAvatarNameRef = useRef(createRandomName());
+
+    const visibleGenderRef = useRef("female");
 
     const femaleLocalAvatarOutfitStringRef = useRef(getInitialAvatarOutfitString('female'));
     window.femaleLocalAvatarOutfitStringRef = femaleLocalAvatarOutfitStringRef;
@@ -286,9 +292,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
                     // scene.add(storeGlb.scene);
 
-                    if(!window.toAddObjs)
-                        window.toAddObjs = [];
-                    window.toAddObjs.push(storeGlb.scene);
+                    toAddObjsRef.current.push(storeGlb.scene);
 
                     storeGlb.scene.scale.set(...STORE_SCALE)
 
@@ -300,7 +304,8 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
         async function loadStoreAndModel() {
 
-            let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver9.glb";
+            // let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_JPEG_DRACO_Ver10.glb";
+            let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver11.glb";
             let M_MODEL_URL = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004_1.glb";
 
             let [_,maleModelMixerMap, femaleModelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations(M_MODEL_URL,maleLocalAvatarOutfitStringRef), loadModelAndAnimations(FEM_MODEL_URL,femaleLocalAvatarOutfitStringRef)]);
@@ -310,9 +315,8 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
 
             window.maleModel = maleModel;
+            window.femaleModel = femaleModel;
 
-
-            window.visibleType = 'female';
             
             setFemaleCharMixer(femaleCharMixer);
             setMaleCharMixer(maleCharMixer);
@@ -323,10 +327,8 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
             // scene.add(maleModel);
             // scene.add(femaleModel);
 
-            if(!window.toAddObjs)
-                window.toAddObjs = [];
-            window.toAddObjs.push(maleModel);
-            window.toAddObjs.push(femaleModel);
+            toAddObjsRef.current.push(maleModel);
+            toAddObjsRef.current.push(femaleModel);
 
             maleModel.visible = false;
             
@@ -340,8 +342,16 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         loadStoreAndModel();
             
         return () => {
-            scene.remove(roomObj)
-            scene.remove(model)
+            window.characterControls.removeEvents();
+            window.socket.disconnect();
+            toAddObjsRef.current.forEach((i)=>{
+                scene.remove(i);
+            })
+
+            toAddObjsRef.current = [];
+
+            // scene.remove(roomObj)
+            // scene.remove(model)
 
             resetRenderer(renderer);
 
@@ -357,17 +367,20 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
                 femaleLocalAvatarOutfitStringRef={femaleLocalAvatarOutfitStringRef}
                 maleLocalAvatarOutfitStringRef={maleLocalAvatarOutfitStringRef}
                 switchAvatar={switchAvatar}
+                visibleGenderRef={visibleGenderRef}
             />}
 
             {mAvatar && <RealtimeControls scene={scene} camera={camera} renderer={renderer} femaleAvatar={fAvatar} maleAvatar={mAvatar} setCharControls={setCharControls} orbitControls={controller}
+            toAddObjsRef={toAddObjsRef}
                 charMixers={[maleCharMixer, femaleCharMixer]} animationsMaps={[maleAnimationsMap, femaleAnimationsMap]} storeMixer={storeMixer} charControls={charControls}
                 localAvatarNameRef={localAvatarNameRef}
                 femaleLocalAvatarOutfitStringRef={femaleLocalAvatarOutfitStringRef}
                 maleLocalAvatarOutfitStringRef={maleLocalAvatarOutfitStringRef}
+                visibleGenderRef={visibleGenderRef}
             />}
         </>
     );
-};
+});
 
 export default RealtimeBackground;
 

@@ -105,6 +105,7 @@ const createOrGetControls = (
 	}
 
 	if(camType == 'realtime') {
+		debugger;
 		return ThreeController.setupControls(
 			cameraRef.current,
 			renderer,
@@ -265,6 +266,9 @@ const Scene = (props) => {
 		if (bgConf?.isFlatScene) {
 			camType = 'flat';
 		}
+		if (Object.keys(orbitControlsConfig).length > 0) {
+			camType = 'custom';
+		}
 		if(bgConf.backgroundUrl.includes("62222274f4e810f086e0bb25")){
 			camType = 'realtime';
 		}
@@ -272,9 +276,6 @@ const Scene = (props) => {
 		// if (bgConf?.isFlatScene) {
 		// 	camType = 'flat';
 
-		if (Object.keys(orbitControlsConfig).length > 0) {
-			camType = 'custom';
-		}
 		// set new reference for cameraRef.current here
 		cameraRef.current = createOrGetCamera(
 			camType,

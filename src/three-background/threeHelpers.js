@@ -11,6 +11,8 @@ import {
 
 import { dressUpFromString } from '../three-controls/CharacterControls/OutfitTranslator.js';
 
+import { DRACOLoader } from './RealtimeBackground/DRACOLoader.js';
+
 import { GUI } from 'dat.gui';
 import {USE_OLD_CHARACTER_MODEL, SHADOW_MAP_TYPE, SHADOW_ENABLED} from './RealtimeBackground/avatar-creator/CustomizationConstants.js';
 
@@ -38,7 +40,6 @@ if(DEBUG_LIGHTS){
 
 
 export const hideAllExceptFirstClothItem = (model) => {
-	debugger;
 	let hairs = []
 	let pants = []
 	let shirts = []
@@ -233,6 +234,11 @@ export const resetRenderer = (renderer) => {
 export const loadModelAndAnimations = async (url,outfitString) => {
 	return new Promise((resolve, reject) => {
 		let loader = new GLTFLoader();
+        let dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath(
+            'https://cdn.obsess-vr.com/charlotte-tilbury/gltf/',
+        );
+        loader.setDRACOLoader(dracoLoader);
 		loader.crossOrigin = true;
 			loader.load(url, (data) => {
 			let animations = data.animations;
@@ -411,6 +417,7 @@ export const setUpSceneBackground = (scene, placeHolderImage=false) => {
 			
 			// tex.encoding = THREE.sRGBEncoding
 			// tex.toneMapping = THREE.ACESFilmicToneMapping;
+			// alert('setting up placeholder img')
 			scene.background = tex;
 			// scene.background.encoding = THREE.sRGBEncoding;
 
@@ -424,6 +431,7 @@ export const setUpSceneBackground = (scene, placeHolderImage=false) => {
 		const backgroundMap = cubeTextureLoader.load(bgArray, (tex) => {
 			
 			tex.encoding = THREE.sRGBEncoding
+			// alert('setting up cube bg')
 			scene.background = tex
 		})
 	}

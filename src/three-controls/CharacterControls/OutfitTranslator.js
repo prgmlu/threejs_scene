@@ -1,15 +1,5 @@
 import * as THREE from 'three';
 
-
-const BLUE_PANTS_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Pants2Blue_D.png";
-const GREY_PANTS_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Pants2Grey_D.png";
-const BLACK_PANTS_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Pants2Black_D.png";
-
-const PINK_SHIRT_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Shirt2Pink_D.png";
-const WHITE_SHIRT_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Shirt2White_D.png";
-const BLACK_SHIRT_TEXTURE = "https://cdn.obsess-vr.com/realtime3d/Shirt2Black_D.png";
-
-
 export const setMeshTextureImage  = (mesh, url) =>{
     let textureLoader = new THREE.ImageBitmapLoader();
     textureLoader.load(url, (imageBitmap) => {
@@ -191,7 +181,7 @@ export const getOutfitParts = (model, hide = false, hideHair=true) => {
     
 }
 
-export const getOutfitStringFromModel = (model, hairColor, pantsColor, shirtColor)=> {
+export const getOutfitStringFromModel = (model)=> {
     let {
         hairs,
         pants,
@@ -240,9 +230,6 @@ export const getOutfitStringFromModel = (model, hairColor, pantsColor, shirtColo
         eyeMesh: eyeMesh,
         skirtMesh: skirtMesh,
         noseMesh: noseMesh,
-        hairColor: hairColor,
-        pantsColor: pantsColor,
-        shirtColor: shirtColor,
         avatarSkinMesh: avatarSkinMesh,
         dressMesh: dressMesh,
         outfitMesh: outfitMesh
@@ -255,16 +242,11 @@ export const getOutfitStringFromModel = (model, hairColor, pantsColor, shirtColo
 
 
 export const dressUpFromString = (model, outfitString) => {
-    debugger;
     let outfit = JSON.parse(outfitString);
     // for example here it would be something like: 
     // {
-    //   hairColor: "Red",
     //   hairMesh: "Hair1",
-    //   pantsColor: "Blue",
-    //   pantsMesh: "Pants2",
-    //   shirtColor: "White",
-    //   shirtMesh: "Shirt2",
+    //   outfitMesh: "Mesh5",
     // }
 
     let {
@@ -301,15 +283,6 @@ export const dressUpFromString = (model, outfitString) => {
                 meshNumber = 3;
             }
     
-            if (outfit.hairColor == 'Red') {
-                setMeshTextureImage(hairMesh, RED_HAIR_TEXTURES[meshNumber - 1]);
-            }
-            if (outfit.hairColor == 'Brown') {
-                setMeshTextureImage(hairMesh, BROWN_HAIR_TEXTURES[meshNumber - 1]);
-            }
-            if (outfit.hairColor == 'Blonde') {
-                setMeshTextureImage(hairMesh,   BLONDE_HAIR_TEXTURES[meshNumber - 1]);
-            }
 
         }
     }
@@ -369,30 +342,12 @@ export const dressUpFromString = (model, outfitString) => {
     
     
 
-    if (outfit.pantsColor == 'blue') {
-        setMeshTextureImage(pantsMesh, BLUE_PANTS_TEXTURE);
-    }
-    else if (outfit.pantsColor == 'grey') {
-        setMeshTextureImage(pantsMesh, GREY_PANTS_TEXTURE);
-    }
-    else if (outfit.pantsColor == 'black') {
-        setMeshTextureImage(pantsMesh, BLACK_PANTS_TEXTURE);
-    }
 
     let shirtMesh = shirts.find(mesh => mesh.name === outfit.shirtMesh);
     if(shirtMesh)
         shirtMesh.visible = true;
 
 
-    if (outfit.shirtColor == 'pink') {
-        setMeshTextureImage(shirtMesh, PINK_SHIRT_TEXTURE);
-    }
-    else if (outfit.shirtColor == 'white') {
-        setMeshTextureImage(shirtMesh, WHITE_SHIRT_TEXTURE);
-    }
-    else if (outfit.shirtColor == 'black') {
-        setMeshTextureImage(shirtMesh, BLACK_SHIRT_TEXTURE);
-    }
 }
 
 
