@@ -50,7 +50,6 @@ const SkinTone = ({
 	return (
 		<button
 			onClick={() => {
-				alert(counter)
 				setSelectedIndex(x, y);
 				swapSkinTexture(counter, mesh, selectedMakeup);
 				updateOutfitString(femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, counter);
