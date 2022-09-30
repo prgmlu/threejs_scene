@@ -209,21 +209,21 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 						currentAvatar={currentAvatar}
 						selectedTone={selectedTone}
 					/>
-				<div className="w-full h-fit max-h-[80%]  grid grid-cols-4 gap-1 pr-2.5 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+				<div className={`w-full h-fit max-h-[80%] justify-center flex flex-wrap pr-2.5 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 ${selectedTone === 0 ? '' : 'gap-1'}`}>
 						{dataTones.map((item, index) => (
 							<div
 								key={index}
-								className="w-fit h-fit relative p-1"
+								className={`w-[30%] bg-red relative  ${selectedTone === 0 ? 'py-1 h-fit px-1' : 'py-[2rem] rounded-md px-[1rem] shadow-md h-full max-h-[6rem] mt-2 bg-[#B9B9B9]'} ${selectedStyle === index && selectedTone !== 0 ? 'border-2 border-[#FF9F9F]' : '' }`}
 							>
 								{selectedStyle === index && (
-									<span className="absolute top-0 right-0 w-3 h-[12px] object-contain">
+									<span className={`absolute  w-full h-full object-contain ${selectedTone === 0 ? 'top-0 right-0' : 'top-[-5px] right-[5px]'}`}>
 										<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
 									</span>
 								)}
 								<img
 									src={item}
-									className={`w-[50px] sm:w-[90px] h-fit object-cover rounded p-1 cursor-pointer shadow-md bg-white ${
-										selectedStyle === index &&
+									className={`w-fit object-cover rounded p-1 cursor-pointer  ${selectedTone === 0 ? 'bg-white shadow-md' : ''} ${
+										selectedStyle === index && selectedTone === 0 &&
 										'border-2 border-[#FF9F9F]'
 									}`}
 									alt=""

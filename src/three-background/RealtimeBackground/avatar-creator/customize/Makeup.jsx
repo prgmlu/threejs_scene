@@ -89,9 +89,9 @@ const Makeup = ({
 		<div className="w-full h-full flex flex-col">
 			<div className="w-full h-full flex flex-col px-2">
 				<div className="font-sourceSansProSemibold text-lg">Makeup</div>
-				<div className="w-full h-fit max-h-[80%] flex  gap-1 pl-2 pr-1 pb-2 sm:my-2 grid grid-cols-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-center pl-2 pr-1 justify-center pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
 					{dataTones.map((item, index) => (
-						<div key={index} className=" w-fit h-fit relative p-1">
+						<div key={index} className=" w-[30%] h-fit relative">
 							{selectedMakeup === index && (
 								<span className="absolute top-0 right-0 w-3 h-3 object-contain">
 									<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
@@ -99,7 +99,7 @@ const Makeup = ({
 							)}
 							<img
 								src={item}
-								className={`w-[50px] sm:w-[90px] h-fit object-cover rounded p-1 cursor-pointer shadow-md bg-white ${
+								className={`w-full h-fit object-cover rounded p-1 cursor-pointer shadow-md bg-white ${
 									selectedMakeup === index &&
 									'border-2 border-[#FF9F9F]'
 								}`}
