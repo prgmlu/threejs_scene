@@ -269,7 +269,7 @@ class AvatarCreator extends Component {
 						</div>
 						<button
 							onClick={() => this.closeModal()}
-							className="text-center text-black text-base px-4 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6"
+							className="text-center text-black uppercase text-base px-4 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6"
 						>
 							Save
 						</button>
@@ -320,8 +320,8 @@ class AvatarCreator extends Component {
 
 				{(window.innerWidth > 960 && window.innerHeight > 750) && (
 					<button
-						onClick={() => this.setState({ isCookieShown: true })}
-						className="z-40 absolute no-underline left-4 bottom-[50%] sm:bottom-[1%] mb-2 -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 font-bold text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
+						// onClick={() => this.setState({ isCookieShown: true })}
+						className="z-40 absolute no-underline left-4 bottom-[50%] sm:bottom-[1%] mb-2 -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
 					>
 						By using our website, you agree to the use of cookies.
 					</button>

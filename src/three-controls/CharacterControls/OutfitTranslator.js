@@ -185,7 +185,7 @@ export const getOutfitParts = (model, hide = false, hideHair=true) => {
 
 export const dressUpFromString = (model, outfitString) => {
 
-    debugger;
+    // debugger;
 
     // a core function that dresses the local model and the remote models
 

@@ -67,7 +67,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 					// src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/makeup.svg"}
 					alt="Makeup"
 					id="2"
-					className={'w-[35%] md:w-[30%] sm:w-[30%] max-h-full'}
+					className={'w-[20%] md:w-[15%] max-h-full'}
 					// className={`w-[13%] ${
 					// 	activeTab === 3
 					// 		? 'h-full pb-1.5 sm:pb-3.5 px-1.5 sm:px-2.5'
