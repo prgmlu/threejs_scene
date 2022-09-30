@@ -199,7 +199,7 @@ export const dressUpFromString = (model, outfitString) => {
     // }
 
 
-    if(outfit.skinTone && outfit.makeup){
+    if(outfit.skinTone && (outfit.makeup || outfit.makeup == 0)){
             let url = `https://cdn.obsess-vr.com/realtime3d/new_uv_skintones/Sk${outfit.skinTone}_FemaleAvatar${
                 outfit.makeup+1
             }_D.png`;

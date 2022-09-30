@@ -68,8 +68,8 @@ export default class CentralMultipleCharControls{
             this.socket.on("connect", () => {
                 this.sendData(); // x8WIv7-mJelg7on_ALbx
                 // this.room = 'general';
-                // this.ownRoom = 1;
-                this.ownRoom = Math.random();
+                this.ownRoom = 1;
+                // this.ownRoom = Math.random();
                 this.room = this.ownRoom;
                 window.setInterval(()=>{
                     this.sendData();
@@ -197,6 +197,7 @@ export default class CentralMultipleCharControls{
             
             // char.model.position.copy(data.position);
             char.model.rotation.copy(data.rotation);
+            char.model.rotation.x = 0;
             
             data.isWalking? char.playWalkingAnimation():char.playIdleAnimation();
             data.isWaving? char.playWavingAnimation(): null;

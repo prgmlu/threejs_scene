@@ -19,8 +19,31 @@ class AvatarCreatorEditor extends Component {
 		this.switchAvatar = this.props.switchAvatar;
 		this.closeModal = this.props.closeModal;
 		this.textureLoader = new THREE.TextureLoader();
-
 		this.parsed = JSON.parse(this.props.femaleLocalAvatarOutfitStringRef.current);
+
+		this.selectedMakeup = this.parsed.makeup;
+
+		if(this.selectedMakeup || this.selectedMakeup == 0){
+			this.selectedMakeup = this.selectedMakeup;
+		}
+			
+		else{
+			this.selectedMakeup = null;
+		}
+
+		this.state = {
+			activeTab: 1,
+			bodyType: 'male',
+			selectedOutfit: -1,
+			selectedSkintone: JSON.parse(this.props.femaleLocalAvatarOutfitStringRef.current).skinTone || null,
+			skintoneX: 0,
+			skintoneY: 0,
+			selectedMakeup: this.selectedMakeup,
+			selectedBodyshape: 'female',
+			windowWidth: window.innerWidth,
+			windowHeight: window.innerHeight,
+		};
+		
 		this.maleOutfits = {
 			display: [
 				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit1.png',
@@ -47,18 +70,6 @@ class AvatarCreatorEditor extends Component {
 
 
 
-	state = {
-		activeTab: 1,
-		bodyType: 'male',
-		selectedOutfit: -1,
-		selectedSkintone: JSON.parse(this.props.femaleLocalAvatarOutfitStringRef.current).skinTone || null,
-		skintoneX: 0,
-		skintoneY: 0,
-		selectedMakeup: JSON.parse(this.props.femaleLocalAvatarOutfitStringRef.current).makeup || null,
-		selectedBodyshape: 'female',
-		windowWidth: window.innerWidth,
-		windowHeight: window.innerHeight,
-	};
 
 	setSkintoneXY(x, y) {
 		this.setState({ skintoneX: x, skintoneY: y });
