@@ -65,15 +65,19 @@ let setEyebroMesh = (index, currentAvatar) => {
 	currentAvatar.getObjectByName(eyebrowMeshName).visible = true;
 };
 
-let setEyeFromMorphTarget = (index, currentAvatar) => {
+let setEyeFromMorphTarget = (index, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef) => {
 
-	let body = currentAvatar.getObjectByName('FemaleAvatar_Body1');
+	let body = currentAvatar.getObjectByName('FemaleAvatar_Head');
 	let influences = body.morphTargetInfluences;
 	let EyeShapeCount = 6;
 	for (let i = 0; i < EyeShapeCount; i++) {
 		influences[i] = 0;
 	}
 	influences[index] = 1;
+
+	let parsed = JSON.parse(femaleLocalAvatarOutfitStringRef.current);
+	parsed.eyeShape = index;
+	femaleLocalAvatarOutfitStringRef.current = JSON.stringify(parsed);
 };
 
 
@@ -230,10 +234,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 										} else if (selectedTone === 1) {
 											setEyebrowFromMorphTarget(index, currentAvatar);
 										} else if (selectedTone === 2) {
-											setEyeFromMorphTarget(
-												index,
-												currentAvatar,
-											);
+											setEyeFromMorphTarget(index, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef.current);
 										}
 									}}
 								/>

@@ -138,12 +138,12 @@ export const getOutfitParts = (model, hide = false, hideHair=true) => {
                     child.visible = false;
                 }
             }
-            if (eyeMeshNames.includes(child.name)) {
-                eyes.push(child);
-                if (hide) {
-                    child.visible = false;
-                }
-            }
+            // if (eyeMeshNames.includes(child.name)) {
+            //     eyes.push(child);
+            //     if (hide) {
+            //         child.visible = false;
+            //     }
+            // }
             if (child.name.toLowerCase().includes("skirt")) {
                 skirts.push(child);
                 if (hide) {
@@ -181,73 +181,58 @@ export const getOutfitParts = (model, hide = false, hideHair=true) => {
     
 }
 
-export const getOutfitStringFromModel = (model)=> {
-    let {
-        hairs,
-        pants,
-        shirts,
-        shoes,
-        glasses,
-        noses,
-        mouthLips,
-        eyeBrows,
-        eyeLashes,
-        eyeLids,
-        eyes,
-        skirts,
-        avatarSkins,
-        dresses,
-        outfits
-    } = getOutfitParts(model);
-
-    let hairMesh = hairs.find(mesh => mesh.visible);
-    let pantsMesh = pants.find(mesh => mesh.visible);
-    let shirtMesh = shirts.find(mesh => mesh.visible);
-    let shoesMesh = shoes.find(mesh => mesh.visible);
-    let glassesMesh = glasses.find(mesh => mesh.visible);
-    let noseMesh = noses.find(mesh => mesh.visible);
-    let mouthLipsMesh = mouthLips.find(mesh => mesh.visible);
-    let eyeBrowsMesh = eyeBrows.find(mesh => mesh.visible);
-    let eyeLashesMesh = eyeLashes.find(mesh => mesh.visible);
-    let eyeLidsMesh = eyeLids.find(mesh => mesh.visible);
-    let eyeMesh = eyes.find(mesh => mesh.visible);
-    let skirtMesh = skirts.find(mesh => mesh.visible);
-    let avatarSkinMesh = avatarSkins.find(mesh => mesh.visible);
-
-    let dressMesh = dresses.find(mesh => mesh.visible);
-    let outfitMesh = outfits.find(mesh => mesh.visible);
-
-    let outfitObj = {
-        hairMesh: hairMesh.name,
-        pantsMesh: pantsMesh.name,
-        glassesMesh: glassesMesh.name,
-        shirtMesh: shirtMesh.name,
-        shoesMesh: shoesMesh? shoesMesh.name :null,
-        mouthLipsMesh: mouthLipsMesh,
-        eyeBrowsMesh: eyeBrowsMesh,
-        eyeLashesMesh: eyeLashesMesh,
-        eyeLidsMesh: eyeLidsMesh,
-        eyeMesh: eyeMesh,
-        skirtMesh: skirtMesh,
-        noseMesh: noseMesh,
-        avatarSkinMesh: avatarSkinMesh,
-        dressMesh: dressMesh,
-        outfitMesh: outfitMesh
-
-    };
-
-    return JSON.stringify(outfitObj);
-}
-
 
 
 export const dressUpFromString = (model, outfitString) => {
+
+    debugger;
+
+    // a core function that dresses the local model and the remote models
+
     let outfit = JSON.parse(outfitString);
-    // for example here it would be something like: 
+    // includes meshes, skintone and makeup indices, eyeshape index which is translated using morphTargets
     // {
     //   hairMesh: "Hair1",
     //   outfitMesh: "Mesh5",
+    //   skinTone : 1,
+    //   makeup: 3
     // }
+
+
+    if(outfit.skinTone && outfit.makeup){
+            let url = `https://cdn.obsess-vr.com/realtime3d/new_uv_skintones/Sk${outfit.skinTone}_FemaleAvatar${
+                outfit.makeup+1
+            }_D.png`;
+            console.log(url);
+            let mesh = model.getObjectByName("FemaleAvatar_Head");
+            setMeshTextureImage(mesh, url);
+        }
+        else if(outfit.skinTone){
+            let url = `https://cdn.obsess-vr.com/realtime3d/new_uv_skintones_only/Sk${outfit.skinTone}_FemaleAvatar_D.png`;
+            console.log(url);
+            let mesh = model.getObjectByName("FemaleAvatar_Head");
+            setMeshTextureImage(mesh, url);
+        }
+        else if(outfit.makeup){
+            let url = `https://cdn.obsess-vr.com/realtime3d/new_uv_skintones/Sk1_FemaleAvatar${
+                outfit.makeup+1
+            }_D.png`;
+            console.log(url);
+
+            let mesh = model.getObjectByName("FemaleAvatar_Head");
+            setMeshTextureImage(mesh, url);
+    }
+
+    if(outfit.eyeShape) {
+        let body = model.getObjectByName('FemaleAvatar_Head');
+        let influences = body.morphTargetInfluences;
+        let EyeShapeCount = 6;
+        for (let i = 0; i < EyeShapeCount; i++) {
+            influences[i] = 0;
+        }
+        influences[outfit.eyeShape] = 1;
+    }
+
 
     let {
         hairs,
@@ -319,9 +304,9 @@ export const dressUpFromString = (model, outfitString) => {
     if(eyeLidsMesh)
         eyeLidsMesh.visible = true;
     
-    let eyeMesh = eyes.find(mesh => mesh.name === outfit.eyeMesh);
-    if(eyeMesh)
-        eyeMesh.visible = true;
+    // let eyeMesh = eyes.find(mesh => mesh.name === outfit.eyeMesh);
+    // if(eyeMesh)
+    //     eyeMesh.visible = true;
     
     let avatarSkinMesh = avatarSkins.find(mesh => mesh.name === outfit.avatarSkinMesh);
     if(avatarSkinMesh)
@@ -353,5 +338,4 @@ export const dressUpFromString = (model, outfitString) => {
 
 window.setMeshTextureImage = setMeshTextureImage;
 window.getOutfitParts = getOutfitParts;
-window.getOutfitStringFromModel = getOutfitStringFromModel;
 window.dressUpFromString = dressUpFromString;

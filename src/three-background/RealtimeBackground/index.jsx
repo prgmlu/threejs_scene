@@ -165,7 +165,7 @@ function getInitialAvatarOutfitString(type){
 }
 
 
-const RealtimeBackground = React.memo(({ scene, renderer,camera, backgroundUrl, controller }) => {
+const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller }) => {
     
     setUpSceneBackground (scene, true);
 
@@ -189,6 +189,7 @@ const RealtimeBackground = React.memo(({ scene, renderer,camera, backgroundUrl, 
     const [charControls, setCharControls] = useState(null);
 
     const localAvatarNameRef = useRef(createRandomName());
+    window.localAvatarNameRef = localAvatarNameRef;
 
     const visibleGenderRef = useRef("female");
 
@@ -380,7 +381,7 @@ const RealtimeBackground = React.memo(({ scene, renderer,camera, backgroundUrl, 
             />}
         </>
     );
-});
+};
 
 export default RealtimeBackground;
 

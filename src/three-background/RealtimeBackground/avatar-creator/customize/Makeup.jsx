@@ -8,13 +8,25 @@ import check from '../../static/avatar/menus/check.png';
 // import makeup_one from '../../static/avatar/makeup/make1.png';
 import { setMeshTextureImage } from '../../../../three-controls/CharacterControls/OutfitTranslator.js';
 
+let updateOutfitString = (femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, index)=>{
+	if(visibleGenderRef.current == 'female'){
+		let parsed = JSON.parse(femaleLocalAvatarOutfitStringRef.current);
+		parsed.makeup = index;
+		//update ref
+		femaleLocalAvatarOutfitStringRef.current = JSON.stringify(parsed);	
+	}
+	else{
+		//handle male case if needed
+	}
+}
+
 let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
 	let ind = index + 1;
 	let url = `https://cdn.obsess-vr.com/realtime3d/new_uv_skintones/Sk${selectedSkintone}_FemaleAvatar${ind}_D.png`;
 	// let url = `https://cdn.obsess-vr.com/realtime3d/tones_new/Sk${selectedSkintone}_FemaleAvatar${ind}_D.png`;
 	console.log(url);
 	// swap the texture of the mesh
-	let mesh = currentAvatar.getObjectByName('FemaleAvatar_Body1');
+	let mesh = currentAvatar.getObjectByName('FemaleAvatar_Head');
 	setMeshTextureImage(mesh, url);
 	addRoughness(currentAvatar);
 	// return;
@@ -23,7 +35,7 @@ let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
 let addRoughness = (currentAvatar) => {
 	let roughnessTextureUrl = "https://cdn.obsess-vr.com/realtime3d/roughness/Sk_FemaleAvatar_R.png";
 	let roughnessTexture = new THREE.TextureLoader().load(roughnessTextureUrl);
-	let mesh = currentAvatar.getObjectByName('FemaleAvatar_Body1');
+	let mesh = currentAvatar.getObjectByName('FemaleAvatar_Head');
 	mesh.material.roughnessMap = roughnessTexture;
 	mesh.material.needsUpdate = true;
 }
@@ -33,6 +45,9 @@ const Makeup = ({
 	setSelectedMakeup,
 	currentAvatar,
 	selectedMakeup,
+	femaleLocalAvatarOutfitStringRef,
+	maleLocalAvatarOutfitStringRef,
+	visibleGenderRef
 }) => {
 	const [selectedStyle, setSelectedStyle] = useState(0);
 	const [dataTones, setDataTones] = useState([]);
@@ -92,6 +107,7 @@ const Makeup = ({
 								onClick={() => {
 									setSelectedStyle(index);
 									setSelectedMakeup(index);
+									updateOutfitString(femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, index)
 									setMakeupFromTexture(
 										index,
 										currentAvatar,

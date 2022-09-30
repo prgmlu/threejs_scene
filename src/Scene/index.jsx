@@ -105,7 +105,6 @@ const createOrGetControls = (
 	}
 
 	if(camType == 'realtime') {
-		debugger;
 		return ThreeController.setupControls(
 			cameraRef.current,
 			renderer,

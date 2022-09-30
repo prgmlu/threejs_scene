@@ -16,12 +16,14 @@ const BodyShape = ({
 	setSkintonXY,
 	skintoneX,
 	skintoneY,
-	visibleGenderRef
+	visibleGenderRef,
+	femaleLocalAvatarOutfitStringRef,
+	maleLocalAvatarOutfitStringRef,
 }) => {
 	// const [selectedIndex, setSelectedIndex] = useState({ x: skinToneX || 0, y: skinToneY || 0 });
 	let counter = 0;
 
-	let bodyMesh = currentAvatar.getObjectByName('FemaleAvatar_Body1');
+	let bodyMesh = currentAvatar.getObjectByName('FemaleAvatar_Head');
 
 	const tones = [
 		['#F2D3CE', '#E0B0A6', '#C68D82', '#A36B60', '#7B4B41', '#502E2C'],
@@ -137,6 +139,9 @@ const BodyShape = ({
 									skintoneY={skintoneY}
 									setSelectedIndex={setSkintonXY}
 									setSelectedSkintone={setSelectedSkintone}
+									visibleGenderRef={visibleGenderRef}
+									femaleLocalAvatarOutfitStringRef={femaleLocalAvatarOutfitStringRef}
+									maleLocalAvatarOutfitStringRef={maleLocalAvatarOutfitStringRef}
 								/>
 							);
 						})}

@@ -90,6 +90,7 @@ class AvatarCreatorContainer extends Component {
 			this.props.avatars[0].position,
 			this.props.avatars[1].position,
 		]);
+		this.props.avatar.rotation.set(0,0,0);
 		// this.dressUpAvatarFromArray(this.props.avatar, this.currentClothing);
 
 		this.currentClothing = [];

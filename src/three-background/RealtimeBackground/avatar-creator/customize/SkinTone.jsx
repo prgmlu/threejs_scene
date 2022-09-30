@@ -2,6 +2,18 @@ import React from 'react';
 import check from '../../static/avatar/menus/check.png';
 import { setMeshTextureImage } from '../../../../three-controls/CharacterControls/OutfitTranslator.js';
 
+let updateOutfitString = (femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, index) => {
+	if(visibleGenderRef.current == 'female'){
+		let parsed = JSON.parse(femaleLocalAvatarOutfitStringRef.current);
+		parsed.skinTone = index;
+		//update ref
+		femaleLocalAvatarOutfitStringRef.current = JSON.stringify(parsed);	
+	}
+	else{
+		//handle male case if needed
+	}
+}
+
 let swapSkinTexture = (textureIndex, mesh, selectedMakeup) => {
 	let url;
 	if (selectedMakeup || selectedMakeup === 0) {
@@ -30,12 +42,16 @@ const SkinTone = ({
 	counter,
 	mesh,
 	setSelectedSkintone,
+	femaleLocalAvatarOutfitStringRef,
+	maleLocalAvatarOutfitStringRef,
+	visibleGenderRef,
 }) => {
 	return (
 		<button
 			onClick={() => {
 				setSelectedIndex(x, y);
 				swapSkinTexture(counter, mesh, selectedMakeup);
+				updateOutfitString(femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, counter);
 				setSelectedSkintone(counter);
 			}}
 			className={`w-[32px] sm:w-12 lg:w-16 lg:h-16 h-[32px] sm:h-12 rounded-full relative`}
