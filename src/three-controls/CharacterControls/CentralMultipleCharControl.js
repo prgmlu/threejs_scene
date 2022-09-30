@@ -68,8 +68,8 @@ export default class CentralMultipleCharControls{
             this.socket.on("connect", () => {
                 this.sendData(); // x8WIv7-mJelg7on_ALbx
                 // this.room = 'general';
-                this.ownRoom = 1;
-                // this.ownRoom = Math.random();
+                // this.ownRoom = 1;
+                this.ownRoom = Math.random();
                 this.room = this.ownRoom;
                 window.setInterval(()=>{
                     this.sendData();
