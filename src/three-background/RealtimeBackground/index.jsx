@@ -264,7 +264,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         function loadStore () {
             return new Promise((resolve, reject) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_scene_v032.glb",(storeGlb) => {
-                loader.load("https://cdn.obsess-vr.com/realtime3d/CT_Holiday2022_v015.glb",(storeGlb) => {
+                loader.load("https://cdn.obsess-vr.com/realtime3d/CT_Holiday2022_v029.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/CharlotteTilbury_sceneAnim_v030.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v036.glb",(storeGlb) => {
                 // loader.load("https://cdn.obsess-vr.com/realtime3d/Armani_GlowRoom_v026.glb",(storeGlb) => {
