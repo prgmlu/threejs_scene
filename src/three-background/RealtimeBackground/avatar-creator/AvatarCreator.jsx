@@ -321,7 +321,7 @@ class AvatarCreator extends Component {
 				{(window.innerWidth > 960 && window.innerHeight > 750) && (
 					<button
 						// onClick={() => this.setState({ isCookieShown: true })}
-						className="z-40 absolute no-underline left-4 bottom-[50%] sm:bottom-[1%] mb-2 -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 text-[#330D0D] text-base underline underline-offset-2 cursor-pointer"
+						className="z-40 absolute no-underline left-4 bottom-[50%] sm:bottom-[1%] mb-2 -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 text-[#330D0D] text-base underline underline-offset-2 cursor-default"
 					>
 						By using our website, you agree to the use of cookies.
 					</button>
