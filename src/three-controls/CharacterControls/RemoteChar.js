@@ -50,10 +50,11 @@ export default class RemoteChar{
     }
 
     interpolateToPosition(position){
-        this.model.position.lerp(position, 0.1);
-        if(this.model.position.distanceTo(position) > 0.1){
-            requestAnimationFrame(this.interpolateToPosition.bind(this, position));
-        }
+        this.model.position.set(position.x, position.y, position.z);
+        // this.model.position.lerp(position, 0.1);
+        // if(this.model.position.distanceTo(position) > 0.1){
+        //     requestAnimationFrame(this.interpolateToPosition.bind(this, position));
+        // }
     }
 
     setPosition(position){

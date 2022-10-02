@@ -197,7 +197,7 @@ export default class CentralMultipleCharControls{
             
             // char.model.position.copy(data.position);
             char.model.rotation.copy(data.rotation);
-            char.model.rotation.x = 0;
+            // char.model.rotation.x = 0;
             
             data.isWalking? char.playWalkingAnimation():char.playIdleAnimation();
             data.isWaving? char.playWavingAnimation(): null;
@@ -284,6 +284,9 @@ export default class CentralMultipleCharControls{
             
         data[address].position = this.mainCharControlsObj.model.position;
         data[address].rotation = this.mainCharControlsObj.model.rotation;
+        if(data[address].rotation.x == 0.35){
+            data[address].rotation.x = 0;
+        }
         data[address].isWalking = this.mainCharControlsObj.isWalking;
         data[address].isWaving = this.mainCharControlsObj.isWaving;
         data[address].room = this.room;
