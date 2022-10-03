@@ -5,14 +5,13 @@ import ThreeController from '../../three-controls/ThreeController';
 
 
 export default function RealtimeControls(props) {
-                visibleGenderRef={visibleGenderRef}
-    let { scene, camera, renderer, maleAvatar, femaleAvatar, charMixers, animationsMaps, storeMixer, setCharControls,orbitControls, localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, toAddObjsRef } = props;
+    let { scene, camera, renderer, maleAvatar, femaleAvatar, charMixers, animationsMaps, storeMixer, setCharControls,orbitControls, localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, toAddObjsRef,stopAvatarAnimationLoopRef } = props;
     let [joystickBroadcast, setJoystickBroadcast] = useState(null);
     let controlsLoaded = useRef(false);
     let directionValues = useRef([0,0,0,0])
     
     useEffect(() => {
-        let u = ThreeController.setupCharacterControls([maleAvatar,femaleAvatar], charMixers, animationsMaps, storeMixer, directionValues.current,localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef,visibleGenderRef,toAddObjsRef, scene,camera);
+        let u = ThreeController.setupCharacterControls([maleAvatar,femaleAvatar], charMixers, animationsMaps, storeMixer, directionValues.current,localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef,visibleGenderRef,toAddObjsRef,stopAvatarAnimationLoopRef, scene,camera);
         setCharControls(u);
         controlsLoaded.current = true;
     } ,[])

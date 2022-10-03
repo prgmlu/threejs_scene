@@ -189,11 +189,6 @@ const Scene = (props) => {
 
 	const animate = (controllerUpdate = false, animationKey) => {
 		window['animationStarted'] = true;
-		if(window.mainAnimationLoopHooks){
-			window.mainAnimationLoopHooks.forEach(hook => {
-				hook();
-			} );
-		}
 		if (renderer.xr.enabled) {
 			renderer.setAnimationLoop(() => {
 				renderer?.render(scene, cameraRef.current);

@@ -15,7 +15,6 @@ let updateOutfitString = (femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfi
 }
 
 let swapSkinTexture = (textureIndex, mesh, selectedMakeup) => {
-	debugger;
 	let url;
 	if (selectedMakeup || selectedMakeup === 0) {
 		url = `https://cdn.obsess-vr.com/realtime3d/new_uv_skintones/Sk${textureIndex}_FemaleAvatar${

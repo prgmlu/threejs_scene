@@ -39,6 +39,8 @@ export const addToolTipToModel = (obj, text) => {
     styleTooltip(tooltipDiv);
     
     var tooltipTextMesh = new CSS2DObject(tooltipDiv);
+    tooltipTextMesh.name = 'tooltip';
+
     tooltipTextMesh.position.set(0, 1.9, 0);
   
     obj.add(tooltipTextMesh);

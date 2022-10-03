@@ -171,6 +171,8 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
     let toAddObjsRef = useRef([]);
 
+    let stopAvatarAnimationLoopRef = useRef(()=>{});
+
     window.toAddObjsRef = toAddObjsRef;
 
     
@@ -306,7 +308,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         async function loadStoreAndModel() {
 
             // let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_JPEG_DRACO_Ver10.glb";
-            let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver11.glb";
+            let FEM_MODEL_URL =   "https://cdn.obsess-vr.com/realtime3d/BaseFemaleAvatar_Ver12.glb";
             let M_MODEL_URL = "https://cdn.obsess-vr.com/realtime3d/BaseMaleAvatar_004_1.glb";
 
             let [_,maleModelMixerMap, femaleModelMixerMap] = await Promise.all([loadStore(), loadModelAndAnimations(M_MODEL_URL,maleLocalAvatarOutfitStringRef), loadModelAndAnimations(FEM_MODEL_URL,femaleLocalAvatarOutfitStringRef)]);
@@ -343,7 +345,13 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         loadStoreAndModel();
             
         return () => {
-            window.characterControls.removeEvents();
+            window.labelRenderer && window.labelRenderer.domElement.remove();
+            
+
+            // that.stopAnimationFrame();
+            stopAvatarAnimationLoopRef.current();
+
+            window.characterControls && window.characterControls.removeEvents();
             window.socket.disconnect();
             toAddObjsRef.current.forEach((i)=>{
                 scene.remove(i);
@@ -371,7 +379,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
                 visibleGenderRef={visibleGenderRef}
             />}
 
-            {mAvatar && <RealtimeControls scene={scene} camera={camera} renderer={renderer} femaleAvatar={fAvatar} maleAvatar={mAvatar} setCharControls={setCharControls} orbitControls={controller}
+            {mAvatar && <RealtimeControls stopAvatarAnimationLoopRef={stopAvatarAnimationLoopRef} scene={scene} camera={camera} renderer={renderer} femaleAvatar={fAvatar} maleAvatar={mAvatar} setCharControls={setCharControls} orbitControls={controller}
             toAddObjsRef={toAddObjsRef}
                 charMixers={[maleCharMixer, femaleCharMixer]} animationsMaps={[maleAnimationsMap, femaleAnimationsMap]} storeMixer={storeMixer} charControls={charControls}
                 localAvatarNameRef={localAvatarNameRef}

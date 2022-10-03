@@ -442,6 +442,8 @@ export const setUpSceneBackground = (scene, placeHolderImage=false) => {
 	// scene.background = tex;
 }
 
+window.setUpSceneBackground = setUpSceneBackground;
+
 export const offsetBoundingObjs = (position, boundingObjs, offset = .5) => {
 	boundingObjs[0].position.set(position.x + offset, position.y + 1, position.z + offset)
 	// boundingObjs[1].position.set(position.x + offset, position.y + .5, position.z - offset)

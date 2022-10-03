@@ -10,6 +10,8 @@ import CentralMultipleCharControl from './CentralMultipleCharControl';
 
 import { ANIMATION_NAMES } from './Constants';
 
+window.ANIMATION_NAMES = ANIMATION_NAMES;
+
 import { RELEVANT_STORE_PARTS_NAMES } from '../../three-background/RealtimeBackground/avatar-creator/CustomizationConstants';
 
 
@@ -86,7 +88,7 @@ export const ApproxAtan2 = ( y,  x) =>
 
 export default class CharacterControls {
 
-    constructor(models, charMixers, animationsMaps, orbitControl, camera, currentAction = ANIMATION_NAMES['idle'] , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues,localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef, scene){
+    constructor(models, charMixers, animationsMaps, orbitControl, camera, currentAction = ANIMATION_NAMES['idle'] , collisionDetection, items, animated=true, detectCollisions=true, handleIndicators=false, storeMixer, directionValues,localAvatarNameRef,femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef,stopAvatarAnimationLoopRef, scene){
         this.model = models[0];
         this.models = models;
 
@@ -142,9 +144,13 @@ export default class CharacterControls {
         this.charMixers.forEach((i)=>{i.addEventListener(
             'finished',
             (e) => {
-                if(e.action == this.animationsMaps[0].get(ANIMATION_NAMES['wave'])
-                ){
+                if( (e.action == (this.animationsMaps[0].get(ANIMATION_NAMES['wave']))) || ((e.action == this.animationsMaps[1].get(ANIMATION_NAMES['wave'])))){
                     this.isWaving = false;
+                }
+
+                if( (e.action == (this.animationsMaps[0].get(ANIMATION_NAMES['jump'])) || (e.action == (this.animationsMaps[1].get(ANIMATION_NAMES['jump']))) )
+                ){
+                    this.isJumping = false;
                 }
             }
         )
@@ -205,7 +211,7 @@ export default class CharacterControls {
 		document.addEventListener('keydown', this.handleKeydown, false);
 		document.addEventListener('keyup', this.handleKeyup, false);
 
-        this.CentralMultipleCharControl = new CentralMultipleCharControl(this,[],localAvatarNameRef, femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef, this.scene, this.camera);
+        this.CentralMultipleCharControl = new CentralMultipleCharControl(this,[],localAvatarNameRef, femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef,stopAvatarAnimationLoopRef, this.scene, this.camera);
 
 
 
@@ -284,8 +290,10 @@ export default class CharacterControls {
         this.enabled && ((this.keysPressed)[e.key.toLowerCase()] = true);
 
         if(e.key == " "){
-            this.playWaveAnimation();
-            this.isWaving = true;
+            // this.playWaveAnimation();
+            // this.isWaving = true;
+            this.playJumpAnimation();
+            this.isJumping = true;
         }
 
     }
@@ -297,16 +305,52 @@ export default class CharacterControls {
         this.keysPressed = {};
     }
 
-    playWaveAnimation(){
-        let c = this.animationsMaps[0].get(ANIMATION_NAMES.wave);
-        c.setLoop(THREE.LoopOnce);
-        c.reset().play();
+    playJumpAnimation(){
+        if(this.isJumping) return;
+        try{
 
-        let d = this.animationsMaps[1].get(ANIMATION_NAMES.wave);
-        d.setLoop(THREE.LoopOnce);
-        d.reset().play();
+            let c = this.animationsMaps[0].get(ANIMATION_NAMES.jump);
+            c.setLoop(THREE.LoopOnce);
+            c.reset().play();
+        }
+        catch(e){
+            console.log(e);
+        }
+
+        try{
+
+            let d = this.animationsMaps[1].get(ANIMATION_NAMES.jump);
+            d.setLoop(THREE.LoopOnce);
+            d.reset().play();
+        }
+        catch(e){
+            console.log(e);
+        }
 
     }
+
+    playWaveAnimation(){
+        try{
+
+            let c = this.animationsMaps[0].get(ANIMATION_NAMES.wave);
+            c.setLoop(THREE.LoopOnce);
+            c.reset().play();
+        }
+        catch(e){
+            console.log(e);
+        }
+        try{
+
+            let d = this.animationsMaps[1].get(ANIMATION_NAMES.wave);
+            d.setLoop(THREE.LoopOnce);
+            d.reset().play();
+        }
+        catch(e){
+            console.log(e);
+        }
+
+    }
+    
     handleKeyup = (e) => {
             this.enabled && ((this.keysPressed)[e.key.toLowerCase()] = false);
         }

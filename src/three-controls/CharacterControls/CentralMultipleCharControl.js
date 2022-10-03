@@ -14,7 +14,7 @@ const USE_TOOLTIP = true;
 let SOCKET_SERVER_URL = (document.location.href.includes("192.168") || document.location.href.includes("127.0.0") || document.location.href.includes("localhost") ) ? 'http://192.168.1.122:8000/':"https://avbe.beta.obsess-vr.com/";
 
 export default class CentralMultipleCharControls{
-    constructor(mainCharControlsObj, otherChars,localAvatarNameRef, femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef, scene, camera){
+    constructor(mainCharControlsObj, otherChars,localAvatarNameRef, femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef, stopAvatarAnimationLoopRef, scene, camera){
         this.mainCharControlsObj = mainCharControlsObj;
 
         window.that = this;
@@ -24,6 +24,8 @@ export default class CentralMultipleCharControls{
         this.maleLocalAvatarOutfitStringRef = maleLocalAvatarOutfitStringRef;
         this.prevFemaleLocalAvatarOutfitString = femaleLocalAvatarOutfitStringRef.current;
         this.prevMaleLocalAvatarOutfitString = maleLocalAvatarOutfitStringRef.current;
+
+        stopAvatarAnimationLoopRef.current = this.stopAnimationFrame.bind(this);
 
         this.visibleGenderRef = visibleGenderRef;
 
@@ -45,6 +47,8 @@ export default class CentralMultipleCharControls{
                 this.labelRenderer && this.labelRenderer.setSize(window.innerWidth, window.innerHeight);
             })
             this.labelRenderer = initCSSRenderer();
+            window.labelRenderer = this.labelRenderer;
+
             let {div,tooltipMesh } = addToolTipToModel(this.model,this.myName);
             this.tooltipMesh = tooltipMesh;
             this.tooltipDiv = div;
@@ -68,8 +72,8 @@ export default class CentralMultipleCharControls{
             this.socket.on("connect", () => {
                 this.sendData(); // x8WIv7-mJelg7on_ALbx
                 // this.room = 'general';
-                // this.ownRoom = 1;
-                this.ownRoom = Math.random();
+                this.ownRoom = 1;
+                // this.ownRoom = Math.random();
                 this.room = this.ownRoom;
                 window.setInterval(()=>{
                     this.sendData();
@@ -84,10 +88,9 @@ export default class CentralMultipleCharControls{
 
         // this.update();
 
-        if(!window.mainAnimationLoopHooks) window.mainAnimationLoopHooks = [];
+        // if(!window.mainAnimationLoopHooks) window.mainAnimationLoopHooks = [];
 
 
-        setUpSceneBackground(this.scene, false);
         adjustRenderer(window.mainRenderer);
 
 
@@ -100,7 +103,9 @@ export default class CentralMultipleCharControls{
             this.scene.add(i);
         })
 
-        window.mainAnimationLoopHooks.push(this.update.bind(this));
+        this.update();
+        // window.mainAnimationLoopHooks.push(this.update.bind(this));
+        // setUpSceneBackground(this.scene, false);
     }
 
     createRemoteCharacter(type,position,rotation, address, name, outfitString){
@@ -321,10 +326,18 @@ export default class CentralMultipleCharControls{
     }
 
 
+    stopAnimationFrame(){
+        cancelAnimationFrame(this.animationFrameId);
+    }
 
 
     update = () => {
-        // window.requestAnimationFrame(this.update);
+        this.animationFrameId = window.requestAnimationFrame(this.update);
+
+        if(! this?.scene?.background?.image?.length ){
+            setUpSceneBackground(this.scene,false);
+        }
+
         if(USE_TOOLTIP){
             this.labelRenderer.render( this.scene, this.camera );
         }
