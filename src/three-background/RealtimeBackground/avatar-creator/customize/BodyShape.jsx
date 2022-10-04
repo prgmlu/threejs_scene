@@ -33,6 +33,20 @@ const BodyShape = ({
 		['#EDD8C7', '#D5B69A', '#B99573', '#93724F', '#715236', '#483320'],
 		['#E0C8B0', '#C5A57F', '#A5855E', '#81633D', '#594426'],
 	];
+	const newTones = [
+		'#F2D3CE',
+		'#E0B0A6',
+		'#C68D82',
+		'#FF9F9F',
+		'#7B4B41',
+		'#502E2C',
+		'#EDD8C7',
+		'#D5B69A',
+		'#B99573',
+		'#93724F',
+		'#715236',
+		'#483320',
+	];
 
 	return (
 		<div className="w-full h-full flex flex-col justify-between overflow-y-auto">
@@ -40,7 +54,7 @@ const BodyShape = ({
 				Body Shape
 			</div>
 			<div className="min-h-[35%] max-h-[35%] flex flex-wrap gap-x-6 gap-y-1">
-					<div
+				<div
 					onClick={() => {
 						maleAvatar.visible = false;
 						femaleAvatar.visible = true;
@@ -110,13 +124,13 @@ const BodyShape = ({
 						}}
 					/>
 				</div>
+				
 			</div>
 			<div className="font-sourceSansProSemibold text-lg py-3">
 				Skin Tone
 			</div>
-			<div className="w-full h-fit max-h-[50%] flex flex-col px-1.5 gap-1 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
-				{tones.map((group, index) => (
-					
+			<div className=" w-full h-full flex flex-wrap wrap gap-[1rem] sm:gap-2 md:gap-3 lg:gap-4 overflow-y-auto justify-center md:px-2">
+				{/* {tones.map((group, index) => (
 					<div
 						key={index}
 						className={`flex flex-nowrap sm:mb-1.5 mx-auto w-[80%] md:w-full items-center justify-between  ${
@@ -126,27 +140,61 @@ const BodyShape = ({
 						{group.map((t, idx) => {
 							counter++;
 							return (
-								<SkinTone
-									mesh={bodyMesh}
-									key={counter}
-									counter={counter}
-									color={t}
-									x={index}
-									y={idx}
-									selectedMakeup={selectedMakeup}
-									// selectedIndex={selectedIndex}
-									skintoneX={skintoneX}
-									skintoneY={skintoneY}
-									setSelectedIndex={setSkintonXY}
-									setSelectedSkintone={setSelectedSkintone}
-									visibleGenderRef={visibleGenderRef}
-									femaleLocalAvatarOutfitStringRef={femaleLocalAvatarOutfitStringRef}
-									maleLocalAvatarOutfitStringRef={maleLocalAvatarOutfitStringRef}
-								/>
+									<SkinTone
+										mesh={bodyMesh}
+										key={counter}
+										counter={counter}
+										color={t}
+										x={index}
+										y={idx}
+										selectedMakeup={selectedMakeup}
+										// selectedIndex={selectedIndex}
+										skintoneX={skintoneX}
+										skintoneY={skintoneY}
+										setSelectedIndex={setSkintonXY}
+										setSelectedSkintone={
+											setSelectedSkintone
+										}
+										visibleGenderRef={visibleGenderRef}
+										femaleLocalAvatarOutfitStringRef={
+											femaleLocalAvatarOutfitStringRef
+										}
+										maleLocalAvatarOutfitStringRef={
+											maleLocalAvatarOutfitStringRef
+										}
+									/>
 							);
 						})}
 					</div>
-				))}
+				))} */}
+				{newTones.map((x, index) => {
+					counter++;
+					return (
+						<>
+						<SkinTone
+							mesh={bodyMesh}
+							key={counter}
+							counter={counter}
+							color={x}
+							x={index}
+							y={index}
+							selectedMakeup={selectedMakeup}
+							// selectedIndex={selectedIndex}
+							skintoneX={skintoneX}
+							skintoneY={skintoneY}
+							setSelectedIndex={setSkintonXY}
+							setSelectedSkintone={setSelectedSkintone}
+							visibleGenderRef={visibleGenderRef}
+							femaleLocalAvatarOutfitStringRef={
+								femaleLocalAvatarOutfitStringRef
+							}
+							maleLocalAvatarOutfitStringRef={
+								maleLocalAvatarOutfitStringRef
+							}
+						/>
+					</>
+					);
+				})}
 			</div>
 		</div>
 	);

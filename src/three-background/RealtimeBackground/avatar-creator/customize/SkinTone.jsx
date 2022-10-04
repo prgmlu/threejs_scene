@@ -54,7 +54,7 @@ const SkinTone = ({
 				updateOutfitString(femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, counter);
 				setSelectedSkintone(counter);
 			}}
-			className={`w-[32px] sm:w-12 lg:w-16 lg:h-16 h-[32px] sm:h-12 rounded-full relative`}
+			className={`w-[50px] sm:w-12 lg:w-[4.5rem] lg:h-[4.5rem] h-[50px] sm:h-12 rounded-full relative`}
 			style={{
 				backgroundColor: color,
 				border: `${

@@ -301,12 +301,9 @@ class AvatarCreator extends Component {
 					</div>
 					{this.props.currentAvatars && (
 						<AvatarCreatorEditor
-
 							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
 							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
-
 							visibleGenderRef={this.props.visibleGenderRef}
-
 							currentAvatar={this.props.currentAvatars[1]}
 							maleAvatar={this.props.currentAvatars[0]}
 							femaleAvatar={this.props.currentAvatars[1]}
