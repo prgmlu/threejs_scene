@@ -55,7 +55,7 @@ const SkinTone = ({
 				setSelectedSkintone(counter);
 			}}
 			className={`w-[50px] sm:w-12 lg:w-[4.5rem] lg:h-[4.5rem] h-[50px] sm:h-12 rounded-full relative`}
-			style={{
+			style={{ 
 				backgroundColor: color,
 				border: `${
 					x === skintoneX && y === skintoneY

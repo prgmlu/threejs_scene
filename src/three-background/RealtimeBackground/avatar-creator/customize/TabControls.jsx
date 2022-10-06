@@ -14,16 +14,10 @@ const TabControls = ({ activeTab, onTabClick }) => {
 				}
 			>
 				<img
-					// src={body}
 					src={'https://cdn.obsess-vr.com/realtime3d/ct_ui/body.svg'}
 					alt="Body type"
 					className={'w-[35%] md:w-[30%] sm:w-[30%] max-h-full'}
 					id="1"
-					// className={`w-[20%] ${
-					// 	activeTab === 1
-					// 		? 'h-full pb-3 pt-3 sm:pb-3.5 px-1.5 sm:px-2.5'
-					// 		: 'h-[80%] pb-1 sm:pb-2 px-1 sm:px-2'
-					// } pt-2 object-contain rounded-t-md flex justify-center cursor-pointer bg-white`}
 				/>
 				<div
 					className={`absolute bg-white bottom-[-44%]  left-0 w-full h-[60%] ${

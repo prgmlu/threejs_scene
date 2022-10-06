@@ -212,7 +212,6 @@ class AvatarCreatorEditor extends Component {
 							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
 							visibleGenderRef={this.props.visibleGenderRef}
 
-
 							selectedSkintone={this.state.selectedSkintone}
 							currentAvatar={this.props.currentAvatar}
 							maleAvatar={this.props.maleAvatar}

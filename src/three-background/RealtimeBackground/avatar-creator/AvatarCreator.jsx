@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
-// import { createScene, createRenderer } from '../threeHelpers';
+
 import {
 	setUpEnvMap,
 	createScene,

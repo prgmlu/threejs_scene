@@ -61,7 +61,7 @@ const BodyShape = ({
 						visibleGenderRef.current = 'female';
 						setSelectedBodyshape('female');
 					}}
-					className={` flex justify-center w-[25%] h-[100%] max-h-[8rem] max-w-[6rem] px-3 relative cursor-pointer rounded-[4px] shadow-md ${
+					className={`flex justify-center w-[25%] h-[100%] max-h-[8rem] max-w-[6rem] px-3 relative cursor-pointer rounded-[4px] shadow-md ${
 						selectedBodyshape === 'female'
 							? 'border-[2px] border-[#FF9F9F]'
 							: 'border-transparent'
