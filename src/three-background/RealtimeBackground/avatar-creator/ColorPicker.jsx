@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import close from '../static/avatar/menus/close.png';
 
-const ColorPicker = ({ selectedColor, handlePicker, handleClose }) => {
+const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 	const [showColor, setShowColor] = useState(false);
 	const colorArr = [
 		['#88582F', '#C89559', '#C9A57B', '#E9D6BC'],
 		['#551A05', '#7D2F17', '#D88050'],
 		['#291401', '#422207', '#633209', '#78461C'],
 		['#050407', '#9D8E80', '#C3BCBA'],
+	];
+	const colorArr2 = [
+		['#271F1D', '#894D31', '#397EDD', '#A18C39'],
+		['#907155', '#3C792B', '#64777B'], 
 	];
 	const switchView = (x) => {
 		setShowColor(x);
@@ -50,7 +54,7 @@ const ColorPicker = ({ selectedColor, handlePicker, handleClose }) => {
 					onChange={(color) => handlePicker(color)}
 				/>
 			)}
-			{!showColor && (
+			{!showColor && tabName != "Eyes" && (
 				<div className="flex py-2 justify-between flex-column column w-[200px] h-[200px]">
 					{colorArr.map((group, i) => {
 						return (
@@ -70,10 +74,43 @@ const ColorPicker = ({ selectedColor, handlePicker, handleClose }) => {
 														: 'none',
 											}}
 											className="w-[37px] h-[37px] rounded-full"
-											// onClick={handlePicker(color)}
+											// onClick={handlePicker(color)} 
+
 										></button>
 									);
 								})}
+								
+							</div>
+						);
+					})}
+				</div>
+			)}
+			{!showColor && tabName == "Eyes" && (
+				<div className="flex py-2  flex-column column w-[200px] h-[200px]">
+					{colorArr2.map((group, i) => {
+						return (
+							<div
+								className="flex flex-nowrap justify-center gap-[10px]"
+								key={i}
+							>
+								{group.map((color, index) => {
+									return (
+										<button
+											key={index}
+											style={{
+												backgroundColor: color,
+												border:
+													selectedColor == color
+														? '2px solid #FF9F9F'
+														: 'none',
+											}}
+											className="w-[37px] h-[37px] rounded-full"
+											// onClick={handlePicker(color)} 
+
+										></button>
+									);
+								})}
+								
 							</div>
 						);
 					})}

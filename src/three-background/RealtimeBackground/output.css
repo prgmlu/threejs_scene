@@ -750,16 +750,16 @@ video {
   margin-top: 1rem;
 }
 
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
 .mt-2 {
   margin-top: 0.5rem;
 }
 
 .mb-0 {
   margin-bottom: 0px;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
 }
 
 .block {
@@ -820,16 +820,16 @@ video {
   height: 1.5rem;
 }
 
-.h-\[50px\] {
-  height: 50px;
+.h-\[40px\] {
+  height: 40px;
 }
 
 .h-\[200px\] {
   height: 200px;
 }
 
-.h-\[45px\] {
-  height: 45px;
+.h-\[37px\] {
+  height: 37px;
 }
 
 .h-\[32px\] {
@@ -852,6 +852,10 @@ video {
   height: 0.75rem;
 }
 
+.h-\[50px\] {
+  height: 50px;
+}
+
 .h-2\.5 {
   height: 0.625rem;
 }
@@ -866,18 +870,6 @@ video {
 
 .h-\[80\%\] {
   height: 80%;
-}
-
-.h-\[40px\] {
-  height: 40px;
-}
-
-.h-\[37px\] {
-  height: 37px;
-}
-
-.h-\[30px\] {
-  height: 30px;
 }
 
 .max-h-\[35\%\] {
@@ -946,12 +938,16 @@ video {
   width: 1.5rem;
 }
 
+.w-1\/2 {
+  width: 50%;
+}
+
 .w-\[200px\] {
   width: 200px;
 }
 
-.w-\[45px\] {
-  width: 45px;
+.w-\[37px\] {
+  width: 37px;
 }
 
 .w-10 {
@@ -960,10 +956,6 @@ video {
 
 .w-\[80\%\] {
   width: 80%;
-}
-
-.w-1\/2 {
-  width: 50%;
 }
 
 .w-\[25\%\] {
@@ -1008,14 +1000,6 @@ video {
 
 .w-\[13\%\] {
   width: 13%;
-}
-
-.w-\[40px\] {
-  width: 40px;
-}
-
-.w-\[37px\] {
-  width: 37px;
 }
 
 .min-w-\[3rem\] {
@@ -1164,10 +1148,6 @@ video {
   border-radius: 0.25rem;
 }
 
-.rounded-sm {
-  border-radius: 0.125rem;
-}
-
 .rounded-l-\[3px\] {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -1213,22 +1193,6 @@ video {
   border-width: 1.5px;
 }
 
-.border-r-\[1px\] {
-  border-right-width: 1px;
-}
-
-.border-b-\[1px\] {
-  border-bottom-width: 1px;
-}
-
-.border-r-2 {
-  border-right-width: 2px;
-}
-
-.border-b-2 {
-  border-bottom-width: 2px;
-}
-
 .border-r {
   border-right-width: 1px;
 }
@@ -1237,20 +1201,20 @@ video {
   border-bottom-width: 1px;
 }
 
-.border-l {
-  border-left-width: 1px;
-}
-
-.border-r-0 {
-  border-right-width: 0px;
-}
-
 .border-t-0 {
   border-top-width: 0px;
 }
 
 .border-l-0 {
   border-left-width: 0px;
+}
+
+.border-l {
+  border-left-width: 1px;
+}
+
+.border-r-0 {
+  border-right-width: 0px;
 }
 
 .border-solid {
@@ -1412,14 +1376,14 @@ video {
   padding-bottom: 0.5rem;
 }
 
-.py-2\.5 {
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-}
-
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.py-2\.5 {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
 }
 
 .py-3 {

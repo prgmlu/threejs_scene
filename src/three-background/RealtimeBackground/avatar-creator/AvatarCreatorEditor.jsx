@@ -5,6 +5,7 @@ import Outfit from './customize/Outfit';
 import Face from './customize/Face';
 import BodyShape from './customize/BodyShape';
 import Makeup from './customize/Makeup';
+
 import {AVATAR_EDITOR_AVATAR_POSITION,
 	AVATAR_EDITOR_AVATAR_ROTATION,
 	ZOOM_ON_FACE_POSITION,
@@ -46,11 +47,11 @@ class AvatarCreatorEditor extends Component {
 		
 		this.maleOutfits = {
 			display: [
-				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit1.png',
-				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit2.png',
-				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit3.png',
-				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit4.png',
-				'https://cdn.obsess-vr.com/realtime3d/ct_ui/outfits/outfit5.png',
+				'../../static/avatar/outfit/female/Outfit1.png',
+				'../../static/avatar/outfit/female/Outfit2.png',
+				'../../static/avatar/outfit/female/Outfit3.png',
+				'../../static/avatar/outfit/female/Outfit4.png',
+				'../../static/avatar/outfit/female/Outfit5.png',
 			],
 		};
 		this.currentScene = props?.currentScene;
@@ -206,12 +207,10 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 					{activeTab == 2 && (
-						<Face
-
+						<Face 
 							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
 							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
-							visibleGenderRef={this.props.visibleGenderRef}
-
+							visibleGenderRef={this.props.visibleGenderRef} 
 							selectedSkintone={this.state.selectedSkintone}
 							currentAvatar={this.props.currentAvatar}
 							maleAvatar={this.props.maleAvatar}
@@ -219,13 +218,10 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 					{activeTab == 3 && (
-						<Makeup
-
+						<Makeup 
 							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
 							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
-							visibleGenderRef={this.props.visibleGenderRef}
-
-
+							visibleGenderRef={this.props.visibleGenderRef} 
 							selectedMakeup={this.state.selectedMakeup}
 							setSelectedMakeup={this.setSelectedMakeup.bind(
 								this,
@@ -237,8 +233,7 @@ class AvatarCreatorEditor extends Component {
 						/>
 					)}
 					{activeTab == 4 && (
-						<Outfit
-
+						<Outfit 
 							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
 							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
 							visibleGenderRef={this.props.visibleGenderRef}
@@ -259,7 +254,7 @@ class AvatarCreatorEditor extends Component {
 							className="w-fit h-fit self-center uppsercase duration-250 text-[#fff] bg-[#330D0D] hover:bg-white hover:text-[#330D0D] px-[2.5rem] py-[0.5rem] text-sm rounded-md cursor-pointer"
 							onClick={this.props.closeModal}
 						>
-							Save
+							SAVE
 						</button>
 					</div>
 				)}

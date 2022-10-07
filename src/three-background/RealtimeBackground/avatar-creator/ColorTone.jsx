@@ -87,9 +87,9 @@ const ColorTone = ({ title, currentAvatar, selectedTone }) => {
 				{isPickerVisible && (
 					<ColorPicker
 						selectedColor={color[title]}
+						tabName={title}
 						handlePicker={(c)=>{
-							let newColor = c;
-
+							let newColor = c; 
 							let newObj = {...color};
 							newObj[title] = newColor;
 							setColor(newObj);
