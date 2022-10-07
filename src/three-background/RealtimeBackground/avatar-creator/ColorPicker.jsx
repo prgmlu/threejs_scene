@@ -30,7 +30,7 @@ const ColorPicker = ({ selectedColor, handlePicker, handleClose }) => {
 						!showColor ? 'border-r border-b border-t-0 border-l-0 border-solid border-[#330D0D] bg-[#330D0D] bg-opacity-20' : 'bg-white'
 					}`}
 				>
-					<Swatches></Swatches>
+					 Swatches 
 				</button>
 				<button
 					onClick={() => {
