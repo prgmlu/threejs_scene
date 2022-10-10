@@ -47,7 +47,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 					Custom
 				</button>
 			</div>
-			<div className="p-3">
+			<div className="px-3 pb-2">
 			{showColor && (
 				<HexColorPicker
 					color={selectedColor}
@@ -55,7 +55,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 				/>
 			)}
 			{!showColor && tabName != "Eyes" && (
-				<div className="flex py-2 justify-between flex-column column w-[200px] h-[200px]">
+				<div className="flex justify-between flex-column column w-[200px] h-[200px]">
 					{colorArr.map((group, i) => {
 						return (
 							<div
@@ -73,7 +73,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 														? '2px solid #FF9F9F'
 														: 'none',
 											}}
-											className="w-[37px] h-[37px] rounded-full"
+											className="w-[40px] h-[40px] rounded-full"
 											// onClick={handlePicker(color)} 
 
 										></button>
@@ -86,7 +86,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 				</div>
 			)}
 			{!showColor && tabName == "Eyes" && (
-				<div className="flex py-2  flex-column column w-[200px] h-[200px]">
+				<div className="flex py-2 justify-center gap-[1rem] flex-column gap-3 column w-[200px] h-[200px]">
 					{colorArr2.map((group, i) => {
 						return (
 							<div
@@ -104,13 +104,10 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 														? '2px solid #FF9F9F'
 														: 'none',
 											}}
-											className="w-[37px] h-[37px] rounded-full"
-											// onClick={handlePicker(color)} 
-
+											className="w-[40px] h-[40px] rounded-full"
 										></button>
 									);
 								})}
-								
 							</div>
 						);
 					})}

@@ -5,12 +5,16 @@ import Outfit from './customize/Outfit';
 import Face from './customize/Face';
 import BodyShape from './customize/BodyShape';
 import Makeup from './customize/Makeup';
+import outfit1 from '../static/avatar/outfit/female/Outfit1.png';
+import outfit2 from '../static/avatar/outfit/female/Outfit2.png';
+import outfit3 from '../static/avatar/outfit/female/Outfit3.png';
+import outfit4 from '../static/avatar/outfit/female/Outfit4.png';
+import outfit5 from '../static/avatar/outfit/female/Outfit5.png';
 
 import {AVATAR_EDITOR_AVATAR_POSITION,
 	AVATAR_EDITOR_AVATAR_ROTATION,
 	ZOOM_ON_FACE_POSITION,
 	ZOOM_ON_FACE_ROTATION
-	
 } from './CustomizationConstants';
 
 class AvatarCreatorEditor extends Component {
@@ -47,11 +51,7 @@ class AvatarCreatorEditor extends Component {
 		
 		this.maleOutfits = {
 			display: [
-				'../../static/avatar/outfit/female/Outfit1.png',
-				'../../static/avatar/outfit/female/Outfit2.png',
-				'../../static/avatar/outfit/female/Outfit3.png',
-				'../../static/avatar/outfit/female/Outfit4.png',
-				'../../static/avatar/outfit/female/Outfit5.png',
+				outfit1, outfit2, outfit3, outfit4, outfit5
 			],
 		};
 		this.currentScene = props?.currentScene;
@@ -68,9 +68,6 @@ class AvatarCreatorEditor extends Component {
 			windowHeight: window.innerHeight,
 		});
 	}
-
-
-
 
 	setSkintoneXY(x, y) {
 		this.setState({ skintoneX: x, skintoneY: y });

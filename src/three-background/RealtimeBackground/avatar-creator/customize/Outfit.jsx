@@ -1,10 +1,5 @@
 import React from 'react';
 import check from '../../static/avatar/menus/check.png';
-import outfit1 from '../../static/avatar/outfit/female/Outfit1.png';
-import outfit2 from '../../static/avatar/outfit/female/Outfit2.png';
-import outfit3 from '../../static/avatar/outfit/female/Outfit3.png';
-import outfit4 from '../../static/avatar/outfit/female/Outfit4.png';
-import outfit5 from '../../static/avatar/outfit/female/Outfit5.png';
 let switchOutfit = (e, index, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGender) => {
 	let outfitNames = [
 		'Outfit1',
@@ -39,7 +34,7 @@ let updateOutfitString = (outfitName, ref) => {
 
 
 const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef }) => {
-const outfitllist = [outfit1,outfit2,outfit3,outfit4,outfit5];
+
 	return (
 		<div className="w-full h-full flex flex-col gap-1 scrollbar">
 			<div className="font-sourceSansProSemibold text-lg">Outfit</div>
@@ -58,7 +53,7 @@ const outfitllist = [outfit1,outfit2,outfit3,outfit4,outfit5];
 						)}
 						<img
 							id={outfit.name}
-							src={outfitllist[index]}
+							src={outfit}
 							className={`w-[100%] h-[100%] object-cover bg-white p-[2px] rounded-md cursor-pointer ${
 								selectedOutfit === index &&
 								'border-2 border-[#FF9F9F]'

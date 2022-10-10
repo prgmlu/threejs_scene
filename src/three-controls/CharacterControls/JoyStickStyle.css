@@ -22,27 +22,33 @@
 	touch-action: manipulation;
 	/* background-color: rgba(255, 0, 0, 0.2); */
 }
-#mobileInterface #joystickWrapper1::before {
-	content: '<';
-	color: rgba(0, 0, 0, 0.3);
-	font-weight: 400;
-	font-size: 2rem;
+#joystickWrapper1 > .arrows {
 	position: absolute;
-	left: 3px;
-	cursor: default;
+	width: 12px;
+	height: 12px;
+}
+#joystickWrapper1 > .left {
+	left: 8px;
+	top: 50%;
+	transform: translateY(50%) rotate(180deg);
+}
+#joystickWrapper1 > .top {
+	top: 8px;
+	transform: translateX(-100%) rotate(-90deg);
+	left: 50%;
+}
+#joystickWrapper1 > .down {
+	transform: rotate(90deg);
+	left: 50%;
+	bottom: 8px;
+}
+#joystickWrapper1 > .right {
+	right: 8px;
 	transform: translateY(-50%);
 	top: 50%;
 }
-#mobileInterface #joystickWrapper1::after {
-	content: '>';
-	color: rgba(0, 0, 0, 0.3);
-	font-weight: 400;
-	font-size: 2rem;
-	position: absolute;
-	right: 3px;
-	top: 50%;
-	cursor: default;
-	transform: translateY(-50%);
+.arrows > img {
+	width: 100%;
 }
 #mobileInterface #joystickWrapper2 {
 	pointer-events: auto;
@@ -58,20 +64,7 @@
 	touch-action: manipulation;
 	display: none;
 }
-.joystick-arrows > div {
-position: absolute;
-left: 60px;
-transform: translateX(-50%);
-color: rgba(0,0,0,0.3);
-font-size: 2rem;
-font-weight: 400;
-}
-.joystick-arrows > div:first-of-type {
-  bottom: 75px;
-}
-.joystick-arrows > div:last-of-type {
-bottom: 0px;
-}
+
 #mobileInterface #joystickWrapper2 #jumpButton {
 	position: absolute;
 	right: 0px;

@@ -2,13 +2,12 @@ import React, { Component, useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import nipplejs from 'nipplejs';
 import './JoyStickStyle.css';
-
+import arrow from '../../three-background/RealtimeBackground/static/movement_controller/arrow_right.png'
 
 
 export default class JoystickControls extends Component {
     constructor(props) {
         super(props);
-
         // this.directionValues[0] = 0;
         // this.directionValues[1] = 0;
         // this.directionValues[2] = 0;
@@ -136,13 +135,14 @@ export default class JoystickControls extends Component {
     render() {
         return (
             <div id="mobileInterface" className="noSelect">
-                <div class="joystick-arrows">
-                    <div>^</div>
-                    <div>v</div>
-                </div>
+               
                 <div id="joystickWrapper1"
                     ref={this.myRef}
                 >
+                    <div className="top arrows"> <img src={arrow}  /> </div>
+                    <div className="right arrows"> <img src={arrow}  /> </div>
+                    <div className="down arrows"> <img src={arrow}  /> </div>
+                    <div className="left arrows"> <img src={arrow}  /> </div>
                 </div>
                 <div id="joystickWrapper2">
                     <div id="jumpButton">

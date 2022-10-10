@@ -78,7 +78,6 @@ class AvatarCreator extends Component {
 		// add camera helper
 		// this.cameraHelper = new THREE.CameraHelper(this.camera);
 		// this.scene.add(this.cameraHelper);
-
 		// createDatGui(this.camera, Math.random());
 		// createDatGui(window.femaleModel, Math.random());
 		
@@ -87,10 +86,7 @@ class AvatarCreator extends Component {
 		this.canRotate = false;
 		this.currentAvatars = props?.currentAvatars;
 		this.saveAvatar = props?.saveAvatar;
-		this.closeModal = props?.closeModal;
-
-
-		
+		this.closeModal = props?.closeModal;		
 		window.addEventListener('resize', this.handleWindowResize.bind(this));
 	}
 
