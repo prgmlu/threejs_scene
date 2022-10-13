@@ -13,6 +13,7 @@ export default class TextObject extends InteractionObject {
 		containerStyling = null,
 		labelStyling = null,
 		arrowConfig = null,
+		imageURL = null,
 	}) {
 		super({
 			transform,
@@ -57,13 +58,15 @@ export default class TextObject extends InteractionObject {
 
 		this.containerDiv.append(this.textDiv);
 
+		this.setUserData(userData);
 		this.setContainerStyling(containerStyling);
+
 		this.setLabelStyling(labelStyling);
 		if (arrowConfig) {
 			this.setArrowConfig(arrowConfig);
 		}
 
-		this.setUserData(userData);
+		imageURL && this.setupImage(imageURL);
 
 		this.visualObject = new CSS2DObject(this.elementWrapper);
 		this.setVisibility(visible);
@@ -170,4 +173,12 @@ export default class TextObject extends InteractionObject {
 			arrowColor,
 		);
 	};
+
+	setupImage(imageUrl) {
+		this.imgDiv = document.createElement('img');
+		this.imgDiv.src = imageUrl;
+		this.textDiv.appendChild(this.imgDiv);
+		this.imgDiv.style.width = '100%';
+		this.imgDiv.style.height = 'auto';
+	}
 }
