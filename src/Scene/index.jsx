@@ -19,7 +19,7 @@ import TWEEN from '@tweenjs/tween.js';
 
 const getRenderer = (type) => {
 	const rendererKey = `${type}_renderer`;
-	const ret = window[rendererKey] || new THREE.WebGLRenderer();
+	const ret = window[rendererKey] || new THREE.WebGLRenderer({ antialias: true, alpha: type === 'zoom' ? true : false });
 	window[rendererKey] = ret;
 	ret.info.autoReset = true;
 	return ret;
@@ -76,6 +76,7 @@ const Scene = (props) => {
 		autoRotateConfig = {
 			enabled: false,
 		},
+		enableZoomControls = false,
 	} = props;
 
 	const [threeReady, setThreeReady] = useState(false);
@@ -181,7 +182,7 @@ const Scene = (props) => {
 			'%c Context restored',
 			'color:green;text-decoration:underline',
 		);
-		setupRenderer(rendererRef.current, canvas);
+		setupRenderer(rendererRef.current, canvas, type);
 		scene.add(cameraRef.current);
 		renderer?.forceContextRestore();
 	};
@@ -197,6 +198,8 @@ const Scene = (props) => {
 			rendererRef,
 			scene,
 			css2DRendererRef,
+			type,
+			enableZoomControls,
 		);
 		setThreeReady(true);
 
@@ -618,6 +621,7 @@ const Scene = (props) => {
 							controller={controlsRef.current}
 							onBackgroundReady={_onBackgroundReady}
 							onBackgroundLoaded={onBackgroundLoaded}
+							enableZoomControls={enableZoomControls}
 						/>
 					</>
 				)}

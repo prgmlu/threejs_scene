@@ -10,6 +10,8 @@ export const initThreeJSScene = (
 	rendererRef,
 	scene,
 	css2DRendererRef,
+	type,
+	enableZoomControls,
 ) => {
 	// console.log('%c >initThreeJSScene ', 'color:green', JSON.parse(JSON.stringify({
 	// canvasRef:canvasRef.current,
@@ -27,16 +29,22 @@ export const initThreeJSScene = (
 	// );
 	// setupCamera(aspectRatio, cameraRef.current);
 
-	setupRenderer(rendererRef.current, canvas);
+	setupRenderer(rendererRef.current, canvas, type, enableZoomControls);
 	setupCSS2DRenderer(css2DRendererRef.current, canvas);
 
 	scene.add(cameraRef.current);
 };
 
-export const setupRenderer = (renderer, canvasContainer) => {
+export const setupRenderer = (renderer, canvasContainer, type, enableZoomControls) => {
+	
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 	renderer.setClearColor('black');
+	if (type === 'zoom' && enableZoomControls) {
+		renderer.setClearColor( 0x000000, 0 );
+	}else{
+		renderer.setClearColor('black');
+	}
 	// Enable XR and other features per browser name
 	switch (browserName) {
 		case 'Oculus Browser':

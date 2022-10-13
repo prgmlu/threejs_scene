@@ -50,6 +50,7 @@ export default class ThreeFlatBackground extends ThreeSceneObject {
 			texture.magFilter = THREE.LinearFilter;
 			texture.wrapS = THREE.ClampToEdgeWrapping;
 			texture.wrapT = THREE.ClampToEdgeWrapping;
+			texture.needsUpdate = true;
 			this.setMaterial(texture);
 			onBackgroundReady(true);
 		});
