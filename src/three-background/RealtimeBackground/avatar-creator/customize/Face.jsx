@@ -170,7 +170,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 		<div className="w-full h-full flex flex-col overflow-y-auto">
 			<div className="w-full h-full flex flex-col px-2">
 				<div className="flex flex-col gap-2">
-					<div className="w-full flex flex-wrap items-center justify-around">
+					<div className="w-full flex flex-wrap items-center justify-center gap-[1rem]">
 						<img
 							className={`w-[30%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 0
@@ -182,7 +182,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 							alt="HAIR"
 							onClick={() => setSelectedTone(0)}
 						/>
-						<img
+						{/* <img
 							className={`w-[30%] h-[36px] object-contain rounded px-6 py-2 cursor-pointer shadow-md ${
 								selectedTone === 1
 									? 'bg-white border-[1.5px] border-black'
@@ -192,7 +192,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 							// src={eyelash}
 							alt="EYELASH"
 							onClick={() => setSelectedTone(1)}
-						/>
+						/> */}
 						<img
 							className={`w-[30%] h-[36px] object-contain rounded px-6 py-2 cursor-pointer shadow-md ${
 								selectedTone === 2

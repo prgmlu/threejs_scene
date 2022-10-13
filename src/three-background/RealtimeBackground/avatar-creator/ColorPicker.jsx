@@ -18,7 +18,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 		setShowColor(x);
 	};
 	return (
-		<div className="absolute top-[130%] right-[0%] w-fit h-fit z-40 bg-gray-100 rounded-md">
+		<div className="absolute top-[130%] right-[0%] w-fit h-fit z-40 bg-white rounded-md">
 			<img
 				onClick={() => handleClose(false)}
 				className="absolute z-50 w-6 h-6 -top-1.5 -right-1.5 cursor-pointer"
@@ -30,8 +30,8 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 					onClick={() => {
 						switchView(false);
 					}}
-					className={`text-sm font-medium color-[#330D0D] py-2 px-3 w-1/2 rounded-md transition-200 ${
-						!showColor ? 'border-r border-b border-t-0 border-l-0 border-solid border-[#330D0D] bg-[#330D0D] bg-opacity-20' : 'bg-white'
+					className={`text-sm border-solid border-r border-b border-t-0 border-l-0 font-medium color-[#330D0D] py-2 px-3 w-1/2 transition-200 rounded-br-[6px] ${
+						showColor ? '  border-[#330D0D] bg-[#f5f3f3] ' : 'bg-white border-white'
 					}`}
 				>
 					 Swatches 
@@ -40,8 +40,8 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 					onClick={() => {
 						switchView(true);
 					}}
-					className={`text-sm font-medium w-1/2 color-[#330D0D] rounded-md transition-200 ${
-						!showColor ? 'bg-white' : 'border-l border-b border-r-0 border-t-0 border-solid border-[#330D0D] bg-[#330D0D] bg-opacity-20'
+					className={`text-sm font-medium border-l border-b border-r-0 border-t-0 border-solid rounded-bl-[6px] w-1/2 color-[#330D0D] border-bl-[6px] transition-200 ${
+						showColor ? 'bg-white border-white' : 'border-[#330D0D] bg-[#f5f3f3] '
 					}`}
 				>
 					Custom
@@ -75,11 +75,9 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 											}}
 											className="w-[40px] h-[40px] rounded-full"
 											// onClick={handlePicker(color)} 
-
 										></button>
 									);
 								})}
-								
 							</div>
 						);
 					})}
