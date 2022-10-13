@@ -15,6 +15,7 @@ const Background = ({
 	controller,
 	onBackgroundReady = () => {},
 	onBackgroundLoaded = () => {},
+	enableZoomControls
 }) => {
 	const ambientLightRef = useRef();
 	const directionalLightRef = useRef();
@@ -112,13 +113,18 @@ const Background = ({
 			imageIntegrity: bgConf?.imageIntegrity,
 			useWebp: bgConf?.useWebp,
 			skipLargest: bgConf?.skipLargest,
+			enableZoomControls: enableZoomControls,
 		}),
 		[bgConf],
 	);
-
-	return (
-		<>
-			{bgConf.sceneType === 'flat_scene' && (
+	
+	const loadFlatBackground = () => {
+		if(type === 'zoom' && sceneConfig.enableZoomControls){
+			onBackgroundReady();
+			onBackgroundLoaded();
+			return <></>
+		}else{
+			return (
 				<FlatBackground
 					backgroundUrl={sceneConfig.backgroundUrl}
 					scene={scene}
@@ -129,6 +135,15 @@ const Background = ({
 					onBackgroundReady={onBackgroundReady}
 					onBackgroundLoaded={onBackgroundLoaded}
 				/>
+			);
+		}
+		
+	};
+
+	return (
+		<>
+			{bgConf.sceneType === 'flat_scene' && (
+				loadFlatBackground()
 			)}
 			{bgConf.sceneType === 'cubemap_scene' && (
 				<BackgroundCube
