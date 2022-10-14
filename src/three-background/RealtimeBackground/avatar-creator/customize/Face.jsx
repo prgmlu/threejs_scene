@@ -216,7 +216,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 								className={`w-[30%] bg-red relative  ${selectedTone === 0 ? 'py-1 h-fit px-1' : 'pt-[2rem] pb-[3rem] sm:pt-[3rem] sm:pb-[5rem] rounded-md px-[1rem] shadow-md h-full max-h-[6rem] mt-2 bg-[#B9B9B9]'} ${selectedStyle === index && selectedTone !== 0 ? 'border-2 border-[#FF9F9F]' : '' }`}
 							>
 								{selectedStyle === index && (
-									<span className={`absolute  w-full h-full object-contain ${selectedTone === 0 ? 'top-0 right-0' : 'top-[-5px] right-[5px]'}`}>
+									<span className={`absolute object-contain ${selectedTone === 0 ? 'top-0 right-0' : 'top-[-5px] right-[-5px]'}`}>
 										<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
 									</span>
 								)}

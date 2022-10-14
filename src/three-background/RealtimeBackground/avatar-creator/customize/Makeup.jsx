@@ -8,17 +8,21 @@ import check from '../../static/avatar/menus/check.png';
 // import makeup_one from '../../static/avatar/makeup/make1.png';
 import { setMeshTextureImage } from '../../../../three-controls/CharacterControls/OutfitTranslator.js';
 
-let updateOutfitString = (femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, index)=>{
-	if(visibleGenderRef.current == 'female'){
+let updateOutfitString = (
+	femaleLocalAvatarOutfitStringRef,
+	maleLocalAvatarOutfitStringRef,
+	visibleGenderRef,
+	index,
+) => {
+	if (visibleGenderRef.current == 'female') {
 		let parsed = JSON.parse(femaleLocalAvatarOutfitStringRef.current);
 		parsed.makeup = index;
 		//update ref
-		femaleLocalAvatarOutfitStringRef.current = JSON.stringify(parsed);	
-	}
-	else{
+		femaleLocalAvatarOutfitStringRef.current = JSON.stringify(parsed);
+	} else {
 		//handle male case if needed
 	}
-}
+};
 
 let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
 	let ind = index + 1;
@@ -33,12 +37,13 @@ let setMakeupFromTexture = (index, currentAvatar, selectedSkintone) => {
 };
 
 let addRoughness = (currentAvatar) => {
-	let roughnessTextureUrl = "https://cdn.obsess-vr.com/realtime3d/roughness/Sk_FemaleAvatar_R.png";
+	let roughnessTextureUrl =
+		'https://cdn.obsess-vr.com/realtime3d/roughness/Sk_FemaleAvatar_R.png';
 	let roughnessTexture = new THREE.TextureLoader().load(roughnessTextureUrl);
 	let mesh = currentAvatar.getObjectByName('FemaleAvatar_Head');
 	mesh.material.roughnessMap = roughnessTexture;
 	mesh.material.needsUpdate = true;
-}
+};
 
 const Makeup = ({
 	selectedSkintone,
@@ -47,14 +52,14 @@ const Makeup = ({
 	selectedMakeup,
 	femaleLocalAvatarOutfitStringRef,
 	maleLocalAvatarOutfitStringRef,
-	visibleGenderRef
+	visibleGenderRef,
 }) => {
 	const [selectedStyle, setSelectedStyle] = useState(0);
 	const [dataTones, setDataTones] = useState([]);
 	const [selectedTone, setSelectedTone] = useState(0);
 	const titles = ['Makeup', 'Eyebrows', 'Eyes'];
 	const demo_items_count = 30;
-
+	const nameList = ['Kate', 'Meg', 'Jourdan', 'Lily', 'Tosin'];
 	let makeupImages = [
 		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup1.png',
 		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup2.png',
@@ -89,17 +94,35 @@ const Makeup = ({
 		<div className="w-full h-full flex flex-col">
 			<div className="w-full h-full flex flex-col px-2">
 				<div className="font-sourceSansProSemibold text-lg">Makeup</div>
-				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-center pl-2 pr-1 justify-center pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-center pl-2 overflow-x-hidden border-b-[4px] pr-1 justify-center pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
 					{dataTones.map((item, index) => (
 						<div key={index} className=" w-[30%] h-fit relative">
+							<div
+								className="absolute bg-[#330D0D] text-[#FF9F9F] text-center bottom-[2px]"
+								style={{
+									left: selectedMakeup === index ?  '6px' : '4px',
+									right: selectedMakeup === index ? '6px' : '4px',
+									textAlign: 'center',
+									padding: '4px',
+									fontSize: '12px',
+									borderRadius: '0px 0px 4px 4px'
+								}}
+							>
+								{nameList[index]}
+							</div>
 							{selectedMakeup === index && (
 								<span className="absolute top-0 right-0 w-3 h-3 object-contain">
-									<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
+									<img
+										src={
+											'https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg'
+										}
+										alt="o"
+									/>
 								</span>
 							)}
 							<img
 								src={item}
-								className={`w-full h-fit object-cover rounded p-1 cursor-pointer shadow-md bg-white ${
+								className={`w-full h-fit object-cover rounded pl-1 pr-1 pt-1 pb-[1rem] cursor-pointer shadow-md bg-white ${
 									selectedMakeup === index &&
 									'border-2 border-[#FF9F9F]'
 								}`}
@@ -107,7 +130,12 @@ const Makeup = ({
 								onClick={() => {
 									setSelectedStyle(index);
 									setSelectedMakeup(index);
-									updateOutfitString(femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, index)
+									updateOutfitString(
+										femaleLocalAvatarOutfitStringRef,
+										maleLocalAvatarOutfitStringRef,
+										visibleGenderRef,
+										index,
+									);
 									setMakeupFromTexture(
 										index,
 										currentAvatar,

@@ -339,7 +339,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
             setMAvatar(maleModel);
             
             // setAvatar(maleModel);
-            // removeBottomBar();
+            removeBottomBar();
         }
 
         loadStoreAndModel();

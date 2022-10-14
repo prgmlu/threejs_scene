@@ -42,7 +42,6 @@ const BodyShape = ({
 		'#F8D8C3',
 		'#F4CEAA',
 		'#D3A271',
-		'#D3A271',
 		'#C3774B',
 		'#794E3A',
 		'#E0C7B3',
@@ -131,7 +130,7 @@ const BodyShape = ({
 				
 			</div>
 			<div className="font-sourceSansProSemibold text-lg py-3">
-				Skin Tone
+				Skin Color
 			</div>
 			<div className=" w-full h-full flex flex-wrap wrap gap-[1rem] sm:gap-2 md:gap-3 lg:gap-4 overflow-y-auto justify-center md:px-2">
 				{/* {tones.map((group, index) => (
