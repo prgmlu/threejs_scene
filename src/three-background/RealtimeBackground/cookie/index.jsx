@@ -64,8 +64,7 @@ const Cookie = ({ handleClose }) => {
 				<button
 					onClick={() => setIsCookieSettings(true)}
 					className="w-1/2 h-fit px-2 py-1 bg-[#330D0D] text-base text-white font-sourceSansProRegular rounded cursor-pointer"
-				>
-					{isCookieSettings
+				>					{isCookieSettings
 						? 'Confirm my choices'
 						: 'Allow all cookies'}
 				</button>
