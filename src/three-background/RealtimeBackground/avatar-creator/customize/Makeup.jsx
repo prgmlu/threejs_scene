@@ -96,22 +96,21 @@ const Makeup = ({
 				<div className="font-sourceSansProSemibold text-lg">Makeup</div>
 				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-center pl-2 overflow-x-hidden border-b-[4px] pr-1 justify-center pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
 					{dataTones.map((item, index) => (
-						<div key={index} className=" w-[30%] h-fit relative">
+						<div key={index} className=" w-[31%] px-1 md:w-[30%] mb-3 h-fit relative">
 							<div
-								className="absolute bg-[#330D0D] text-[#FF9F9F] text-center bottom-[2px]"
+								className="absolute p-[2px] lg:p-[4px] text-[7px] lg:text-[10px] xl:text-[12px] bg-[#330D0D] text-[#FF9F9F] text-center bottom-[2px]"
 								style={{
 									left: selectedMakeup === index ?  '6px' : '4px',
 									right: selectedMakeup === index ? '6px' : '4px',
 									textAlign: 'center',
-									padding: '4px',
-									fontSize: '12px',
-									borderRadius: '0px 0px 4px 4px'
+									borderRadius: '0px 0px 4px 4px',
+									bottom: selectedMakeup === index ? '2px' : '0px',
 								}}
 							>
 								{nameList[index]}
 							</div>
 							{selectedMakeup === index && (
-								<span className="absolute top-0 right-0 w-3 h-3 object-contain">
+								<span className="absolute top-[-1px] right-[-2px] md:w-[1.5rem] md:h-[1.5rem] h-[1rem] w-[1rem] object-contain">
 									<img
 										src={
 											'https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg'
@@ -122,7 +121,7 @@ const Makeup = ({
 							)}
 							<img
 								src={item}
-								className={`w-full h-fit object-cover rounded pl-1 pr-1 pt-1 pb-[1rem] cursor-pointer shadow-md bg-white ${
+								className={`w-full h-full object-cover rounded cursor-pointer shadow-md bg-white ${
 									selectedMakeup === index &&
 									'border-2 border-[#FF9F9F]'
 								}`}
