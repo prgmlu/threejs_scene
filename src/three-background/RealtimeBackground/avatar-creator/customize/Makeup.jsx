@@ -59,7 +59,7 @@ const Makeup = ({
 	const [selectedTone, setSelectedTone] = useState(0);
 	const titles = ['Makeup', 'Eyebrows', 'Eyes'];
 	const demo_items_count = 30;
-	const nameList = ['Kate', 'Meg', 'Jourdan', 'Lily', 'Tosin'];
+	const nameList = ['Kate', 'Meg', 'Lily', 'Tosin', 'Jourdan'];
 	let makeupImages = [
 		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup1.png',
 		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup2.png',
@@ -94,7 +94,7 @@ const Makeup = ({
 		<div className="w-full h-full flex flex-col">
 			<div className="w-full h-full flex flex-col px-2">
 				<div className="font-sourceSansProSemibold text-lg">Makeup</div>
-				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-center pl-2 overflow-x-hidden border-b-[4px] pr-1 justify-center pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-center pl-2 overflow-x-hidden pr-1 justify-center pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
 					{dataTones.map((item, index) => (
 						<div key={index} className=" w-[31%] px-1 md:w-[30%] mb-3 h-fit relative">
 							<div

@@ -42,7 +42,7 @@ const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar, femaleL
 				{maleOutfits.display.map((outfit, index) => (
 					<div
 						key={index}
-						className={`w-[30%] h-fit bg-[#B9B9B9] relative rounded-md px-3 shadow-md mb-3 ${
+						className={`w-[30%] h-fit bg-[#B9B9B9] py-[0.5rem] relative rounded-md px-3 shadow-md mb-3 ${
 							selectedOutfit === index &&
 							'border-2 border-[#FF9F9F]'
 						}`}

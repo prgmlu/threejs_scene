@@ -99,3 +99,9 @@
 	user-select: none;
 	-webkit-tap-highlight-color: transparent;
 }
+.nipple {
+	opacity: 1 !important;
+}
+.nipple .back {
+	opacity: 0.2 !important;
+}
