@@ -172,7 +172,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 				<div className="flex flex-col gap-2">
 					<div className="w-full flex flex-wrap items-center justify-center gap-[1rem]">
 						<img
-							className={`w-[30%] h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
+							className={`sm:w-[30%] w-[45%]  h-[36px] object-contain rounded px-4 py-2 cursor-pointer shadow-md ${
 								selectedTone === 0
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
@@ -194,7 +194,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 							onClick={() => setSelectedTone(1)}
 						/> */}
 						<img
-							className={`w-[30%] h-[36px] object-contain rounded px-6 py-2 cursor-pointer shadow-md ${
+							className={`sm:w-[30%] w-[45%] h-[36px] object-contain rounded px-6 py-2 cursor-pointer shadow-md ${
 								selectedTone === 2
 									? 'bg-white border-[1.5px] border-black'
 									: 'bg-white/50'
@@ -213,7 +213,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 						{dataTones.map((item, index) => (
 							<div
 								key={index}
-								className={`w-[30%] bg-red relative  ${selectedTone === 0 ? 'py-1 h-fit px-1' : 'pt-[2rem] pb-[3rem] sm:pt-[3rem] sm:pb-[5rem] rounded-md px-[1rem] shadow-md h-full max-h-[6rem] mt-2 bg-[#B9B9B9]'} ${selectedStyle === index && selectedTone !== 0 ? 'border-2 border-[#FF9F9F]' : '' }`}
+								className={`w-[30%] bg-red relative  ${selectedTone === 0 ? 'py-1 h-fit px-1' : 'sm:pt-[2rem] pt-[1rem] pb-[3rem] sm:pt-[3rem] sm:pb-[5rem] rounded-md px-[1rem] shadow-md h-full sm:max-h-[6rem] max-h-[0rem] mt-2 bg-[#B9B9B9]'} border-2 ${selectedStyle === index && selectedTone !== 0 ? ' border-[#FF9F9F]' : 'border-[transparent]' }`}
 							>
 								{selectedStyle === index && (
 									<span className={`absolute object-contain ${selectedTone === 0 ? 'top-0 right-0' : 'top-[-5px] right-[-5px]'}`}>

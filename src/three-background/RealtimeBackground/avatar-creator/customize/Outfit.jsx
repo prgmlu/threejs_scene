@@ -22,7 +22,6 @@ let switchOutfit = (e, index, currentAvatar, femaleLocalAvatarOutfitStringRef, m
 	else{
 		updateOutfitString(outfitNames[index], femaleLocalAvatarOutfitStringRef);
 	}
-
 }
 
 let updateOutfitString = (outfitName, ref) => {
@@ -31,10 +30,7 @@ let updateOutfitString = (outfitName, ref) => {
 	ref.current = JSON.stringify(u);
 }
 
-
-
 const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef }) => {
-
 	return (
 		<div className="w-full h-full flex flex-col gap-1 scrollbar">
 			<div className="font-sourceSansProSemibold text-lg">Outfit</div>
@@ -42,7 +38,7 @@ const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar, femaleL
 				{maleOutfits.display.map((outfit, index) => (
 					<div
 						key={index}
-						className={`w-[30%] h-fit bg-[#B9B9B9] py-[0.5rem] relative rounded-md px-3 shadow-md mb-3 ${
+						className={`w-[30%] sm:h-fit h-[6rem]  bg-[#B9B9B9] py-[0rem] sm"py-[0.5rem] relative rounded-md px-3 shadow-md mb-3 ${
 							selectedOutfit === index &&
 							'border-2 border-[#FF9F9F]'
 						}`}

@@ -6,7 +6,7 @@ import makeup from '../../static/avatar/menus/makeup.png';
 
 const TabControls = ({ activeTab, onTabClick }) => {
 	return (
-		<div className="w-full sm:w-[95%] md:w-[95%] items-center h-[8%] sm:h-[12%] mb-0 md:mb-[2px] sm:mb-[2px]  flex items-start justify-center gap-3 lg:gap-6">
+		<div className="w-full sm:w-[95%] md:w-[95%] items-center h-[8%] sm:h-[12%] mb-[5px] md:mb-[2px] sm:mb-[2px]  flex items-start justify-center gap-3 lg:gap-6">
 			<div
 				onClick={() => onTabClick(1)}
 				className={
@@ -37,11 +37,6 @@ const TabControls = ({ activeTab, onTabClick }) => {
 					alt="Skin tone"
 					id="2"
 					className={'w-[35%] md:w-[30%] sm:w-[30%] max-h-full'}
-					// className={`w-[30%] ${
-					// 	activeTab === 2
-					// 		? 'h-full pb-1.5 sm:pb-3.5 px-1.5 sm:px-2.5'
-					// 		: 'h-[80%] pb-1 sm:pb-2 px-1 sm:px-2'
-					// } pt-2 object-contain rounded-t-md flex justify-center cursor-pointer bg-white`}
 				/>
 				<div
 					className={`absolute bg-white bottom-[-44%] left-0 w-full h-[60%] ${
