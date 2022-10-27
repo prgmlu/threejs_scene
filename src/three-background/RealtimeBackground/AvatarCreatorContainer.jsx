@@ -102,7 +102,7 @@ class AvatarCreatorContainer extends Component {
 
 	render() {
 		return (
-			<div className="p-2">
+			<div>
 				<AvatarButton showModal={this.showAvatarCreator} />
 				{this.state.isAvatarCreatorActive && (
 					<AvatarCreator
