@@ -59,7 +59,7 @@ const Makeup = ({
 	const [selectedTone, setSelectedTone] = useState(0);
 	const titles = ['Makeup', 'Eyebrows', 'Eyes'];
 	const demo_items_count = 30;
-	const nameList = ['Kate', 'Meg', 'Lily', 'Tosin', 'Jourdan'];
+	//const nameList = ['Kate', 'Meg', 'Lily', 'Tosin', 'Jourdan'];
 	let makeupImages = [
 		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup1.png',
 		'https://cdn.obsess-vr.com/realtime3d/placeholders/makeup2.png',
@@ -97,7 +97,7 @@ const Makeup = ({
 				<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-center pl-2 overflow-x-hidden pr-1 justify-center pb-2 sm:my-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
 					{dataTones.map((item, index) => (
 						<div key={index} className=" w-[31%] px-1 md:w-[30%] mb-3 h-fit relative">
-							<div
+							{/* <div
 								className="absolute p-[2px] lg:p-[4px] text-[7px] lg:text-[10px] xl:text-[12px] bg-[#330D0D] text-[#FF9F9F] text-center bottom-[2px]"
 								style={{
 									left: selectedMakeup === index ?  '6px' : '4px',
@@ -108,7 +108,7 @@ const Makeup = ({
 								}}
 							>
 								{nameList[index]}
-							</div>
+							</div> */}
 							{selectedMakeup === index && (
 								<span className="absolute top-[-1px] right-[-2px] md:w-[1.5rem] md:h-[1.5rem] h-[1rem] w-[1rem] object-contain">
 									<img

@@ -73,7 +73,7 @@ const ColorTone = ({ title, currentAvatar, selectedTone }) => {
 	return (
 		<div className="flex justify-between items-center py-2.5 sm:py-3">
 			<div className="font-sourceSansProSemibold text-lg">{title}</div>
-			<div className="flex relative">
+			<div className="flex">
 				<img
 					className="rounded-l-md px-2.5 py-1 bg-white object-contain"
 					src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/palette.svg"}

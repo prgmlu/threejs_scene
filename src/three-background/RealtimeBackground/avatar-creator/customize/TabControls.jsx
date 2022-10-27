@@ -37,6 +37,7 @@ const TabControls = ({ activeTab, onTabClick }) => {
 					alt="Skin tone"
 					id="2"
 					className={'w-[35%] md:w-[30%] sm:w-[30%] max-h-full'}
+
 				/>
 				<div
 					className={`absolute bg-white bottom-[-44%] left-0 w-full h-[60%] ${

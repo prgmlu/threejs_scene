@@ -18,7 +18,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 		setShowColor(x);
 	};
 	return (
-		<div className="absolute top-[130%] right-[0%] w-fit h-fit z-40 bg-white rounded-md">
+		<div className="absolute top-[-20%] md:top-[10%] w-fit max-w-[80%] shadow-lg left-[50%] md:left-[80%] translate-x-[-50%] md:translate-x-[0px] w-fit h-fit z-40 bg-white rounded-md">
 			<img
 				onClick={() => handleClose(false)}
 				className="absolute z-50 w-6 h-6 -top-1.5 -right-1.5 cursor-pointer"
@@ -47,19 +47,19 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 					Custom
 				</button>
 			</div>
-			<div className="px-3 pb-2">
+			<div className="px-3 pb-2 min-h-[235px] flex justify-between align-center align-items-center ">
 			{showColor && (
-				<HexColorPicker
+				<HexColorPicker style={{height: "232px", width: "250px"}}
 					color={selectedColor}
 					onChange={(color) => handlePicker(color)}
 				/>
 			)}
 			{!showColor && tabName != "Eyes" && (
-				<div className="flex justify-between flex-column column w-[200px] h-[200px]">
+				<div className="flex justify-between flex-column mx-auto column w-fit h-fit">
 					{colorArr.map((group, i) => {
 						return (
 							<div
-								className="flex flex-nowrap justify-center gap-[10px]"
+								className="flex mb-2 flex-nowrap justify-center gap-[10px]"
 								key={i}
 							>
 								{group.map((color, index) => {
@@ -73,7 +73,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 														? '2px solid #FF9F9F'
 														: 'none',
 											}}
-											className="w-[40px] h-[40px] rounded-full"
+											className="w-[50px] h-[50px] rounded-full"
 											// onClick={handlePicker(color)} 
 										></button>
 									);
@@ -84,11 +84,11 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 				</div>
 			)}
 			{!showColor && tabName == "Eyes" && (
-				<div className="flex py-2 justify-center gap-[1rem] flex-column gap-3 column w-[200px] h-[200px]">
+				<div className="flex py-2 justify-center mx-auto gap-[1rem] flex-column gap-3 column w-fit h-fit">
 					{colorArr2.map((group, i) => {
 						return (
 							<div
-								className="flex flex-nowrap justify-center gap-[10px]"
+								className="flex flex-nowrap mb-2 justify-center gap-[10px]"
 								key={i}
 							>
 								{group.map((color, index) => {
@@ -102,7 +102,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 														? '2px solid #FF9F9F'
 														: 'none',
 											}}
-											className="w-[40px] h-[40px] rounded-full"
+											className="w-[50px] h-[50px] rounded-full"
 										></button>
 									);
 								})}

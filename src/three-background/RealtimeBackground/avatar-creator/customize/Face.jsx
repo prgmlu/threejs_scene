@@ -167,7 +167,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 	};
 
 	return (
-		<div className="w-full h-full flex flex-col overflow-y-auto">
+		<div className="w-full h-full flex flex-col overflow-y-visible">
 			<div className="w-full h-full flex flex-col px-2">
 				<div className="flex flex-col gap-2">
 					<div className="w-full flex flex-wrap items-center justify-center gap-[1rem]">
@@ -209,7 +209,7 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 						currentAvatar={currentAvatar}
 						selectedTone={selectedTone}
 					/>
-				<div className={`w-full h-fit max-h-[80%] justify-center flex flex-wrap pr-2.5 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 ${selectedTone === 0 ? '' : 'gap-1'}`}>
+				<div className={`w-full h-fit justify-center max-[h-85%] flex flex-wrap pr-2.5 pb-2 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 ${selectedTone === 0 ? '' : 'gap-1'}`}>
 						{dataTones.map((item, index) => (
 							<div
 								key={index}

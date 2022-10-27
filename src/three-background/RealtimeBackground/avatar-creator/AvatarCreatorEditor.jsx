@@ -179,7 +179,7 @@ class AvatarCreatorEditor extends Component {
 					activeTab={activeTab}
 					onTabClick={this.onTabClick}
 				/>
-				<div className="w-full md:w-[95%] mx-auto sm:w-[95%] overflow-y-auto h-[70%] pt-3 sm:pt-none md:h-[90%] sm:h-[90%] mb-3 sm:mb-0 white-shadow-container bg-white rounded-lg gap-x-2 md:pt-3 lg:pt-3 xl:pt-3 sm:pt-1 px-3 relative">
+				<div className="w-full md:w-[95%] mx-auto sm:w-[95%] overflow-visible h-[70%] pt-3 sm:pt-none md:h-[90%] sm:h-[90%] mb-3 sm:mb-0 white-shadow-container bg-white rounded-lg gap-x-2 md:pt-3 lg:pt-3 xl:pt-3 sm:pt-1 px-3 relative">
 					{activeTab == 1 && (
 						<BodyShape
 

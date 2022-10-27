@@ -55,10 +55,7 @@ const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar, femaleL
 							src={outfit}
 							className={`w-[100%] bg-[#B9B9B9] h-[100%]  object-cover p-[2px] rounded-md cursor-pointer`}
 							onClick={(e) => {setOutfit(e, index); switchOutfit(e, index, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef.current) }}
-						/>
-
-						
-
+						/> 
 					</div>
 				))}
 			</div>
