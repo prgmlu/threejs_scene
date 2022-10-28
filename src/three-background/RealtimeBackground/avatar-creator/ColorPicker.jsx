@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import close from '../static/avatar/menus/close.png';
+import "./CustomStyles/ColorPicker.css"
 
 const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 	const [showColor, setShowColor] = useState(false);
@@ -18,7 +19,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 		setShowColor(x);
 	};
 	return (
-		<div className="absolute top-[-20%] md:top-[10%] w-fit max-w-[80%] shadow-lg left-[50%] md:left-[80%] translate-x-[-50%] md:translate-x-[0px] w-fit h-fit z-40 bg-white rounded-md">
+		<div className="absolute top-[-20%] md:top-[10%] w-fit max-w-[80%] shadow-lg left-[50%] md:left-[55%] translate-x-[-50%] md:translate-x-[0px] h-[310px] w-[285px] w-fit h-fit z-40 bg-white rounded-md">
 			<img
 				onClick={() => handleClose(false)}
 				className="absolute z-50 w-6 h-6 -top-1.5 -right-1.5 cursor-pointer"
@@ -49,7 +50,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose }) => {
 			</div>
 			<div className="px-3 pb-2 min-h-[235px] flex justify-between align-center align-items-center ">
 			{showColor && (
-				<HexColorPicker style={{height: "232px", width: "250px"}}
+				<HexColorPicker style={{height: "232px", width: "250px", paddingLeft: "1.5rem"}}
 					color={selectedColor}
 					onChange={(color) => handlePicker(color)}
 				/>

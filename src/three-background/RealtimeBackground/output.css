@@ -750,7 +750,7 @@ video {
   margin-top: 0.75rem;
 }
 
-.mb-2 {
+.mb-\[0\.5rem\] {
   margin-bottom: 0.5rem;
 }
 
@@ -766,20 +766,16 @@ video {
   margin-bottom: 1rem;
 }
 
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
 .mt-2 {
   margin-top: 0.5rem;
 }
 
 .mb-\[5px\] {
   margin-bottom: 5px;
-}
-
-.mb-0 {
-  margin-bottom: 0px;
-}
-
-.mb-\[0\.5rem\] {
-  margin-bottom: 0.5rem;
 }
 
 .block {
@@ -886,6 +882,10 @@ video {
 
 .h-\[80\%\] {
   height: 80%;
+}
+
+.h-\[310px\] {
+  height: 310px;
 }
 
 .max-h-\[35\%\] {
@@ -1020,6 +1020,14 @@ video {
 
 .w-\[13\%\] {
   width: 13%;
+}
+
+.w-\[20\%\] {
+  width: 20%;
+}
+
+.w-\[285px\] {
+  width: 285px;
 }
 
 .min-w-\[3rem\] {
@@ -1354,10 +1362,6 @@ video {
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
-}
-
-.p-2 {
-  padding: 0.5rem;
 }
 
 .p-1 {
@@ -1977,6 +1981,10 @@ video {
     left: 80%;
   }
 
+  .md\:left-\[55\%\] {
+    left: 55%;
+  }
+
   .md\:mt-auto {
     margin-top: auto;
   }
@@ -2139,16 +2147,8 @@ video {
 }
 
 @media (min-width: 1280px) {
-  .xl\:h-\[7rem\] {
-    height: 7rem;
-  }
-
   .xl\:h-\[5rem\] {
     height: 5rem;
-  }
-
-  .xl\:w-\[7rem\] {
-    width: 7rem;
   }
 
   .xl\:w-\[5rem\] {
@@ -2161,5 +2161,23 @@ video {
 
   .xl\:text-\[12px\] {
     font-size: 12px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .\32xl\:h-\[5rem\] {
+    height: 5rem;
+  }
+
+  .\32xl\:h-\[5\.5rem\] {
+    height: 5.5rem;
+  }
+
+  .\32xl\:w-\[5rem\] {
+    width: 5rem;
+  }
+
+  .\32xl\:w-\[5\.5rem\] {
+    width: 5.5rem;
   }
 }

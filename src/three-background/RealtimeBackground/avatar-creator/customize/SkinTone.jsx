@@ -47,6 +47,10 @@ const SkinTone = ({
 	visibleGenderRef,
 }) => {
 	return (
+		//  color picker verticle ni bna skty custom css se wi.d.t.h size sath change hogi to position change horhi kiunky transform rotate krwana parhy ga
+		
+		<div className="w-[20%] flex justify-center align-center mb-2">
+
 		<button
 			onClick={() => {
 				setSelectedIndex(x, y);
@@ -54,7 +58,7 @@ const SkinTone = ({
 				updateOutfitString(femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef, counter);
 				setSelectedSkintone(counter);
 			}}
-			className={`w-[50px] sm:w-12 lg:w-[4.5rem] xl:w-[5rem] xl:h-[5rem] lg:h-[4.5rem] h-[50px] sm:h-12 rounded-full relative`}
+			className={`w-[50px] sm:w-12 lg:w-[4.5rem] 2xl:w-[5.5rem] 2xl:h-[5.5rem] lg:h-[4.5rem] h-[50px] sm:h-12 rounded-full relative`}
 			style={{ 
 				backgroundColor: color,
 				border: `${
@@ -71,6 +75,8 @@ const SkinTone = ({
 				</span>
 			)}
 		</button>
+		</div>
+
 	);
 };
 
