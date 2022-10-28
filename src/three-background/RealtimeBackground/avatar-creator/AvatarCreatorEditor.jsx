@@ -174,12 +174,12 @@ class AvatarCreatorEditor extends Component {
 	render() {
 		const { selectedOutfit, activeTab, windowWidth } = this.state;
 		return (
-			<div className="w-full md:w-[80%] lg:w-[45%] min-h-[80%] sm:min-h-[80%] md:min-h-[64%] h-[60%] md:h-full flex flex-col relative justify-start items-center sm:items-start relative">
+			<div className="w-full md:w-[80%] lg:w-[45%] min-h-[80%] sm:min-h-[80%] md:min-h-[64%] self-start md:h-full flex flex-col relative justify-start items-center sm:items-start relative">
 				<TabControls
 					activeTab={activeTab}
 					onTabClick={this.onTabClick}
 				/>
-				<div className="w-full md:w-[95%] mx-auto sm:w-[95%] overflow-visible h-[70%] pt-3 sm:pt-none md:h-[90%] sm:h-[90%] mb-3 sm:mb-0 white-shadow-container bg-white rounded-lg gap-x-2 md:pt-3 lg:pt-3 xl:pt-3 sm:pt-1 px-3 relative">
+				<div className="w-full md:w-[95%] mx-auto sm:w-[95%] overflow-visible h-[70%] pt-3 sm:pt-none md:h-[84%] sm:h-[90%] mb-3 sm:mb-0 white-shadow-container bg-white rounded-lg gap-x-2 md:pt-3 lg:pt-3 xl:pt-3 sm:pt-1 px-3 relative">
 					{activeTab == 1 && (
 						<BodyShape
 
@@ -245,7 +245,7 @@ class AvatarCreatorEditor extends Component {
 					)}
 				</div>
 				{windowWidth >= 1440 && (
-					<div className="w-full flex justify-end items-center mt-4">
+					<div className="w-full flex justify-end items-center">
 						<button
 							style={{ border: '1px solid #330D0D' }}
 							className="w-fit h-fit self-center uppsercase duration-250 text-[#fff] bg-[#330D0D] hover:bg-white hover:text-[#330D0D] px-[2.5rem] py-[0.5rem] text-sm rounded-md cursor-pointer"

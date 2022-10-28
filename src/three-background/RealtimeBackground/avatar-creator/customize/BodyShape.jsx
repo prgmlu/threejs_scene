@@ -25,14 +25,14 @@ const BodyShape = ({
 
 	let bodyMesh = currentAvatar.getObjectByName('FemaleAvatar_Head');
 
-	const tones = [
-		['#F2D3CE', '#E0B0A6', '#C68D82', '#A36B60', '#7B4B41', '#502E2C'],
-		['#EAC2B9', '#CE9E8F', '#B27F6A', '#8E5D4E', '#643E31'],
-		['#EFD5C8', '#DCB3A1', '#BF9077', '#9D6F55', '#754F38', '#4B3124'],
-		['#E4C8B2', '#CBA487', '#AA8163', '#876144', '#5D412B'],
-		['#EDD8C7', '#D5B69A', '#B99573', '#93724F', '#715236', '#483320'],
-		['#E0C8B0', '#C5A57F', '#A5855E', '#81633D', '#594426A86B48']
-	];
+	// const tones = [
+	// 	['#F2D3CE', '#E0B0A6', '#C68D82', '#A36B60', '#7B4B41', '#502E2C'],
+	// 	['#EAC2B9', '#CE9E8F', '#B27F6A', '#8E5D4E', '#643E31'],
+	// 	['#EFD5C8', '#DCB3A1', '#BF9077', '#9D6F55', '#754F38', '#4B3124'],
+	// 	['#E4C8B2', '#CBA487', '#AA8163', '#876144', '#5D412B'],
+	// 	['#EDD8C7', '#D5B69A', '#B99573', '#93724F', '#715236', '#483320'],
+	// 	['#E0C8B0', '#C5A57F', '#A5855E', '#81633D', '#594426A86B48']
+	// ];
 	const newTones = [
 		'#FBEBD7',
 		'#F7D5AF',
@@ -54,7 +54,7 @@ const BodyShape = ({
 	return (
 		<div className="w-full h-full flex flex-col justify-between overflow-y-auto">
 			<div className="h-fit font-sourceSansProSemibold text-lg pb-2">
-				Body Shape
+				Body Type
 			</div>
 			<div className="min-h-[35%] max-h-[35%] flex flex-wrap gap-x-6 gap-y-1">
 				<div
@@ -130,7 +130,7 @@ const BodyShape = ({
 				
 			</div>
 			<div className="font-sourceSansProSemibold text-lg py-3">
-				Skin Color
+				Skin Tone
 			</div>
 			<div className=" w-full h-full flex flex-wrap wrap pb-[1rem] overflow-y-auto justify-center md:px-2">
 				{/* {tones.map((group, index) => (
