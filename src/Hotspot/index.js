@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import AnimationMarker from './_constructors/AnimationMarker'
+import AnimationMarker from './_constructors/AnimationMarker';
 import PropTypes from 'prop-types';
 import {
 	createAndRenderHotspotMarkerOnEvent,
@@ -10,11 +10,16 @@ import {
 } from '../utils';
 import Object3dMarker from './_constructors/Object3dMarker';
 
-const createAndRenderAnimatedHotspot = (props, sceneRef, point, isNewRecord) => {
+const createAndRenderAnimatedHotspot = (
+	props,
+	sceneRef,
+	point,
+	isNewRecord,
+) => {
 	//1. Create Animation Marker
 	const marker = new AnimationMarker({
 		...props,
-		clickPoint: isNewRecord && point
+		clickPoint: isNewRecord && point,
 	});
 
 	//2. Render Marker
@@ -22,7 +27,6 @@ const createAndRenderAnimatedHotspot = (props, sceneRef, point, isNewRecord) => 
 
 	return marker;
 };
-
 
 //TODO: refactor setMaxRenderOrder
 //TODO: object with hotspot_type =='image_marker' has prop sceneObject == null???
@@ -42,6 +46,7 @@ const Hotspot = (props) => {
 		activeHotspotIndex,
 		hotspotMarkerIndex,
 		camera,
+		canvas,
 	} = props;
 
 	let hotspot_type = userData?.props?.hotspot_type;
@@ -64,7 +69,7 @@ const Hotspot = (props) => {
 				sceneRef,
 				point,
 				isNewRecord,
-			)
+			);
 		}
 
 		if (type === 'HotspotMarker' && hotspot_type !== 'animation') {
@@ -77,7 +82,12 @@ const Hotspot = (props) => {
 					sceneRef.current,
 				);
 			} else {
-				markerRef.current = renderHotspotRecord(props, sceneRef);
+				markerRef.current = renderHotspotRecord(
+					props,
+					sceneRef,
+					camera,
+					canvas,
+				);
 			}
 		}
 
@@ -97,7 +107,7 @@ const Hotspot = (props) => {
 				);
 			}
 		} else if (type === 'Label') {
-			markerRef.current = createAndRenderLabel(sceneRef, props);
+			markerRef.current = createAndRenderLabel(sceneRef.current, props);
 		} else if (type === '3d_model') {
 			const marker = new Object3dMarker(props);
 			marker.addToScene(sceneRef.current);

@@ -35,14 +35,18 @@ export const initThreeJSScene = (
 	scene.add(cameraRef.current);
 };
 
-export const setupRenderer = (renderer, canvasContainer, type, enableZoomControls) => {
-	
+export const setupRenderer = (
+	renderer,
+	canvasContainer,
+	type,
+	enableZoomControls,
+) => {
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 	renderer.setClearColor('black');
 	if (type === 'zoom' && enableZoomControls) {
-		renderer.setClearColor( 0x000000, 0 );
-	}else{
+		renderer.setClearColor(0x000000, 0);
+	} else {
 		renderer.setClearColor('black');
 	}
 	// Enable XR and other features per browser name

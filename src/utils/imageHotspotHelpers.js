@@ -38,9 +38,9 @@ export const createAndRenderImageHotspot = (props, sceneRef, point) => {
 	return marker;
 };
 
-export const createAndRenderLabel = (sceneRef, props) => {
+export const createAndRenderLabel = (scene, props) => {
 	const marker = new TextObject(props);
-	marker.addToScene(sceneRef.current);
+	marker.addToScene(scene);
 	return marker;
 };
 // export const addImageHotspotOnDrop = async (e, position, storeId, currentSceneId, cameraRef, folderId, products, maxRenderOrder, scene, setMaxRenderOrder, reduxDispatch) => {
