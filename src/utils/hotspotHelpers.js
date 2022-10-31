@@ -9,6 +9,8 @@ const createHotspotMarker = ({
 	onClick,
 	animation,
 	transform,
+	camera,
+	canvas,
 }) => {
 	return new HotspotMarker({
 		iconConfig,
@@ -19,6 +21,8 @@ const createHotspotMarker = ({
 		onClick,
 		animation,
 		transform,
+		camera,
+		canvas,
 	});
 };
 
@@ -46,9 +50,10 @@ export const createAndRenderHotspotMarkerOnEvent = (e, data, point, scene) => {
  * Renders marker from stored hotspot record {}
  * @param object - scene object
  * @param sceneRef
+ * @param camera
  * @returns {HotspotMarker}
  */
-export const renderHotspotRecord = (object = {}, sceneRef) => {
+export const renderHotspotRecord = (object = {}, sceneRef, camera, canvas) => {
 	//1. Create
 	const marker = createHotspotMarker({
 		userData: object.userData,
@@ -59,6 +64,8 @@ export const renderHotspotRecord = (object = {}, sceneRef) => {
 		animation: object.animation,
 		imageHoverURL: object.imageHoverURL,
 		transform: object.transform,
+		camera,
+		canvas,
 	});
 
 	//2.Add

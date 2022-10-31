@@ -19,7 +19,12 @@ import TWEEN from '@tweenjs/tween.js';
 
 const getRenderer = (type) => {
 	const rendererKey = `${type}_renderer`;
-	const ret = window[rendererKey] || new THREE.WebGLRenderer({ antialias: true, alpha: type === 'zoom' ? true : false });
+	const ret =
+		window[rendererKey] ||
+		new THREE.WebGLRenderer({
+			antialias: true,
+			alpha: type === 'zoom',
+		});
 	window[rendererKey] = ret;
 	ret.info.autoReset = true;
 	return ret;
@@ -65,7 +70,6 @@ const Scene = (props) => {
 		allowHotspotsToMove,
 		resetBGBeforeImageLoaded = false,
 		children,
-		fps = 60,
 		type,
 		enablePan = false,
 		orbitControlsConfig = {},
@@ -77,6 +81,7 @@ const Scene = (props) => {
 			enabled: false,
 		},
 		enableZoomControls = false,
+		tooltipComponents = {},
 	} = props;
 
 	const [threeReady, setThreeReady] = useState(false);
@@ -87,6 +92,8 @@ const Scene = (props) => {
 
 	//Scene
 	const sceneRef = useRef(new THREE.Scene());
+	sceneRef.current.tooltipComponents = tooltipComponents;
+
 	const scene = sceneRef.current;
 
 	//Renderer
@@ -605,6 +612,7 @@ const Scene = (props) => {
 							sceneRef,
 							setMaxRenderOrder,
 							camera: cameraRef.current,
+							canvas: canvasRef.current,
 						}),
 					)}
 

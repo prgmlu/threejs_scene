@@ -1,5 +1,5 @@
 import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
-
+import { generateRandomString } from '../utils';
 
 export default class Tooltip {
 	constructor(params = {}) {
@@ -23,19 +23,19 @@ export default class Tooltip {
 				font_size: params?.label?.font_size || 10,
 				wrap_text: params?.label?.wrap_text,
 				width: params?.label?.width || 130,
-				background_color: params?.label?.background_color || DEFAULT_CONTAINER_COLOR,
+				background_color:
+					params?.label?.background_color || DEFAULT_CONTAINER_COLOR,
 				padding: params.label?.padding || 10,
 				border_radius: params?.label?.border_radius || 0,
 				textAlign: 'center', //dont see it coming from params.container!!!
 			},
 		};
 
-
 		this.elementWrapper = document.createElement('div');
+		this.elementWrapper.id = `tooltip-wrapper-${generateRandomString(5)}`;
 		this.tooltipSceneObject = new CSS2DObject(this.elementWrapper);
 
 		// this.mount();
-		console.log('%c >> TOOLTIP constructor', 'color:blue', { params, 'this': this });
 	}
 
 	mount = () => {
@@ -48,15 +48,17 @@ export default class Tooltip {
 	};
 
 	//set element CSS rules from object
-	setElementStyling = (el, rulesObj) => Object.entries(rulesObj).map(([key, val]) => {
-		if (key === 'background_color') el.style.backgroundColor = val;
-		else if (key === 'border_radius') el.style.borderRadius = `${val}px`;
-		else if (key === 'width') el.style.width = `${val}px`;
-		else if (key === 'padding') el.style.padding = `${val}px`;
-		else if (key === 'font_name') el.style.fontName = val;
-		else if (key === 'font_size') el.style.fontSize = `${val}px`;
-		else el.style[key] = val;
-	});
+	setElementStyling = (el, rulesObj) =>
+		Object.entries(rulesObj).map(([key, val]) => {
+			if (key === 'background_color') el.style.backgroundColor = val;
+			else if (key === 'border_radius')
+				el.style.borderRadius = `${val}px`;
+			else if (key === 'width') el.style.width = `${val}px`;
+			else if (key === 'padding') el.style.padding = `${val}px`;
+			else if (key === 'font_name') el.style.fontName = val;
+			else if (key === 'font_size') el.style.fontSize = `${val}px`;
+			else el.style[key] = val;
+		});
 
 	initHTML = () => {
 		const defaultContainerStyling = {
@@ -97,16 +99,21 @@ export default class Tooltip {
 		this.containerDiv.append(this.labelDiv);
 	};
 
-	
-	setOffset = (offset = this.config.offset, sideShiftOffset = this.config.offset_side_shift) => {
-		if (this.containerDiv.clientWidth < 1) console.error('Tooltip container is not ready yet');
+	setOffset = (
+		offset = this.config.offset,
+		sideShiftOffset = this.config.offset_side_shift,
+	) => {
+		if (this.containerDiv.clientWidth < 1)
+			console.error('Tooltip container is not ready yet');
 
 		//update
 		this.config.offset = Number(offset);
 		this.config.offset_side_shift = Number(sideShiftOffset);
 
-		const translateW = this.config.offset + (this.containerDiv.clientWidth / 2);
-		const translateH = this.config.offset + (this.containerDiv.clientHeight / 2);
+		const translateW =
+			this.config.offset + this.containerDiv.clientWidth / 2;
+		const translateH =
+			this.config.offset + this.containerDiv.clientHeight / 2;
 		// console.log('>>> setOffset', {
 		// 	offset,
 		// 	translateW,
@@ -137,7 +144,6 @@ export default class Tooltip {
 		this.setElementStyling(this.labelDiv, newConfig);
 	};
 
-
 	setArrowColor = (newColor) => {
 		this.config.arrow_color = newColor;
 		// this.setElementStyling(this.arrowDiv, { borderColor:newColor });
@@ -149,7 +155,6 @@ export default class Tooltip {
 		this.arrowDiv.style[bType] = `10px solid ${newColor}`;
 		// console.log('- setArrowColor', { newColor, 'this': this });
 	};
-
 
 	setTooltipStatus = (status) => {
 		// console.log('>>> setTooltipStatus', status);
@@ -210,27 +215,39 @@ export default class Tooltip {
 		this.setOffset(this.config.offset);
 	};
 
-
 	//<Hotspot tooltip={}/> props changed
 	updateConfig = (newConf) => {
-		console.log('%c _TOOLTIP::updateConfig', 'color:orange', { newConf, 'this': this });
 		let offsetNeedsUpdate = false;
 
-		if ('active' in newConf && (this.config.active != newConf.active)) this.setTooltipStatus(newConf.active);
+		if ('active' in newConf && this.config.active != newConf.active)
+			this.setTooltipStatus(newConf.active);
 
-		if (newConf.position && (newConf.position !== this.config.position)) this.setTooltipPosition(newConf.position);
-		if (newConf.text && (newConf.text !== this.config.text)) this.setLabelContent(newConf.text);
-		if (newConf?.label && (JSON.stringify(newConf?.label) !== JSON.stringify(this.config.label))) {
+		if (newConf.position && newConf.position !== this.config.position)
+			this.setTooltipPosition(newConf.position);
+		if (newConf.text && newConf.text !== this.config.text)
+			this.setLabelContent(newConf.text);
+		if (
+			newConf?.label &&
+			JSON.stringify(newConf?.label) !== JSON.stringify(this.config.label)
+		) {
 			this.setLabelConfig(newConf?.label);
 			offsetNeedsUpdate = true;
 		}
 		//offset updated
-		if (offsetNeedsUpdate || (newConf.offset && (newConf.offset != this.config.offset) || newConf.offset_side_shift && (newConf.offset_side_shift != this.config.offset_side_shift))) {
+		if (
+			offsetNeedsUpdate ||
+			(newConf.offset && newConf.offset != this.config.offset) ||
+			(newConf.offset_side_shift &&
+				newConf.offset_side_shift != this.config.offset_side_shift)
+		) {
 			this.setOffset(newConf.offset, newConf.offset_side_shift);
 		}
 
-		if ('arrow_color' in newConf && (newConf.arrow_color != this.config.arrow_color)) this.setArrowColor(newConf.arrow_color);
-
+		if (
+			'arrow_color' in newConf &&
+			newConf.arrow_color != this.config.arrow_color
+		)
+			this.setArrowColor(newConf.arrow_color);
 	};
 
 	dispose = () => {

@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import InteractionObject from '../../three-base-components/InteractionObject';
 import SVGSpriteComponent from '../../three-svg/SVGSpriteComponent';
-import { isAndroid } from 'react-device-detect';
+import { isAndroid, isDesktop } from 'react-device-detect';
+import ContentTooltip from '../../Components/ContentTooltip';
 
 export default class HotspotMarker extends InteractionObject {
 	constructor({
@@ -12,20 +13,22 @@ export default class HotspotMarker extends InteractionObject {
 		UIConfig,
 		primaryColor = '#000000',
 		secondaryColor = '#00000050',
-		arrowColor = null,
 		onClick = () => {},
 		animation = {},
 		transform = [],
+		camera = null,
+		canvas = null,
 	}) {
 		super();
+
 		this.sceneObject.name = 'marker';
 		this.hotspot_type = 'hotspot_marker'; //type of marker
 		this.userData = userData; //stores custom user data
 		this.UIConfig = UIConfig; //could be used for modals
-
+		this.camera = camera;
 		// this.imageURL = imageURL;
 		this.isFlatBackground = false;
-
+		this.canvas = canvas;
 		// animation info
 		this.animation = animation;
 		this.clock = new THREE.Clock();
@@ -40,15 +43,14 @@ export default class HotspotMarker extends InteractionObject {
 
 		this.onClickCallBack = onClick;
 
-		this.primaryColor = primaryColor;
-		this.secondaryColor = secondaryColor;
-
 		//SVG Icon
 		this.imageURL = imageURL;
 		this.imageHoverURL = imageHoverURL;
 		this.svgSpriteComponent = new SVGSpriteComponent(iconConfig);
 		this.svgSpriteComponent.setSvgFromUrl(imageURL, userData);
 		if (isAndroid) this.svgSpriteComponent.setOwnerHotspotInSVG(this);
+
+		this.contentTooltip = null;
 	}
 
 	onClick = () => {
@@ -95,12 +97,56 @@ export default class HotspotMarker extends InteractionObject {
 		}
 	};
 
+	getDimensions = () => {
+		const dist = this.camera.position.distanceToManhattan(
+			this.visualObject.position,
+		);
+		let vFOV = THREE.MathUtils.degToRad(this.camera.fov); // convert vertical fov to radians
+		let height = 2 * Math.tan(vFOV / 2) * dist; // visible height
+		let width = height * this.camera.aspect; // visible width
+		return { height, width };
+	};
+
+	createContentTooltip = (type) => {
+		const dimensions = this.getDimensions();
+		this.contentTooltip = new ContentTooltip(
+			{
+				active: true,
+				dimensions,
+			},
+			this.scene.tooltipComponents[type],
+			{ ...this.userData?.props },
+			this.canvas,
+		);
+		this.contentTooltip.tooltipSceneObject.position.copy(
+			this.visualObject.position,
+		);
+		this.scene.add(this.contentTooltip.tooltipSceneObject);
+		this.contentTooltip.mount();
+	};
+
+	triggerContentTooltip = (type) => {
+		if (this.contentTooltip) {
+			this.contentTooltip.setTooltipStatus(true);
+		} else {
+			this.createContentTooltip(type);
+		}
+	};
+
 	onHover = () => {
 		this.svgSpriteComponent.onHover(this.imageHoverURL, this.userData);
-		this.showLabel();
+
+		const hsType = this.userData?.props?.hotspot_type;
+		if (hsType in this.scene.tooltipComponents) {
+			isDesktop && this.triggerContentTooltip(hsType);
+		} else {
+			this.showLabel();
+		}
 	};
 
 	onUnhover = () => {
+		this.contentTooltip && this.contentTooltip.setTooltipStatus(false);
+
 		this.svgSpriteComponent.onUnhover(this.imageURL, this.userData);
 		this.hideLabel();
 	};
