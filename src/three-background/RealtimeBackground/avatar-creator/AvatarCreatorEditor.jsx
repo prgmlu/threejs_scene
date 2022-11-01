@@ -182,11 +182,9 @@ class AvatarCreatorEditor extends Component {
 				<div className="w-full md:w-[95%] mx-auto sm:w-[95%] overflow-visible h-[70%] pt-3 sm:pt-none md:h-[84%] sm:h-[90%] mb-3 sm:mb-0 white-shadow-container bg-white rounded-lg gap-x-2 md:pt-3 lg:pt-3 xl:pt-3 sm:pt-1 px-3 relative">
 					{activeTab == 1 && (
 						<BodyShape
-
 							femaleLocalAvatarOutfitStringRef={this.props.femaleLocalAvatarOutfitStringRef}
 							maleLocalAvatarOutfitStringRef={this.props.maleLocalAvatarOutfitStringRef}
 							visibleGenderRef={this.props.visibleGenderRef}
-
 							skintoneX={this.state.skintoneX}
 							skintoneY={this.state.skintoneY}
 							setSkintonXY={this.setSkintoneXY.bind(this)}

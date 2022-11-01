@@ -311,7 +311,7 @@ class AvatarCreator extends Component {
 					)}
 				</div>
 
-				{(window.innerWidth >= 768 && window.innerHeight > 730) && (
+				{(window.innerWidth >= 1024 && window.innerHeight > 730) && (
 					<button
 						// onClick={() => this.setState({ isCookieShown: true })}
 						className="z-40 absolute no-underline left-4 bottom-[50%] sm:bottom-[1%] mb-[0.5rem] xl:mb-none -translate-y-1/2 sm:translate-y-0  sm:left-1/2 sm:-translate-x-1/2 text-[#330D0D] text-base underline underline-offset-2 cursor-default"

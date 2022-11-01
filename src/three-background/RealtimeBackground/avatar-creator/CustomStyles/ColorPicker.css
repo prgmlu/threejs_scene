@@ -1,8 +1,8 @@
 .react-colorful__hue {
     position: absolute !important;
     height: 12px !important;
-    width: 230px;
-    left: -46%;
+    width: 205px;
+    left: -59%;
     top: 97%;
     transform: rotate(90deg) translateY(-50%) translateX(-50%);
     border-radius: 8px !important;
