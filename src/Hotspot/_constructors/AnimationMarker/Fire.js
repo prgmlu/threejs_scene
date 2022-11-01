@@ -211,7 +211,7 @@ const FireShader = {
 };
 
 export default class Fire extends THREE.Mesh {
-    constructor(renderOrder = 1) {
+    constructor(renderOrder = 2) {
 
 
         const loaderz = new THREE.TextureLoader();

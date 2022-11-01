@@ -31,12 +31,12 @@ export default class AnimationMarker extends InteractionObject {
 	}
 
 	initFireComponent = () => {
-		this.component = new Fire({ renderOrder: this.#visualObjectConf.renderOrder || 2 });
+		this.component = new Fire(this.#visualObjectConf.renderOrder || 2 );
 		this.visualObject = this.component;
 	}
 
 	initSmokeComponent = () => {
-		this.component = new Smoke({ renderOrder: this.#visualObjectConf.renderOrder || 2 });
+		this.component = new Smoke(this.#visualObjectConf.renderOrder || 2 );
 		this.visualObject = this.component.particles.points;
 	}
 
