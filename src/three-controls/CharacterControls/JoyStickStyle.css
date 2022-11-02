@@ -22,6 +22,22 @@
 	touch-action: manipulation;
 	/* background-color: rgba(255, 0, 0, 0.2); */
 }
+#mobileInterface #tooltipsJoystick {
+	pointer-events: auto;
+    display: block;
+    position: absolute;
+    bottom: 130px;
+    color: white;
+    left: 0;
+    background-color: rgba(0,0,0,0.4);
+    max-width: 170px;
+    z-index: 12;
+    touch-action: manipulation;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 600;
+}
 #joystickWrapper1 > .arrows {
 	position: absolute;
 	width: 12px;
