@@ -19,26 +19,6 @@ import * as THREE from 'three';
 // a function that makes a timer that resets on mouse events
 
 
-var inactivityTime = function () {
-    resetTimer();
-    document.onmousemove = ()=>{resetTimer(); document.querySelector('#tooltipsJoystick').style.display='none'; };
-    document.onkeydown = ()=>{resetTimer(); document.querySelector('#tooltipsJoystick').style.display='none'; };
-    document.onmousedown = ()=>{resetTimer(); document.querySelector('#tooltipsJoystick').style.display='none'; }; 
-    document.ontouchstart = ()=>{resetTimer(); document.querySelector('#tooltipsJoystick').style.display='none'; };
-    document.onscroll = ()=>{resetTimer(); document.querySelector('#tooltipsJoystick').style.display='none'; }; 
-
-    function showToolTip() {
-        // alert("tooltip");
-        document.querySelector('#tooltipsJoystick').style.display = 'block';
-        resetTimer();
-    }
-
-    function resetTimer() {
-        clearTimeout(window.tooltipTimer);
-        window.tooltipTimer = setTimeout(showToolTip, 3000)
-        // 1000 milliseconds = 1 second
-    }
-};
 
 
 	
@@ -575,7 +555,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
 
     return (
         <>
-        {inactivityTime()}
+        {/* {inactivityTime()} */}
         {/* {setupRaycaster(camera,scene.children.filter((i)=>i.name=='marker'))} */}
             {adjustHotspotsToY0(scene)}
 {        adjustHostpotsToDepthTestTrue()}

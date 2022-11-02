@@ -106,6 +106,12 @@ export default class CentralMultipleCharControls{
 
         scene.remove(window.vid)
 
+        window.tooltipTimer = setTimeout(()=>{
+            document.querySelector('#tooltipsJoystick').style.display = 'block';
+        }, 5000)
+
+        
+
 
         this.update();
         // window.mainAnimationLoopHooks.push(this.update.bind(this));

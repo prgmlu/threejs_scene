@@ -498,6 +498,10 @@ export default class CharacterControls {
             var directionOffset = this.directionOffset(this.keysPressed)
 
             let [moveX, moveZ] = this.getMovesFromDirectionClick(directionOffset, angleYCameraDirection, updateDelta);
+            window.hasMoved = true;
+
+            document.querySelector('#tooltipsJoystick').style.display='none';
+            clearTimeout(window.tooltipTimer);
 
             this.models.forEach((i)=>i.position.x += moveX);
             this.models.forEach((i)=>i.position.z += moveZ);
