@@ -161,10 +161,10 @@ else{
 
 	return (
 		<>
-			{bgConf.sceneType === 'flat_scene' (
+			{bgConf.sceneType === 'flat_scene' && (
 				loadFlatBackground()
 			)}
-			{bgConf.sceneType === 'cubemap_scene' (
+			{bgConf.sceneType === 'cubemap_scene' &&(
 				<BackgroundCube
 				backgroundUrl={sceneConfig.backgroundUrl}
 				opacityMapUrl={sceneConfig.opacityMapUrl}
@@ -182,7 +182,7 @@ else{
 				)}
 
 
-			{['3d_model_scene', '3d_scene'].includes(bgConf?.sceneType) (
+			{['3d_model_scene', '3d_scene'].includes(bgConf?.sceneType) && (
 				<_3DScene
 				scene={scene}
 				{...bgConf}

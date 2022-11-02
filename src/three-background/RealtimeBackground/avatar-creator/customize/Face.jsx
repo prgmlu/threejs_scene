@@ -107,11 +107,11 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 	const titles = ['Hair', 'Eyebrows', 'Eyes'];
 
 	let hairImages = [
-		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair1.png',
-		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair2.png',
-		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair3.png',
-		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair4.png',
-		'https://cdn.obsess-vr.com/realtime3d/ct_ui/hairs/hair5.png',
+		'https://cdn.obsess-vr.com/realtime3d/hair placeholders/1.png',
+		'https://cdn.obsess-vr.com/realtime3d/hair placeholders/2.png',
+		'https://cdn.obsess-vr.com/realtime3d/hair placeholders/3.png',
+		'https://cdn.obsess-vr.com/realtime3d/hair placeholders/4.png',
+		'https://cdn.obsess-vr.com/realtime3d/hair placeholders/5.png',
 	];
 
 	let eyebrowImages = [

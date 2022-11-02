@@ -407,7 +407,8 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         let newStoreMixer =  new THREE.AnimationMixer(data.scene);
         data.animations.forEach((anim)=>{
             let action = newStoreMixer.clipAction(anim);
-            action.loop = THREE.LoopPingPong;
+            // action.loop = THREE.LoopPingPong;
+            action.loop = THREE.LoopRepeat;
             action.play();
         })
         setStoreMixer(newStoreMixer);
