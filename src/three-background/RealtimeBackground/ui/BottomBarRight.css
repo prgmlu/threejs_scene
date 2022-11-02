@@ -1,0 +1,34 @@
+#bottomBarRight {
+    position: fixed;
+    z-index: 10;
+    bottom: 1em;
+    left: 0;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+#bottomBarRightMenuContainer {
+    float: left;
+    margin-left: 0.5em;
+}
+
+#bottomBarRight .hoverable div,
+#bottomBarObsessLogoWrapper  {
+    display: inline-block;
+}
+
+#bottomBarRightMenuContainer p {
+    color: white;
+    font-family: 'Montserrat';
+    font-size: 12px;
+    letter-spacing: 0px;    
+}
+
+.uiHighlight p {
+    font-weight: bolder;
+    color: white;
+}
+
+#bottomBarObsessLogoWrapper {
+    position: relative;
+}

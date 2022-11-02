@@ -1,0 +1,21 @@
+.products-cart-button {
+    position: absolute;
+    text-align: center;
+    top: 10px;
+    right: 10px;
+}
+
+.products-cart-icon {
+    width: 75px;
+    height: 75px;
+    cursor: pointer;
+}
+
+.products-cart-number {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: large;
+    font-weight: bold;
+}

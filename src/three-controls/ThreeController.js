@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import OrbitControls from './OrbitControls';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory';
+import { CharacterControls } from './CharacterControls';
+import { ANIMATION_NAMES } from './CharacterControls/Constants';
 
 class ThreeController {
 	setupControls(camera, renderer, orbitControlsConfig) {
@@ -75,6 +77,22 @@ class ThreeController {
 
 		// return this.controls;
 	};
+
+	setupCharacterControls(models, charMixers, animationsMaps, storeMixer, directionValues,localAvatarNameRef,femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef, stopAvatarAnimationLoopRef, scene, camera) {
+		console.log('setupCharacterControls');
+        this.controls.minDistance = 2;
+        this.controls.maxDistance = 6;
+        this.controls.enablePan = false;
+        this.controls.maxPolarAngle = Math.PI /1.79;
+
+        // this.controls.minPolarAngle = - Math.PI / 2 - 0.05;
+
+		this.characterControls = new CharacterControls(models, charMixers, animationsMaps, this.controls, this.camera, ANIMATION_NAMES['idle'],null, [], true, true ,false,storeMixer,directionValues,localAvatarNameRef,femaleLocalAvatarOutfitStringRef,maleLocalAvatarOutfitStringRef, visibleGenderRef,toAddObjsRef,stopAvatarAnimationLoopRef, scene);
+		window.characterControls = this.characterControls;
+		// this.characterControls = new CharacterControls(model, charMixer, animationsMap, this.controls, this.camera, 'Idle',null, [], true, false );
+		return this.characterControls;
+	}
+
 
 	setupVRControls(renderer, scene, showOnlyHands) {
 		const controllerModelFactory = new XRControllerModelFactory();

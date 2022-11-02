@@ -27,6 +27,7 @@ const getRenderer = (type) => {
 		});
 	window[rendererKey] = ret;
 	ret.info.autoReset = true;
+	window.mainRenderer = ret
 	return ret;
 };
 
@@ -95,6 +96,7 @@ const Scene = (props) => {
 	sceneRef.current.tooltipComponents = tooltipComponents;
 
 	const scene = sceneRef.current;
+	window.scene = scene;
 
 	//Renderer
 	const rendererRef = useRef(getRenderer(type));
@@ -622,6 +624,7 @@ const Scene = (props) => {
 						<Background
 							bgConf={bgConf}
 							scene={scene}
+							renderer={rendererRef.current}
 							camera={cameraRef.current}
 							resetBGBeforeImageLoaded={resetBGBeforeImageLoaded}
 							enablePan={enablePan && isMobile}

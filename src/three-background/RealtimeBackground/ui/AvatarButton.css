@@ -1,0 +1,11 @@
+.avatar-editor-button {
+    position: absolute;
+    bottom: 7%;
+    left: 10px;
+}
+
+.avatar-editor-icon {
+    width: 55px;
+    height: 55px;
+    cursor: pointer;
+}
