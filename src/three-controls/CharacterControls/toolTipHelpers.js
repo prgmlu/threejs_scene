@@ -1,7 +1,4 @@
-import {
-  CSS2DObject
-} from 'three/examples/jsm/renderers/CSS2DRenderer';
-import {CSS2DRenderer} from './CSS2DRenderer';
+import {CSS2DRenderer,CSS2DObject} from './CSS2DRenderer';
 
 export const initCSSRenderer = ()=> {
     let labelRenderer = new CSS2DRenderer();
