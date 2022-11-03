@@ -521,10 +521,6 @@ export default class CharacterControls {
                 console.log(e);
             }
 
-            if(result){
-                console.log(result.normal);
-            }
-
             // const results = [];
             // for(let i=0; i<this.worldOctrees.length; i++){
             //     results.push(this.worldOctrees[i].capsuleIntersect(this.playerCollider));

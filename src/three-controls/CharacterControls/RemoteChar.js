@@ -4,6 +4,7 @@ import { initCSSRenderer, addToolTipToModel } from './toolTipHelpers';
 import { hideAllExceptFirstClothItem } from '../../three-background/threeHelpers';
 import { dressUpFromString } from './OutfitTranslator.js';
 import { ANIMATION_NAMES } from './Constants.js';
+import * as THREE from 'three';
 
 
 const FADE_DURATION = .4;
@@ -95,7 +96,7 @@ export default class RemoteChar{
             this.model.traverse( function ( child ) {
                 if ( child.isMesh ) {
                     // child.castShadow = true;
-                    // child.frustumCulled = false;
+                    child.frustumCulled = false;
                     // child.receiveShadow = true;
                 }
             } );
