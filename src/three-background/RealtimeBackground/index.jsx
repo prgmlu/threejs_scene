@@ -177,6 +177,7 @@ let placePairsGivenPoints = (pairs, points) => {
 let adjustPairsGivenHardcodedData = () =>{
     let pairs = getHotspotBoxPairs();
     window.pairs = pairs;
+    console.log(pairs)
     let pts = [
         {
             "x": -0.9,
@@ -224,9 +225,9 @@ let adjustPairsGivenHardcodedData = () =>{
             "z": -31.637132523110257 + .5
         },
         {
-            "x": 1,
-            "y": 1.818305150993834,
-            "z": -30 + .5
+            "x": 3,
+            "y": 3.5,
+            "z": -61 + .5
         },
     ]
     placePairsGivenPoints(pairs, pts);
