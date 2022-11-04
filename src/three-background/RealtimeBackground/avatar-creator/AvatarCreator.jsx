@@ -231,7 +231,7 @@ class AvatarCreator extends Component {
 		const { isCookieShown, username, isWindowSize } = this.state;
 		return (
 			<div
-				className={`flex flex-col items-center justify-center w-[95%] sm:w-4/5 h-[95%] sm:h-[85%] md:h-[95%] lg:h-[80%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-[#7c6a6a] via-[#c1b8b8] to-[#FFF2F2] rounded-md ${
+				className={`flex flex-col items-center justify-center w-[95%] sm:w-4/5 h-[88%] sm:h-[85%] md:h-[90%] md:top-[45%] lg:top-[50%] lg:h-[80%]  top-[50%] sm:top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-[#7c6a6a] via-[#c1b8b8] to-[#FFF2F2] rounded-md ${
 					isCookieShown && 'bg-white/50'
 				} overflow-visible absolute z-30`}
 			>
