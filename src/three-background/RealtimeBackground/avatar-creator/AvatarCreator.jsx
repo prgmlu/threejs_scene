@@ -62,13 +62,16 @@ class AvatarCreator extends Component {
 		window.miniScene = this.scene;
 		this.switchAvatar = this.props.switchAvatar;
 		this.renderer = createRenderer();
+		this.wMul = 0.3528;
+		this.hMul = 0.6205;
+
 		this.renderer.setSize(
-			window.innerWidth * 0.3528,
-			window.innerHeight * 0.6205,
+			window.innerWidth * this.wMul,
+			window.innerHeight * this.hMul,
 		);
 		this.camera = new THREE.PerspectiveCamera(
 			50,
-			(window.innerWidth * 0.3528) / (window.innerHeight * 0.6205),
+			(window.innerWidth * this.wMul) / (window.innerHeight * this.hMul),
 			0.1,
 			1000,
 		);
@@ -91,6 +94,19 @@ class AvatarCreator extends Component {
 	}
 
 	handleWindowResize() {
+		// debugger;
+
+		this.newWidth = this.myRef.current.parentElement.offsetWidth;
+		this.newHeight = this.myRef.current.parentElement.offsetHeight;
+
+		this.renderer.setSize(
+			this.newWidth,
+			this.newHeight);
+
+		this.camera.aspect = this.newWidth / this.newHeight;
+
+		this.camera.updateProjectionMatrix();
+
 		if (window.innerWidth >= 1440) {
 			this.setState({ isWindowSize: true });
 		} else {
