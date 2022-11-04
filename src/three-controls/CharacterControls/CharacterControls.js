@@ -197,7 +197,7 @@ export default class CharacterControls {
         this.path = [model.position.clone()];
 
         this.orbitControl.rotateLeft(-1.5);
-        this.orbitControl.rotateUp(-1.8)
+        this.orbitControl.rotateUp(-1.7)
         this.updateCameraTarget(this.model.position.x,this.model.position.z);
         
 

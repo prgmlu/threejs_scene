@@ -41,6 +41,18 @@ class ThreeController {
 					this.camera.updateProjectionMatrix();
 				}
 
+				if (temp <= 20 ||  temp >= 70) {
+					//clamp
+					if (temp <= 20) {
+						this.camera.fov = 20;
+						this.camera.updateProjectionMatrix();
+					}
+					if (temp >= 70) {
+						this.camera.fov = 70;
+						this.camera.updateProjectionMatrix();
+					}
+				}
+
 				this.startDistance = dist;
 			}
 		});
