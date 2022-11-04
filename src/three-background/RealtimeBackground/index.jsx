@@ -641,6 +641,7 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         <>
         {/* {inactivityTime()} */}
         {/* {setupRaycaster(camera,scene.children.filter((i)=>i.name=='marker'))} */}
+        {localStorage.clear()}
             {adjustHotspotsToY0(scene)}
 {        adjustHostpotsToDepthTestTrue()}
 
