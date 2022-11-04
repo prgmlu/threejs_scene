@@ -104,10 +104,6 @@ let getDistanceOfHotspots = (hotspotPositions, femaleModel, hotspots) => {
     );
 }
 
-let placeHotspots = () => {
-
-}
-
 let adjustHotspotsToY0 = () => {
     scene.children.filter((i)=>['marker','visualObject'].includes(i.name)).forEach((i)=>{i.position.y=2;});
 }
@@ -123,7 +119,9 @@ let getHotspotBoxPairs = () => {
 
     //group them in twos and push into pairs
     for(let i = 0; i < hotspotsAndBoxes.length; i+=2){
-        pairs.push([hotspotsAndBoxes[i], hotspotsAndBoxes[i+1]]);
+        if(hotspotsAndBoxes[i].owner.userData.props.product_sku){
+            pairs.push([hotspotsAndBoxes[i], hotspotsAndBoxes[i+1]]);
+        }
     }
     return pairs;
 }
@@ -131,112 +129,154 @@ let getHotspotBoxPairs = () => {
 let placePairsGivenPoints = (pairs, points) => {
 
     if(!pairs || !points || pairs.length==0 || points.length==0){return;}
-    //slice pairs and points to be the same size
-    let pairsToUse = pairs.slice(0, points.length);
-    // pairsToUse.push(pairs[pairs.length-2]);
-    pairsToUse[0] = pairs[pairs.length-1];
-    pairsToUse[1] = pairs[pairs.length-2];
 
-    window.pairsToUse = pairsToUse;
-    // pairs not to use are the ones not in pairsToUse
-    let pairsNotToUse = pairs.filter((pair) => {
-        return !pairsToUse.includes(pair);
-    });
+    let placedHotspots = [];
 
+    points.forEach((point) => {
+        if(!point.sku){return;}
 
-    pairsToUse.forEach((pair, index) => {
         let hotspot;
         let box;
-        try{
-            hotspot = pair[0];
-            box = pair[1];
-
+        let pair = pairs.find(function isPlaced(pair, index) {
+            if(!placedHotspots.includes(index) && pair[0].owner.userData.props.product_sku === point.sku){
+                placedHotspots.push(index);
+                return pair;
+            }
+        });
+        if(pair){
+            try{
+                box = pair[0];
+                hotspot = pair[1];
+            }
+            catch{
+            }
+            box.position.x = point.x;
+            box.position.y = point.y;
+            box.position.z = point.z;
+    
+            hotspot.position.x = point.x;
+            hotspot.position.y = point.y;
+            hotspot.position.z = point.z;
         }
-        catch{
-        }
-
-        hotspot.position.x = points[index].x;
-        hotspot.position.y = points[index].y;
-        hotspot.position.z = points[index].z;
-
-        box.position.x = points[index].x;
-        box.position.y = points[index].y;
-        box.position.z = points[index].z;
-    });
-
-    // hide the pairs not to use
-    pairsNotToUse.forEach((pair) => {
-        let hotspot = pair[0];
-        let box = pair[1];
-        hotspot.visible = false;
-        box.visible = false;
     });
 }
 
 
 let adjustPairsGivenHardcodedData = () =>{
     let pairs = getHotspotBoxPairs();
+    for(let i=0; i<pairs.length; i++){
+        console.log(pairs[i][0].owner.userData.props.product_sku)
+    }
+    
     window.pairs = pairs;
     let pts = [
         {
             "x": -0.9,
             "y": 0.6431190815503904,
-            "z": .6 + .5
+            "z": .6 + .5,
+            "sku": "pillow-talk-push-up-lashes-mascara",
         },
         {
             "x": 4.765384344674514,
             "y": 1.7,
-            "z": -1.7555395049756977 + .5
+            "z": -1.7555395049756977 + .5,
+            "sku": "charlottes-magic-cream",
         },
         {
             "x": 6.2,
             "y": 0.7,
-            "z": 1.2 + .5
+            "z": 1.2 + .5,
+            "sku": "hypnotising-pop-shot-cosmic-rocks",
         },
         {
             "x": -4.991625460181749,
             "y": 1.1,
-            "z": -12.800001780689092 + .5
+            "z": -12.800001780689092 + .5,
+            "sku": "lip-cheat-pillowtalk",
         },
         {
             "x": -5.785417533613236,
             "y": 1.1,
-            "z": -12.85026351730901 + .5
+            "z": -12.85026351730901 + .5,
+            "sku": "beautiful-skin-foundation-1-neutral",
         },
         {
             "x": 5,
             "y": 1,
-            "z": -30.7 + .5
+            "z": -30.7 + .5,
+            "sku": "pillow-talk-push-up-lashes-mascara",
         },
         {
             "x": 4.2,
             "y": 1.1,
-            "z": -30.571256723009724 + .5
+            "z": -30.571256723009724 + .5,
+            "sku": "matte-revolution-lipstick-pillowtalk",
         },
         {
             "x": 3.245,
             "y": 1.1,
-            "z": -30.733689088933694 + .5
+            "z": -30.733689088933694 + .5,
+            "sku": "beautiful-skin-radiant-concealer-3-5-fair",
         },
         {
             "x": 2.8,
             "y": 1.1,
-            "z": -31.2 + .5
+            "z": -31.2 + .5,
+            "sku": "lip-cheat-pillowtalk",
         },
         {
             "x": 2.3702360479038873,
             "y": 1.1,
-            "z": -31.637132523110257 + .5
+            "z": -31.637132523110257 + .5,
+            "sku": "beautiful-skin-foundation-1-neutral",
         },
         {
             "x": 2.25,
             "y": 1.1,
-            "z": -32.5 + .5
+            "z": -32.5 + .5,
+            "sku": "collagen-plumping-lipgloss-pillow-talk",
         },
         {
             "x": 2.8,
             "y": 1.1,
-            "z": -33.633689088933694 + .5
+            "z": -33.63+ .5,
+            "sku": "pillow-talk-face-palette-fair-med",
+        },
+        {
+            "x": -4.9,
+            "y": 1.1,
+            "z": -46.9 + .5,
+            "sku": "collagen-plumping-lipgloss-pillow-talk",
+        },
+        {
+            "x": -5.8,
+            "y": 1.1,
+            "z": -46.8 + .5,
+            "sku": "beautiful-skin-foundation-1-neutral",
+        },
+        {
+            "x": -4.25,
+            "y": 1.1,
+            "z": -47.25 + .5,
+            "sku": "beauty-light-wand-pillow-talk-light",
+        },
+        {
+            "x": -3.65,
+            "y": 1.1,
+            "z": -47.85 + .5,
+            "sku": "matte-revolution-lipstick-pillowtalk",
+        },
+        {
+            "x": -3.5,
+            "y": 1.1,
+            "z": -48.65 + .5,
+            "sku": "pillow-talk-crystal-dimension-eyeliner",
+        },
+        {
+            "x": -3.55,
+            "y": 1.1,
+            "z": -49.3 + .5,
+            "sku": "pillow-talk-push-up-lashes-mascara",
         },
         {
             "x": 3,
@@ -246,22 +286,26 @@ let adjustPairsGivenHardcodedData = () =>{
         {
             "x": 4.5,
             "y": 0.6431190815503904,
-            "z": -60.9 + .5
+            "z": -60.9 + .5,
+            "sku": "cheek-to-chic-pillow-talk",
         },
         {
             "x": 3.8,
             "y": 0.6431190815503904,
-            "z": -63.8 + .5
+            "z": -63.8 + .5,
+            "sku": "matte-revolution-lipstick-pillowtalk",
         },
         {
             "x": 0.8,
             "y": 0.6431190815503904,
-            "z": -63.9 + .5
+            "z": -63.9 + .5,
+            "sku": "luxury-palette-the-queen-of-glow",
         },
         {
             "x": -0.7,
             "y": 0.6431190815503904,
-            "z": -62.2 + .5
+            "z": -62.2 + .5,
+            "sku": "pillow-talk-push-up-lashes-mascara",
         },
     ]
     placePairsGivenPoints(pairs, pts);
