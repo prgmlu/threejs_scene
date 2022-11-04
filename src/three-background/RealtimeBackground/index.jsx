@@ -133,16 +133,26 @@ let placePairsGivenPoints = (pairs, points) => {
     let placedHotspots = [];
 
     points.forEach((point) => {
-        if(!point.sku){return;}
-
         let hotspot;
         let box;
-        let pair = pairs.find(function isPlaced(pair, index) {
-            if(!placedHotspots.includes(index) && pair[0].owner.userData.props.product_sku === point.sku){
-                placedHotspots.push(index);
-                return pair;
-            }
-        });
+        let pair;
+        if(point.sku){
+            pair = pairs.find(function isPlaced(pair, index) {
+                if(!placedHotspots.includes(index) && pair[0].owner.userData.props.product_sku === point.sku){
+                    placedHotspots.push(index);
+                    return pair;
+                }
+            });
+        }
+        else{
+            pair = pairs.find(function isPlaced(pair, index) {
+                if(!placedHotspots.includes(index)){
+                    console.log(pair);
+                    placedHotspots.push(index);
+                    return pair;
+                }
+            });
+        }
         if(pair){
             try{
                 box = pair[0];
@@ -164,11 +174,6 @@ let placePairsGivenPoints = (pairs, points) => {
 
 let adjustPairsGivenHardcodedData = () =>{
     let pairs = getHotspotBoxPairs();
-    for(let i=0; i<pairs.length; i++){
-        console.log(pairs[i][0].owner.userData.props.product_sku)
-    }
-    
-    window.pairs = pairs;
     let pts = [
         {
             "x": -0.9,
@@ -181,6 +186,24 @@ let adjustPairsGivenHardcodedData = () =>{
             "y": 1.7,
             "z": -1.7555395049756977 + .5,
             "sku": "charlottes-magic-cream",
+        },
+        {
+            "x": 6.65,
+            "y": 0.7,
+            "z": 2 + .5,
+            "sku": "hypnotising-pop-shot-sunlit-diamond",
+        },
+        {
+            "x": 6.65,
+            "y": 1.25,
+            "z": 2 + .5,
+            "sku": "hypnotising-pop-shot-lovers-diamond",
+        },
+        {
+            "x": 6.65,
+            "y": 1.8,
+            "z": 2 + .5,
+            "sku": "hypnotising-pop-shot-emerald-eyes",
         },
         {
             "x": 6.2,
@@ -199,6 +222,36 @@ let adjustPairsGivenHardcodedData = () =>{
             "y": 1.1,
             "z": -12.85026351730901 + .5,
             "sku": "beautiful-skin-foundation-1-neutral",
+        },
+        {
+            "x": -4.3,
+            "y": 1.1,
+            "z": -13.2 + .5,
+            "sku": "hypnotising-pop-shot-cosmic-rocks",
+        },
+        {
+            "x": -3.485417533613236,
+            "y": 1.1,
+            "z": -13.95026351730901 + .5,
+            "sku": "beautiful-skin-radiant-concealer-3-5-fair",
+        },
+        {
+            "x": -6.785417533613236,
+            "y": 1.1,
+            "z": -13.75026351730901 + .5,
+            "sku": "pillow-talk-face-palette-fair-med",
+        },
+        {
+            "x": -3.285417533613236,
+            "y": 1.1,
+            "z": -14.70026351730901 + .5,
+            "sku": "pillow-talk-push-up-lashes-mascara",
+        },
+        {
+            "x": -3.6,
+            "y": 1.1,
+            "z": -15.65026351730901 + .5,
+            "sku": "matte-revolution-lipstick-pillowtalk",
         },
         {
             "x": 5,
@@ -641,7 +694,6 @@ const RealtimeBackground = ({ scene, renderer,camera, backgroundUrl, controller 
         <>
         {/* {inactivityTime()} */}
         {/* {setupRaycaster(camera,scene.children.filter((i)=>i.name=='marker'))} */}
-        {localStorage.clear()}
             {adjustHotspotsToY0(scene)}
 {        adjustHostpotsToDepthTestTrue()}
 
