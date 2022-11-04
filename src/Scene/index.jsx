@@ -159,7 +159,7 @@ const Scene = (props) => {
 	const animate = (controllerUpdate = false) => {
 		renderer.setAnimationLoop(() => {
 			renderer?.render(scene, cameraRef.current);
-			css2DRenderer.render(scene, cameraRef.current);
+			// css2DRenderer.render(scene, cameraRef.current);
 			TWEEN.update();
 			autoRotateConfig?.enabled && controllerUpdate && controllerUpdate();
 		});

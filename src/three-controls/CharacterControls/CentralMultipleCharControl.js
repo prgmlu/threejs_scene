@@ -277,6 +277,7 @@ export default class CentralMultipleCharControls{
 
         // if it's the first time the session is active
         if( this.isShopTogetherSession(params) ){
+            this.localAvatarNameRef.current = localStorage.getItem('swfUserName');
             this.sessionId = params.has('shoptogether')? params.get('shoptogether'):localStorage.getItem('shoptogether');
             data[address].shoptogether = this.sessionId;
             

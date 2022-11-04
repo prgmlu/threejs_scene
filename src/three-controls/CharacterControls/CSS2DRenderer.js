@@ -188,9 +188,15 @@ class CSS2DRenderer {
 		function zOrder( scene ) {
 
 			const sorted = filterAndFlatten( scene ).sort( function ( a, b ) {
+				let A,B;
+				try{
 
-				let A = cache.objects.get( a );
-				let B = cache.objects.get( b );
+					A = cache.objects.get( a );
+					B = cache.objects.get( b );
+				}
+				catch(e){
+					debugger;
+				}
 
 				if(A && B){
 					const distanceA = A.distanceToCameraSquared;
