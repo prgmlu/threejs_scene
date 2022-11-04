@@ -133,9 +133,9 @@ let placePairsGivenPoints = (pairs, points) => {
     let placedHotspots = [];
 
     points.forEach((point) => {
-        let hotspot;
-        let box;
-        let pair;
+        let hotspot = null;
+        let box = null;
+        let pair = [];
         if(point.sku){
             pair = pairs.find(function isPlaced(pair, index) {
                 if(!placedHotspots.includes(index) && pair[0].owner.userData.props.product_sku === point.sku){
@@ -144,29 +144,31 @@ let placePairsGivenPoints = (pairs, points) => {
                 }
             });
         }
-        else{
-            pair = pairs.find(function isPlaced(pair, index) {
-                if(!placedHotspots.includes(index)){
-                    console.log(pair);
-                    placedHotspots.push(index);
-                    return pair;
+        else if(point.selector){
+            pair.push(scene.children.find(function hasSelector(collider, index) {
+                if(collider.owner?.userData?.props?.selector === point.selector){
+                    pair.push(scene.children[index+1])
+                    return collider;
                 }
-            });
+            }));
         }
         if(pair){
             try{
-                box = pair[0];
-                hotspot = pair[1];
+                if(pair[0]) box = pair[0];
+                if(pair[1]) hotspot = pair[1];
             }
             catch{
             }
-            box.position.x = point.x;
-            box.position.y = point.y;
-            box.position.z = point.z;
-    
-            hotspot.position.x = point.x;
-            hotspot.position.y = point.y;
-            hotspot.position.z = point.z;
+            if(box){
+                box.position.x = point.x;
+                box.position.y = point.y;
+                box.position.z = point.z;
+            }
+            if(hotspot){
+                hotspot.position.x = point.x;
+                hotspot.position.y = point.y;
+                hotspot.position.z = point.z;
+            }
         }
     });
 }
@@ -189,21 +191,21 @@ let adjustPairsGivenHardcodedData = () =>{
         },
         {
             "x": 6.65,
-            "y": 0.7,
+            "y": 0.6,
             "z": 2 + .5,
-            "sku": "hypnotising-pop-shot-sunlit-diamond",
+            "sku": "hypnotising-pop-shot-emerald-eyes",
         },
         {
-            "x": 6.65,
-            "y": 1.25,
+            "x": 6.55,
+            "y": 1.3,
             "z": 2 + .5,
             "sku": "hypnotising-pop-shot-lovers-diamond",
         },
         {
             "x": 6.65,
-            "y": 1.8,
+            "y": 1.9,
             "z": 2 + .5,
-            "sku": "hypnotising-pop-shot-emerald-eyes",
+            "sku": "hypnotising-pop-shot-sunlit-diamond",
         },
         {
             "x": 6.2,
@@ -334,7 +336,9 @@ let adjustPairsGivenHardcodedData = () =>{
         {
             "x": 3,
             "y": 3.5,
-            "z": -61 + .5
+            "z": -60.6 + .5,
+            "type": "iframe",
+            "selector": "poap_iframe",
         },
         {
             "x": 4.5,
