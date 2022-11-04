@@ -292,7 +292,7 @@ class AvatarCreatorEditor extends Component {
 					<div className="w-full flex justify-end items-center">
 						<button
 							style={{ border: '1px solid #330D0D' }}
-							className="w-fit h-fit self-center uppsercase duration-250 text-[#fff] bg-[#330D0D] hover:bg-white hover:text-[#330D0D] px-[2.5rem] py-[0.5rem] text-sm rounded-md cursor-pointer"
+							className="w-fit h-fit self-center duration-250 text-[#fff] bg-[#330D0D] hover:bg-white hover:text-[#330D0D] px-[2.5rem] py-[0.5rem] text-sm rounded-md cursor-pointer"
 							onClick={this.props.saveAvatar}
 						>
 							SAVE

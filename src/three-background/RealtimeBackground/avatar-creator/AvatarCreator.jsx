@@ -267,7 +267,7 @@ class AvatarCreator extends Component {
 						</div>
 						<button
 							onClick={() => this.saveAvatar()}
-							className="text-center text-black uppercase text-base px-4 py-1.5 sm:py-1 gap-2 rounded-md cursor-pointer bg-white mr-0 sm:mr-6"
+							className="w-fit h-fit self-center duration-250 text-[#fff] bg-[#330D0D] hover:bg-white hover:text-[#330D0D] px-[2.5rem] py-[0.5rem] text-sm rounded-md cursor-pointer"
 						>
 							SAVE
 						</button>
