@@ -145,7 +145,6 @@ const Background = ({
 
 	let realTimeRoomId = "6358559a238095b8792b5dc9";
 
-	debugger;
 	if(bgConf.backgroundUrl.includes(realTimeRoomId)){
 		onBackgroundReady();
 		onBackgroundLoaded();

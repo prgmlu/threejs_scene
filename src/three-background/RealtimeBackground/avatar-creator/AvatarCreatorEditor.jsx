@@ -73,6 +73,7 @@ class AvatarCreatorEditor extends Component {
 			windowHeight: window.innerHeight,
 			hairColor : JSON.parse(this.props.femaleLocalAvatarOutfitStringRef.current).hairColor,
 			eyeColor : JSON.parse(this.props.femaleLocalAvatarOutfitStringRef.current).eyeColor,
+			// eyeShape: JSON.parse(this.props.femaleLocalAvatarOutfitStringRef.current).eyeShape,
 		};
 
 
