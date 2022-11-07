@@ -27,7 +27,7 @@ const getRenderer = (type) => {
 		});
 	window[rendererKey] = ret;
 	ret.info.autoReset = true;
-	window.mainRenderer = ret
+	window.mainRenderer = ret;
 	return ret;
 };
 
@@ -609,14 +609,17 @@ const Scene = (props) => {
 				{/*{threeReady && children}*/}
 				{threeReady &&
 					renderObjects &&
-					React.Children.map(children, (child) =>
-						React.cloneElement(child, {
-							sceneRef,
-							setMaxRenderOrder,
-							scene:sceneRef.current,//keep this version
-							camera: cameraRef.current,
-							canvas: canvasRef.current,
-						}),
+					React.Children.map(
+						children,
+						(child) =>
+							child &&
+							React.cloneElement(child, {
+								sceneRef,
+								setMaxRenderOrder,
+								scene: sceneRef.current, //keep this version
+								camera: cameraRef.current,
+								canvas: canvasRef.current,
+							}),
 					)}
 
 				{threeReady && (
