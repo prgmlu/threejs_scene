@@ -54,8 +54,9 @@ build:production:
   <<: *build-template
   variables:
     CURRENT_ENV: production
+  when: manual
   only:
-    - feature/wp-federated
+    - feature/rt3d
 
 beta:
   <<: *deploy-template
@@ -75,14 +76,15 @@ production:
     - build:production
   when: manual
   only:
-    - feature/wp-federated
+    - feature/rt3d
 
 build:client:
   <<: *build-template
   variables:
     CURRENT_ENV: client
+  when: manual
   only:
-    - feature/wp-federated
+    - feature/rt3d
 
 client:
   <<: *deploy-template
@@ -92,4 +94,4 @@ client:
     - build:client
   when: manual
   only:
-    - feature/wp-federated
+    - feature/rt3d
