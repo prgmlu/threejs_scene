@@ -302,6 +302,7 @@ export default class CentralMultipleCharControls{
         // else data[address].shoptogether = null;
             
         data[address].position = this.mainCharControlsObj.model.position;
+        data[address].position.y = 0;
         data[address].rotation = this.mainCharControlsObj.model.rotation;
         if(data[address].rotation.x == 0.35){
             data[address].rotation.x = 0;
