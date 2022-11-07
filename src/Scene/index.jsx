@@ -613,6 +613,7 @@ const Scene = (props) => {
 						React.cloneElement(child, {
 							sceneRef,
 							setMaxRenderOrder,
+							scene:sceneRef.current,//keep this version
 							camera: cameraRef.current,
 							canvas: canvasRef.current,
 						}),
