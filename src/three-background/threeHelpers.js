@@ -407,63 +407,137 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	}
 	let lights = [];
 
-	// const pntLight_001 = new THREE.PointLight(0xffffff, 10)
-	const pntLight_001 = new THREE.PointLight(0xffffff, 10)
-	scene.add(pntLight_001)
+	const spotLight_001 = new THREE.SpotLight(0xffffff, 1);
+	scene.add(spotLight_001);
+	spotLight_001.position.set(2,5,2);
+	spotLight_001.angle = 0.66
+	spotLight_001.penumbra = 0.29;
+	spotLight_001.decay = 2;
+	spotLight_001.distance = 20;
+	spotLight_001.target.position.set(6,0,-4)
+	scene.add(spotLight_001.target);
+	
+	// const spotLight_001_helper = new THREE.SpotLightHelper(spotLight_001);
+	// scene.add(spotLight_001_helper);
+	// spotLight_001_helper.parent.updateMatrixWorld();
+	// spotLight_001_helper.update();
+	// gui.add(spotLight_001, 'intensity').min(0).max(10).step(0.01).name('spot_001-light-intensity');
+	// gui.add(spotLight_001, 'angle').min(0).max(10).step(0.01).name('spot_001-light-angle');
+	// gui.add(spotLight_001, 'penumbra').min(0).max(10).step(0.01).name('spot_001-light-penumbra');
+	
+	//KateLook light
+	const spotLight_002 = new THREE.SpotLight(0xffffff, 1);
+	scene.add(spotLight_002);
+	spotLight_002.position.set(-5,5,-8);
+	spotLight_002.angle = 0.66
+	spotLight_002.penumbra = 0.29;
+	spotLight_002.decay = 2;
+	spotLight_002.distance = 20;
+	spotLight_002.target.position.set(-5.2,0,-14)
+	scene.add(spotLight_002.target);
+	
+	// const spotLight_002_helper = new THREE.SpotLightHelper(spotLight_002);
+	// scene.add(spotLight_002_helper,0.1);
+	// spotLight_002_helper.parent.updateMatrixWorld();
+	// spotLight_002_helper.update();
+	// gui.add(spotLight_002, 'intensity').min(0).max(10).step(0.01).name('spot_002-light-intensity');
+	// gui.add(spotLight_002, 'angle').min(0).max(10).step(0.01).name('spot_002-light-angle');
+	// gui.add(spotLight_002, 'penumbra').min(0).max(10).step(0.01).name('spot_002-light-penumbra');
+	
+	//LilyLook light
+	const spotLight_003 = new THREE.SpotLight(0xffffff, 1);
+	scene.add(spotLight_003);
+	spotLight_003.position.set(0,5,-26);
+	spotLight_003.angle = 0.66
+	spotLight_003.penumbra = 0.29;
+	spotLight_003.decay = 2;
+	spotLight_003.distance = 20;
+	spotLight_003.target.position.set(5,0,-32.5)
+	scene.add(spotLight_003.target);
+	
+	// const spotLight_003_helper = new THREE.SpotLightHelper(spotLight_003);
+	// scene.add(spotLight_003_helper,0.1);
+	// spotLight_003_helper.parent.updateMatrixWorld();
+	// spotLight_003_helper.update();
+	// gui.add(spotLight_003, 'intensity').min(0).max(10).step(0.01).name('spot_003-light-intensity');
+	// gui.add(spotLight_003, 'angle').min(0).max(10).step(0.01).name('spot_003-light-angle');
+	// gui.add(spotLight_003, 'penumbra').min(0).max(10).step(0.01).name('spot_003-light-penumbra');
+	
+	//JourdanLook light
+	const spotLight_004 = new THREE.SpotLight(0xffffff, 1);
+	scene.add(spotLight_004);
+	spotLight_004.position.set(-1,5,-43);
+	spotLight_004.angle = 0.66
+	spotLight_004.penumbra = 0.29;
+	spotLight_004.decay = 2;
+	spotLight_004.distance = 20;
+	spotLight_004.target.position.set(-7,0,-50)
+	scene.add(spotLight_004.target);
+	
+	// const spotLight_004_helper = new THREE.SpotLightHelper(spotLight_004);
+	// scene.add(spotLight_004_helper,0.1);
+	// spotLight_004_helper.parent.updateMatrixWorld();
+	// spotLight_004_helper.update();
+	// gui.add(spotLight_004, 'intensity').min(0).max(10).step(0.01).name('spot_004-light-intensity');
+	// gui.add(spotLight_004, 'angle').min(0).max(10).step(0.01).name('spot_004-light-angle');
+	// gui.add(spotLight_004, 'penumbra').min(0).max(10).step(0.01).name('spot_004-light-penumbra');
+	
+	//Castle light
+	const spotLight_005 = new THREE.SpotLight(0xffffff, 1);
+	scene.add(spotLight_005);
+	spotLight_005.position.set(-1,5,-54);
+	spotLight_005.angle = 0.66
+	spotLight_005.penumbra = 0.29;
+	spotLight_005.decay = 2;
+	spotLight_005.distance = 20;
+	spotLight_005.target.position.set(1,0,-60)
+	scene.add(spotLight_005.target);
+	
+	// const spotLight_005_helper = new THREE.SpotLightHelper(spotLight_005);
+	// scene.add(spotLight_005_helper,0.1);
+	// spotLight_005_helper.parent.updateMatrixWorld();
+	// spotLight_005_helper.update();
+	// gui.add(spotLight_005, 'intensity').min(0).max(10).step(0.01).name('spot_005-light-intensity');
+	// gui.add(spotLight_005, 'angle').min(0).max(10).step(0.01).name('spot_005-light-angle');
+	// gui.add(spotLight_005, 'penumbra').min(0).max(10).step(0.01).name('spot_005-light-penumbra');
+	
+	//Directional lights
+	//
+	//
+	const directLight_001 = new THREE.DirectionalLight(0x4b168c, 0.5)
+	scene.add(directLight_001)
+	directLight_001.position.set(30,30,-45)
+	directLight_001.target.position.set(0,0,-5)
+	scene.add(directLight_001.target)
+	
+	// const directLight_001_helper = new THREE.DirectionalLightHelper(directLight_001)
+	// scene.add(directLight_001_helper, 0.1)
+	// directLight_001_helper.parent.updateMatrixWorld()
+	// directLight_001_helper.update()
+	// gui.add(directLight_001, 'intensity').min(0).max(10).step(0.01).name('directLight_001-intensity')
+	
+	const directLight_002 = new THREE.DirectionalLight(0x4b168c, 0.5)
+	scene.add(directLight_002)
+	directLight_002.position.set(-30,30,-5)
+	directLight_002.target.position.set(0,0,-45)
+	scene.add(directLight_002.target)
+	
+	// const directLight_002_helper = new THREE.DirectionalLightHelper(directLight_002)
+	// scene.add(directLight_002_helper, 0.1)
+	// directLight_002_helper.parent.updateMatrixWorld()
+	// directLight_002_helper.update()
+	// gui.add(directLight_002, 'intensity').min(0).max(10).step(0.01).name('directLight_002-intensity')
+	// lights.push(pntLight_001, spotLight_001, spotLight_002);
+	// window.lights = lights;
+	// lights.forEach((l,i) => {
+	// 	if(i!=0) return;
+	// 	// l.castShadow = true;
+	// 	// l.shadow.mapSize.width = 1024;
+	// 	// l.shadow.mapSize.height = 1024;
+	// 	// l.shadow.camera.near = .5;
+	// 	// l.shadow.camera.far = 100;
 
-	if(DEBUG_LIGHTS){
-		// gui.add(pntLight_001.position, 'x').min(-30).max(30).step(0.1).name('x');
-		// gui.add(pntLight_001.position, 'y').min(-30).max(30).step(0.1).name('y');
-		// gui.add(pntLight_001.position, 'z').min(-30).max(30).step(0.1).name('z');
-	}
-
-
-	pntLight_001.position.set(-14,11.5,14);
-	if(DEBUG_LIGHTS){
-		// const pntLight_001_helper = new THREE.PointLightHelper(pntLight_001, 10)
-		// scene.add(pntLight_001_helper)
-		// gui.add(pntLight_001, 'intensity').min(0).max(10).step(0.01).name('pnt_001-light-intensity')
-	}
-	const spotLight_001 = new THREE.SpotLight(0xffffff, 10)
-	scene.add(spotLight_001)
-	spotLight_001.position.set(14,14,-14);
-
-	spotLight_001.target.position.x = -0.5
-	spotLight_001.target.position.y = 0
-	spotLight_001.target.position.z = 0.5
-	scene.add(spotLight_001.target)
-	spotLight_001.penumbra = 1
-	if(DEBUG_LIGHTS){
-		// const spotLight_001_helper = new THREE.SpotLightHelper(spotLight_001)
-		// // scene.add(spotLight_001_helper)
-		// gui.add(spotLight_001, 'intensity').min(0).max(10).step(0.01).name('spot_001-light-intensity')
-	}
-	const spotLight_002 = new THREE.SpotLight(0xffffff, 10)
-	scene.add(spotLight_002)
-	spotLight_002.position.set(0,2.31,-7.42);
-	spotLight_002.target.position.x = 0;
-	spotLight_002.target.position.y = 0;
-	spotLight_002.target.position.z = -7.42;
-	scene.add(spotLight_002.target)
-	spotLight_002.penumbra = 0.1
-	spotLight_002.decay = 2
-	spotLight_002.distance = 100
-	if(DEBUG_LIGHTS){
-		// const spotLight_002_helper = new THREE.SpotLightHelper(spotLight_002)
-		// // scene.add(spotLight_002_helper)
-		// gui.add(spotLight_002, 'intensity').min(0).max(10).step(0.01).name('spot_002-light-intensity')
-	}
-	lights.push(pntLight_001, spotLight_001, spotLight_002);
-	window.lights = lights;
-	lights.forEach((l,i) => {
-		if(i!=0) return;
-		// l.castShadow = true;
-		// l.shadow.mapSize.width = 1024;
-		// l.shadow.mapSize.height = 1024;
-		// l.shadow.camera.near = .5;
-		// l.shadow.camera.far = 100;
-
-	});
+	// });
 }
 
 export const setUpEnvMap = (scene, renderer) => {
