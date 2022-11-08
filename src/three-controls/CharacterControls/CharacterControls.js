@@ -579,7 +579,7 @@ export default class CharacterControls {
             //intesect all the areas octress with the player capsule
 
             
-            let isAreaChanged = checkAreaChange();
+            let isAreaChanged = this.checkAreaChange();
             if(isAreaChanged){
                 // handleAreaChange(this.oldAreaName, this.currentAreaName);
             }

@@ -16,8 +16,8 @@ const getMode = (env) => {
 
 const getPublicPath = (env = 'development', modulePath = '') => {
 	if (env === 'development') {
-		// return 'http://192.168.1.122:4000/';
-		return 'http://localhost:4000/';
+		return 'http://192.168.1.122:4000/';
+		// return 'http://localhost:4000/';
 	}
 	return `https://modules.obsess-vr.com/${modulePath}/`;
 };
