@@ -101,6 +101,8 @@ export default class CharacterControls {
         this.model = models[0];
         this.models = models;
 
+        this.currentArea = 0;
+
         this.enabled = true;
         this.joystickBroadcast = directionValues;
 
@@ -120,6 +122,7 @@ export default class CharacterControls {
 
             console.log('before octree')
             this.setupOctree();
+            this.setupAreasOctrees();
 
             for(let i = 0; i < areaNames.length; i++){
                 let area = window.store.getObjectByName(areaNames[i]);
@@ -234,6 +237,27 @@ export default class CharacterControls {
         // this.update();
 
     }
+
+    emitGAEvent = () => {
+
+    }
+
+    setupAreasOctrees(){
+        let areas = [
+            "entry_area",
+            "kate_area",
+            "lily_area",
+            "jourdan_area",
+            "castle_area"
+        ]
+        this.areasOctrees = [];
+        for(let i = 0; i < areas.length; i++){
+            let octree = new Octree();
+            octree.fromGraphNode(window.store.getObjectByName(areas[i]));
+            this.areasOctrees.push(octree);
+        }
+    }
+
 
     setupOctree(){
 
@@ -470,6 +494,22 @@ export default class CharacterControls {
         }
     }
 
+    checkAreaChange = () => {
+        this.prevArea = this.currentArea;
+        this.areasOctrees.forEach((i, n)=>{
+            let result = i.capsuleIntersect( this.playerCollider );
+            if(result){
+                this.currentArea = n;
+            }
+        })
+        if(this.prevArea != this.currentArea){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     update = (updateDelta) => {
         // requestAnimationFrame(this.update);
 
@@ -521,7 +561,6 @@ export default class CharacterControls {
 
             this.models.forEach((i)=>i.position.x += moveX);
             this.models.forEach((i)=>i.position.z += moveZ);
-            
             // else{
                 this.playerCollider .start.x = this.model.position.x;
                 this.playerCollider .start.z = this.model.position.z;
@@ -536,6 +575,16 @@ export default class CharacterControls {
             catch(e){
                 console.log(e);
             }
+
+            //intesect all the areas octress with the player capsule
+
+            
+            let isAreaChanged = checkAreaChange();
+            if(isAreaChanged){
+                // handleAreaChange(this.oldAreaName, this.currentAreaName);
+            }
+
+
 
             // const results = [];
             // for(let i=0; i<this.worldOctrees.length; i++){
