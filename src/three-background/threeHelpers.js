@@ -409,6 +409,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 
 	const spotLight_001 = new THREE.SpotLight(0xffffff, 1);
 	scene.add(spotLight_001);
+	lights.push(spotLight_001);
 	spotLight_001.position.set(2,5,2);
 	spotLight_001.angle = 0.66
 	spotLight_001.penumbra = 0.29;
@@ -428,6 +429,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	//KateLook light
 	const spotLight_002 = new THREE.SpotLight(0xffffff, 1);
 	scene.add(spotLight_002);
+	lights.push(spotLight_002);
 	spotLight_002.position.set(-5,5,-8);
 	spotLight_002.angle = 0.66
 	spotLight_002.penumbra = 0.29;
@@ -447,6 +449,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	//LilyLook light
 	const spotLight_003 = new THREE.SpotLight(0xffffff, 1);
 	scene.add(spotLight_003);
+	lights.push(spotLight_003);
 	spotLight_003.position.set(0,5,-26);
 	spotLight_003.angle = 0.66
 	spotLight_003.penumbra = 0.29;
@@ -466,6 +469,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	//JourdanLook light
 	const spotLight_004 = new THREE.SpotLight(0xffffff, 1);
 	scene.add(spotLight_004);
+	lights.push(spotLight_004);
 	spotLight_004.position.set(-1,5,-43);
 	spotLight_004.angle = 0.66
 	spotLight_004.penumbra = 0.29;
@@ -485,6 +489,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	//Castle light
 	const spotLight_005 = new THREE.SpotLight(0xffffff, 1);
 	scene.add(spotLight_005);
+	lights.push(spotLight_005);
 	spotLight_005.position.set(-1,5,-54);
 	spotLight_005.angle = 0.66
 	spotLight_005.penumbra = 0.29;
@@ -506,6 +511,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	//
 	const directLight_001 = new THREE.DirectionalLight(0x4b168c, 0.5)
 	scene.add(directLight_001)
+	lights.push(directLight_001)
 	directLight_001.position.set(30,30,-45)
 	directLight_001.target.position.set(0,0,-5)
 	scene.add(directLight_001.target)
@@ -518,6 +524,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	
 	const directLight_002 = new THREE.DirectionalLight(0x4b168c, 0.5)
 	scene.add(directLight_002)
+	lights.push(directLight_002)
 	directLight_002.position.set(-30,30,-5)
 	directLight_002.target.position.set(0,0,-45)
 	scene.add(directLight_002.target)
@@ -528,7 +535,9 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	// directLight_002_helper.update()
 	// gui.add(directLight_002, 'intensity').min(0).max(10).step(0.01).name('directLight_002-intensity')
 	// lights.push(pntLight_001, spotLight_001, spotLight_002);
-	// window.lights = lights;
+
+	window.lights = lights;
+	
 	// lights.forEach((l,i) => {
 	// 	if(i!=0) return;
 	// 	// l.castShadow = true;
