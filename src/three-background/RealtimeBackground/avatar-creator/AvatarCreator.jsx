@@ -62,18 +62,6 @@ class AvatarCreator extends Component {
 		window.miniScene = this.scene;
 		this.switchAvatar = this.props.switchAvatar;
 		this.renderer = createRenderer();
-		this.renderer.setSize(
-			window.innerWidth * 0.3528,
-			window.innerHeight * 0.6205,
-		);
-		this.camera = new THREE.PerspectiveCamera(
-			50,
-			(window.innerWidth * 0.3528) / (window.innerHeight * 0.6205),
-			0.1,
-			1000,
-		);
-
-		window.miniCamera = this.camera;
 
 		// add camera helper
 		// this.cameraHelper = new THREE.CameraHelper(this.camera);
@@ -91,6 +79,19 @@ class AvatarCreator extends Component {
 	}
 
 	handleWindowResize() {
+		// debugger;
+
+		this.newWidth = this.myRef.current.parentElement.offsetWidth;
+		this.newHeight = this.myRef.current.parentElement.offsetHeight;
+
+		this.renderer.setSize(
+			this.newWidth,
+			this.newHeight);
+
+		this.camera.aspect = this.newWidth / this.newHeight;
+
+		this.camera.updateProjectionMatrix();
+
 		if (window.innerWidth >= 1440) {
 			this.setState({ isWindowSize: true });
 		} else {
@@ -213,9 +214,26 @@ class AvatarCreator extends Component {
 
 		this.loadAvatar();
 
+		
+		this.newWidth = this.myRef.current.parentElement.offsetWidth;
+		this.newHeight = this.myRef.current.parentElement.offsetHeight;
+
+		this.renderer.setSize(
+			this.newWidth,
+			this.newHeight);
+
+			this.camera = new THREE.PerspectiveCamera(
+				50,
+				(this.newWidth) / (this.newHeight),
+				0.1,
+				1000,
+		);
+		
+		window.miniCamera = this.camera;
 		if(!this.animationStarted)
 			this.animate();
 		this.animtionStarted = true;
+
 	}
 
 	animate = () => {

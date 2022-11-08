@@ -104,6 +104,9 @@ export default class CentralMultipleCharControls{
             this.scene.add(i);
         })
 
+        window.c.object.fov= 90;
+        window.c.object.updateProjectionMatrix();
+
         scene.remove(window.vid)
 
         window.tooltipTimer = setTimeout(()=>{
