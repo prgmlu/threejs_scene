@@ -14,6 +14,14 @@ window.ANIMATION_NAMES = ANIMATION_NAMES;
 
 import { RELEVANT_STORE_PARTS_NAMES } from '../../three-background/RealtimeBackground/avatar-creator/CustomizationConstants';
 
+let areaNames = [
+    "entry_area",
+    "kate_area",
+    "lily_area",
+    "jourdan_area",
+    "castle_area"
+];
+
 
 
 // CONSTANTS
@@ -112,6 +120,14 @@ export default class CharacterControls {
 
             console.log('before octree')
             this.setupOctree();
+
+            for(let i = 0; i < areaNames.length; i++){
+                let area = window.store.getObjectByName(areaNames[i]);
+                if(area){
+                    area.visible = false;
+                }
+            }
+
 
 
             // this.octreeHelper = new OctreeHelper(this.worldOctree);
