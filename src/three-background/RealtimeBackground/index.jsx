@@ -184,8 +184,8 @@ let adjustPairsGivenHardcodedData = () =>{
             "sku": "pillow-talk-push-up-lashes-mascara",
         },
         {
-            "x": 4.765384344674514,
-            "y": 1.7,
+            "x": 5.165384344674514,
+            "y": 1.2,
             "z": -1.7555395049756977 + .5,
             "sku": "charlottes-magic-cream",
         },
@@ -297,6 +297,7 @@ let adjustPairsGivenHardcodedData = () =>{
             "z": -33.63+ .5,
             "sku": "pillow-talk-face-palette-fair-med",
         },
+        // Jourdan's Look
         {
             "x": -4.9,
             "y": 1.1,
@@ -332,6 +333,20 @@ let adjustPairsGivenHardcodedData = () =>{
             "y": 1.1,
             "z": -49.3 + .5,
             "sku": "pillow-talk-push-up-lashes-mascara",
+        },
+        {
+            "x": -4.2,
+            "y": 1.1,
+            "z": -50.3 + .5,
+            "sku": "pillow-talk-face-palette-fair-med",
+        },
+        // Pillow Talk
+        {
+            "x": 1.8,
+            "y": 6.6,
+            "z": -58.5 + .5,
+            "type": "iframe",
+            "selector": "masterclass_schedule_modal",
         },
         {
             "x": 3,
