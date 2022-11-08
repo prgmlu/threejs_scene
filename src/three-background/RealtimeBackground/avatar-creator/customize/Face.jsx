@@ -200,10 +200,10 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 							onClick={() => setSelectedTone(1)}
 						/> */}
 						<img
-							className={`sm:w-[30%] w-[45%] h-[36px] object-contain rounded px-6 py-2 cursor-pointer shadow-md ${
+							className={`sm:w-[30%] w-[45%] h-[36px] object-contain rounded cursor-pointer shadow-md ${
 								selectedTone === 2
-									? 'bg-white border-[1.5px] border-black'
-									: 'bg-white/50'
+									? 'bg-white py-[11px] border-[1.5px] border-black '
+									: 'bg-white/50 py-[13px]'
 							}`}
 							src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/eyes.svg"}
 							alt="EYE"
