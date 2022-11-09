@@ -97,10 +97,16 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 	// parse femaleLocalAvatarOutfitStringRef
 	let parsed = JSON.parse(femaleLocalAvatarOutfitStringRef.current);
 	let hairStyle = parsed.hairMesh;
+	let eyeShape = parsed.eyeShape;
 	// extract the number of hairStyle at the end
 	let hairStyleNumber = hairStyle.charAt(hairStyle.length - 1);
 
-	const [selectedStyle, setSelectedStyle] = useState(Number(hairStyleNumber)-1);
+	const [selectedStyle, setSelectedStyle] = useState(
+		{
+			hair:Number(hairStyleNumber)-1,
+			eye: Number(eyeShape),
+		}
+	);
 	const [dataTones, setDataTones] = useState([]);
 	const [selectedTone, setSelectedTone] = useState(0);
 
@@ -225,9 +231,9 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 						{dataTones.map((item, index) => (
 							<div
 								key={index}
-								className={`w-[30%] bg-red relative  ${selectedTone === 0 ? 'py-1 h-fit px-1' : 'sm:pt-[2rem] pt-[1rem] pb-[3rem] sm:pt-[3rem] sm:pb-[5rem] rounded-md px-[1rem] shadow-md h-full sm:max-h-[6rem] max-h-[0rem] mt-2 bg-[#B9B9B9]'} border-2 ${selectedStyle === index && selectedTone !== 0 ? ' border-[#FF9F9F]' : 'border-[transparent]' }`}
+								className={`w-[30%] bg-red relative  ${selectedTone === 0 ? 'py-1 h-fit px-1 rounded-md' : 'sm:pt-[2rem] pt-[1rem] pb-[3rem] sm:pt-[3rem] sm:pb-[5rem] rounded-md px-[1rem] shadow-md h-full sm:max-h-[6rem] max-h-[0rem] mt-2 bg-[#B9B9B9]'} border-2 ${((selectedStyle.hair === index) && selectedTone === 0 ) || ((selectedStyle.eye === index) && selectedTone === 2 ) ? ' border-[#FF9F9F]' : 'border-[transparent]' }`}
 							>
-								{selectedStyle === index && (
+								{(((selectedStyle.hair === index) && selectedTone === 0 ) || ((selectedStyle.eye === index) && selectedTone === 2 )) && (
 									<span className={`absolute object-contain ${selectedTone === 0 ? 'top-0 right-0' : 'top-[-5px] right-[-5px]'}`}>
 										<img src={"https://cdn.obsess-vr.com/realtime3d/ct_ui/check.svg"} alt="o" />
 									</span>
@@ -240,7 +246,13 @@ const Face = ({ currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatar
 									}`}
 									alt=""
 									onClick={() => {
-										setSelectedStyle(index);
+										if(selectedTone === 0) {
+											setSelectedStyle({ ...selectedStyle, hair: index });
+										}
+										if(selectedTone === 2) {
+											setSelectedStyle({ ...selectedStyle, eye: index });
+										}
+										// setSelectedStyle(index);
 										if (selectedTone === 0) {
 											// setHairMesh(index, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef.current);
 											setHairMesh(index, window.maleModel, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef.current);

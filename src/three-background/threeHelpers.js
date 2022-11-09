@@ -361,7 +361,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	if(avatarEditor){
 		const spotLight_001 = new THREE.SpotLight(0xFFFFFF, 5);
 		scene.add(spotLight_001);
-		spotLight_001.position.set(1,4,3);
+		spotLight_001.position.set(1,4,-2);
 		spotLight_001.target.position.x = -0.5;
 		spotLight_001.target.position.y = 0;
 		spotLight_001.target.position.z = 0.5;
@@ -378,9 +378,9 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 			gui.add(spotLight_001.position, 'z').min(0).max(10).step(0.01).name('spot position z')
 		}
 
-		const pntLight_001 = new THREE.PointLight(0xFFF1BF, 0.75);
+		const pntLight_001 = new THREE.PointLight(0xFFF1BF, 1);
 		scene.add(pntLight_001);
-		pntLight_001.position.set(0.5,1.5,2);
+		pntLight_001.position.set(3,1.5,2);
 		const pntLight_001_helper = new THREE.PointLightHelper(pntLight_001, 0.5);
 
 		// scene.add(pntLight_001_helper);
@@ -392,9 +392,9 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 			gui.add(pntLight_001.position, 'z').min(0).max(10).step(0.01).name('pnt 1 position z');
 		}
 
-		const pntLight_002 = new THREE.PointLight(0xFFF1BF, 0.25);
+		const pntLight_002 = new THREE.PointLight(0xFFF1BF, 2);
 		scene.add(pntLight_002);
-		pntLight_002.position.set(-1,1,2);
+		pntLight_002.position.set(-2,1,2);
 
 		if(DEBUG_LIGHTS_AVTAR_EDITOR){
 			gui.add(pntLight_002, 'intensity').min(0).max(10).step(0.01).name('pnt 2  intensity');
@@ -407,7 +407,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	}
 	let lights = [];
 
-	const spotLight_001 = new THREE.SpotLight(0xffffff, 1);
+	const spotLight_001 = new THREE.SpotLight(0xffffff, 50);
 	scene.add(spotLight_001);
 	lights.push(spotLight_001);
 	spotLight_001.position.set(2,5,2);
@@ -427,7 +427,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	// gui.add(spotLight_001, 'penumbra').min(0).max(10).step(0.01).name('spot_001-light-penumbra');
 	
 	//KateLook light
-	const spotLight_002 = new THREE.SpotLight(0xffffff, 1);
+	const spotLight_002 = new THREE.SpotLight(0xffffff, 50);
 	scene.add(spotLight_002);
 	lights.push(spotLight_002);
 	spotLight_002.position.set(-5,5,-8);
@@ -447,7 +447,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	// gui.add(spotLight_002, 'penumbra').min(0).max(10).step(0.01).name('spot_002-light-penumbra');
 	
 	//LilyLook light
-	const spotLight_003 = new THREE.SpotLight(0xffffff, 1);
+	const spotLight_003 = new THREE.SpotLight(0xffffff, 50);
 	scene.add(spotLight_003);
 	lights.push(spotLight_003);
 	spotLight_003.position.set(0,5,-26);
@@ -467,7 +467,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	// gui.add(spotLight_003, 'penumbra').min(0).max(10).step(0.01).name('spot_003-light-penumbra');
 	
 	//JourdanLook light
-	const spotLight_004 = new THREE.SpotLight(0xffffff, 1);
+	const spotLight_004 = new THREE.SpotLight(0xffffff, 50);
 	scene.add(spotLight_004);
 	lights.push(spotLight_004);
 	spotLight_004.position.set(-1,5,-43);
@@ -487,7 +487,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	// gui.add(spotLight_004, 'penumbra').min(0).max(10).step(0.01).name('spot_004-light-penumbra');
 	
 	//Castle light
-	const spotLight_005 = new THREE.SpotLight(0xffffff, 1);
+	const spotLight_005 = new THREE.SpotLight(0xffffff, 50);
 	scene.add(spotLight_005);
 	lights.push(spotLight_005);
 	spotLight_005.position.set(-1,5,-54);
@@ -509,7 +509,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	//Directional lights
 	//
 	//
-	const directLight_001 = new THREE.DirectionalLight(0x4b168c, 0.5)
+	const directLight_001 = new THREE.DirectionalLight(0x4b168c, 2)
 	scene.add(directLight_001)
 	lights.push(directLight_001)
 	directLight_001.position.set(30,30,-45)
@@ -522,7 +522,7 @@ export const setUpNormalLights = (scene, avatarEditor) => {
 	// directLight_001_helper.update()
 	// gui.add(directLight_001, 'intensity').min(0).max(10).step(0.01).name('directLight_001-intensity')
 	
-	const directLight_002 = new THREE.DirectionalLight(0x4b168c, 0.5)
+	const directLight_002 = new THREE.DirectionalLight(0x4b168c, 2)
 	scene.add(directLight_002)
 	lights.push(directLight_002)
 	directLight_002.position.set(-30,30,-5)
