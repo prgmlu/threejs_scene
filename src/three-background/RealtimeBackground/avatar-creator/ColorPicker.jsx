@@ -51,7 +51,7 @@ const ColorPicker = ({ selectedColor,tabName, handlePicker, handleClose, avatar,
 			</div>
 			<div className="px-3 pb-2 min-h-[235px] flex justify-between align-center align-items-center ">
 			{showColor && (
-				<HexColorPicker style={{height: "215px", width: "250px", marginLeft: '1.75rem', marginRight: 'auto'}}
+				<HexColorPicker style={{height: "215px", width: "250px",  marginRight: 'auto'}}
 					color={selectedColor}
 					onChange={(color) => handlePicker(color)}
 				/>

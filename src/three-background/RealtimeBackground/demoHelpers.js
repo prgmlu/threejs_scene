@@ -20,8 +20,6 @@ export const adjustHotspots = (scene) => {
 
     let imgHotspotCollider = scene.children.filter((i) => (i.position.x > 2.1 && i.position.x < 2.2) && (i.position.y > -1.34) && (i.position.y < -1.33))[0];
     keep.push(imgHotspotCollider);
-
-
     scene.children.filter((i) => { return i.name == 'marker' || i.name == 'visualObject' }).filter((i) => { return i.position.y < 0 }).forEach((i, counter) => {
 
         // i.visible=false;
