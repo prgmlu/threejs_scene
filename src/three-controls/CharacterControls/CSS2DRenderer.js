@@ -80,9 +80,9 @@ class CSS2DRenderer {
 				height: _height
 			};
 
-		};
+	0	};
 
-		this.render = function ( scene, camera ) {
+0	;	this.render = function ( scene, camera ) {
 
 			if ( scene.autoUpdate === true ) scene.updateMatrixWorld();
 			if ( camera.parent === null ) camera.updateMatrixWorld();

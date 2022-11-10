@@ -2,7 +2,7 @@ import React, { Component, useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import nipplejs from 'nipplejs';
 import './JoyStickStyle.css';
-import arrow from '../../three-background/RealtimeBackground/static/movement_controller/arrow_right.png'
+import arrow from '../../three-background/RealtimeBackground/static/movement_controller/arrow.png'
 
 
 export default class JoystickControls extends Component {
