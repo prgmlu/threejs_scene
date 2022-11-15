@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import check from '../../static/avatar/menus/check.png';
 let switchOutfit = (e, index, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGender) => {
 	let outfitNames = [
@@ -34,12 +34,24 @@ let updateOutfitString = (outfitName, ref) => {
 	ref.current = JSON.stringify(u);
 }
 
-const Outfit = ({ maleOutfits, selectedOutfit, setOutfit, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef }) => {
+const Outfit = ({ maleOutfits, femaleOutfits, selectedOutfit, setOutfit, currentAvatar, femaleLocalAvatarOutfitStringRef, maleLocalAvatarOutfitStringRef, visibleGenderRef }) => {
+	const [selectedGenderOutfits, setSelectedGenderOutfits] = useState({
+		display: []
+	});
+	useEffect(() => {
+		if(visibleGenderRef.current === "female") {
+			setSelectedGenderOutfits(femaleOutfits)
+		}
+		else {
+			setSelectedGenderOutfits(maleOutfits)
+
+		}
+	}, [visibleGenderRef])
 	return (
 		<div className="w-full h-full flex flex-col gap-1 scrollbar">
 			<div className="font-sourceSansProSemibold text-lg">Outfit</div>
 			<div className="w-full h-fit max-h-[80%] flex flex-wrap justify-center gap-2 pl-2 pr-1 pb-2 sm:my-2  overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
-				{maleOutfits.display.map((outfit, index) => (
+				{selectedGenderOutfits.display.map((outfit, index) => (
 					<div
 						key={index}
 						className={`w-[30%] sm:h-fit h-[6rem]  bg-[#B9B9B9] py-[0rem] sm"py-[0.5rem] relative rounded-md px-3 shadow-md mb-3 ${

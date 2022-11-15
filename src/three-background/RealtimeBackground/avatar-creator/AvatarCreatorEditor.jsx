@@ -5,11 +5,16 @@ import Outfit from './customize/Outfit';
 import Face from './customize/Face';
 import BodyShape from './customize/BodyShape';
 import Makeup from './customize/Makeup';
-import outfit1 from '../static/avatar/outfit/female/Outfit1.png';
-import outfit2 from '../static/avatar/outfit/female/Outfit2.png';
-import outfit3 from '../static/avatar/outfit/female/Outfit3.png';
-import outfit4 from '../static/avatar/outfit/female/Outfit4.png';
-import outfit5 from '../static/avatar/outfit/female/Outfit5.png';
+import f1 from '../static/avatar/outfit/female/f1.png';
+import f2 from '../static/avatar/outfit/female/f2.png';
+import f3 from '../static/avatar/outfit/female/f3.png';
+import f4 from '../static/avatar/outfit/female/f4.png';
+import f5 from '../static/avatar/outfit/female/f5.png';
+import m1 from '../static/avatar/outfit/male/m1.png';
+import m2 from '../static/avatar/outfit/male/m2.png';
+import m3 from '../static/avatar/outfit/male/m3.png';
+import m4 from '../static/avatar/outfit/male/m4.png';
+import m5 from '../static/avatar/outfit/male/m5.png';
 
 import {AVATAR_EDITOR_AVATAR_POSITION,
 	AVATAR_EDITOR_AVATAR_ROTATION,
@@ -81,7 +86,12 @@ class AvatarCreatorEditor extends Component {
 		
 		this.maleOutfits = {
 			display: [
-				outfit1, outfit2, outfit3, outfit4, outfit5
+				m1, m2, m3, m4, m5
+			],
+		};
+		this.femaleOutfits = {
+			display: [
+				f1, f2, f3, f4, f5
 			],
 		};
 		this.currentScene = props?.currentScene;
@@ -282,6 +292,7 @@ class AvatarCreatorEditor extends Component {
 
 							selectedOutfit={selectedOutfit}
 							maleOutfits={this.maleOutfits}
+							femaleOutfits={this.femaleOutfits}
 							setOutfit={this.setOutfit}
 							currentAvatar={this.props.currentAvatar}
 							maleAvatar={this.props.maleAvatar}
